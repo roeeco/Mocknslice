@@ -19,7 +19,7 @@ The desktop workspace uses workflow navigation on the left, a synchronized 3D or
 
 For planned folding work, the user will import and orient an STL, choose a general template, fit it to a convex projected profile with explicit clearance, inspect the assembled construction and flat net, then arrange and export it. See [Shape-aware folding plan](FOLDING_PLAN.md).
 
-## Current implementation through Phase 4
+## Current implementation through Phase 5
 
 The foundation includes a generated 40 mm cube, material and mode selection, a three-column responsive shell, 3D orbit and camera presets, a 2D sheet empty state, local project autosave, project JSON import/export, undo/redo, and structured validation.
 
@@ -30,6 +30,8 @@ Phase 3 adds X/Y/Z stacked-slice generation, independent spacing and thickness c
 Generated parts are preserved but marked stale when source geometry or slice parameters change. Regeneration is explicit and enters undo/autosave history as one project action.
 
 Phase 4 adds configurable sheet width, height, margins, and spacing; deterministic row placement across multiple sheets; add, duplicate, and delete sheet actions; manual drag and precise placement controls; 90° or numeric rotation; structured boundary, margin, overlap, duplicate, and unplaced-part checks; and operation-layered SVG export for the active sheet. Layout and selection stay synchronized with the assembled 3D preview. Complex polygon nesting remains deferred.
+
+Phase 5 adds orthogonal waffle construction from any two different X/Y/Z axes. Each family has independent spacing, while material thickness plus explicit clearance determines complementary half-depth slot width. Users can alternate slot entry sides, reverse the complete assembly pattern, inspect colour-labelled families in 3D, inspect open U-shaped slot cuts in 2D, arrange all parts on sheets, and export the active sheet as layered SVG. Structured checks report missing intersections, narrow sections, slots that do not fit, overlapping slots, and hole-based entries that need manual assembly review.
 
 ## Roadmap
 

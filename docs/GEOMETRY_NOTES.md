@@ -40,6 +40,23 @@ Triangle intersections within the contour epsilon are welded through neighbourin
 
 Part thickness controls the extruded assembled preview and fabrication metadata. It does not change plane spacing. Thickness greater than spacing is allowed but reported because assembled parts overlap.
 
+## Orthogonal waffle pipeline
+
+1. Validate two different axis-aligned slice families and generate each through the existing stacked-slice contour pipeline.
+2. Map each slice's 2D coordinates back to its two global in-plane axes.
+3. Scan the filled contour at the paired plane position, pairing even/odd boundary crossings and subtracting hole intervals.
+4. Intersect both parts' usable intervals along their shared physical axis.
+5. Set slot width to material thickness plus explicit non-negative clearance.
+6. Split every shared interval at its midpoint and assign complementary start/end entries.
+7. Sample the slot-width edges against the usable contour and create a deterministic open U-shaped cut path.
+8. Add stable family, pair, direction, width, depth, and intersection metadata, then validate all slots on each part.
+
+The `by-family` pattern sends all family A slots from one side and family B slots from the other. The `alternating` pattern flips the complementary pair based on the two plane indices. Reversal inverts every pair without changing plane or part order.
+
+An open U path is intentional: its endpoints lie on the existing outer or hole contour. Together those cuts enclose the removable slot waste while preserving the original contour as the canonical assembled panel outline. The 3D preview therefore shows positioned intersecting panels and family relationships; the production slot cuts are verified in 2D and SVG.
+
+Validation reports family contour problems inherited from stacked slicing, pairs with no usable shared interval, full-width slots that cannot remain inside both contours, half-depth slots shorter than two slot widths, overlapping slot bands, and any part whose holes could provide an inaccessible slot entry.
+
 ## Basic sheet layout
 
 Phase 4 uses deterministic first-fit rows. Parts retain generation order and start unrotated at the safe margin. A row advances by the part's axis-aligned width plus configured spacing; overflow starts a new row, and vertical overflow starts another sheet with stable derived IDs. A part too large for the usable area remains placed and receives a structured boundary or margin warning so the problem stays visible.
@@ -82,3 +99,11 @@ Concave silhouettes, projection holes, and arbitrary face unfolding are delibera
 - Overlap checks use transformed axis-aligned bounds and can conservatively flag irregular contours whose boxes overlap.
 - Configured spacing guides automatic placement but is not yet enforced as a separate manual-placement warning.
 - Sheets share the same fabrication parts; duplicating a sheet copies setup only, not placements.
+
+## Phase 5 limitations
+
+- Slice families are orthogonal and axis-aligned; radial or arbitrary-angle waffle systems remain deferred.
+- Slots are fixed at half the shared usable depth. Custom depths and stepped joints are not yet exposed.
+- The 3D preview shows intersecting family panels but does not subtract the U-shaped slot waste from the rendered extrusion.
+- Hole-aware scan intervals are supported, but entries that may originate from an internal hole receive a manual-review warning.
+- Slot-fit validation is geometric only; it does not simulate flex, kerf, grain, insertion order, or structural strength.

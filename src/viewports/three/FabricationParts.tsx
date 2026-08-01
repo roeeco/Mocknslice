@@ -40,6 +40,8 @@ function PartMesh({ part }: { part: FabricationPart }) {
   useEffect(() => () => geometry?.dispose(), [geometry]);
   if (!geometry) return null;
   const selected = selectedEntityId === part.id;
+  const color =
+    part.waffle?.family === 'a' ? '#d85c2f' : part.waffle?.family === 'b' ? '#3f7f70' : '#d85c2f';
   return (
     <mesh
       geometry={geometry}
@@ -50,11 +52,7 @@ function PartMesh({ part }: { part: FabricationPart }) {
         selectEntity(part.id);
       }}
     >
-      <meshStandardMaterial
-        color={selected ? '#f97316' : '#d85c2f'}
-        roughness={0.7}
-        metalness={0.02}
-      />
+      <meshStandardMaterial color={selected ? '#f59e0b' : color} roughness={0.7} metalness={0.02} />
     </mesh>
   );
 }

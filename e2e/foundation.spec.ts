@@ -133,3 +133,41 @@ test('generates, arranges, rotates, and exports a selected fabrication sheet', a
   expect(svg).toContain('data-contour-role="outer"');
   expect(svg).not.toContain('<image');
 });
+
+test('generates complementary waffle slots and exports them on the active sheet', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.getByLabel('Fabrication mode').selectOption('waffle-slices');
+
+  await expect(page.getByRole('heading', { name: 'Interlocking slices' })).toBeVisible();
+  await expect(page.getByLabel('Family A axis')).toHaveValue('x');
+  await expect(page.getByLabel('Family B axis')).toHaveValue('y');
+  await expect(page.getByLabel('Family A spacing')).toHaveValue('20');
+  await expect(page.getByLabel('Family B spacing')).toHaveValue('20');
+  await page.getByLabel('Slot clearance').fill('0.25');
+  await expect(page.getByText('0.6 mm', { exact: true })).toBeVisible();
+  await page.getByLabel('Reverse all slot directions').check();
+
+  await page.getByRole('button', { name: 'Generate waffle slices' }).click();
+  await expect(page.getByText('4 parts · 4 joints', { exact: true })).toBeVisible();
+  await expect(page.getByText('Family A', { exact: true })).toBeVisible();
+  await expect(page.getByText('Family B', { exact: true })).toBeVisible();
+  await expect(page.getByText('4 of 4 parts placed · 1 sheet', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: '2D parts' }).click();
+  await expect(page.getByRole('button', { name: 'Family A · Slice X1 on sheet' })).toBeVisible();
+  await expect(page.locator('path[data-slot="true"]')).toHaveCount(8);
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export sheet SVG' }).click();
+  const download = await downloadPromise;
+  const stream = await download.createReadStream();
+  const chunks: Uint8Array[] = [];
+  for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
+  const svg = Buffer.concat(chunks).toString('utf8');
+  expect(svg).toContain('&quot;mode&quot;:&quot;waffle-slices&quot;');
+  expect(svg).toContain('-slot-');
+  expect(svg).toContain('id="operation-cut"');
+  expect(svg).not.toContain('<image');
+});

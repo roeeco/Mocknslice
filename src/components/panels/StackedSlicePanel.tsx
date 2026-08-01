@@ -18,6 +18,7 @@ export function StackedSlicePanel() {
     project.modeParameters.sliceThicknessMm ?? project.materialProfileSnapshot.thicknessMm,
   );
   const disabled = project.fabricationMode !== 'stacked-slices';
+  if (disabled) return null;
 
   const updateNumber = (name: string) => (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.valueAsNumber;
@@ -77,7 +78,6 @@ export function StackedSlicePanel() {
           </div>
         </div>
       </fieldset>
-      {disabled ? <p className="field-help">Select stacked slices to generate geometry.</p> : null}
       <div className="generation-actions">
         {status === 'processing' ? (
           <button type="button" onClick={cancelSliceGeneration}>

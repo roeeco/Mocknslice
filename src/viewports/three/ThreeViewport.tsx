@@ -17,6 +17,7 @@ export function ThreeViewport() {
   const setCameraPreset = useProjectStore((state) => state.setCameraPreset);
   const fitCamera = useProjectStore((state) => state.fitCamera);
   const modelId = useProjectStore((state) => state.project.model.id);
+  const fabricationMode = useProjectStore((state) => state.project.fabricationMode);
 
   return (
     <section className="viewport-stage" aria-label={copy.modelPreview}>
@@ -50,9 +51,20 @@ export function ThreeViewport() {
         </Canvas>
       </ViewportErrorBoundary>
       <div className="viewport-legend">
-        <span>
-          <i className="legend-swatch model-swatch" /> Model
-        </span>
+        {fabricationMode === 'waffle-slices' ? (
+          <>
+            <span>
+              <i className="legend-swatch waffle-a-swatch" /> Family A
+            </span>
+            <span>
+              <i className="legend-swatch waffle-b-swatch" /> Family B
+            </span>
+          </>
+        ) : (
+          <span>
+            <i className="legend-swatch model-swatch" /> Model
+          </span>
+        )}
         <span>
           <i className="legend-line" /> 10 mm grid
         </span>

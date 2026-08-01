@@ -90,6 +90,8 @@ function PartOnSheet({
           stroke={strokeByOperation.get(path.operation) ?? '#222222'}
           strokeWidth={selected ? 0.65 : 0.35}
           vectorEffect="non-scaling-stroke"
+          data-operation={path.operation}
+          data-slot={path.slot ? 'true' : undefined}
         />
       ))}
       {part.label && bounds ? (
