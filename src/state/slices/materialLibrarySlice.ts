@@ -22,6 +22,13 @@ export const createMaterialLibrarySlice: AppSliceCreator<MaterialLibrarySlice> =
           ...project,
           modeParameters: parameters,
           materialProfileSnapshot: material,
+          exportSettings: {
+            ...project.exportSettings,
+            customKerfMm:
+              project.exportSettings.customKerfMm === previous.kerfMm
+                ? material.kerfMm
+                : project.exportSettings.customKerfMm,
+          },
         });
       });
       return {

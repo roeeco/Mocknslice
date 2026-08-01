@@ -19,7 +19,7 @@ The desktop workspace uses workflow navigation on the left, a synchronized 3D or
 
 For folding work, the user imports and orients an STL, chooses a general template, fits it to a convex projected profile with explicit clearance, inspects the assembled construction and flat net, then arranges and exports it. See [Shape-aware folding plan](FOLDING_PLAN.md).
 
-## Current implementation through Phase 6
+## Current implementation through Phase 7
 
 The foundation includes a generated 40 mm cube, material and mode selection, a three-column responsive shell, 3D orbit and camera presets, a 2D sheet empty state, local project autosave, project JSON import/export, undo/redo, and structured validation.
 
@@ -33,7 +33,9 @@ Phase 4 adds configurable sheet width, height, margins, and spacing; determinist
 
 Phase 5 adds orthogonal waffle construction from any two different X/Y/Z axes. Each family has independent spacing, while material thickness plus explicit clearance determines complementary half-depth slot width. Users can alternate slot entry sides, reverse the complete assembly pattern, inspect colour-labelled families in 3D, inspect open U-shaped slot cuts in 2D, arrange all parts on sheets, and export the active sheet as layered SVG. Structured checks report missing intersections, narrow sections, slots that do not fit, overlapping slots, and hole-based entries that need manual assembly review.
 
-Phase 6 adds deterministic X/Y/Z projection, convex hull offset and visible simplification, seven shape-aware template families, material-aware fit warnings, stable panel/edge/tab IDs, an explicit worker-based Generate/Regenerate action, source-versus-fitted profile inspection, the imported model ghosted inside an assembled panel preview, selectable and labelled 2D nets, multi-sheet arrangement, and cut/score/mountain/valley/engrave/guide SVG layers. The complete result persists in version 2 project files with an explicit version 1 migration.
+Phase 6 adds deterministic X/Y/Z projection, convex hull offset and visible simplification, seven shape-aware template families, material-aware fit warnings, stable panel/edge/tab IDs, an explicit worker-based Generate/Regenerate action, source-versus-fitted profile inspection, the imported model ghosted inside an assembled panel preview, selectable and labelled 2D nets, multi-sheet arrangement, and cut/score/mountain/valley/engrave/guide SVG layers. Project version 2 introduced persistence for the complete result; current version 3 retains it through explicit migrations.
+
+Phase 7 adds a non-destructive fabrication-output preparation layer. Users choose material or custom kerf, preserve fold layers or convert them to score/perforation output, configure perforation dash and gap lengths, edit every operation colour and width, size printable labels, add registration marks and sheet boundaries, and inspect the prepared result directly in 2D. The output panel reports placed material area, estimated waste, utilization, and cut length. SVG includes project-format and preparation metadata; deterministic vector PDF assembly sheets export all placed sheets with operation legends and labels. Project version 3 persists these settings and explicitly migrates versions 1 and 2.
 
 ## Roadmap
 
@@ -43,6 +45,6 @@ Phase 6 adds deterministic X/Y/Z projection, convex hull offset and visible simp
 4. Basic sheet layout
 5. Orthogonal waffle slices
 6. Shape-aware deterministic folding templates
-7. Improved fabrication output
+7. Improved fabrication output — implemented
 8. Advanced mesh unfolding research, not currently scheduled
 9. Advanced fabrication modes

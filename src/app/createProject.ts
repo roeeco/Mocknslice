@@ -84,6 +84,12 @@ export function createProject(name = 'Untitled project'): ProjectData {
       includeLabels: true,
       includeRegistrationMarks: false,
       includeSheetBoundary: true,
+      kerfCompensation: 'none',
+      customKerfMm: material.kerfMm,
+      foldLineOutput: 'preserve',
+      perforationDashMm: 2,
+      perforationGapMm: 1,
+      labelFontSizeMm: 3,
       operationStyles: [
         { operation: 'cut', stroke: '#ff0000', strokeWidthMm: 0.1 },
         { operation: 'score', stroke: '#0000ff', strokeWidthMm: 0.1 },
@@ -143,5 +149,14 @@ export function prepareProjectForUse(project: ProjectData): ProjectData {
       ...project.modeParameters,
     },
     generationIssues: project.generationIssues ?? [],
+    exportSettings: {
+      ...project.exportSettings,
+      kerfCompensation: project.exportSettings.kerfCompensation ?? 'none',
+      customKerfMm: project.exportSettings.customKerfMm ?? project.materialProfileSnapshot.kerfMm,
+      foldLineOutput: project.exportSettings.foldLineOutput ?? 'preserve',
+      perforationDashMm: project.exportSettings.perforationDashMm ?? 2,
+      perforationGapMm: project.exportSettings.perforationGapMm ?? 1,
+      labelFontSizeMm: project.exportSettings.labelFontSizeMm ?? 3,
+    },
   };
 }

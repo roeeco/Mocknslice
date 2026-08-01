@@ -779,6 +779,127 @@ h2 {
   border: 1px solid;
 }
 
+.output-intro {
+  margin-top: 0.55rem;
+}
+
+.output-readout {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.65rem 0 0;
+  padding: 0.5rem 0.55rem;
+  background: #e5e1d7;
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.output-readout strong {
+  color: var(--ink);
+}
+
+.output-toggles {
+  margin-top: 0.75rem;
+}
+
+.compact-field {
+  margin: 0.55rem 0 0 1.5rem;
+}
+
+.operation-style-editor {
+  margin-top: 1rem;
+  border: 1px solid var(--line);
+  background: #fffdf8;
+}
+
+.operation-style-editor summary {
+  cursor: pointer;
+  padding: 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.operation-style-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2rem minmax(4.5rem, 0.8fr);
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.65rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.65rem;
+}
+
+.operation-style-row > input[type='color'] {
+  width: 2rem;
+  height: 1.7rem;
+  padding: 0.1rem;
+  border: 1px solid #aaa69c;
+  background: white;
+}
+
+.operation-style-row .unit-input input {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  padding: 0.4rem;
+}
+
+.usage-card {
+  margin-top: 1rem;
+  padding: 0.7rem;
+  border: 1px solid #b4c5bb;
+  background: #dce5df;
+}
+
+.usage-card .panel-heading-row {
+  font-size: 0.7rem;
+}
+
+.usage-card .panel-heading-row span {
+  color: var(--green-dark);
+  font-weight: 800;
+}
+
+.usage-card dl {
+  margin: 0.5rem 0 0;
+}
+
+.usage-card dl div {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.28rem 0;
+  font-size: 0.65rem;
+}
+
+.usage-card dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+}
+
+.usage-card p {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  font-size: 0.58rem;
+  line-height: 1.35;
+}
+
+.output-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.output-actions .primary-panel-action {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+
+.output-issue-summary {
+  margin-top: 0.55rem;
+}
+
 .source-key {
   background: #315c5226;
   border-color: #315c52 !important;

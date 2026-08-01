@@ -3,6 +3,11 @@ import type { Point2D } from '../domain/geometry';
 import type { OperationType } from '../domain/operations';
 import type { ProjectData } from '../domain/project';
 import { transformPoint, transformedBoundsForPart } from '../geometry/layout/partPlacement';
+import {
+  createRegistrationMarkPaths,
+  prepareFabricationOutput,
+} from '../geometry/output/prepareFabricationOutput';
+import { CURRENT_PROJECT_FILE_VERSION } from './exportProject';
 
 const operations: OperationType[] = [
   'cut',
@@ -73,9 +78,12 @@ function pathData(points: Point2D[], offsetX: number, offsetY: number, closed: b
 }
 
 export function createSvgDocument(project: ProjectData): string {
+  const prepared = prepareFabricationOutput(project);
+  const blockingIssue = prepared.issues.find((issue) => issue.severity === 'error');
+  if (blockingIssue) throw new Error(blockingIssue.message);
   let cursorX = MARGIN_MM;
   let contentHeight = 0;
-  const placements: PartPlacement[] = project.generatedParts
+  const placements: PartPlacement[] = prepared.parts
     .filter((part) => part.paths.some((path) => path.points.length > 0))
     .map((part) => {
       const bounds = partBounds(part);
@@ -98,7 +106,7 @@ export function createSvgDocument(project: ProjectData): string {
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<svg xmlns="http://www.w3.org/2000/svg" width="${decimal(widthMm)}mm" height="${decimal(heightMm)}mm" viewBox="0 0 ${decimal(widthMm)} ${decimal(heightMm)}">`,
-    `  <metadata>${escapeXml(JSON.stringify({ application: 'SliceFold', projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm' }))}</metadata>`,
+    `  <metadata>${escapeXml(JSON.stringify({ application: 'SliceFold', projectFormatVersion: CURRENT_PROJECT_FILE_VERSION, projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', kerfMm: prepared.appliedKerfMm, foldLineOutput: project.exportSettings.foldLineOutput }))}</metadata>`,
   ];
   if (project.exportSettings.includeSheetBoundary) {
     lines.push(
@@ -123,7 +131,7 @@ export function createSvgDocument(project: ProjectData): string {
           (candidate) => candidate.operation === operation,
         ) ?? []) {
           lines.push(
-            `    <text id="${escapeXml(label.id)}" data-part-id="${escapeXml(placement.part.id)}"${label.entityId ? ` data-entity-id="${escapeXml(label.entityId)}"` : ''} x="${decimal(label.position.x + placement.offsetX)}" y="${decimal(label.position.y + placement.offsetY)}" fill="${escapeXml(style?.stroke ?? '#000000')}" stroke="none" font-family="sans-serif" font-size="2.4" text-anchor="middle">${escapeXml(label.text)}</text>`,
+            `    <text id="${escapeXml(label.id)}" data-part-id="${escapeXml(placement.part.id)}"${label.entityId ? ` data-entity-id="${escapeXml(label.entityId)}"` : ''} x="${decimal(label.position.x + placement.offsetX)}" y="${decimal(label.position.y + placement.offsetY)}" fill="${escapeXml(style?.stroke ?? '#000000')}" stroke="none" font-family="sans-serif" font-size="${decimal(project.exportSettings.labelFontSizeMm)}" text-anchor="middle">${escapeXml(label.text)}</text>`,
           );
         }
       }
@@ -132,7 +140,7 @@ export function createSvgDocument(project: ProjectData): string {
   }
   if (project.exportSettings.includeLabels) {
     lines.push(
-      '  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="3">',
+      `  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="${decimal(project.exportSettings.labelFontSizeMm)}">`,
     );
     for (const placement of placements) {
       if (!placement.part.label) continue;
@@ -174,7 +182,10 @@ function placedPathData(points: Point2D[], placement: SheetPlacement, closed: bo
 export function createSheetSvgDocument(project: ProjectData, sheetId: string): string {
   const sheet = project.sheetLayouts.find((candidate) => candidate.id === sheetId);
   if (!sheet) throw new Error(`Sheet ${sheetId} does not exist.`);
-  const partsById = new Map(project.generatedParts.map((part) => [part.id, part]));
+  const prepared = prepareFabricationOutput(project);
+  const blockingIssue = prepared.issues.find((issue) => issue.severity === 'error');
+  if (blockingIssue) throw new Error(blockingIssue.message);
+  const partsById = new Map(prepared.parts.map((part) => [part.id, part]));
   const placements = sheet.placements.flatMap((placement) => {
     const part = partsById.get(placement.partId);
     return part ? [{ part, placement }] : [];
@@ -186,7 +197,7 @@ export function createSheetSvgDocument(project: ProjectData, sheetId: string): s
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<svg xmlns="http://www.w3.org/2000/svg" width="${decimal(sheet.widthMm)}mm" height="${decimal(sheet.heightMm)}mm" viewBox="0 0 ${decimal(sheet.widthMm)} ${decimal(sheet.heightMm)}">`,
-    `  <metadata>${escapeXml(JSON.stringify({ application: 'SliceFold', projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', sheetId: sheet.id, sheetNumber: sheetIndex + 1 }))}</metadata>`,
+    `  <metadata>${escapeXml(JSON.stringify({ application: 'SliceFold', projectFormatVersion: CURRENT_PROJECT_FILE_VERSION, projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', sheetId: sheet.id, sheetNumber: sheetIndex + 1, kerfMm: prepared.appliedKerfMm, foldLineOutput: project.exportSettings.foldLineOutput }))}</metadata>`,
   ];
   if (project.exportSettings.includeSheetBoundary) {
     lines.push(
@@ -209,16 +220,23 @@ export function createSheetSvgDocument(project: ProjectData, sheetId: string): s
           []) {
           const point = transformPoint(label.position, placement);
           lines.push(
-            `    <text id="${escapeXml(label.id)}" data-part-id="${escapeXml(part.id)}"${label.entityId ? ` data-entity-id="${escapeXml(label.entityId)}"` : ''} x="${decimal(point.x)}" y="${decimal(point.y)}" fill="${escapeXml(style?.stroke ?? '#000000')}" stroke="none" font-family="sans-serif" font-size="2.4" text-anchor="middle">${escapeXml(label.text)}</text>`,
+            `    <text id="${escapeXml(label.id)}" data-part-id="${escapeXml(part.id)}"${label.entityId ? ` data-entity-id="${escapeXml(label.entityId)}"` : ''} x="${decimal(point.x)}" y="${decimal(point.y)}" fill="${escapeXml(style?.stroke ?? '#000000')}" stroke="none" font-family="sans-serif" font-size="${decimal(project.exportSettings.labelFontSizeMm)}" text-anchor="middle">${escapeXml(label.text)}</text>`,
           );
         }
+      }
+    }
+    if (operation === 'guide' && project.exportSettings.includeRegistrationMarks) {
+      for (const path of createRegistrationMarkPaths(sheet)) {
+        lines.push(
+          `    <path id="${escapeXml(path.id)}" data-registration-mark="true" d="${pathData(path.points, 0, 0, false)}"/>`,
+        );
       }
     }
     lines.push('  </g>');
   }
   if (project.exportSettings.includeLabels) {
     lines.push(
-      '  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="3">',
+      `  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="${decimal(project.exportSettings.labelFontSizeMm)}">`,
     );
     for (const { part, placement } of placements) {
       if (!part.label) continue;

@@ -9,7 +9,7 @@
 - `npm run test:e2e` — Playwright Chromium smoke tests against the Vite development server.
 - `npm run build` — TypeScript project build and production Vite bundle.
 
-## Coverage through Phase 6
+## Coverage through Phase 7
 
 Tests verify default material profiles and snapshot isolation, versioned project JSON round-trips and rejection paths, IndexedDB save/list/restore/delete behaviour, parameter panel state changes and undo, ASCII and binary STL parsing, cube normalization, unit conversion, degenerate-triangle reporting, open/non-manifold/disconnected topology, scaling, orientation, and model inspection controls.
 
@@ -26,6 +26,15 @@ Phase 5 geometry tests cover X/Y, X/Z, and Y/Z cube families, deterministic comp
 - Focused tests cover zero-area projections, visible enclosure-preserving simplification, incompatible short walls, pyramid/frustum variants, material warnings, project version migration, and operation-layered SVG metadata.
 - Component tests cover conditional family controls and simultaneous source/fitted profile inspection.
 - Playwright imports a real STL, selects and adjusts a template, generates through the real worker, verifies assembled and flat previews, and inspects the downloaded layered SVG.
+
+## Phase 7 output coverage
+
+- Pure geometry tests verify half-kerf direction for outer and hole contours, source immutability, degenerate rejection, open-path notices, score conversion, deterministic perforation dashes, invalid pattern errors, material estimates, cut length, and registration marks.
+- SVG tests verify prepared coordinates, editable operation styles, printable-label size, registration marks, preparation metadata, and stable operation groups.
+- PDF tests verify deterministic bytes, physical page sizes, multiple page objects, vector content streams, labels, document metadata, and an explicit no-placement error.
+- Project migration tests verify version 2 output settings acquire version 3 defaults while new exports declare version 3.
+- Component tests cover every output setting category and accessible operation colour/width labels.
+- Playwright generates a folding net, previews material kerf and perforations, edits cut styling, shows registration marks, and inspects both downloaded SVG and PDF files.
 
 ## Known Phase 1 baselines
 

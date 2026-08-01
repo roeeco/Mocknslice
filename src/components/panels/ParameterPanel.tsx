@@ -20,7 +20,7 @@ export function ParameterPanel() {
     <section className="panel-section" aria-labelledby="parameters-heading">
       <div className="panel-heading-row">
         <p className="eyebrow">Setup</p>
-        <span className="phase-badge">Phase 5</span>
+        <span className="phase-badge">Phase 7</span>
       </div>
       <h2 id="parameters-heading">{copy.parametersPanel}</h2>
 
@@ -48,7 +48,7 @@ export function ParameterPanel() {
           ))}
         </select>
         <p className="field-help">
-          Stacked and interlocking slices are available now. Folding modes remain planned.
+          Stacked slices, interlocking slices, and shape-aware folding templates are available.
         </p>
       </div>
 

@@ -1,7 +1,12 @@
-import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
+import { useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
 import type { FabricationPart, SheetPlacement } from '../../domain/fabrication';
 import type { Point2D } from '../../domain/geometry';
+import type { OperationStyle } from '../../domain/operations';
 import { transformPoint, transformedBoundsForPart } from '../../geometry/layout/partPlacement';
+import {
+  createRegistrationMarkPaths,
+  prepareFabricationOutput,
+} from '../../geometry/output/prepareFabricationOutput';
 import { copy } from '../../locales/en';
 import { useProjectStore } from '../../state/useProjectStore';
 
@@ -45,7 +50,9 @@ function PartOnSheet({
   selected,
   selectedEntityId,
   invalid,
-  strokeByOperation,
+  styleByOperation,
+  labelFontSizeMm,
+  includeLabels,
   onPointerDown,
   onSelect,
   onSelectEntity,
@@ -55,7 +62,9 @@ function PartOnSheet({
   selected: boolean;
   selectedEntityId: string | undefined;
   invalid: boolean;
-  strokeByOperation: Map<string, string>;
+  styleByOperation: Map<string, OperationStyle>;
+  labelFontSizeMm: number;
+  includeLabels: boolean;
   onPointerDown: (event: PointerEvent<SVGGElement>) => void;
   onSelect: () => void;
   onSelectEntity: (id: string) => void;
@@ -82,6 +91,7 @@ function PartOnSheet({
       {part.paths.map((path) => {
         const entityId = path.tabId ?? path.edgeId ?? path.panelId;
         const entitySelected = [path.tabId, path.edgeId, path.panelId].includes(selectedEntityId);
+        const style = styleByOperation.get(path.operation);
         return (
           <path
             key={path.id}
@@ -94,8 +104,12 @@ function PartOnSheet({
                   : 'none'
             }
             fillRule="evenodd"
-            stroke={strokeByOperation.get(path.operation) ?? '#222222'}
-            strokeWidth={selected || entitySelected ? 0.65 : 0.35}
+            stroke={style?.stroke ?? '#222222'}
+            strokeWidth={
+              selected || entitySelected
+                ? Math.max(0.65, style?.strokeWidthMm ?? 0.35)
+                : (style?.strokeWidthMm ?? 0.35)
+            }
             vectorEffect="non-scaling-stroke"
             data-operation={path.operation}
             data-slot={path.slot ? 'true' : undefined}
@@ -113,43 +127,45 @@ function PartOnSheet({
           />
         );
       })}
-      {part.label && bounds ? (
+      {includeLabels && part.label && bounds ? (
         <text
           x={bounds.minX + 2}
-          y={bounds.minY + 4}
-          fontSize="3"
+          y={bounds.minY + labelFontSizeMm + 1}
+          fontSize={labelFontSizeMm}
           fill="#1f2724"
           pointerEvents="none"
         >
           {part.label}
         </text>
       ) : null}
-      {part.labels?.map((label) => {
-        const point = transformPoint(label.position, placement);
-        const entitySelected = label.entityId === selectedEntityId;
-        return (
-          <text
-            key={label.id}
-            x={point.x}
-            y={point.y}
-            fontSize="2.4"
-            textAnchor="middle"
-            fill={entitySelected ? '#d85c2f' : '#1f2724'}
-            data-operation={label.operation}
-            data-entity-id={label.entityId}
-            onClick={
-              label.entityId
-                ? (event) => {
-                    event.stopPropagation();
-                    onSelectEntity(label.entityId!);
-                  }
-                : undefined
-            }
-          >
-            {label.text}
-          </text>
-        );
-      })}
+      {includeLabels
+        ? part.labels?.map((label) => {
+            const point = transformPoint(label.position, placement);
+            const entitySelected = label.entityId === selectedEntityId;
+            return (
+              <text
+                key={label.id}
+                x={point.x}
+                y={point.y}
+                fontSize={labelFontSizeMm}
+                textAnchor="middle"
+                fill={entitySelected ? '#d85c2f' : '#1f2724'}
+                data-operation={label.operation}
+                data-entity-id={label.entityId}
+                onClick={
+                  label.entityId
+                    ? (event) => {
+                        event.stopPropagation();
+                        onSelectEntity(label.entityId!);
+                      }
+                    : undefined
+                }
+              >
+                {label.text}
+              </text>
+            );
+          })
+        : null}
     </g>
   );
 }
@@ -164,12 +180,13 @@ export function TwoViewport() {
   const selectEntity = useProjectStore((state) => state.selectEntity);
   const setActiveSheet = useProjectStore((state) => state.setActiveSheet);
   const updatePartPlacement = useProjectStore((state) => state.updatePartPlacement);
+  const preparedParts = useMemo(() => prepareFabricationOutput(project).parts, [project]);
   const sheet =
     project.sheetLayouts.find((candidate) => candidate.id === activeSheetId) ??
     project.sheetLayouts[0];
   if (!sheet) return null;
 
-  const partsById = new Map(project.generatedParts.map((part) => [part.id, part]));
+  const partsById = new Map(preparedParts.map((part) => [part.id, part]));
   const invalidIds = new Set(
     validationIssues
       .filter((issue) =>
@@ -177,8 +194,8 @@ export function TwoViewport() {
       )
       .flatMap((issue) => issue.affectedEntityIds),
   );
-  const strokeByOperation = new Map(
-    project.exportSettings.operationStyles.map((style) => [style.operation, style.stroke]),
+  const styleByOperation = new Map(
+    project.exportSettings.operationStyles.map((style) => [style.operation, style]),
   );
   const placements = sheet.placements.flatMap((placement) => {
     const part = partsById.get(placement.partId);
@@ -269,6 +286,24 @@ export function TwoViewport() {
           vectorEffect="non-scaling-stroke"
           pointerEvents="none"
         />
+        {project.exportSettings.includeRegistrationMarks
+          ? createRegistrationMarkPaths(sheet).map((path) => (
+              <path
+                key={path.id}
+                d={pathData(
+                  path.points,
+                  { partId: 'registration', x: 0, y: 0, rotationDeg: 0 },
+                  false,
+                )}
+                fill="none"
+                stroke={styleByOperation.get('guide')?.stroke ?? '#6b7280'}
+                strokeWidth={styleByOperation.get('guide')?.strokeWidthMm ?? 0.35}
+                vectorEffect="non-scaling-stroke"
+                data-registration-mark="true"
+                pointerEvents="none"
+              />
+            ))
+          : null}
         {placements.map(({ part, placement }) => (
           <PartOnSheet
             key={part.id}
@@ -277,7 +312,9 @@ export function TwoViewport() {
             selected={selectedEntityId === part.id}
             selectedEntityId={selectedEntityId}
             invalid={invalidIds.has(part.id)}
-            strokeByOperation={strokeByOperation}
+            styleByOperation={styleByOperation}
+            labelFontSizeMm={project.exportSettings.labelFontSizeMm}
+            includeLabels={project.exportSettings.includeLabels}
             onPointerDown={(event) => beginDrag(event, placement)}
             onSelect={() => selectEntity(part.id)}
             onSelectEntity={selectEntity}

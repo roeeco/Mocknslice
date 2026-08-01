@@ -65,12 +65,35 @@ describe('SliceFold project format', () => {
     expect(restored.generatedParts[0]?.paths[1]?.slot?.widthMm).toBe(2);
   });
 
-  it('migrates a valid version 1 project through the version 2 reader', () => {
+  it('migrates a valid version 1 project through the version 3 reader', () => {
     const project = createProject('Legacy');
     const legacy = JSON.stringify({ format: 'slicefold-project', version: 1, project });
 
     expect(parseProjectFile(legacy)).toEqual(project);
-    expect(JSON.parse(serializeProject(project))).toMatchObject({ version: 2 });
+    expect(JSON.parse(serializeProject(project))).toMatchObject({ version: 3 });
+  });
+
+  it('adds Phase 7 output defaults while migrating a version 2 project', () => {
+    const project = createProject('Version 2');
+    const file = JSON.parse(serializeProject(project)) as Record<string, unknown>;
+    file.version = 2;
+    const storedProject = file.project as Record<string, unknown>;
+    const exportSettings = storedProject.exportSettings as Record<string, unknown>;
+    delete exportSettings.kerfCompensation;
+    delete exportSettings.customKerfMm;
+    delete exportSettings.foldLineOutput;
+    delete exportSettings.perforationDashMm;
+    delete exportSettings.perforationGapMm;
+    delete exportSettings.labelFontSizeMm;
+
+    expect(parseProjectFile(JSON.stringify(file)).exportSettings).toMatchObject({
+      kerfCompensation: 'none',
+      customKerfMm: project.materialProfileSnapshot.kerfMm,
+      foldLineOutput: 'preserve',
+      perforationDashMm: 2,
+      perforationGapMm: 1,
+      labelFontSizeMm: 3,
+    });
   });
 
   it('round-trips a serializable folding result with stable panel references', () => {

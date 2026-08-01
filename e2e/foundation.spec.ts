@@ -220,3 +220,62 @@ test('imports an STL, fits a folding template, previews its net, and exports ope
   expect(svg).toContain('data-tab-id=');
   expect(svg).toContain('data-entity-id=');
 });
+
+test('prepares kerf, perforations, labels, registration marks, styles, and PDF output', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.getByLabel('Fabrication mode').selectOption('fold-template');
+  await page.getByRole('button', { name: 'Generate template' }).click();
+  await expect(page.getByText('5 panels · 4 tabs', { exact: true })).toBeVisible();
+
+  await page.getByLabel('Kerf compensation').selectOption('material');
+  await expect(
+    page.getByLabel('Fabrication output').getByText('0.1 mm', { exact: true }),
+  ).toBeVisible();
+  await page.getByLabel('Fold-line output').selectOption('perforate');
+  await page.getByLabel('Dash length').fill('3');
+  await page.getByLabel('Gap length').fill('1');
+  await page.getByLabel('Registration marks').check();
+  await page.getByLabel('Label size').fill('4');
+  await page.getByText('Operation styles', { exact: true }).click();
+  await page.getByLabel('Cut colour').fill('#00aa11');
+  await page.getByLabel('Cut width').fill('0.2');
+
+  await page.getByRole('button', { name: '2D parts' }).click();
+  await expect(page.locator('path[data-registration-mark="true"]')).toHaveCount(8);
+  await expect(page.locator('path[data-operation="perforate"]')).not.toHaveCount(0);
+  await expect(page.locator('path[data-operation="valley-fold"]')).toHaveCount(0);
+  await expect(page.locator('path[data-operation="cut"]').first()).toHaveAttribute(
+    'stroke',
+    '#00aa11',
+  );
+
+  const svgDownloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download active sheet SVG' }).click();
+  const svgDownload = await svgDownloadPromise;
+  const svgStream = await svgDownload.createReadStream();
+  const svgChunks: Uint8Array[] = [];
+  for await (const chunk of svgStream as AsyncIterable<Uint8Array>) svgChunks.push(chunk);
+  const svg = Buffer.concat(svgChunks).toString('utf8');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:3');
+  expect(svg).toContain('&quot;kerfMm&quot;:0.1');
+  expect(svg).toContain('id="operation-perforate"');
+  expect(svg).toContain('data-registration-mark="true"');
+  expect(svg).toContain('stroke="#00aa11" stroke-width="0.2"');
+  expect(svg).toContain('font-size="4"');
+
+  const pdfDownloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export assembly PDF' }).click();
+  const pdfDownload = await pdfDownloadPromise;
+  expect(pdfDownload.suggestedFilename()).toMatch(/assembly\.pdf$/);
+  const pdfStream = await pdfDownload.createReadStream();
+  const pdfChunks: Uint8Array[] = [];
+  for await (const chunk of pdfStream as AsyncIterable<Uint8Array>) pdfChunks.push(chunk);
+  const pdf = Buffer.concat(pdfChunks).toString('latin1');
+  expect(pdf.startsWith('%PDF-1.4')).toBe(true);
+  expect(pdf).toContain('/Type /Pages');
+  expect(pdf).toContain('(Open box net) Tj');
+  expect(pdf).toContain('Operations: cut, score, perforate, engrave, guide');
+  expect(pdf.endsWith('%%EOF\n')).toBe(true);
+});

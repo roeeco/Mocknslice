@@ -1,8 +1,9 @@
-import { useRef, useState, type ChangeEvent } from 'react';
+import { useMemo, useRef, useState, type ChangeEvent } from 'react';
 import { createProjectDownload } from '../../exporters/exportProject';
 import { createSheetSvgDownload } from '../../exporters/exportSvg';
 import { parseProjectFile, ProjectImportError } from '../../exporters/importProject';
 import { copy } from '../../locales/en';
+import { prepareFabricationOutput } from '../../geometry/output/prepareFabricationOutput';
 import { useProjectStore } from '../../state/useProjectStore';
 
 const autosaveLabels = {
@@ -27,6 +28,10 @@ export function AppHeader() {
   const canRedo = useProjectStore((state) => state.future.length > 0);
   const activeSheet =
     project.sheetLayouts.find((sheet) => sheet.id === activeSheetId) ?? project.sheetLayouts[0];
+  const hasOutputErrors = useMemo(
+    () => prepareFabricationOutput(project).issues.some((issue) => issue.severity === 'error'),
+    [project],
+  );
 
   const handleImport = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -98,11 +103,13 @@ export function AppHeader() {
         <button
           type="button"
           onClick={() => activeSheet && createSheetSvgDownload(project, activeSheet.id)}
-          disabled={!activeSheet || activeSheet.placements.length === 0}
+          disabled={!activeSheet || activeSheet.placements.length === 0 || hasOutputErrors}
           title={
-            !activeSheet || activeSheet.placements.length === 0
-              ? 'Place parts on the active sheet before exporting SVG.'
-              : undefined
+            hasOutputErrors
+              ? 'Resolve fabrication output errors before exporting SVG.'
+              : !activeSheet || activeSheet.placements.length === 0
+                ? 'Place parts on the active sheet before exporting SVG.'
+                : undefined
           }
         >
           {copy.exportSvg}

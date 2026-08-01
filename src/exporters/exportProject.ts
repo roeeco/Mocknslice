@@ -1,9 +1,9 @@
-import type { ProjectData, SliceFoldProjectFileV2 } from '../domain/project';
+import type { ProjectData, SliceFoldProjectFileV3 } from '../domain/project';
 
-export const CURRENT_PROJECT_FILE_VERSION = 2 as const;
+export const CURRENT_PROJECT_FILE_VERSION = 3 as const;
 
 export function serializeProject(project: ProjectData): string {
-  const file: SliceFoldProjectFileV2 = {
+  const file: SliceFoldProjectFileV3 = {
     format: 'slicefold-project',
     version: CURRENT_PROJECT_FILE_VERSION,
     project,

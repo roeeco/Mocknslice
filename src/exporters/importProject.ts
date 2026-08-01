@@ -364,6 +364,18 @@ function isExportSettings(value: unknown): boolean {
     typeof value.includeLabels === 'boolean' &&
     typeof value.includeRegistrationMarks === 'boolean' &&
     typeof value.includeSheetBoundary === 'boolean' &&
+    (value.kerfCompensation === undefined ||
+      value.kerfCompensation === 'none' ||
+      value.kerfCompensation === 'material' ||
+      value.kerfCompensation === 'custom') &&
+    (value.customKerfMm === undefined || isFiniteNumber(value.customKerfMm)) &&
+    (value.foldLineOutput === undefined ||
+      value.foldLineOutput === 'preserve' ||
+      value.foldLineOutput === 'score' ||
+      value.foldLineOutput === 'perforate') &&
+    (value.perforationDashMm === undefined || isFiniteNumber(value.perforationDashMm)) &&
+    (value.perforationGapMm === undefined || isFiniteNumber(value.perforationGapMm)) &&
+    (value.labelFontSizeMm === undefined || isFiniteNumber(value.labelFontSizeMm)) &&
     Array.isArray(value.operationStyles) &&
     value.operationStyles.every(
       (style) =>
@@ -373,6 +385,23 @@ function isExportSettings(value: unknown): boolean {
         isString(style.stroke) &&
         isFiniteNumber(style.strokeWidthMm),
     )
+  );
+}
+
+function isCurrentExportSettings(value: unknown): boolean {
+  return (
+    isExportSettings(value) &&
+    isRecord(value) &&
+    (value.kerfCompensation === 'none' ||
+      value.kerfCompensation === 'material' ||
+      value.kerfCompensation === 'custom') &&
+    isFiniteNumber(value.customKerfMm) &&
+    (value.foldLineOutput === 'preserve' ||
+      value.foldLineOutput === 'score' ||
+      value.foldLineOutput === 'perforate') &&
+    isFiniteNumber(value.perforationDashMm) &&
+    isFiniteNumber(value.perforationGapMm) &&
+    isFiniteNumber(value.labelFontSizeMm)
   );
 }
 
@@ -417,7 +446,7 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
     throw new ProjectImportError('This file is not a SliceFold project.');
   }
 
-  if (value.version !== 1 && value.version !== 2) {
+  if (value.version !== 1 && value.version !== 2 && value.version !== 3) {
     throw new ProjectImportError(
       `Project version ${String(value.version)} is not supported by this build.`,
     );
@@ -427,10 +456,28 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
     throw new ProjectImportError('The project file is incomplete or damaged.');
   }
 
+  if (value.version === 3 && !isCurrentExportSettings(value.project.exportSettings)) {
+    throw new ProjectImportError('The project file is incomplete or damaged.');
+  }
+
+  const project: ProjectData = {
+    ...value.project,
+    exportSettings: {
+      ...value.project.exportSettings,
+      kerfCompensation: value.project.exportSettings.kerfCompensation ?? 'none',
+      customKerfMm:
+        value.project.exportSettings.customKerfMm ?? value.project.materialProfileSnapshot.kerfMm,
+      foldLineOutput: value.project.exportSettings.foldLineOutput ?? 'preserve',
+      perforationDashMm: value.project.exportSettings.perforationDashMm ?? 2,
+      perforationGapMm: value.project.exportSettings.perforationGapMm ?? 1,
+      labelFontSizeMm: value.project.exportSettings.labelFontSizeMm ?? 3,
+    },
+  };
+
   return {
     format: 'slicefold-project',
-    version: 2,
-    project: value.project,
+    version: 3,
+    project,
   };
 }
 

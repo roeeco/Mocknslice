@@ -117,3 +117,26 @@ Open boxes, lidded boxes, and trays use fitted profile extents. Sleeves use the 
 - The 3D preview shows intersecting family panels but does not subtract the U-shaped slot waste from the rendered extrusion.
 - Hole-aware scan intervals are supported, but entries that may originate from an internal hole receive a manual-review warning.
 - Slot-fit validation is geometric only; it does not simulate flex, kerf, grain, insertion order, or structural strength.
+
+## Fabrication-output preparation
+
+Phase 7 keeps generated geometry canonical and creates a prepared derivative for the live 2D preview, SVG, PDF, warnings, and usage estimates.
+
+1. Resolve kerf from `none`, the material snapshot, or a custom non-negative value.
+2. Offset eligible closed cut contours by half the kerf: outer contours outward and hole contours inward.
+3. Validate winding, finite intersections, miter length, area preservation, and self-intersection. Preserve the source path and emit `KERF_OFFSET_FAILED` if a reliable result cannot be produced.
+4. Keep open cut paths on their centreline and emit `KERF_OPEN_PATH_SKIPPED`; this includes waffle slots and segmented folding-net boundaries.
+5. Preserve mountain/valley operations, combine them as score lines, or split them into stable dash/gap perforation paths.
+6. Add optional guide-layer registration crosses directly in sheet coordinates.
+
+The built-in offset is intended for simple polygon contours and avoids a new polygon-boolean dependency. It does not silently trim self-intersections or join independent open cut segments into a closed boundary.
+
+Material usage sums exact outer-minus-hole area for closed contours. Folding nets use the sum of serializable panel and enabled-tab areas. Other open-path-only parts fall back to their planar bounding footprint. Waste and utilization compare that estimate with every sheet containing placements; cut length is calculated from prepared cut paths.
+
+## Phase 7 limitations
+
+- Kerf compensation is not applied to open slot or folding-net cut paths; the interface reports every affected part.
+- Concave offsets that require topology changes or polygon booleans are rejected rather than repaired.
+- Material usage does not account for grain constraints, spacing corridors, overlapping folding panels/tabs, or scrap reuse.
+- PDF uses vector paths and a built-in Helvetica font. Non-ASCII label characters are replaced with `?` until embedded-font support is added.
+- PDF pages use the configured physical sheet size and are assembly/print guides, not a substitute for confirming cutter-driver scale settings.

@@ -137,4 +137,73 @@ describe('createSvgDocument', () => {
     expect(svg).toContain('data-tab-id=');
     expect(svg).toContain('data-entity-id=');
   });
+
+  it('exports kerf, perforation, registration, label-size, and style settings visibly', () => {
+    const project = createProject('Prepared output');
+    project.generatedParts = [
+      {
+        id: 'prepared-part',
+        name: 'Prepared part',
+        label: 'P1',
+        thicknessMm: 1,
+        paths: [
+          {
+            id: 'prepared-cut',
+            operation: 'cut',
+            closed: true,
+            contourRole: 'outer',
+            points: [
+              { x: -5, y: -5 },
+              { x: 5, y: -5 },
+              { x: 5, y: 5 },
+              { x: -5, y: 5 },
+            ],
+          },
+          {
+            id: 'prepared-fold',
+            operation: 'mountain-fold',
+            closed: false,
+            points: [
+              { x: -5, y: 0 },
+              { x: 5, y: 0 },
+            ],
+          },
+        ],
+      },
+    ];
+    project.sheetLayouts[0]!.placements = [
+      { partId: 'prepared-part', x: 20, y: 20, rotationDeg: 0 },
+    ];
+    project.exportSettings.kerfCompensation = 'custom';
+    project.exportSettings.customKerfMm = 0.2;
+    project.exportSettings.foldLineOutput = 'perforate';
+    project.exportSettings.perforationDashMm = 2;
+    project.exportSettings.perforationGapMm = 1;
+    project.exportSettings.includeRegistrationMarks = true;
+    project.exportSettings.labelFontSizeMm = 4;
+    project.exportSettings.operationStyles = project.exportSettings.operationStyles.map((style) =>
+      style.operation === 'perforate'
+        ? { ...style, stroke: '#123456', strokeWidthMm: 0.25 }
+        : style,
+    );
+
+    const svg = createSheetSvgDocument(project, project.sheetLayouts[0]!.id);
+    expect(svg).toContain('&quot;kerfMm&quot;:0.2');
+    expect(svg).toContain('M 14.9 14.9 L 25.1 14.9 L 25.1 25.1 L 14.9 25.1 Z');
+    expect(svg.match(/prepared-fold-perforation-/g)).toHaveLength(4);
+    expect(svg.match(/data-registration-mark="true"/g)).toHaveLength(8);
+    expect(svg).toContain(
+      'id="operation-perforate" data-operation="perforate" fill="none" stroke="#123456" stroke-width="0.25"',
+    );
+    expect(svg).toContain(
+      'id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="4"',
+    );
+  });
+
+  it('blocks vector export when output preparation has an error', () => {
+    const project = createProject();
+    project.exportSettings.kerfCompensation = 'custom';
+    project.exportSettings.customKerfMm = -1;
+    expect(() => createSvgDocument(project)).toThrow('Custom kerf must be a non-negative');
+  });
 });

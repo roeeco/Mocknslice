@@ -38,4 +38,11 @@ export interface SliceFoldProjectFileV2 {
   project: ProjectData;
 }
 
-export type SliceFoldProjectFile = SliceFoldProjectFileV1 | SliceFoldProjectFileV2;
+export interface SliceFoldProjectFileV3 {
+  format: 'slicefold-project';
+  version: 3;
+  project: ProjectData;
+}
+
+export type SliceFoldProjectFile =
+  SliceFoldProjectFileV1 | SliceFoldProjectFileV2 | SliceFoldProjectFileV3;
