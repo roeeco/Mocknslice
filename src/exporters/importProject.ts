@@ -229,7 +229,8 @@ function isFabricationPart(value: unknown): boolean {
           construction.role === 'back' ||
           construction.role === 'left' ||
           construction.role === 'right' ||
-          construction.role === 'lid') &&
+          construction.role === 'lid' ||
+          (isString(construction.role) && /^divider-\d+$/.test(construction.role))) &&
         isStringArray(construction.jointIds)))
   );
 }
@@ -241,14 +242,17 @@ function isFoldTab(value: unknown): boolean {
     isString(value.partId) &&
     isString(value.edgeId) &&
     isString(value.ownerPanelId) &&
-    value.style === 'glue' &&
+    (value.style === 'glue' || value.style === 'press-fit') &&
     isFiniteNumber(value.depthMm) &&
     isFiniteNumber(value.shoulderAngleDeg) &&
     typeof value.enabled === 'boolean' &&
     isPoint2D(value.baseStart) &&
     isPoint2D(value.baseEnd) &&
     Array.isArray(value.outline) &&
-    value.outline.every(isPoint2D)
+    value.outline.every(isPoint2D) &&
+    (value.receiverPanelId === undefined || isString(value.receiverPanelId)) &&
+    (value.slotStart === undefined || isPoint2D(value.slotStart)) &&
+    (value.slotEnd === undefined || isPoint2D(value.slotEnd))
   );
 }
 
@@ -342,7 +346,10 @@ function isTemplateGenerationResult(value: unknown): boolean {
         Array.isArray(panel.verticesMm) &&
         panel.verticesMm.every(
           (point) => Array.isArray(point) && point.length === 3 && point.every(isFiniteNumber),
-        ),
+        ) &&
+        (panel.holesVerticesMm === undefined ||
+          (Array.isArray(panel.holesVerticesMm) &&
+            panel.holesVerticesMm.every((hole) => Array.isArray(hole) && hole.every(isVector3)))),
     ) &&
     isString(value.algorithmVersion) &&
     isString(value.inputHash)
@@ -446,7 +453,12 @@ function isMeshUnfoldResult(value: unknown): boolean {
 }
 
 const panelRoles = new Set(['base', 'front', 'back', 'left', 'right', 'lid']);
+
+function isPanelRole(value: unknown): boolean {
+  return isString(value) && (panelRoles.has(value) || /^divider-\d+$/.test(value));
+}
 const panelEdges = new Set(['bottom', 'right', 'top', 'left']);
+const panelJointLocations = new Set([...panelEdges, 'face']);
 const panelJointKinds = new Set(['butt', 'finger', 'tab-slot']);
 
 function isPanelConstructionResult(value: unknown): boolean {
@@ -464,6 +476,10 @@ function isPanelConstructionResult(value: unknown): boolean {
     isFiniteNumber(settings.fingerWidthMm) &&
     isFiniteNumber(settings.clearanceMm) &&
     typeof settings.includeLid === 'boolean' &&
+    (settings.dividerCount === undefined || Number.isInteger(settings.dividerCount)) &&
+    (settings.dividerAxis === undefined ||
+      settings.dividerAxis === 'width' ||
+      settings.dividerAxis === 'depth') &&
     isRecord(material) &&
     isString(material.id) &&
     isString(material.category) &&
@@ -476,8 +492,7 @@ function isPanelConstructionResult(value: unknown): boolean {
         isString(panel.id) &&
         isString(panel.partId) &&
         isString(panel.name) &&
-        isString(panel.role) &&
-        panelRoles.has(panel.role) &&
+        isPanelRole(panel.role) &&
         isFiniteNumber(panel.widthMm) &&
         isFiniteNumber(panel.heightMm) &&
         Array.isArray(panel.outline) &&
@@ -497,14 +512,15 @@ function isPanelConstructionResult(value: unknown): boolean {
         isString(joint.panelAId) &&
         isString(joint.panelBId) &&
         isString(joint.edgeA) &&
-        panelEdges.has(joint.edgeA) &&
+        panelJointLocations.has(joint.edgeA) &&
         isString(joint.edgeB) &&
-        panelEdges.has(joint.edgeB) &&
+        panelJointLocations.has(joint.edgeB) &&
         isFiniteNumber(joint.sharedLengthMm) &&
         Number.isInteger(joint.fingerCount) &&
         isFiniteNumber(joint.clearanceMm) &&
         isString(joint.pairLabel) &&
-        (joint.tabOwnerPanelId === undefined || isString(joint.tabOwnerPanelId)),
+        (joint.tabOwnerPanelId === undefined || isString(joint.tabOwnerPanelId)) &&
+        (joint.receiverCentreMm === undefined || isPoint2D(joint.receiverCentreMm)),
     ) &&
     Array.isArray(value.parts) &&
     value.parts.every(isFabricationPart) &&
@@ -519,7 +535,10 @@ function isPanelConstructionResult(value: unknown): boolean {
         isString(panel.partId) &&
         isString(panel.name) &&
         Array.isArray(panel.verticesMm) &&
-        panel.verticesMm.every(isVector3),
+        panel.verticesMm.every(isVector3) &&
+        (panel.holesVerticesMm === undefined ||
+          (Array.isArray(panel.holesVerticesMm) &&
+            panel.holesVerticesMm.every((hole) => Array.isArray(hole) && hole.every(isVector3)))),
     ) &&
     isString(value.algorithmVersion) &&
     isString(value.inputHash)

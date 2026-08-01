@@ -46,7 +46,7 @@ describe('generatePanelConstruction', () => {
       expect(first.parts).toHaveLength(panelCount);
       expect(first.joints).toHaveLength(jointCount);
       expect(first.assembledPreview.panels).toHaveLength(panelCount);
-      expect(first.algorithmVersion).toBe('rectangular-joints-v1');
+      expect(first.algorithmVersion).toBe('rectangular-joints-v3');
       expect(first.inputHash).toMatch(/^sf9-[0-9a-f]{8}$/);
       expect(first.issues.some((issue) => issue.severity === 'error')).toBe(false);
       expect(
@@ -71,8 +71,8 @@ describe('generatePanelConstruction', () => {
       expect(joint.pairLabel).toMatch(/^J\d+$/);
       const panelA = result.panels.find((panel) => panel.id === joint.panelAId)!;
       const panelB = result.panels.find((panel) => panel.id === joint.panelBId)!;
-      expect(panelA.edgeJointIds[joint.edgeA]).toBe(joint.id);
-      expect(panelB.edgeJointIds[joint.edgeB]).toBe(joint.id);
+      if (joint.edgeA !== 'face') expect(panelA.edgeJointIds[joint.edgeA]).toBe(joint.id);
+      if (joint.edgeB !== 'face') expect(panelB.edgeJointIds[joint.edgeB]).toBe(joint.id);
     }
     expect(result.panels.every((panel) => panel.outline.length > 4)).toBe(true);
   });
@@ -85,6 +85,57 @@ describe('generatePanelConstruction', () => {
     expect(result.parts.at(-1)?.construction?.role).toBe('lid');
     expect(result.issues.map((issue) => issue.code)).toContain('PANEL_CLOSED_ASSEMBLY_REVIEW');
   });
+
+  it.each(['width', 'depth'] as const)(
+    'adds base tabs, finger-jointed sides, wall slots, and exact 3D geometry across %s',
+    (dividerAxis) => {
+      const result = generate({ dividerCount: 2, dividerAxis, jointKind: 'finger' });
+
+      const expectedReceiverRoles = dividerAxis === 'width' ? ['left', 'right'] : ['front', 'back'];
+      const dividerJoints = result.joints.filter((joint) => joint.edgeB === 'face');
+
+      expect(result.panels).toHaveLength(7);
+      expect(result.parts).toHaveLength(7);
+      expect(result.joints).toHaveLength(12);
+      expect(dividerJoints).toHaveLength(4);
+      expect(
+        dividerJoints.map((joint) => joint.panelBId.replace('construction-panel-', '')).sort(),
+      ).toEqual([...expectedReceiverRoles, ...expectedReceiverRoles].sort());
+      expect(dividerJoints.every((joint) => joint.tabOwnerPanelId?.includes('divider-'))).toBe(
+        true,
+      );
+      expect(result.panels.filter((panel) => panel.role.startsWith('divider-'))).toHaveLength(2);
+      expect(
+        result.panels
+          .filter((panel) => panel.role.startsWith('divider-'))
+          .every((panel) => panel.outline.some((point) => Math.abs(point.x) > panel.widthMm / 2)),
+      ).toBe(true);
+      expect(
+        result.parts
+          .find((part) => part.construction?.role === 'base')
+          ?.paths.filter((path) => path.id.includes('base-slot')),
+      ).toHaveLength(4);
+      expect(
+        result.parts.flatMap((part) => part.paths.filter((path) => path.id.includes('-side-slot-')))
+          .length,
+      ).toBeGreaterThan(0);
+      expect(
+        result.assembledPreview.panels.find((panel) => panel.id === 'construction-panel-base')
+          ?.holesVerticesMm,
+      ).toHaveLength(4);
+      expect(
+        result.assembledPreview.panels.find((panel) => panel.id === 'construction-panel-front')
+          ?.verticesMm.length,
+      ).toBeGreaterThan(4);
+      expect(
+        result.assembledPreview.panels
+          .filter((panel) =>
+            expectedReceiverRoles.some((role) => panel.id === `construction-panel-${role}`),
+          )
+          .every((panel) => (panel.holesVerticesMm?.length ?? 0) > 0),
+      ).toBe(true);
+    },
+  );
 
   it('reports material and dimension incompatibilities without silent repair', () => {
     const paper = generatePanelConstruction({

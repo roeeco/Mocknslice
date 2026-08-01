@@ -10,7 +10,13 @@ import {
   type GeometryTask,
 } from '../../workers/geometryWorkerClient';
 import type { SliceAxis } from '../../domain/fabrication';
-import type { TemplateFitSettings, TemplateKind } from '../../domain/folding';
+import type {
+  TemplateEnvelopeDimensions,
+  TemplateFitSettings,
+  TemplateKind,
+  TemplateSizeMode,
+} from '../../domain/folding';
+import { TEMPLATE_KINDS } from '../../domain/folding';
 import type { MeshUnfoldSettings, MeshUnfoldStrategy } from '../../domain/unfolding';
 import type {
   PanelConstructionMaterial,
@@ -25,8 +31,13 @@ import type {
   WaffleSlotPattern,
 } from '../../geometry/slicing/types';
 import { arrangePartsInRows } from '../../geometry/layout/arrangeParts';
+import type { WorkflowStep } from '../types';
 
 let activeTask: Pick<GeometryTask<unknown>, 'cancel'> | undefined;
+
+function completeConfigureStep(completed: readonly WorkflowStep[]): WorkflowStep[] {
+  return completed.includes('configure') ? [...completed] : [...completed, 'configure'];
+}
 
 function positiveNumber(value: unknown, fallback: number): number {
   return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : fallback;
@@ -92,15 +103,27 @@ function waffleSettingsMatch(a: WaffleSliceSettings, b: WaffleSliceSettings): bo
   );
 }
 
-const templateKinds = new Set<TemplateKind>([
-  'open-box',
-  'box-with-lid',
-  'tray',
-  'sleeve',
-  'envelope',
-  'regular-prism',
-  'pyramid-frustum',
-]);
+const templateKinds = new Set<TemplateKind>(TEMPLATE_KINDS);
+
+function withTemplateSource(project: ProjectData, templateKind: TemplateKind): ProjectData {
+  const alreadyCreating = project.modeParameters.workflowSourceMode === 'template';
+  return touchProject({
+    ...project,
+    fabricationMode: 'fold-template',
+    modeParameters: {
+      ...project.modeParameters,
+      workflowSourceMode: 'template',
+      foldTemplateKind: templateKind,
+      foldSizeMode: 'custom',
+      foldStandalone: true,
+      foldFitAxis: 'y',
+      foldClearanceMm: 0,
+      foldWidthMm: alreadyCreating ? positiveNumber(project.modeParameters.foldWidthMm, 80) : 80,
+      foldLengthMm: alreadyCreating ? positiveNumber(project.modeParameters.foldLengthMm, 60) : 60,
+      foldHeightMm: alreadyCreating ? positiveNumber(project.modeParameters.foldHeightMm, 40) : 40,
+    },
+  });
+}
 
 function foldSettingsForProject(project: ProjectData): TemplateFitSettings {
   const rawKind = project.modeParameters.foldTemplateKind;
@@ -109,7 +132,33 @@ function foldSettingsForProject(project: ProjectData): TemplateFitSettings {
       ? (rawKind as TemplateKind)
       : 'open-box';
   const rawAxis = project.modeParameters.foldFitAxis;
-  const fitAxis: SliceAxis = rawAxis === 'x' || rawAxis === 'y' || rawAxis === 'z' ? rawAxis : 'z';
+  const fitAxis: SliceAxis =
+    project.fabricationMode === 'fold-template'
+      ? 'y'
+      : rawAxis === 'x' || rawAxis === 'y' || rawAxis === 'z'
+        ? rawAxis
+        : 'z';
+  const sizeMode: TemplateSizeMode =
+    project.fabricationMode === 'fold-template' || project.modeParameters.foldSizeMode === 'custom'
+      ? 'custom'
+      : 'auto-fit';
+  const envelopeDimensions: TemplateEnvelopeDimensions | undefined =
+    sizeMode === 'custom'
+      ? {
+          widthMm: positiveNumber(
+            project.modeParameters.foldWidthMm,
+            project.model.dimensions.widthMm,
+          ),
+          lengthMm: positiveNumber(
+            project.modeParameters.foldLengthMm,
+            project.model.dimensions.depthMm,
+          ),
+          heightMm: positiveNumber(
+            project.modeParameters.foldHeightMm,
+            project.model.dimensions.heightMm,
+          ),
+        }
+      : undefined;
   return {
     templateKind,
     fitAxis,
@@ -118,6 +167,8 @@ function foldSettingsForProject(project: ProjectData): TemplateFitSettings {
       project.materialProfileSnapshot.clearanceMm,
     ),
     profileToleranceMm: positiveNumber(project.modeParameters.foldProfileToleranceMm, 1),
+    sizeMode,
+    ...(envelopeDimensions ? { envelopeDimensions } : {}),
     parameters: {
       wallHeightMm: positiveNumber(project.modeParameters.foldWallHeightMm, 20),
       tabDepthMm: positiveNumber(project.modeParameters.foldTabDepthMm, 8),
@@ -132,6 +183,13 @@ function foldSettingsForProject(project: ProjectData): TemplateFitSettings {
           : 0,
       topScale: nonNegativeNumber(project.modeParameters.foldTopScale, 0),
       seamTabMm: positiveNumber(project.modeParameters.foldSeamTabMm, 8),
+      standalone: project.fabricationMode === 'fold-template',
+      closureMethod:
+        project.modeParameters.foldClosureMethod === 'press-fit' ? 'press-fit' : 'glue',
+      slotClearanceMm: nonNegativeNumber(
+        project.modeParameters.foldSlotClearanceMm,
+        project.materialProfileSnapshot.clearanceMm,
+      ),
     },
   };
 }
@@ -194,6 +252,11 @@ function panelSettingsForProject(project: ProjectData): PanelConstructionSetting
       project.materialProfileSnapshot.clearanceMm,
     ),
     includeLid: Boolean(project.modeParameters.panelIncludeLid),
+    dividerCount: Math.max(
+      0,
+      Math.min(6, Math.round(nonNegativeNumber(project.modeParameters.panelDividerCount, 0))),
+    ),
+    dividerAxis: project.modeParameters.panelDividerAxis === 'depth' ? 'depth' : 'width',
   };
 }
 
@@ -226,6 +289,44 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       ...recordProjectChange(state, (project) => touchProject({ ...project, fabricationMode })),
       sliceGenerationStatus:
         state.project.generatedParts.length > 0 ? 'stale' : state.sliceGenerationStatus,
+      completedWorkflowSteps: state.completedWorkflowSteps.filter((step) => step === 'start'),
+    })),
+  setWorkflowSourceMode: (workflowSourceMode) =>
+    set((state) => ({
+      ...recordProjectChange(state, (project) =>
+        workflowSourceMode === 'template'
+          ? withTemplateSource(
+              project,
+              templateKinds.has(project.modeParameters.foldTemplateKind as TemplateKind)
+                ? (project.modeParameters.foldTemplateKind as TemplateKind)
+                : 'open-box',
+            )
+          : touchProject({
+              ...project,
+              fabricationMode: 'mesh-unfold',
+              modeParameters: {
+                ...project.modeParameters,
+                workflowSourceMode,
+                foldStandalone: false,
+              },
+            }),
+      ),
+      sliceGenerationStatus:
+        state.project.generatedParts.length > 0 ? 'stale' : state.sliceGenerationStatus,
+      sliceGenerationError: undefined,
+      completedWorkflowSteps: state.completedWorkflowSteps.filter((step) =>
+        ['start', 'mode'].includes(step),
+      ),
+    })),
+  selectTemplateSource: (templateKind) =>
+    set((state) => ({
+      ...recordProjectChange(state, (project) => withTemplateSource(project, templateKind)),
+      sliceGenerationStatus:
+        state.project.generatedParts.length > 0 ? 'stale' : state.sliceGenerationStatus,
+      sliceGenerationError: undefined,
+      completedWorkflowSteps: state.completedWorkflowSteps.filter((step) =>
+        ['start', 'mode'].includes(step),
+      ),
     })),
   setModeParameter: (name, value) =>
     set((state) => ({
@@ -238,6 +339,9 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       sliceGenerationStatus:
         state.project.generatedParts.length > 0 ? 'stale' : state.sliceGenerationStatus,
       sliceGenerationError: undefined,
+      completedWorkflowSteps: state.completedWorkflowSteps.filter((step) =>
+        ['start', 'mode', 'import'].includes(step),
+      ),
     })),
   generateSlices: () => {
     const { project } = get();
@@ -290,12 +394,21 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
           const nextProject = changed.project ?? state.project;
           return {
             ...changed,
-            sliceGenerationStatus: 'ready',
-            sliceGenerationError: undefined,
+            sliceGenerationStatus: result.parts.length > 0 ? 'ready' : 'error',
+            sliceGenerationError:
+              result.parts.length > 0
+                ? undefined
+                : (result.issues.find((issue) => issue.severity === 'error')?.message ??
+                  'Template generation failed.'),
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
-            activeWorkflowStep: 'arrange',
+            activeWorkflowStep: result.parts.length > 0 ? 'inspect' : state.activeWorkflowStep,
+            completedWorkflowSteps:
+              result.parts.length > 0
+                ? completeConfigureStep(state.completedWorkflowSteps)
+                : state.completedWorkflowSteps,
+            viewportMode: result.parts.length > 0 ? 'three' : state.viewportMode,
           };
         });
       })
@@ -373,7 +486,9 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
-            activeWorkflowStep: 'arrange',
+            activeWorkflowStep: 'inspect',
+            completedWorkflowSteps: completeConfigureStep(state.completedWorkflowSteps),
+            viewportMode: 'three',
           };
         });
       })
@@ -446,7 +561,9 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.panels[0]?.id ?? result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
-            activeWorkflowStep: 'arrange',
+            activeWorkflowStep: 'inspect',
+            completedWorkflowSteps: completeConfigureStep(state.completedWorkflowSteps),
+            viewportMode: 'three',
           };
         });
       })
@@ -522,7 +639,12 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.faces[0]?.id ?? result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
-            activeWorkflowStep: result.parts.length > 0 ? 'arrange' : state.activeWorkflowStep,
+            activeWorkflowStep: result.parts.length > 0 ? 'inspect' : state.activeWorkflowStep,
+            completedWorkflowSteps:
+              result.parts.length > 0
+                ? completeConfigureStep(state.completedWorkflowSteps)
+                : state.completedWorkflowSteps,
+            viewportMode: result.parts.length > 0 ? 'three' : state.viewportMode,
             foldPreviewProgress: 0,
           };
         });
@@ -589,7 +711,12 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.panels[0]?.id ?? result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
-            activeWorkflowStep: result.parts.length > 0 ? 'arrange' : state.activeWorkflowStep,
+            activeWorkflowStep: result.parts.length > 0 ? 'inspect' : state.activeWorkflowStep,
+            completedWorkflowSteps:
+              result.parts.length > 0
+                ? completeConfigureStep(state.completedWorkflowSteps)
+                : state.completedWorkflowSteps,
+            viewportMode: result.parts.length > 0 ? 'three' : state.viewportMode,
           };
         });
       })

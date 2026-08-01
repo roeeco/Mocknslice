@@ -1,27 +1,73 @@
 import { Edges } from '@react-three/drei';
 import { useEffect, useMemo } from 'react';
-import { BufferGeometry, DoubleSide, Float32BufferAttribute } from 'three';
+import { DoubleSide, ExtrudeGeometry, Matrix4, Path, Shape, Vector2, Vector3 } from 'three';
 import type { AssembledFoldPanel } from '../../domain/folding';
 import { useProjectStore } from '../../state/useProjectStore';
 
 const colours = ['#d15e35', '#39786a', '#d29a34', '#577896', '#8e658d', '#73834d'];
+const EMPTY_PANELS: readonly AssembledFoldPanel[] = [];
 
-function ConstructionPanelMesh({ panel, index }: { panel: AssembledFoldPanel; index: number }) {
+function outwardDirection(panelId: string): Vector3 | undefined {
+  if (panelId.endsWith('-base')) return new Vector3(0, -1, 0);
+  if (panelId.endsWith('-front')) return new Vector3(0, 0, -1);
+  if (panelId.endsWith('-back')) return new Vector3(0, 0, 1);
+  if (panelId.endsWith('-left')) return new Vector3(-1, 0, 0);
+  if (panelId.endsWith('-right')) return new Vector3(1, 0, 0);
+  if (panelId.endsWith('-lid')) return new Vector3(0, 1, 0);
+  return undefined;
+}
+
+function planarFrame(points: AssembledFoldPanel['verticesMm'], desiredNormal?: Vector3) {
+  const origin = new Vector3(...points[0]!);
+  const firstDistinct = points
+    .slice(1)
+    .map((point) => new Vector3(...point).sub(origin))
+    .find((vector) => vector.lengthSq() > 1e-10);
+  const u = firstDistinct?.normalize() ?? new Vector3(1, 0, 0);
+  const normal =
+    points
+      .slice(2)
+      .map((point) => new Vector3(...point).sub(origin).cross(u))
+      .find((vector) => vector.lengthSq() > 1e-10)
+      ?.normalize() ?? new Vector3(0, 1, 0);
+  if (desiredNormal && normal.dot(desiredNormal) < 0) normal.multiplyScalar(-1);
+  const v = new Vector3().crossVectors(normal, u).normalize();
+  const project = (point: (typeof points)[number]) => {
+    const relative = new Vector3(...point).sub(origin);
+    return new Vector2(relative.dot(u), relative.dot(v));
+  };
+  const matrix = new Matrix4().makeBasis(u, v, normal);
+  matrix.setPosition(origin);
+  return { matrix, project };
+}
+
+function ConstructionPanelMesh({
+  panel,
+  index,
+  thicknessMm,
+}: {
+  panel: AssembledFoldPanel;
+  index: number;
+  thicknessMm: number;
+}) {
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
   const geometry = useMemo(() => {
-    const result = new BufferGeometry();
-    result.setAttribute(
-      'position',
-      new Float32BufferAttribute(
-        panel.verticesMm.flatMap((point) => point),
-        3,
-      ),
-    );
-    result.setIndex([0, 1, 2, 0, 2, 3]);
-    result.computeVertexNormals();
+    const centredThickness = panel.id.includes('divider-');
+    const { matrix, project } = planarFrame(panel.verticesMm, outwardDirection(panel.id));
+    const shape = new Shape(panel.verticesMm.map(project));
+    const holes = panel.holesVerticesMm ?? [];
+    shape.holes.push(...holes.map((hole) => new Path(hole.map(project))));
+    const result = new ExtrudeGeometry(shape, {
+      depth: thicknessMm,
+      bevelEnabled: false,
+      steps: 1,
+      curveSegments: 1,
+    });
+    if (centredThickness) result.translate(0, 0, -thicknessMm / 2);
+    result.applyMatrix4(matrix);
     return result;
-  }, [panel]);
+  }, [panel, thicknessMm]);
   useEffect(() => () => geometry.dispose(), [geometry]);
   return (
     <mesh
@@ -39,8 +85,6 @@ function ConstructionPanelMesh({ panel, index }: { panel: AssembledFoldPanel; in
         }
         roughness={0.72}
         metalness={0.01}
-        transparent
-        opacity={0.78}
         side={DoubleSide}
         polygonOffset
         polygonOffsetFactor={1}
@@ -51,16 +95,23 @@ function ConstructionPanelMesh({ panel, index }: { panel: AssembledFoldPanel; in
 }
 
 export function PanelConstructionAssembly() {
-  const panels = useProjectStore(
-    (state) => state.project.panelConstructionResult?.assembledPreview.panels ?? [],
-  );
+  const result = useProjectStore((state) => state.project.panelConstructionResult);
+  const panels = result?.assembledPreview.panels ?? EMPTY_PANELS;
   const heightMm = useProjectStore(
     (state) => state.project.panelConstructionResult?.settings.innerHeightMm ?? 0,
+  );
+  const thicknessMm = useProjectStore(
+    (state) => state.project.panelConstructionResult?.material.thicknessMm ?? 1,
   );
   return (
     <group position={[0, -heightMm / 2, 0]}>
       {panels.map((panel, index) => (
-        <ConstructionPanelMesh key={panel.id} panel={panel} index={index} />
+        <ConstructionPanelMesh
+          key={panel.id}
+          panel={panel}
+          index={index}
+          thicknessMm={thicknessMm}
+        />
       ))}
     </group>
   );

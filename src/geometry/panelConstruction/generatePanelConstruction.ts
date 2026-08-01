@@ -13,7 +13,7 @@ import type {
 } from '../../domain/panelConstruction';
 import type { ValidationIssue } from '../../domain/validation';
 
-export const PANEL_CONSTRUCTION_ALGORITHM_VERSION = 'rectangular-joints-v1';
+export const PANEL_CONSTRUCTION_ALGORITHM_VERSION = 'rectangular-joints-v3';
 
 export interface PanelConstructionInput {
   modelId: string;
@@ -26,6 +26,7 @@ interface PanelSpec {
   name: string;
   widthMm: number;
   heightMm: number;
+  dividerPositionMm?: number;
 }
 
 interface JointSpec {
@@ -33,6 +34,14 @@ interface JointSpec {
   panelB: PanelRole;
   edgeA: PanelEdgeName;
   edgeB: PanelEdgeName;
+  lengthMm: number;
+}
+
+interface DividerSideJointSpec {
+  dividerRole: `divider-${number}`;
+  receiverRole: 'front' | 'back' | 'left' | 'right';
+  dividerEdge: 'left' | 'right';
+  receiverCentreMm: Point2D;
   lengthMm: number;
 }
 
@@ -55,6 +64,14 @@ function roundedPoint(point: Point2D): Point2D {
   return { x: rounded(point.x), y: rounded(point.y) };
 }
 
+function dividerCountFor(settings: PanelConstructionSettings): number {
+  return settings.dividerCount ?? 0;
+}
+
+function dividerAxisFor(settings: PanelConstructionSettings): 'width' | 'depth' {
+  return settings.dividerAxis === 'depth' ? 'depth' : 'width';
+}
+
 function fnv1a(values: readonly (string | number | boolean)[]): string {
   let hash = 0x811c9dc5;
   const text = values.join('|');
@@ -67,6 +84,7 @@ function fnv1a(values: readonly (string | number | boolean)[]): string {
 
 export function deterministicPanelConstructionHash(input: PanelConstructionInput): string {
   return fnv1a([
+    PANEL_CONSTRUCTION_ALGORITHM_VERSION,
     input.modelId,
     input.material.id,
     input.material.category,
@@ -79,6 +97,8 @@ export function deterministicPanelConstructionHash(input: PanelConstructionInput
     input.settings.fingerWidthMm,
     input.settings.clearanceMm,
     input.settings.includeLid,
+    dividerCountFor(input.settings),
+    dividerAxisFor(input.settings),
   ]);
 }
 
@@ -173,6 +193,122 @@ function panelOutline(
   return points;
 }
 
+function isDividerRole(role: PanelRole): role is `divider-${number}` {
+  return role.startsWith('divider-');
+}
+
+function dividerTabWidth(widthMm: number, thicknessMm: number): number {
+  return Math.min(widthMm / 5, Math.max(thicknessMm * 4, 6));
+}
+
+function appendFingerEdge(
+  points: Point2D[],
+  start: Point2D,
+  end: Point2D,
+  outward: Point2D,
+  segmentCount: number,
+  depthMm: number,
+): void {
+  pushUnique(points, start);
+  for (let index = 0; index < segmentCount; index += 1) {
+    const segmentStart = pointAlong(start, end, index / segmentCount);
+    const segmentEnd = pointAlong(start, end, (index + 1) / segmentCount);
+    if (index % 2 === 1) {
+      pushUnique(points, {
+        x: segmentStart.x + outward.x * depthMm,
+        y: segmentStart.y + outward.y * depthMm,
+      });
+      pushUnique(points, {
+        x: segmentEnd.x + outward.x * depthMm,
+        y: segmentEnd.y + outward.y * depthMm,
+      });
+    }
+    pushUnique(points, segmentEnd);
+  }
+}
+
+function dividerOutline(
+  spec: PanelSpec,
+  thicknessMm: number,
+  fingerSegmentCount: number,
+): Point2D[] {
+  const left = -spec.widthMm / 2;
+  const right = spec.widthMm / 2;
+  const bottom = -spec.heightMm / 2;
+  const top = spec.heightMm / 2;
+  const tabWidth = dividerTabWidth(spec.widthMm, thicknessMm);
+  const halfTab = tabWidth / 2;
+  const tabDepth = thicknessMm;
+  const centres = [-spec.widthMm / 4, spec.widthMm / 4];
+  const points: Point2D[] = [
+    { x: left, y: bottom },
+    { x: centres[0]! - halfTab, y: bottom },
+    { x: centres[0]! - halfTab, y: bottom - tabDepth },
+    { x: centres[0]! + halfTab, y: bottom - tabDepth },
+    { x: centres[0]! + halfTab, y: bottom },
+    { x: centres[1]! - halfTab, y: bottom },
+    { x: centres[1]! - halfTab, y: bottom - tabDepth },
+    { x: centres[1]! + halfTab, y: bottom - tabDepth },
+    { x: centres[1]! + halfTab, y: bottom },
+    { x: right, y: bottom },
+  ].map(roundedPoint);
+  appendFingerEdge(
+    points,
+    { x: right, y: bottom },
+    { x: right, y: top },
+    { x: 1, y: 0 },
+    fingerSegmentCount,
+    thicknessMm,
+  );
+  pushUnique(points, { x: left, y: top });
+  appendFingerEdge(
+    points,
+    { x: left, y: top },
+    { x: left, y: bottom },
+    { x: -1, y: 0 },
+    fingerSegmentCount,
+    thicknessMm,
+  );
+  return points;
+}
+
+function dividerBaseSlots(
+  settings: PanelConstructionSettings,
+  material: PanelConstructionMaterial,
+  specs: readonly PanelSpec[],
+): FabricationPath[] {
+  const paths: FabricationPath[] = [];
+  for (const spec of specs.filter((candidate) => isDividerRole(candidate.role))) {
+    const position = spec.dividerPositionMm ?? 0;
+    const tabWidth = dividerTabWidth(spec.widthMm, material.thicknessMm);
+    const slotLength = tabWidth + settings.clearanceMm;
+    const slotWidth = material.thicknessMm + settings.clearanceMm;
+    const centres = [-spec.widthMm / 4, spec.widthMm / 4];
+    centres.forEach((alongPosition, index) => {
+      const centre =
+        dividerAxisFor(settings) === 'width'
+          ? { x: alongPosition, y: position }
+          : { x: position, y: alongPosition };
+      const halfX = (dividerAxisFor(settings) === 'width' ? slotLength : slotWidth) / 2;
+      const halfY = (dividerAxisFor(settings) === 'width' ? slotWidth : slotLength) / 2;
+      paths.push({
+        id: `${spec.role}-base-slot-${index + 1}`,
+        operation: 'cut',
+        closed: true,
+        contourRole: 'hole',
+        panelId: 'construction-panel-base',
+        points: [
+          { x: centre.x - halfX, y: centre.y - halfY },
+          { x: centre.x + halfX, y: centre.y - halfY },
+          { x: centre.x + halfX, y: centre.y + halfY },
+          { x: centre.x - halfX, y: centre.y + halfY },
+        ].map(roundedPoint),
+      });
+    });
+  }
+  return paths;
+}
+
 function slotPaths(
   spec: PanelSpec,
   treatments: ReadonlyMap<PanelEdgeName, EdgeTreatment>,
@@ -264,6 +400,20 @@ function panelSpecs(settings: PanelConstructionSettings): PanelSpec[] {
       name: 'Lid panel',
       widthMm: settings.innerWidthMm,
       heightMm: settings.innerDepthMm,
+    });
+  }
+  const dividerCount = dividerCountFor(settings);
+  const dividerSpanMm =
+    dividerAxisFor(settings) === 'width' ? settings.innerWidthMm : settings.innerDepthMm;
+  const positionSpanMm =
+    dividerAxisFor(settings) === 'width' ? settings.innerDepthMm : settings.innerWidthMm;
+  for (let index = 0; index < dividerCount; index += 1) {
+    specs.push({
+      role: `divider-${index + 1}`,
+      name: `Divider ${index + 1}`,
+      widthMm: dividerSpanMm,
+      heightMm: settings.innerHeightMm,
+      dividerPositionMm: -positionSpanMm / 2 + (positionSpanMm * (index + 1)) / (dividerCount + 1),
     });
   }
   return specs;
@@ -363,59 +513,128 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
   return joints;
 }
 
-function assembledPanels(settings: PanelConstructionSettings): AssembledFoldPanel[] {
+function dividerSideJointSpecs(
+  settings: PanelConstructionSettings,
+  specs: readonly PanelSpec[],
+): DividerSideJointSpec[] {
+  const axis = dividerAxisFor(settings);
+  const result: DividerSideJointSpec[] = [];
+  for (const spec of specs) {
+    if (!isDividerRole(spec.role)) continue;
+    const position = spec.dividerPositionMm ?? 0;
+    result.push(
+      axis === 'width'
+        ? {
+            dividerRole: spec.role,
+            receiverRole: 'left',
+            dividerEdge: 'left',
+            receiverCentreMm: { x: -position, y: 0 },
+            lengthMm: settings.innerHeightMm,
+          }
+        : {
+            dividerRole: spec.role,
+            receiverRole: 'front',
+            dividerEdge: 'left',
+            receiverCentreMm: { x: position, y: 0 },
+            lengthMm: settings.innerHeightMm,
+          },
+      axis === 'width'
+        ? {
+            dividerRole: spec.role,
+            receiverRole: 'right',
+            dividerEdge: 'right',
+            receiverCentreMm: { x: position, y: 0 },
+            lengthMm: settings.innerHeightMm,
+          }
+        : {
+            dividerRole: spec.role,
+            receiverRole: 'back',
+            dividerEdge: 'right',
+            receiverCentreMm: { x: -position, y: 0 },
+            lengthMm: settings.innerHeightMm,
+          },
+    );
+  }
+  return result;
+}
+
+function dividerReceiverSlotPaths(
+  role: PanelRole,
+  joints: readonly PanelConstructionJoint[],
+  thicknessMm: number,
+  clearanceMm: number,
+): FabricationPath[] {
+  const paths: FabricationPath[] = [];
+  for (const joint of joints.filter(
+    (candidate) =>
+      candidate.panelBId === `construction-panel-${role}` && candidate.edgeB === 'face',
+  )) {
+    const centre = joint.receiverCentreMm;
+    if (!centre || joint.fingerCount < 3) continue;
+    const pitch = joint.sharedLengthMm / joint.fingerCount;
+    for (let index = 0; index < joint.fingerCount; index += 1) {
+      if (index % 2 === 0) continue;
+      const slotCentre = {
+        x: centre.x,
+        y: centre.y - joint.sharedLengthMm / 2 + pitch * (index + 0.5),
+      };
+      const halfWidth = (thicknessMm + clearanceMm) / 2;
+      const halfHeight = (pitch + clearanceMm) / 2;
+      paths.push({
+        id: `${joint.id}-${role}-side-slot-${index + 1}`,
+        operation: 'cut',
+        closed: true,
+        contourRole: 'hole',
+        panelId: `construction-panel-${role}`,
+        edgeId: joint.id,
+        points: [
+          { x: slotCentre.x - halfWidth, y: slotCentre.y - halfHeight },
+          { x: slotCentre.x + halfWidth, y: slotCentre.y - halfHeight },
+          { x: slotCentre.x + halfWidth, y: slotCentre.y + halfHeight },
+          { x: slotCentre.x - halfWidth, y: slotCentre.y + halfHeight },
+        ].map(roundedPoint),
+      });
+    }
+  }
+  return paths;
+}
+
+function assembledPanels(
+  settings: PanelConstructionSettings,
+  panels: readonly PanelConstructionPanel[],
+  parts: readonly FabricationPart[],
+  specs: readonly PanelSpec[],
+): AssembledFoldPanel[] {
   const halfWidth = settings.innerWidthMm / 2;
   const halfDepth = settings.innerDepthMm / 2;
   const height = settings.innerHeightMm;
-  const panel = (role: PanelRole, verticesMm: Vector3Mm[]): AssembledFoldPanel => ({
-    id: `construction-panel-${role}`,
-    partId: `construction-part-${role}`,
-    name: `${role[0]!.toUpperCase()}${role.slice(1)} panel`,
-    verticesMm,
+  const specsByRole = new Map(specs.map((spec) => [spec.role, spec]));
+  const toWorld = (role: PanelRole, point: Point2D): Vector3Mm => {
+    if (role === 'base') return [point.x, 0, point.y];
+    if (role === 'front') return [point.x, point.y + height / 2, -halfDepth];
+    if (role === 'back') return [-point.x, point.y + height / 2, halfDepth];
+    if (role === 'left') return [-halfWidth, point.y + height / 2, -point.x];
+    if (role === 'right') return [halfWidth, point.y + height / 2, point.x];
+    if (role === 'lid') return [point.x, height, -point.y];
+    const position = specsByRole.get(role)?.dividerPositionMm ?? 0;
+    return dividerAxisFor(settings) === 'width'
+      ? [point.x, point.y + height / 2, position]
+      : [position, point.y + height / 2, point.x];
+  };
+  return panels.map((panel) => {
+    const part = parts.find((candidate) => candidate.id === panel.partId);
+    const holes =
+      part?.paths
+        .filter((path) => path.contourRole === 'hole')
+        .map((path) => path.points.map((point) => toWorld(panel.role, point))) ?? [];
+    return {
+      id: panel.id,
+      partId: panel.partId,
+      name: panel.name,
+      verticesMm: panel.outline.map((point) => toWorld(panel.role, point)),
+      ...(holes.length > 0 ? { holesVerticesMm: holes } : {}),
+    };
   });
-  const panels = [
-    panel('base', [
-      [-halfWidth, 0, -halfDepth],
-      [halfWidth, 0, -halfDepth],
-      [halfWidth, 0, halfDepth],
-      [-halfWidth, 0, halfDepth],
-    ]),
-    panel('front', [
-      [-halfWidth, 0, -halfDepth],
-      [halfWidth, 0, -halfDepth],
-      [halfWidth, height, -halfDepth],
-      [-halfWidth, height, -halfDepth],
-    ]),
-    panel('back', [
-      [halfWidth, 0, halfDepth],
-      [-halfWidth, 0, halfDepth],
-      [-halfWidth, height, halfDepth],
-      [halfWidth, height, halfDepth],
-    ]),
-    panel('left', [
-      [-halfWidth, 0, halfDepth],
-      [-halfWidth, 0, -halfDepth],
-      [-halfWidth, height, -halfDepth],
-      [-halfWidth, height, halfDepth],
-    ]),
-    panel('right', [
-      [halfWidth, 0, -halfDepth],
-      [halfWidth, 0, halfDepth],
-      [halfWidth, height, halfDepth],
-      [halfWidth, height, -halfDepth],
-    ]),
-  ];
-  if (settings.includeLid) {
-    panels.push(
-      panel('lid', [
-        [-halfWidth, height, halfDepth],
-        [halfWidth, height, halfDepth],
-        [halfWidth, height, -halfDepth],
-        [-halfWidth, height, -halfDepth],
-      ]),
-    );
-  }
-  return panels;
 }
 
 function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
@@ -428,7 +647,10 @@ function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
     !Number.isFinite(settings.clearanceMm) ||
     settings.clearanceMm < 0 ||
     !Number.isFinite(material.thicknessMm) ||
-    material.thicknessMm <= 0
+    material.thicknessMm <= 0 ||
+    !Number.isInteger(dividerCountFor(settings)) ||
+    dividerCountFor(settings) < 0 ||
+    dividerCountFor(settings) > 6
   ) {
     return [
       {
@@ -443,6 +665,20 @@ function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
     ];
   }
   const issues: ValidationIssue[] = [];
+  const dividerCount = dividerCountFor(settings);
+  const usesFingers = settings.jointKind !== 'butt' || dividerCount > 0;
+  const dividedSpan =
+    dividerAxisFor(settings) === 'width' ? settings.innerDepthMm : settings.innerWidthMm;
+  if (dividerCount > 0 && dividedSpan / (dividerCount + 1) < material.thicknessMm * 4) {
+    issues.push({
+      id: `panel-divider-spacing-${input.modelId}`,
+      severity: 'error',
+      code: 'PANEL_DIVIDER_SPACING_TOO_NARROW',
+      message: 'The requested dividers leave sections narrower than four material thicknesses.',
+      affectedEntityIds: [input.modelId],
+      suggestedAction: 'Use fewer dividers, a larger box, or thinner material.',
+    });
+  }
   if (Math.min(...dimensions) < material.thicknessMm * 4) {
     issues.push({
       id: `panel-dimension-too-small-${input.modelId}`,
@@ -453,7 +689,7 @@ function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
       suggestedAction: 'Increase the enclosure dimensions or choose thinner material.',
     });
   }
-  if (settings.jointKind !== 'butt' && settings.fingerWidthMm < material.thicknessMm * 1.5) {
+  if (usesFingers && settings.fingerWidthMm < material.thicknessMm * 1.5) {
     issues.push({
       id: `panel-finger-narrow-${input.modelId}`,
       severity: 'warning',
@@ -465,7 +701,9 @@ function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
   }
   const shortestJoint = Math.min(...dimensions);
   const minimumPitch = shortestJoint / segmentCount(shortestJoint, settings.fingerWidthMm);
-  if (settings.jointKind !== 'butt' && settings.fingerWidthMm > shortestJoint / 3) {
+  const dividerPitch =
+    settings.innerHeightMm / segmentCount(settings.innerHeightMm, settings.fingerWidthMm);
+  if (usesFingers && settings.fingerWidthMm > shortestJoint / 3) {
     issues.push({
       id: `panel-finger-sparse-${input.modelId}`,
       severity: 'warning',
@@ -475,7 +713,7 @@ function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
       suggestedAction: 'Reduce target finger width for better load distribution.',
     });
   }
-  if (settings.jointKind !== 'butt' && minimumPitch <= material.kerfMm * 4) {
+  if (usesFingers && Math.min(minimumPitch, dividerPitch) <= material.kerfMm * 4) {
     issues.push({
       id: `panel-finger-kerf-${input.modelId}`,
       severity: 'warning',
@@ -495,8 +733,18 @@ function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
       suggestedAction: 'Reduce slot clearance or use wider fingers.',
     });
   }
+  if (dividerCount > 0 && settings.clearanceMm >= dividerPitch) {
+    issues.push({
+      id: `panel-divider-clearance-large-${input.modelId}`,
+      severity: 'error',
+      code: 'PANEL_DIVIDER_CLEARANCE_TOO_LARGE',
+      message: 'Divider slot clearance is at least as large as the side-finger pitch.',
+      affectedEntityIds: [input.modelId],
+      suggestedAction: 'Reduce slot clearance or use wider divider fingers.',
+    });
+  }
   if (
-    settings.jointKind !== 'butt' &&
+    usesFingers &&
     (material.category === 'paper' || (material.category === 'card' && material.thicknessMm < 0.8))
   ) {
     issues.push({
@@ -558,46 +806,69 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
   const treatmentsByRole = new Map<PanelRole, Map<PanelEdgeName, EdgeTreatment>>(
     specs.map((spec) => [spec.role, new Map()]),
   );
-  const joints: PanelConstructionJoint[] = jointSpecs(input.settings).map((spec, index) => {
-    const id = `construction-joint-${index + 1}`;
-    const count =
-      input.settings.jointKind === 'butt'
-        ? 0
-        : segmentCount(spec.lengthMm, input.settings.fingerWidthMm);
-    const tabOwnerPanelId =
-      input.settings.jointKind === 'tab-slot' ? `construction-panel-${spec.panelA}` : undefined;
-    const treatmentA: EdgeTreatment = {
-      jointId: id,
-      kind: input.settings.jointKind,
-      segmentCount: count,
-      phase: 0,
-      depthMm: input.material.thicknessMm,
-      slotReceiver: false,
-    };
-    const treatmentB: EdgeTreatment = {
-      jointId: id,
-      kind: input.settings.jointKind,
-      segmentCount: count,
-      phase: input.settings.jointKind === 'finger' ? 1 : 0,
-      depthMm: input.material.thicknessMm,
-      slotReceiver: input.settings.jointKind === 'tab-slot',
-    };
-    treatmentsByRole.get(spec.panelA)!.set(spec.edgeA, treatmentA);
-    treatmentsByRole.get(spec.panelB)!.set(spec.edgeB, treatmentB);
-    return {
-      id,
-      kind: input.settings.jointKind,
-      panelAId: `construction-panel-${spec.panelA}`,
-      panelBId: `construction-panel-${spec.panelB}`,
-      edgeA: spec.edgeA,
-      edgeB: spec.edgeB,
+  const enclosureJoints: PanelConstructionJoint[] = jointSpecs(input.settings).map(
+    (spec, index) => {
+      const id = `construction-joint-${index + 1}`;
+      const count =
+        input.settings.jointKind === 'butt'
+          ? 0
+          : segmentCount(spec.lengthMm, input.settings.fingerWidthMm);
+      const tabOwnerPanelId =
+        input.settings.jointKind === 'tab-slot' ? `construction-panel-${spec.panelA}` : undefined;
+      const treatmentA: EdgeTreatment = {
+        jointId: id,
+        kind: input.settings.jointKind,
+        segmentCount: count,
+        phase: 0,
+        depthMm: input.material.thicknessMm,
+        slotReceiver: false,
+      };
+      const treatmentB: EdgeTreatment = {
+        jointId: id,
+        kind: input.settings.jointKind,
+        segmentCount: count,
+        phase: input.settings.jointKind === 'finger' ? 1 : 0,
+        depthMm: input.material.thicknessMm,
+        slotReceiver: input.settings.jointKind === 'tab-slot',
+      };
+      treatmentsByRole.get(spec.panelA)!.set(spec.edgeA, treatmentA);
+      treatmentsByRole.get(spec.panelB)!.set(spec.edgeB, treatmentB);
+      return {
+        id,
+        kind: input.settings.jointKind,
+        panelAId: `construction-panel-${spec.panelA}`,
+        panelBId: `construction-panel-${spec.panelB}`,
+        edgeA: spec.edgeA,
+        edgeB: spec.edgeB,
+        sharedLengthMm: rounded(spec.lengthMm),
+        fingerCount: count,
+        clearanceMm: rounded(input.settings.clearanceMm),
+        pairLabel: `J${index + 1}`,
+        ...(tabOwnerPanelId ? { tabOwnerPanelId } : {}),
+      };
+    },
+  );
+  const dividerFingerCount = segmentCount(
+    input.settings.innerHeightMm,
+    input.settings.fingerWidthMm,
+  );
+  const dividerJoints: PanelConstructionJoint[] = dividerSideJointSpecs(input.settings, specs).map(
+    (spec, index) => ({
+      id: `construction-joint-${enclosureJoints.length + index + 1}`,
+      kind: 'finger',
+      panelAId: `construction-panel-${spec.dividerRole}`,
+      panelBId: `construction-panel-${spec.receiverRole}`,
+      edgeA: spec.dividerEdge,
+      edgeB: 'face',
       sharedLengthMm: rounded(spec.lengthMm),
-      fingerCount: count,
+      fingerCount: dividerFingerCount,
       clearanceMm: rounded(input.settings.clearanceMm),
-      pairLabel: `J${index + 1}`,
-      ...(tabOwnerPanelId ? { tabOwnerPanelId } : {}),
-    };
-  });
+      pairLabel: `J${enclosureJoints.length + index + 1}`,
+      tabOwnerPanelId: `construction-panel-${spec.dividerRole}`,
+      receiverCentreMm: roundedPoint(spec.receiverCentreMm),
+    }),
+  );
+  const joints = [...enclosureJoints, ...dividerJoints];
   const panels: PanelConstructionPanel[] = specs.map((spec) => {
     const roleJoints = joints.filter(
       (joint) =>
@@ -606,8 +877,9 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
     );
     const edgeJointIds: Partial<Record<PanelEdgeName, string>> = {};
     for (const joint of roleJoints) {
-      const edge = joint.panelAId === `construction-panel-${spec.role}` ? joint.edgeA : joint.edgeB;
-      edgeJointIds[edge] = joint.id;
+      const location =
+        joint.panelAId === `construction-panel-${spec.role}` ? joint.edgeA : joint.edgeB;
+      if (location !== 'face') edgeJointIds[location] = joint.id;
     }
     return {
       id: `construction-panel-${spec.role}`,
@@ -616,7 +888,9 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
       role: spec.role,
       widthMm: rounded(spec.widthMm),
       heightMm: rounded(spec.heightMm),
-      outline: panelOutline(spec, treatmentsByRole.get(spec.role)!),
+      outline: isDividerRole(spec.role)
+        ? dividerOutline(spec, input.material.thicknessMm, dividerFingerCount)
+        : panelOutline(spec, treatmentsByRole.get(spec.role)!),
       edgeJointIds,
     };
   });
@@ -636,16 +910,22 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
       },
     ];
     for (const joint of panelJoints) {
-      const edge = joint.panelAId === panel.id ? joint.edgeA : joint.edgeB;
-      const geometry = edgeGeometry(edge, spec.widthMm, spec.heightMm);
-      const midpoint = pointAlong(geometry.start, geometry.end, 0.5);
+      const location = joint.panelAId === panel.id ? joint.edgeA : joint.edgeB;
+      const position =
+        location === 'face'
+          ? (joint.receiverCentreMm ?? { x: 0, y: 0 })
+          : (() => {
+              const geometry = edgeGeometry(location, spec.widthMm, spec.heightMm);
+              const midpoint = pointAlong(geometry.start, geometry.end, 0.5);
+              return {
+                x: midpoint.x - geometry.outward.x * 2.5,
+                y: midpoint.y - geometry.outward.y * 2.5,
+              };
+            })();
       labels.push({
         id: `${joint.id}-${spec.role}-label`,
         text: joint.pairLabel,
-        position: roundedPoint({
-          x: midpoint.x - geometry.outward.x * 2.5,
-          y: midpoint.y - geometry.outward.y * 2.5,
-        }),
+        position: roundedPoint(position),
         operation: 'engrave',
         entityId: joint.id,
       });
@@ -670,6 +950,13 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
           treatmentsByRole.get(spec.role)!,
           input.settings.clearanceMm,
         ),
+        ...dividerReceiverSlotPaths(
+          spec.role,
+          joints,
+          input.material.thicknessMm,
+          input.settings.clearanceMm,
+        ),
+        ...(spec.role === 'base' ? dividerBaseSlots(input.settings, input.material, specs) : []),
       ],
       labels,
       construction: {
@@ -679,14 +966,6 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
       },
     };
   });
-  issues.push({
-    id: `panel-preview-simplified-${input.modelId}`,
-    severity: 'info',
-    code: 'PANEL_PREVIEW_NOMINAL_SURFACES',
-    message: 'The 3D preview shows nominal panel surfaces; inspect finger and slot geometry in 2D.',
-    affectedEntityIds: panels.map((panel) => panel.id),
-    suggestedAction: 'Verify the flat joint profiles and cut a small fit test first.',
-  });
   return {
     settings: input.settings,
     material: input.material,
@@ -694,7 +973,7 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
     joints,
     parts,
     issues,
-    assembledPreview: { panels: assembledPanels(input.settings) },
+    assembledPreview: { panels: assembledPanels(input.settings, panels, parts, specs) },
     algorithmVersion: PANEL_CONSTRUCTION_ALGORITHM_VERSION,
     inputHash: deterministicPanelConstructionHash(input),
   };

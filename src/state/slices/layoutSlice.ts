@@ -13,7 +13,11 @@ function updateProject(
     touchProject({ ...project, sheetLayouts: updater(project.sheetLayouts) }),
   );
   const project = changed.project ?? state.project;
-  return { ...changed, validationIssues: validationIssuesForProject(project) };
+  return {
+    ...changed,
+    validationIssues: validationIssuesForProject(project),
+    completedWorkflowSteps: state.completedWorkflowSteps.filter((step) => step !== 'arrange'),
+  };
 }
 
 function nextSheetId(): string {

@@ -1,4 +1,4 @@
-# Shape-aware folding plan
+# Parametric folding plan
 
 - Status: Implemented in Phase 6
 - Prerequisite: Phase 4 sheet layout
@@ -6,21 +6,25 @@
 
 ## Product boundary
 
-SliceFold will fit deterministic folding templates around an imported, normalized STL. It will not unfold arbitrary mesh faces, expose a seam editor, import PDO files, or preserve UV textures in this phase.
+SliceFold creates deterministic folding templates directly from explicit finished dimensions. It does not fit predefined templates around an STL. Imported STL geometry belongs to the mesh-unfolding branch of the same Folding and unfolding workflow.
 
 The user workflow is:
 
-1. Import, normalize, orient, and inspect an STL.
-2. Choose a template family and fitting axis.
-3. Preview the source projection, convex fitted profile, and clearance.
+1. Choose Folding and unfolding, then Create from template.
+2. Choose one of the seven template families.
+3. Enter width, length, and height and choose glue or press-fit connections.
 4. Generate the folding net explicitly.
-5. Inspect the model inside the assembled template and the flat net in 2D.
-6. Adjust clearance or template parameters and regenerate.
+5. Inspect the assembled template and flat net in 2D.
+6. Adjust dimensions, connection depth, or family parameters and regenerate.
 7. Arrange the generated parts on sheets and export operation-layered SVG.
 
-## Fit contract
+## Geometry contract
 
-All calculations use millimetres and pure serializable data.
+All calculations use millimetres and pure serializable data. A standalone rectangular parameter profile supplies the requested envelope; unrelated model vertices and orientation do not affect output or its hash.
+
+Every required connection produces a tab. Tab depth is bounded by its actual base edge and an absolute 15 mm maximum. Automatic reduction emits `TAB_DEPTH_CLAMPED`. Glue tabs retain a shouldered bonding surface. Press-fit lips additionally identify a receiving panel and add a clearance-adjusted slit cut; a missing receiver is a blocking `PRESS_FIT_RECEIVER_MISSING` issue.
+
+The earlier convex-profile fitting contract is retained only as legacy geometry support and is no longer exposed by the template workflow.
 
 - X-axis fitting projects vertices to Z/Y, Y-axis fitting to X/Z, and Z-axis fitting to X/Y.
 - Sort projected points deterministically, remove duplicates within the configured tolerance, and calculate a monotone-chain convex hull.
@@ -35,15 +39,15 @@ Profile extraction and template generation run through the geometry worker with 
 
 ## Template families
 
-| Template              | Shape-fitting behaviour                                                                                                                                                                             | Initial controls                                  |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| Open box              | Rectangular panels use the oriented fitted-profile extents and model axis depth.                                                                                                                    | Clearance, wall height, tab depth                 |
-| Box with lid          | Box rules plus a separate lid enlarged for material thickness and lid clearance.                                                                                                                    | Clearance, wall height, lid depth, tab depth      |
-| Tray                  | Open-box base with independently adjustable shallow walls.                                                                                                                                          | Clearance, wall height, corner-tab style          |
-| Sleeve                | A segmented perimeter band wraps the convex profile and remains open at both fitting-axis ends.                                                                                                     | Clearance, seam position, glue-tab depth          |
-| Envelope              | Two convex profile faces joined by a gusset sized from model depth.                                                                                                                                 | Clearance, gusset depth, closure flap             |
-| Regular polygon prism | Circumscribe a regular polygon around the fitted profile and use axis extent for length.                                                                                                            | Side count 3–12, rotation, clearance, seam tab    |
-| Pyramid or frustum    | Use convex profiles from the lower and upper axial quarters, resample them to a shared stable vertex count, and connect corresponding edges with trapezoidal panels. An apex uses a zero top scale. | Clearance, apex/frustum mode, top scale, seam tab |
+| Template              | Parametric behaviour                                                        | Initial controls                        |
+| --------------------- | --------------------------------------------------------------------------- | --------------------------------------- |
+| Open box              | Rectangular base plus four walls sized from the requested envelope.         | Width, length, height, connection depth |
+| Box with lid          | Open box plus a separate material- and clearance-adjusted lid.              | Envelope, lid depth, lid clearance      |
+| Tray                  | Open-box construction using the requested shallow height.                   | Envelope, connection depth              |
+| Sleeve                | A four-sided wrapping band around the requested rectangular section.        | Envelope, seam connection               |
+| Envelope              | Paired rectangular faces connected by a depth band and closure flap.        | Envelope, flap depth, seam connection   |
+| Regular polygon prism | Regular 3–12-sided section with the requested extrusion length.             | Envelope, side count, rotation, seam    |
+| Pyramid or frustum    | Rectangular base with tapered side panels; zero top scale produces an apex. | Envelope, top scale, seam, optional cap |
 
 If a template cannot maintain matching shared-edge lengths or a physically connected net, return `TEMPLATE_INCOMPATIBLE` instead of silently changing the requested template.
 
@@ -64,6 +68,12 @@ interface TemplateFitSettings {
   fitAxis: 'x' | 'y' | 'z';
   clearanceMm: number;
   profileToleranceMm: number;
+  sizeMode?: 'auto-fit' | 'custom';
+  envelopeDimensions?: {
+    widthMm: number;
+    lengthMm: number;
+    heightMm: number;
+  };
   parameters: Record<string, number | string | boolean>;
 }
 
@@ -96,10 +106,13 @@ interface FoldTab {
   id: string;
   edgeId: string;
   ownerPanelId: string;
-  style: 'glue';
+  style: 'glue' | 'press-fit';
   depthMm: number;
   shoulderAngleDeg: number;
   enabled: boolean;
+  receiverPanelId?: string;
+  slotStart?: Point2D;
+  slotEnd?: Point2D;
 }
 
 interface TemplateGenerationResult {
@@ -128,6 +141,8 @@ Generation uses structured issues with affected model, panel, edge, tab, or part
 - `TEMPLATE_INCOMPATIBLE`
 - `SHARED_EDGE_LENGTH_MISMATCH`
 - `TAB_OVERLAP`
+- `TAB_DEPTH_CLAMPED`
+- `PRESS_FIT_RECEIVER_MISSING`
 - `NET_OVERLAP`
 - `PART_EXCEEDS_SHEET`
 

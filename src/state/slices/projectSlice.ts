@@ -5,6 +5,7 @@ import {
   foundationValidationIssues,
   validationIssuesForProject,
 } from '../../validation/projectValidation';
+import { inferredWorkflowProgress } from '../workflow';
 
 export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
   project: createProject(),
@@ -22,11 +23,16 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
         sliceGenerationStatus: 'idle',
         sliceGenerationError: undefined,
         activeSheetId: project.sheetLayouts[0]?.id,
+        activeWorkflowStep: 'start',
+        completedWorkflowSteps: [],
       };
     }),
   hydrateProject: (project) =>
     set((state) => {
       const prepared = prepareProjectForUse(project ?? state.project);
+      const progress = project
+        ? inferredWorkflowProgress(prepared)
+        : { activeStep: state.activeWorkflowStep, completedSteps: state.completedWorkflowSteps };
       return {
         project: prepared,
         hasHydrated: true,
@@ -37,25 +43,30 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
         sliceGenerationStatus: prepared.generatedParts.length > 0 ? 'ready' : 'idle',
         sliceGenerationError: undefined,
         activeSheetId: prepared.sheetLayouts[0]?.id,
+        activeWorkflowStep: progress.activeStep,
+        completedWorkflowSteps: progress.completedSteps,
       };
     }),
   renameProject: (name) =>
-    set((state) =>
-      recordProjectChange(state, (project) =>
+    set((state) => ({
+      ...recordProjectChange(state, (project) =>
         touchProject({
           ...project,
           metadata: { ...project.metadata, name },
         }),
       ),
-    ),
+      completedWorkflowSteps: name.trim() ? state.completedWorkflowSteps : [],
+    })),
   replaceProject: (project) =>
     set((state) => {
       const prepared = prepareProjectForUse(project);
+      const progress = inferredWorkflowProgress(prepared);
       return {
         ...recordProjectChange(state, () => touchProject(prepared)),
         hasHydrated: true,
         validationIssues: validationIssuesForProject(prepared),
-        activeWorkflowStep: prepared.model.source.kind === 'imported' ? 'inspect' : 'start',
+        activeWorkflowStep: progress.activeStep,
+        completedWorkflowSteps: progress.completedSteps,
         sliceGenerationStatus: prepared.generatedParts.length > 0 ? 'ready' : 'idle',
         sliceGenerationError: undefined,
         activeSheetId: prepared.sheetLayouts[0]?.id,

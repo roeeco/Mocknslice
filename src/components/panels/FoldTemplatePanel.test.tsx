@@ -17,24 +17,39 @@ describe('FoldTemplatePanel', () => {
       sliceGenerationStatus: 'idle',
       sliceGenerationError: undefined,
     });
+    useProjectStore.getState().setLocale('en');
   });
 
-  it('stores the fitting axis, template family, clearance, and family controls', async () => {
+  it('translates all template dimensions in Hebrew', () => {
+    useProjectStore.getState().setLocale('he');
+    render(<FoldTemplatePanel />);
+
+    expect(screen.getByLabelText('רוחב (X)')).toBeVisible();
+    expect(screen.getByLabelText('אורך / עומק (Z)')).toBeVisible();
+    expect(screen.getByLabelText('גובה (Y)')).toBeVisible();
+
+    useProjectStore.getState().setLocale('en');
+  });
+
+  it('stores standalone dimensions, template family, closure, and family controls', async () => {
     const user = userEvent.setup();
     render(<FoldTemplatePanel />);
 
     await user.selectOptions(screen.getByLabelText('Template family'), 'regular-prism');
-    await user.selectOptions(screen.getByLabelText('Fitting axis'), 'x');
-    fireEvent.change(screen.getByLabelText('Clearance'), { target: { value: '1.25' } });
+    fireEvent.change(screen.getByLabelText('Width (X)'), { target: { value: '120' } });
+    await user.selectOptions(screen.getByLabelText('Connection method'), 'press-fit');
+    fireEvent.change(screen.getByLabelText('Slit clearance'), { target: { value: '0.35' } });
     fireEvent.change(screen.getByLabelText('Polygon sides'), { target: { value: '8' } });
 
     expect(useProjectStore.getState().project.modeParameters).toMatchObject({
       foldTemplateKind: 'regular-prism',
-      foldFitAxis: 'x',
-      foldClearanceMm: 1.25,
+      foldWidthMm: 120,
+      foldClosureMethod: 'press-fit',
+      foldSlotClearanceMm: 0.35,
       foldPrismSides: 8,
     });
-    expect(screen.getByText(/circumscribed around the model/)).toBeVisible();
+    expect(screen.queryByLabelText('Fitting axis')).toBeNull();
+    expect(screen.getByText(/chosen extrusion length/)).toBeVisible();
   });
 
   it('shows source and fitted profiles after generation', () => {

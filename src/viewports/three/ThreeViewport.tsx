@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber';
 import { ViewportErrorBoundary } from '../../components/common/ViewportErrorBoundary';
-import { copy } from '../../locales/en';
+import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 import type { CameraPreset } from '../../state/types';
 import { ModelScene } from './ModelScene';
@@ -17,11 +17,22 @@ export function ThreeViewport() {
   const setCameraPreset = useProjectStore((state) => state.setCameraPreset);
   const fitCamera = useProjectStore((state) => state.fitCamera);
   const modelId = useProjectStore((state) => state.project.model.id);
+  const hasImportedModel = useProjectStore(
+    (state) => state.project.model.source.kind === 'imported',
+  );
   const fabricationMode = useProjectStore((state) => state.project.fabricationMode);
+  const foldingHash = useProjectStore((state) => state.project.foldingResult?.inputHash ?? 'none');
+  const unfoldingHash = useProjectStore(
+    (state) => state.project.unfoldingResult?.inputHash ?? 'none',
+  );
+  const panelHash = useProjectStore(
+    (state) => state.project.panelConstructionResult?.inputHash ?? 'none',
+  );
+  const resetKey = `${modelId}:${fabricationMode}:${foldingHash}:${unfoldingHash}:${panelHash}`;
 
   return (
     <section className="viewport-stage" aria-label={copy.modelPreview}>
-      <div className="viewport-toolbar" aria-label="Camera presets">
+      <div className="viewport-toolbar" aria-label={t('Camera presets')}>
         {cameraPresets.map((preset) => (
           <button
             type="button"
@@ -30,14 +41,14 @@ export function ThreeViewport() {
             aria-pressed={cameraPreset === preset.id}
             onClick={() => setCameraPreset(preset.id)}
           >
-            {preset.label}
+            {t(preset.label)}
           </button>
         ))}
         <button type="button" onClick={fitCamera}>
-          Fit model
+          {t('Fit model')}
         </button>
       </div>
-      <ViewportErrorBoundary key={modelId}>
+      <ViewportErrorBoundary resetKey={resetKey}>
         <Canvas
           camera={{ position: [82, 68, 82], fov: 38 }}
           shadows
@@ -61,14 +72,9 @@ export function ThreeViewport() {
             </span>
           </>
         ) : fabricationMode === 'fold-template' ? (
-          <>
-            <span>
-              <i className="legend-swatch model-swatch" /> Ghosted model
-            </span>
-            <span>
-              <i className="legend-swatch fold-swatch" /> Assembled template
-            </span>
-          </>
+          <span>
+            <i className="legend-swatch fold-swatch" /> {t('Parametric template')}
+          </span>
         ) : fabricationMode === 'mesh-unfold' ? (
           <>
             <span>
@@ -84,11 +90,12 @@ export function ThreeViewport() {
           </span>
         ) : (
           <span>
-            <i className="legend-swatch model-swatch" /> Model
+            <i className="legend-swatch model-swatch" />{' '}
+            {t(hasImportedModel ? 'Model' : 'Import an STL to preview')}
           </span>
         )}
         <span>
-          <i className="legend-line" /> 10 mm grid
+          <i className="legend-line" /> {t('10 mm grid')}
         </span>
       </div>
     </section>

@@ -1,44 +1,18 @@
 import type { ChangeEvent } from 'react';
-import type { SliceAxis } from '../../domain/fabrication';
-import type { ProjectedProfile, TemplateKind } from '../../domain/folding';
+import { TEMPLATE_KINDS, type ProjectedProfile, type TemplateKind } from '../../domain/folding';
 import type { Point2D } from '../../domain/geometry';
-import { copy } from '../../locales/en';
+import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 
-const axes: SliceAxis[] = ['x', 'y', 'z'];
-const templates: { value: TemplateKind; label: string; description: string }[] = [
-  {
-    value: 'open-box',
-    label: 'Open box',
-    description: 'A fitted rectangular base with four walls.',
-  },
-  {
-    value: 'box-with-lid',
-    label: 'Box with lid',
-    description: 'A fitted open box plus a separate lid.',
-  },
-  { value: 'tray', label: 'Tray', description: 'A shallow fitted rectangular tray.' },
-  {
-    value: 'sleeve',
-    label: 'Profile sleeve',
-    description: 'Convex end profiles joined by a wrapping band.',
-  },
-  {
-    value: 'envelope',
-    label: 'Profile envelope',
-    description: 'Paired convex faces with a depth gusset.',
-  },
-  {
-    value: 'regular-prism',
-    label: 'Regular polygon prism',
-    description: 'A configurable polygon circumscribed around the model.',
-  },
-  {
-    value: 'pyramid-frustum',
-    label: 'Pyramid / frustum',
-    description: 'End profiles connected by tapered side panels.',
-  },
-];
+const templateDescriptions: Record<TemplateKind, string> = {
+  'open-box': 'A fitted rectangular base with four walls.',
+  'box-with-lid': 'A fitted open box plus a separate lid.',
+  tray: 'A shallow fitted rectangular tray.',
+  sleeve: 'Four-sided end sections joined by a wrapping band.',
+  envelope: 'Paired rectangular faces with a depth gusset.',
+  'regular-prism': 'A configurable regular polygon with a chosen extrusion length.',
+  'pyramid-frustum': 'Rectangular ends connected by tapered side panels.',
+};
 
 function previewPoints(
   points: readonly Point2D[],
@@ -49,7 +23,7 @@ function previewPoints(
   return points.map((point) => `${(point.x - minX) * scale},${(point.y - minY) * scale}`).join(' ');
 }
 
-function ProfilePreview({ profile }: { profile: ProjectedProfile }) {
+export function FoldProfilePreview({ profile }: { profile: ProjectedProfile }) {
   const all = [...profile.sourceHullPoints, ...profile.fittedPoints];
   const minX = Math.min(...all.map((point) => point.x));
   const minY = Math.min(...all.map((point) => point.y));
@@ -61,12 +35,12 @@ function ProfilePreview({ profile }: { profile: ProjectedProfile }) {
   return (
     <div className="profile-preview" data-testid="fold-profile-preview">
       <div className="panel-heading-row">
-        <strong>Projection check</strong>
+        <strong>{t('Projection check')}</strong>
         <span>{profile.clearanceMm} mm clearance</span>
       </div>
       <svg
         viewBox={`-8 -8 ${width + 16} ${height + 16}`}
-        aria-label="Projected model and fitted profile"
+        aria-label={t('Projected model and fitted profile')}
       >
         <polygon
           className="fitted-profile"
@@ -114,7 +88,7 @@ function NumberField({
 }: NumberFieldProps) {
   return (
     <div className="field-stack">
-      <label htmlFor={name}>{label}</label>
+      <label htmlFor={name}>{t(label)}</label>
       <div className="unit-input">
         <input
           id={name}
@@ -131,7 +105,9 @@ function NumberField({
   );
 }
 
-export function FoldTemplatePanel() {
+export function FoldTemplatePanel({
+  hideGenerationAction = false,
+}: { hideGenerationAction?: boolean } = {}) {
   const project = useProjectStore((state) => state.project);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
@@ -142,8 +118,12 @@ export function FoldTemplatePanel() {
 
   const parameters = project.modeParameters;
   const kind = (parameters.foldTemplateKind as TemplateKind | undefined) ?? 'open-box';
-  const axis = (parameters.foldFitAxis as SliceAxis | undefined) ?? 'z';
-  const currentTemplate = templates.find((candidate) => candidate.value === kind) ?? templates[0];
+  const templateDimensions = {
+    widthMm: Number(parameters.foldWidthMm ?? 80),
+    lengthMm: Number(parameters.foldLengthMm ?? 60),
+    heightMm: Number(parameters.foldHeightMm ?? 40),
+  };
+  const closureMethod = parameters.foldClosureMethod === 'press-fit' ? 'press-fit' : 'glue';
   const updateNumber =
     (name: string, allowZero = false) =>
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -168,12 +148,12 @@ export function FoldTemplatePanel() {
       aria-labelledby="fold-template-heading"
     >
       <div className="panel-heading-row">
-        <p className="eyebrow">Fabrication</p>
+        <p className="eyebrow">{t('Fabrication')}</p>
         <span className={`generation-status status-${status}`}>{status}</span>
       </div>
       <h2 id="fold-template-heading">{copy.foldingTemplate}</h2>
       <p className="field-help fold-intro">
-        Fit a predictable paper or board construction around the model’s convex projection.
+        Create a parametric folding form directly from its finished dimensions.
       </p>
       <fieldset disabled={status === 'processing'}>
         <div className="field-stack">
@@ -183,59 +163,64 @@ export function FoldTemplatePanel() {
             value={kind}
             onChange={(event) => setModeParameter('foldTemplateKind', event.target.value)}
           >
-            {templates.map((template) => (
-              <option value={template.value} key={template.value}>
-                {template.label}
+            {TEMPLATE_KINDS.map((templateKind) => (
+              <option value={templateKind} key={templateKind}>
+                {copy.templateNames[templateKind]}
               </option>
             ))}
           </select>
-          <p className="field-help">{currentTemplate?.description}</p>
+          <p className="field-help">{templateDescriptions[kind]}</p>
+        </div>
+        <div className="template-dimension-grid">
+          <NumberField
+            name="foldWidthMm"
+            label="Width (X)"
+            value={templateDimensions.widthMm}
+            onChange={updateNumber('foldWidthMm')}
+          />
+          <NumberField
+            name="foldLengthMm"
+            label="Length / depth (Z)"
+            value={templateDimensions.lengthMm}
+            onChange={updateNumber('foldLengthMm')}
+          />
+          <NumberField
+            name="foldHeightMm"
+            label="Height (Y)"
+            value={templateDimensions.heightMm}
+            onChange={updateNumber('foldHeightMm')}
+          />
         </div>
         <div className="slice-number-grid">
           <div className="field-stack">
-            <label htmlFor="foldFitAxis">{copy.fittingAxis}</label>
+            <label htmlFor="fold-closure-method">{t('Connection method')}</label>
             <select
-              id="foldFitAxis"
-              value={axis}
-              onChange={(event) => setModeParameter('foldFitAxis', event.target.value)}
+              id="fold-closure-method"
+              value={closureMethod}
+              onChange={(event) => setModeParameter('foldClosureMethod', event.target.value)}
             >
-              {axes.map((candidate) => (
-                <option value={candidate} key={candidate}>
-                  {candidate.toUpperCase()} axis
-                </option>
-              ))}
+              <option value="glue">{t('Glue tabs')}</option>
+              <option value="press-fit">{t('Press-fit lips and slits')}</option>
             </select>
           </div>
-          <NumberField
-            name="foldClearanceMm"
-            label="Clearance"
-            value={Number(
-              parameters.foldClearanceMm ?? project.materialProfileSnapshot.clearanceMm,
-            )}
-            min={0}
-            step={0.1}
-            onChange={updateNumber('foldClearanceMm', true)}
-          />
-        </div>
-        <NumberField
-          name="foldProfileToleranceMm"
-          label={copy.profileTolerance}
-          value={Number(parameters.foldProfileToleranceMm ?? 1)}
-          min={0.01}
-          step={0.25}
-          onChange={updateNumber('foldProfileToleranceMm')}
-        />
-        {boxLike ? (
-          <div className="slice-number-grid">
+          {closureMethod === 'press-fit' ? (
             <NumberField
-              name="foldWallHeightMm"
-              label="Wall height"
-              value={Number(parameters.foldWallHeightMm ?? 20)}
-              onChange={updateNumber('foldWallHeightMm')}
+              name="foldSlotClearanceMm"
+              label={t('Slit clearance')}
+              value={Number(
+                parameters.foldSlotClearanceMm ?? project.materialProfileSnapshot.clearanceMm,
+              )}
+              min={0}
+              step={0.05}
+              onChange={updateNumber('foldSlotClearanceMm', true)}
             />
+          ) : null}
+        </div>
+        {boxLike ? (
+          <div className="field-stack">
             <NumberField
               name="foldTabDepthMm"
-              label="Glue tab depth"
+              label={closureMethod === 'press-fit' ? 'Press-fit lip depth' : 'Glue tab depth'}
               value={Number(parameters.foldTabDepthMm ?? 8)}
               onChange={updateNumber('foldTabDepthMm')}
             />
@@ -261,12 +246,6 @@ export function FoldTemplatePanel() {
         ) : null}
         {kind === 'envelope' ? (
           <div className="slice-number-grid">
-            <NumberField
-              name="foldGussetDepthMm"
-              label="Gusset depth"
-              value={Number(parameters.foldGussetDepthMm ?? 20)}
-              onChange={updateNumber('foldGussetDepthMm')}
-            />
             <NumberField
               name="foldClosureFlapMm"
               label="Closure flap"
@@ -314,36 +293,42 @@ export function FoldTemplatePanel() {
         {['sleeve', 'envelope', 'regular-prism', 'pyramid-frustum'].includes(kind) ? (
           <NumberField
             name="foldSeamTabMm"
-            label="Seam tab depth"
+            label={closureMethod === 'press-fit' ? 'Press-fit lip depth' : 'Seam tab depth'}
             value={Number(parameters.foldSeamTabMm ?? 8)}
             onChange={updateNumber('foldSeamTabMm')}
           />
         ) : null}
       </fieldset>
-      <div className="generation-actions">
-        {status === 'processing' ? (
-          <button type="button" onClick={cancel}>
-            {copy.cancelGeneration}
-          </button>
-        ) : (
-          <button className="primary-panel-action" type="button" onClick={generate}>
-            {status === 'stale' ? 'Regenerate template' : copy.generateTemplate}
-          </button>
-        )}
-        <span aria-live="polite">
-          {status === 'processing'
-            ? 'Fitting profile…'
-            : project.foldingResult
-              ? `${project.foldingResult.panels.length} panels · ${project.foldingResult.tabs.length} tabs`
-              : 'Ready to fit'}
-        </span>
-      </div>
+      {!hideGenerationAction ? (
+        <div className="generation-actions">
+          {status === 'processing' ? (
+            <button type="button" onClick={cancel}>
+              {copy.cancelGeneration}
+            </button>
+          ) : (
+            <button className="primary-panel-action" type="button" onClick={generate}>
+              {status === 'stale' ? 'Regenerate template' : copy.generateTemplate}
+            </button>
+          )}
+          <span aria-live="polite">
+            {status === 'processing'
+              ? 'Fitting profile…'
+              : project.foldingResult
+                ? `${project.foldingResult.panels.length} panels · ${project.foldingResult.tabs.length} tabs`
+                : 'Ready to fit'}
+          </span>
+        </div>
+      ) : null}
       {error ? (
         <p className="inline-error" role="alert">
           {error}
         </p>
       ) : null}
-      {project.foldingResult ? <ProfilePreview profile={project.foldingResult.profile} /> : null}
+      {!hideGenerationAction &&
+      project.foldingResult &&
+      project.modeParameters.workflowSourceMode !== 'template' ? (
+        <FoldProfilePreview profile={project.foldingResult.profile} />
+      ) : null}
     </section>
   );
 }

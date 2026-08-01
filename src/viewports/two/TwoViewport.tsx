@@ -1,4 +1,11 @@
-import { useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
+import {
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type PointerEvent,
+  type WheelEvent,
+} from 'react';
 import type { FabricationPart, SheetPlacement } from '../../domain/fabrication';
 import type { Point2D } from '../../domain/geometry';
 import type { OperationStyle } from '../../domain/operations';
@@ -7,7 +14,7 @@ import {
   createRegistrationMarkPaths,
   prepareFabricationOutput,
 } from '../../geometry/output/prepareFabricationOutput';
-import { copy } from '../../locales/en';
+import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 
 interface DragState {
@@ -18,6 +25,36 @@ interface DragState {
   originY: number;
   x: number;
   y: number;
+}
+
+interface ViewState {
+  sheetId: string;
+  zoom: number;
+  centerX: number;
+  centerY: number;
+}
+
+interface PanState {
+  pointerId: number;
+  startClientX: number;
+  startClientY: number;
+  originCenterX: number;
+  originCenterY: number;
+  unitsPerPixelX: number;
+  unitsPerPixelY: number;
+}
+
+const MIN_ZOOM = 0.5;
+const MAX_ZOOM = 4;
+const ZOOM_STEP = 0.25;
+
+function clampZoom(value: number) {
+  return Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, value));
+}
+
+function clampCenter(center: number, sheetSize: number, viewSize: number) {
+  if (viewSize >= sheetSize) return sheetSize / 2;
+  return Math.max(viewSize / 2, Math.min(sheetSize - viewSize / 2, center));
 }
 
 function decimal(value: number): string {
@@ -174,6 +211,8 @@ function PartOnSheet({
 export function TwoViewport() {
   const svgRef = useRef<SVGSVGElement>(null);
   const [drag, setDrag] = useState<DragState>();
+  const [pan, setPan] = useState<PanState>();
+  const [storedView, setStoredView] = useState<ViewState>();
   const project = useProjectStore((state) => state.project);
   const activeSheetId = useProjectStore((state) => state.activeSheetId);
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
@@ -185,7 +224,23 @@ export function TwoViewport() {
   const sheet =
     project.sheetLayouts.find((candidate) => candidate.id === activeSheetId) ??
     project.sheetLayouts[0];
+
   if (!sheet) return null;
+
+  const view =
+    storedView?.sheetId === sheet.id
+      ? storedView
+      : {
+          sheetId: sheet.id,
+          zoom: 1,
+          centerX: sheet.widthMm / 2,
+          centerY: sheet.heightMm / 2,
+        };
+  const zoom = view.zoom;
+  const viewWidth = sheet.widthMm / zoom;
+  const viewHeight = sheet.heightMm / zoom;
+  const viewX = view.centerX - viewWidth / 2;
+  const viewY = view.centerY - viewHeight / 2;
 
   const partsById = new Map(preparedParts.map((part) => [part.id, part]));
   const invalidIds = new Set(
@@ -207,11 +262,13 @@ export function TwoViewport() {
   });
 
   const beginDrag = (event: PointerEvent<SVGGElement>, placement: SheetPlacement) => {
+    if (event.button !== 0) return;
     const svg = svgRef.current;
     if (!svg) return;
     const start = screenPoint(svg, event.clientX, event.clientY);
     if (!start) return;
     event.preventDefault();
+    event.stopPropagation();
     event.currentTarget.setPointerCapture(event.pointerId);
     selectEntity(placement.partId);
     setDrag({
@@ -224,20 +281,94 @@ export function TwoViewport() {
       y: placement.y,
     });
   };
-  const continueDrag = (event: PointerEvent<SVGSVGElement>) => {
-    if (!drag || event.pointerId !== drag.pointerId) return;
-    const point = screenPoint(event.currentTarget, event.clientX, event.clientY);
-    if (!point) return;
-    setDrag({
-      ...drag,
-      x: drag.originX + point.x - drag.start.x,
-      y: drag.originY + point.y - drag.start.y,
+  const setZoomAt = (requestedZoom: number, focus?: Point2D) => {
+    const nextZoom = clampZoom(requestedZoom);
+    const anchor = focus ?? { x: view.centerX, y: view.centerY };
+    const relativeX = (anchor.x - viewX) / viewWidth;
+    const relativeY = (anchor.y - viewY) / viewHeight;
+    const nextViewWidth = sheet.widthMm / nextZoom;
+    const nextViewHeight = sheet.heightMm / nextZoom;
+    const nextCenterX = anchor.x - (relativeX - 0.5) * nextViewWidth;
+    const nextCenterY = anchor.y - (relativeY - 0.5) * nextViewHeight;
+    setStoredView({
+      sheetId: sheet.id,
+      zoom: nextZoom,
+      centerX: clampCenter(nextCenterX, sheet.widthMm, nextViewWidth),
+      centerY: clampCenter(nextCenterY, sheet.heightMm, nextViewHeight),
     });
   };
-  const finishDrag = (event: PointerEvent<SVGSVGElement>) => {
-    if (!drag || event.pointerId !== drag.pointerId) return;
-    updatePartPlacement(sheet.id, drag.partId, { x: drag.x, y: drag.y });
-    setDrag(undefined);
+  const resetView = () =>
+    setStoredView({
+      sheetId: sheet.id,
+      zoom: 1,
+      centerX: sheet.widthMm / 2,
+      centerY: sheet.heightMm / 2,
+    });
+  const handleWheel = (event: WheelEvent<SVGSVGElement>) => {
+    const focus = screenPoint(event.currentTarget, event.clientX, event.clientY);
+    if (!focus) return;
+    event.preventDefault();
+    const delta =
+      event.deltaMode === 1
+        ? event.deltaY * 16
+        : event.deltaMode === 2
+          ? event.deltaY * event.currentTarget.clientHeight
+          : event.deltaY;
+    setZoomAt(zoom * Math.exp(-delta * 0.002), focus);
+  };
+  const beginPan = (event: PointerEvent<SVGSVGElement>) => {
+    const target = event.target as Element;
+    if (event.button === 0 && target.closest('.sheet-part')) return;
+    if (event.button !== 0 && event.button !== 1) return;
+    const matrix = event.currentTarget.getScreenCTM();
+    if (!matrix || matrix.a === 0 || matrix.d === 0) return;
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setPan({
+      pointerId: event.pointerId,
+      startClientX: event.clientX,
+      startClientY: event.clientY,
+      originCenterX: view.centerX,
+      originCenterY: view.centerY,
+      unitsPerPixelX: Math.abs(1 / matrix.a),
+      unitsPerPixelY: Math.abs(1 / matrix.d),
+    });
+  };
+  const continuePointerInteraction = (event: PointerEvent<SVGSVGElement>) => {
+    if (pan && event.pointerId === pan.pointerId) {
+      const nextCenterX =
+        pan.originCenterX - (event.clientX - pan.startClientX) * pan.unitsPerPixelX;
+      const nextCenterY =
+        pan.originCenterY - (event.clientY - pan.startClientY) * pan.unitsPerPixelY;
+      setStoredView({
+        sheetId: sheet.id,
+        zoom,
+        centerX: clampCenter(nextCenterX, sheet.widthMm, viewWidth),
+        centerY: clampCenter(nextCenterY, sheet.heightMm, viewHeight),
+      });
+      return;
+    }
+    if (drag && event.pointerId === drag.pointerId) {
+      const point = screenPoint(event.currentTarget, event.clientX, event.clientY);
+      if (!point) return;
+      setDrag({
+        ...drag,
+        x: drag.originX + point.x - drag.start.x,
+        y: drag.originY + point.y - drag.start.y,
+      });
+    }
+  };
+  const finishPointerInteraction = (event: PointerEvent<SVGSVGElement>) => {
+    if (pan && event.pointerId === pan.pointerId) {
+      if (event.currentTarget.hasPointerCapture(event.pointerId))
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      setPan(undefined);
+      return;
+    }
+    if (drag && event.pointerId === drag.pointerId) {
+      updatePartPlacement(sheet.id, drag.partId, { x: drag.x, y: drag.y });
+      setDrag(undefined);
+    }
   };
 
   return (
@@ -245,7 +376,7 @@ export function TwoViewport() {
       className="viewport-stage two-stage sheet-layout-stage"
       aria-label={copy.layoutPreview}
     >
-      <div className="viewport-toolbar sheet-tabs" aria-label="Sheets">
+      <div className="viewport-toolbar sheet-tabs" aria-label={t('Sheets')}>
         {project.sheetLayouts.map((candidate, index) => (
           <button
             type="button"
@@ -258,14 +389,47 @@ export function TwoViewport() {
           </button>
         ))}
       </div>
+      <div className="viewport-toolbar zoom-toolbar" aria-label={copy.zoomControls}>
+        <button
+          type="button"
+          aria-label={copy.zoomOut}
+          title={copy.zoomOut}
+          disabled={zoom <= MIN_ZOOM}
+          onClick={() => setZoomAt(zoom - ZOOM_STEP)}
+        >
+          −
+        </button>
+        <output aria-label={copy.zoomLevel}>{Math.round(zoom * 100)}%</output>
+        <button
+          type="button"
+          aria-label={copy.zoomIn}
+          title={copy.zoomIn}
+          disabled={zoom >= MAX_ZOOM}
+          onClick={() => setZoomAt(zoom + ZOOM_STEP)}
+        >
+          +
+        </button>
+        <button type="button" onClick={resetView}>
+          {copy.fitSheet}
+        </button>
+      </div>
       <svg
         ref={svgRef}
-        className="sheet-preview interactive-sheet"
-        viewBox={`0 0 ${sheet.widthMm} ${sheet.heightMm}`}
+        className={`sheet-preview interactive-sheet${pan ? ' is-panning' : ''}`}
+        viewBox={`${decimal(viewX)} ${decimal(viewY)} ${decimal(viewWidth)} ${decimal(viewHeight)}`}
+        data-zoom={zoom}
+        data-view-x={decimal(viewX)}
+        data-view-y={decimal(viewY)}
         aria-label={`${sheet.widthMm} by ${sheet.heightMm} millimetre sheet`}
-        onPointerMove={continueDrag}
-        onPointerUp={finishDrag}
-        onPointerCancel={() => setDrag(undefined)}
+        aria-describedby="sheet-navigation-help"
+        onWheel={handleWheel}
+        onPointerDown={beginPan}
+        onPointerMove={continuePointerInteraction}
+        onPointerUp={finishPointerInteraction}
+        onPointerCancel={() => {
+          setDrag(undefined);
+          setPan(undefined);
+        }}
       >
         <rect
           x="0.5"
@@ -322,6 +486,9 @@ export function TwoViewport() {
           />
         ))}
       </svg>
+      <p className="visually-hidden" id="sheet-navigation-help">
+        {copy.sheetNavigationHelp}
+      </p>
       {project.generatedParts.length === 0 ? (
         <div className="empty-state">
           <span className="empty-state-mark" aria-hidden="true">
@@ -332,8 +499,8 @@ export function TwoViewport() {
         </div>
       ) : placements.length === 0 ? (
         <div className="empty-state">
-          <h2>This sheet is empty</h2>
-          <p>Select an unplaced part or arrange all parts from the layout panel.</p>
+          <h2>{t('This sheet is empty')}</h2>
+          <p>{t('Select an unplaced part or arrange all parts from the layout panel.')}</p>
         </div>
       ) : null}
     </section>

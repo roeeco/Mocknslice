@@ -1,11 +1,13 @@
 import type { ChangeEvent } from 'react';
 import type { SliceAxis } from '../../domain/fabrication';
-import { copy } from '../../locales/en';
+import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 
 const axes: SliceAxis[] = ['x', 'y', 'z'];
 
-export function StackedSlicePanel() {
+export function StackedSlicePanel({
+  hideGenerationAction = false,
+}: { hideGenerationAction?: boolean } = {}) {
   const project = useProjectStore((state) => state.project);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
@@ -28,7 +30,7 @@ export function StackedSlicePanel() {
   return (
     <section className="panel-section slice-panel" aria-labelledby="slice-heading">
       <div className="panel-heading-row">
-        <p className="eyebrow">Fabrication</p>
+        <p className="eyebrow">{t('Fabrication')}</p>
         <span className={`generation-status status-${status}`}>{status}</span>
       </div>
       <h2 id="slice-heading">{copy.stackedSlices}</h2>
@@ -78,27 +80,29 @@ export function StackedSlicePanel() {
           </div>
         </div>
       </fieldset>
-      <div className="generation-actions">
-        {status === 'processing' ? (
-          <button type="button" onClick={cancelSliceGeneration}>
-            {copy.cancelGeneration}
-          </button>
-        ) : (
-          <button
-            className="primary-panel-action"
-            type="button"
-            onClick={generateSlices}
-            disabled={disabled}
-          >
-            {status === 'stale' ? 'Regenerate slices' : copy.generateSlices}
-          </button>
-        )}
-        <span aria-live="polite">
-          {status === 'processing'
-            ? 'Tracing contours…'
-            : `${project.generatedParts.length} part${project.generatedParts.length === 1 ? '' : 's'}`}
-        </span>
-      </div>
+      {!hideGenerationAction ? (
+        <div className="generation-actions">
+          {status === 'processing' ? (
+            <button type="button" onClick={cancelSliceGeneration}>
+              {copy.cancelGeneration}
+            </button>
+          ) : (
+            <button
+              className="primary-panel-action"
+              type="button"
+              onClick={generateSlices}
+              disabled={disabled}
+            >
+              {status === 'stale' ? 'Regenerate slices' : copy.generateSlices}
+            </button>
+          )}
+          <span aria-live="polite">
+            {status === 'processing'
+              ? 'Tracing contours…'
+              : `${project.generatedParts.length} part${project.generatedParts.length === 1 ? '' : 's'}`}
+          </span>
+        </div>
+      ) : null}
       {error ? (
         <p className="inline-error" role="alert">
           {error}

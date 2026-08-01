@@ -3,7 +3,7 @@ import type { StlUnit } from '../../domain/model';
 import type { GeometryTask } from '../../workers/geometryWorkerClient';
 import { normalizeStlInWorker } from '../../workers/geometryWorkerClient';
 import type { NormalizedMeshResult } from '../../geometry/mesh/normalizeMesh';
-import { copy } from '../../locales/en';
+import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 
 const units: { value: StlUnit; label: string }[] = [
@@ -70,7 +70,7 @@ export function ModelImportPanel() {
 
   return (
     <section className="panel-section" aria-labelledby="model-import-heading">
-      <p className="eyebrow">Import or create</p>
+      <p className="eyebrow">{t('Import or create')}</p>
       <h2 id="model-import-heading">{copy.importStl}</h2>
       <div className="field-stack">
         <label htmlFor="stl-units">{copy.stlUnits}</label>
@@ -110,7 +110,7 @@ export function ModelImportPanel() {
         className="visually-hidden"
         type="file"
         accept=".stl,model/stl,application/sla"
-        aria-label="Choose STL model"
+        aria-label={t('Choose STL model')}
         onChange={(event) => void handleFile(event)}
       />
       <div className={`import-status import-status-${status}`} aria-live="polite">

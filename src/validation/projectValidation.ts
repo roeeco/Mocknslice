@@ -28,7 +28,7 @@ export function validationIssuesForProject(project: ProjectData): ValidationIssu
     ];
   }
   return [
-    ...foundationValidationIssues(),
+    ...(project.generatedParts.length === 0 ? foundationValidationIssues() : []),
     ...(project.generationIssues ?? []),
     ...validateSheetLayouts(project),
     ...prepareFabricationOutput(project).issues,

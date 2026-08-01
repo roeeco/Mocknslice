@@ -1,5 +1,11 @@
 import type { FabricationPart } from '../../domain/fabrication';
-import type { FoldEdgeDefinition, FoldPanel, FoldTab, TemplateKind } from '../../domain/folding';
+import type {
+  FoldClosureMethod,
+  FoldEdgeDefinition,
+  FoldPanel,
+  FoldTab,
+  TemplateKind,
+} from '../../domain/folding';
 import type { Point2D } from '../../domain/geometry';
 import type { ValidationIssue } from '../../domain/validation';
 
@@ -19,6 +25,12 @@ export interface TabSpec {
   start: Point2D;
   end: Point2D;
   depthMm: number;
+  style?: FoldClosureMethod;
+  receiverPanelId?: string;
+  receiverStart?: Point2D;
+  receiverEnd?: Point2D;
+  slotClearanceMm?: number;
+  emitSlot?: boolean;
 }
 
 function rounded(value: number): number {
@@ -47,25 +59,54 @@ function centroid(points: readonly Point2D[]): Point2D {
   };
 }
 
-function tabOutline(spec: TabSpec): Point2D[] {
+function tabOutline(spec: TabSpec, depthMm: number, thicknessMm: number): Point2D[] {
   const dx = spec.end.x - spec.start.x;
   const dy = spec.end.y - spec.start.y;
   const length = Math.hypot(dx, dy);
   const unit = { x: dx / length, y: dy / length };
   const outward = { x: unit.y, y: -unit.x };
-  const inset = Math.min(spec.depthMm * 0.35, length * 0.2);
+  const inset =
+    spec.style === 'press-fit'
+      ? Math.max(length * 0.18, Math.min(length * 0.32, thicknessMm * 2))
+      : Math.min(depthMm * 0.35, length * 0.2);
   return [
     spec.start,
     {
-      x: spec.start.x + unit.x * inset + outward.x * spec.depthMm,
-      y: spec.start.y + unit.y * inset + outward.y * spec.depthMm,
+      x: spec.start.x + unit.x * inset + outward.x * depthMm,
+      y: spec.start.y + unit.y * inset + outward.y * depthMm,
     },
     {
-      x: spec.end.x - unit.x * inset + outward.x * spec.depthMm,
-      y: spec.end.y - unit.y * inset + outward.y * spec.depthMm,
+      x: spec.end.x - unit.x * inset + outward.x * depthMm,
+      y: spec.end.y - unit.y * inset + outward.y * depthMm,
     },
     spec.end,
   ].map(roundedPoint);
+}
+
+function centredSlot(
+  start: Point2D,
+  end: Point2D,
+  tabBaseLength: number,
+  thicknessMm: number,
+  clearanceMm: number,
+): { start: Point2D; end: Point2D } {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const receiverLength = Math.hypot(dx, dy);
+  const unit = { x: dx / receiverLength, y: dy / receiverLength };
+  const inset = Math.max(tabBaseLength * 0.18, Math.min(tabBaseLength * 0.32, thicknessMm * 2));
+  const tongueLength = Math.min(receiverLength, tabBaseLength - inset * 2 + clearanceMm * 2);
+  const centre = { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 };
+  return {
+    start: roundedPoint({
+      x: centre.x - unit.x * (tongueLength / 2),
+      y: centre.y - unit.y * (tongueLength / 2),
+    }),
+    end: roundedPoint({
+      x: centre.x + unit.x * (tongueLength / 2),
+      y: centre.y + unit.y * (tongueLength / 2),
+    }),
+  };
 }
 
 function projection(points: readonly Point2D[], axis: Point2D): { min: number; max: number } {
@@ -118,19 +159,63 @@ export function buildFoldNet(input: {
     start: roundedPoint(hinge.start),
     end: roundedPoint(hinge.end),
   }));
-  const foldTabs: FoldTab[] = tabs.map((tab) => ({
-    id: tab.id,
-    partId,
-    edgeId: `${tab.id}-base`,
-    ownerPanelId: tab.ownerPanelId,
-    style: 'glue',
-    depthMm: rounded(tab.depthMm),
-    shoulderAngleDeg: 20,
-    enabled: true,
-    baseStart: roundedPoint(tab.start),
-    baseEnd: roundedPoint(tab.end),
-    outline: tabOutline(tab),
-  }));
+  const issues: ValidationIssue[] = [];
+  const foldTabs: FoldTab[] = tabs.map((tab) => {
+    const baseLength = Math.hypot(tab.end.x - tab.start.x, tab.end.y - tab.start.y);
+    const maximumDepth = Math.max(0.5, Math.min(baseLength * 0.35, 15));
+    const depthMm = Math.max(0.5, Math.min(tab.depthMm, maximumDepth));
+    if (depthMm + 1e-6 < tab.depthMm) {
+      issues.push({
+        id: `tab-depth-clamped-${tab.id}`,
+        severity: 'warning',
+        code: 'TAB_DEPTH_CLAMPED',
+        message: `Tab ${tab.id} was reduced from ${rounded(tab.depthMm)} mm to ${rounded(depthMm)} mm to fit its edge.`,
+        affectedEntityIds: [partId, tab.id, tab.ownerPanelId],
+        suggestedAction: 'Review the adjusted tab before fabrication.',
+      });
+    }
+    const style = tab.style ?? 'glue';
+    const slotClearanceMm = Math.max(0, tab.slotClearanceMm ?? 0);
+    if (style === 'press-fit' && slotClearanceMm >= baseLength * 0.25) {
+      issues.push({
+        id: `press-fit-clearance-large-${tab.id}`,
+        severity: 'error',
+        code: 'PRESS_FIT_CLEARANCE_TOO_LARGE',
+        message: `Press-fit clearance for ${tab.id} is too large for its receiving edge.`,
+        affectedEntityIds: [partId, tab.id],
+        suggestedAction: 'Reduce slit clearance or increase the connected edge length.',
+      });
+    }
+    const receiverSlot =
+      style === 'press-fit' && tab.receiverStart && tab.receiverEnd
+        ? centredSlot(tab.receiverStart, tab.receiverEnd, baseLength, thicknessMm, slotClearanceMm)
+        : undefined;
+    if (style === 'press-fit' && (!tab.receiverPanelId || !receiverSlot)) {
+      issues.push({
+        id: `press-fit-receiver-missing-${tab.id}`,
+        severity: 'error',
+        code: 'PRESS_FIT_RECEIVER_MISSING',
+        message: `Press-fit tab ${tab.id} has no receiving panel or slit.`,
+        affectedEntityIds: [partId, tab.id],
+        suggestedAction: 'Use glue closure or choose a template with a valid receiving face.',
+      });
+    }
+    return {
+      id: tab.id,
+      partId,
+      edgeId: `${tab.id}-base`,
+      ownerPanelId: tab.ownerPanelId,
+      style,
+      depthMm: rounded(depthMm),
+      shoulderAngleDeg: style === 'press-fit' ? 12 : 20,
+      enabled: true,
+      baseStart: roundedPoint(tab.start),
+      baseEnd: roundedPoint(tab.end),
+      outline: tabOutline(tab, depthMm, thicknessMm),
+      ...(tab.receiverPanelId ? { receiverPanelId: tab.receiverPanelId } : {}),
+      ...(receiverSlot ? { slotStart: receiverSlot.start, slotEnd: receiverSlot.end } : {}),
+    };
+  });
 
   const paths: FabricationPart['paths'] = [];
   for (const panel of panels) {
@@ -196,9 +281,26 @@ export function buildFoldNet(input: {
       start: tab.baseStart,
       end: tab.baseEnd,
     });
+    const sourceSpec = tabs.find((candidate) => candidate.id === tab.id);
+    if (
+      tab.style === 'press-fit' &&
+      tab.receiverPanelId &&
+      tab.slotStart &&
+      tab.slotEnd &&
+      sourceSpec?.emitSlot !== false
+    ) {
+      paths.push({
+        id: `${tab.id}-receiver-slit`,
+        operation: 'cut',
+        closed: false,
+        points: [tab.slotStart, tab.slotEnd],
+        panelId: tab.receiverPanelId,
+        tabId: tab.id,
+        edgeId: tab.edgeId,
+      });
+    }
   }
 
-  const issues: ValidationIssue[] = [];
   for (let first = 0; first < panels.length; first += 1) {
     for (let second = first + 1; second < panels.length; second += 1) {
       const a = panels[first]!;
@@ -221,7 +323,7 @@ export function buildFoldNet(input: {
         id: `tab-overlap-${tab.id}-${panel.id}`,
         severity: 'warning',
         code: 'TAB_OVERLAP',
-        message: `Glue tab ${tab.id} overlaps ${panel.name}.`,
+        message: `${tab.style === 'press-fit' ? 'Press-fit' : 'Glue'} tab ${tab.id} overlaps ${panel.name}.`,
         affectedEntityIds: [partId, tab.id, panel.id],
         suggestedAction: 'Reduce tab depth or adjust the template dimensions.',
       });

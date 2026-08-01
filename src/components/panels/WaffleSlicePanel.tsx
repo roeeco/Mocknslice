@@ -1,12 +1,14 @@
 import type { ChangeEvent } from 'react';
 import type { SliceAxis } from '../../domain/fabrication';
 import type { WaffleSlotPattern } from '../../geometry/slicing/types';
-import { copy } from '../../locales/en';
+import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 
 const axes: SliceAxis[] = ['x', 'y', 'z'];
 
-export function WaffleSlicePanel() {
+export function WaffleSlicePanel({
+  hideGenerationAction = false,
+}: { hideGenerationAction?: boolean } = {}) {
   const project = useProjectStore((state) => state.project);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
@@ -44,7 +46,7 @@ export function WaffleSlicePanel() {
   return (
     <section className="panel-section slice-panel waffle-panel" aria-labelledby="waffle-heading">
       <div className="panel-heading-row">
-        <p className="eyebrow">Fabrication</p>
+        <p className="eyebrow">{t('Fabrication')}</p>
         <span className={`generation-status status-${status}`}>{status}</span>
       </div>
       <h2 id="waffle-heading">{copy.waffleSlices}</h2>
@@ -156,8 +158,8 @@ export function WaffleSlicePanel() {
             value={pattern}
             onChange={(event) => setModeParameter('waffleSlotPattern', event.target.value)}
           >
-            <option value="alternating">Alternate top and bottom</option>
-            <option value="by-family">Family A from one side</option>
+            <option value="alternating">{t('Alternate top and bottom')}</option>
+            <option value="by-family">{t('Family A from one side')}</option>
           </select>
         </div>
         <label className="checkbox-field" htmlFor="waffle-reverse-slots">
@@ -170,22 +172,24 @@ export function WaffleSlicePanel() {
           <span>{copy.reverseSlots}</span>
         </label>
       </fieldset>
-      <div className="generation-actions">
-        {status === 'processing' ? (
-          <button type="button" onClick={cancelSliceGeneration}>
-            {copy.cancelGeneration}
-          </button>
-        ) : (
-          <button className="primary-panel-action" type="button" onClick={generateWaffleSlices}>
-            {status === 'stale' ? 'Regenerate waffle slices' : copy.generateWaffle}
-          </button>
-        )}
-        <span aria-live="polite">
-          {status === 'processing'
-            ? 'Cutting slots…'
-            : `${project.generatedParts.length} part${project.generatedParts.length === 1 ? '' : 's'}${project.generatedParts.length > 0 ? ` · ${jointCount} joints` : ''}`}
-        </span>
-      </div>
+      {!hideGenerationAction ? (
+        <div className="generation-actions">
+          {status === 'processing' ? (
+            <button type="button" onClick={cancelSliceGeneration}>
+              {copy.cancelGeneration}
+            </button>
+          ) : (
+            <button className="primary-panel-action" type="button" onClick={generateWaffleSlices}>
+              {status === 'stale' ? 'Regenerate waffle slices' : copy.generateWaffle}
+            </button>
+          )}
+          <span aria-live="polite">
+            {status === 'processing'
+              ? 'Cutting slots…'
+              : `${project.generatedParts.length} part${project.generatedParts.length === 1 ? '' : 's'}${project.generatedParts.length > 0 ? ` · ${jointCount} joints` : ''}`}
+          </span>
+        </div>
+      ) : null}
       {error ? (
         <p className="inline-error" role="alert">
           {error}

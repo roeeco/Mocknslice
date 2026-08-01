@@ -1,4 +1,4 @@
-import { copy } from '../../locales/en';
+import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 
 export function WarningPanel() {
@@ -7,6 +7,9 @@ export function WarningPanel() {
   return (
     <section className="panel-section warning-section" aria-labelledby="warnings-heading">
       <h2 id="warnings-heading">{copy.warningsPanel}</h2>
+      {issues.length === 0 ? (
+        <p className="field-help">{t('No current fabrication issues.')}</p>
+      ) : null}
       <ul className="issue-list">
         {issues.map((issue) => (
           <li className={`issue issue-${issue.severity}`} key={issue.id}>

@@ -1,6 +1,12 @@
 import type { ChangeEvent } from 'react';
-import { copy } from '../../locales/en';
+import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
+
+const sheetPresets = [
+  { label: 'A4', widthMm: 210, heightMm: 297 },
+  { label: 'A3', widthMm: 297, heightMm: 420 },
+  { label: '500 × 700', widthMm: 500, heightMm: 700 },
+] as const;
 
 export function LayoutPanel() {
   const project = useProjectStore((state) => state.project);
@@ -51,7 +57,7 @@ export function LayoutPanel() {
   return (
     <section className="panel-section layout-panel" aria-labelledby="layout-heading">
       <div className="panel-heading-row">
-        <p className="eyebrow">Layout</p>
+        <p className="eyebrow">{t('Layout')}</p>
         <span className="phase-badge">Phase 4</span>
       </div>
       <h2 id="layout-heading">{copy.sheetLayout}</h2>
@@ -61,7 +67,7 @@ export function LayoutPanel() {
       </p>
 
       <div className="field-stack">
-        <label htmlFor="active-sheet">Active sheet</label>
+        <label htmlFor="active-sheet">{t('Active sheet')}</label>
         <select
           id="active-sheet"
           value={sheet.id}
@@ -73,6 +79,34 @@ export function LayoutPanel() {
             </option>
           ))}
         </select>
+      </div>
+
+      <div className="field-stack">
+        <span className="field-label">{copy.sheetPresets}</span>
+        <div className="sheet-preset-list" role="group" aria-label={copy.sheetPresets}>
+          {sheetPresets.map((preset) => {
+            const selected = sheet.widthMm === preset.widthMm && sheet.heightMm === preset.heightMm;
+            return (
+              <button
+                type="button"
+                className={selected ? 'is-selected' : undefined}
+                aria-pressed={selected}
+                onClick={() =>
+                  updateSheetSettings(sheet.id, {
+                    widthMm: preset.widthMm,
+                    heightMm: preset.heightMm,
+                  })
+                }
+                key={preset.label}
+              >
+                <strong>{preset.label}</strong>
+                <small>
+                  {preset.widthMm} × {preset.heightMm} mm
+                </small>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="sheet-number-grid">
@@ -164,7 +198,7 @@ export function LayoutPanel() {
         <div className="placement-controls">
           <div className="panel-heading-row">
             <strong>{selectedPart.label ?? selectedPart.name}</strong>
-            {placement ? <span>{placement.rotationDeg}°</span> : <span>Unplaced</span>}
+            {placement ? <span>{placement.rotationDeg}°</span> : <span>{t('Unplaced')}</span>}
           </div>
           {placement ? (
             <>
@@ -226,7 +260,7 @@ export function LayoutPanel() {
           )}
         </div>
       ) : (
-        <p className="field-help">Select a part in either viewport to edit its placement.</p>
+        <p className="field-help">{t('Select a part in either viewport to edit its placement.')}</p>
       )}
     </section>
   );

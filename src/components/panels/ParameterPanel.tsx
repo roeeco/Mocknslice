@@ -1,11 +1,10 @@
 import type { ChangeEvent } from 'react';
 import type { FabricationMode } from '../../domain/fabrication';
-import { copy } from '../../locales/en';
+import { copy, materialLabel } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 
-const modes = Object.entries(copy.modes) as [FabricationMode, string][];
-
 export function ParameterPanel() {
+  const modes = Object.entries(copy.modes) as [FabricationMode, string][];
   const project = useProjectStore((state) => state.project);
   const materials = useProjectStore((state) => state.materials);
   const renameProject = useProjectStore((state) => state.renameProject);
@@ -62,7 +61,7 @@ export function ParameterPanel() {
         >
           {materials.map((material) => (
             <option key={material.id} value={material.id}>
-              {material.name}
+              {materialLabel(material.id, material.name)}
             </option>
           ))}
         </select>

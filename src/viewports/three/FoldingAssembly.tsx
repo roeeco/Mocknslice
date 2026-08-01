@@ -4,6 +4,7 @@ import type { AssembledFoldPanel } from '../../domain/folding';
 import { useProjectStore } from '../../state/useProjectStore';
 
 const panelColors = ['#d85c2f', '#4f897b', '#e0a83e', '#607a9b', '#a45d78', '#73834d'];
+const EMPTY_PANELS: readonly AssembledFoldPanel[] = [];
 
 function PanelMesh({ panel, index }: { panel: AssembledFoldPanel; index: number }) {
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
@@ -53,9 +54,8 @@ function PanelMesh({ panel, index }: { panel: AssembledFoldPanel; index: number 
 }
 
 export function FoldingAssembly() {
-  const panels = useProjectStore(
-    (state) => state.project.foldingResult?.assembledPreview.panels ?? [],
-  );
+  const result = useProjectStore((state) => state.project.foldingResult);
+  const panels = result?.assembledPreview.panels ?? EMPTY_PANELS;
   return (
     <>
       {panels.map((panel, index) => (

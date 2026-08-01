@@ -5,8 +5,10 @@ import type { MaterialCategory } from './material';
 import type { ValidationIssue } from './validation';
 
 export type PanelJointKind = 'butt' | 'finger' | 'tab-slot';
-export type PanelRole = 'base' | 'front' | 'back' | 'left' | 'right' | 'lid';
+export type PanelDividerAxis = 'width' | 'depth';
+export type PanelRole = 'base' | 'front' | 'back' | 'left' | 'right' | 'lid' | `divider-${number}`;
 export type PanelEdgeName = 'bottom' | 'right' | 'top' | 'left';
+export type PanelJointLocation = PanelEdgeName | 'face';
 
 export interface PanelConstructionSettings {
   innerWidthMm: Millimetres;
@@ -16,6 +18,8 @@ export interface PanelConstructionSettings {
   fingerWidthMm: Millimetres;
   clearanceMm: Millimetres;
   includeLid: boolean;
+  dividerCount?: number;
+  dividerAxis?: PanelDividerAxis;
 }
 
 export interface PanelConstructionMaterial {
@@ -41,13 +45,14 @@ export interface PanelConstructionJoint {
   kind: PanelJointKind;
   panelAId: string;
   panelBId: string;
-  edgeA: PanelEdgeName;
-  edgeB: PanelEdgeName;
+  edgeA: PanelJointLocation;
+  edgeB: PanelJointLocation;
   sharedLengthMm: Millimetres;
   fingerCount: number;
   clearanceMm: Millimetres;
   pairLabel: string;
   tabOwnerPanelId?: string;
+  receiverCentreMm?: Point2D;
 }
 
 export interface PanelConstructionResult {

@@ -34,6 +34,8 @@ describe('PanelConstructionPanel', () => {
       target: { value: '0.25' },
     });
     await user.click(screen.getByLabelText('Include a fully jointed lid'));
+    fireEvent.change(screen.getByLabelText('Internal dividers'), { target: { value: '2' } });
+    await user.selectOptions(screen.getByLabelText('Divider direction'), 'depth');
 
     expect(useProjectStore.getState().project.modeParameters).toMatchObject({
       panelInnerWidthMm: 120,
@@ -43,6 +45,8 @@ describe('PanelConstructionPanel', () => {
       panelFingerWidthMm: 12,
       panelClearanceMm: 0.25,
       panelIncludeLid: true,
+      panelDividerCount: 2,
+      panelDividerAxis: 'depth',
     });
     expect(screen.getByText(/through-slots/)).toBeVisible();
   });
@@ -77,5 +81,18 @@ describe('PanelConstructionPanel', () => {
     expect(screen.getByTestId('panel-construction-summary')).toHaveTextContent('8 joints');
     expect(screen.getByTestId('panel-construction-summary')).toHaveTextContent('slots');
     expect(screen.getByText('5 panels · 8 joints')).toBeVisible();
+  });
+
+  it('keeps finger width and slot clearance available for dividers with butt walls', async () => {
+    const user = userEvent.setup();
+    render(<PanelConstructionPanel />);
+
+    await user.selectOptions(screen.getByLabelText('Edge joint'), 'butt');
+    expect(screen.queryByLabelText('Target finger width (mm)')).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText('Internal dividers'), { target: { value: '1' } });
+
+    expect(screen.getByLabelText('Target finger width (mm)')).toBeEnabled();
+    expect(screen.getByLabelText('Slot clearance (mm)')).toBeEnabled();
+    expect(screen.getByText(/side fingers and matching slots/)).toBeVisible();
   });
 });

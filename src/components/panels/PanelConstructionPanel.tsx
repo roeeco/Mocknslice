@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react';
 import type { PanelJointKind } from '../../domain/panelConstruction';
 import { useProjectStore } from '../../state/useProjectStore';
-import { copy } from '../../locales/en';
+import { copy, t } from '../../locales';
 
 function numberHandler(
   setModeParameter: (name: string, value: number | string | boolean) => void,
@@ -14,7 +14,9 @@ function numberHandler(
   };
 }
 
-export function PanelConstructionPanel() {
+export function PanelConstructionPanel({
+  hideGenerationAction = false,
+}: { hideGenerationAction?: boolean } = {}) {
   const project = useProjectStore((state) => state.project);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
@@ -28,6 +30,7 @@ export function PanelConstructionPanel() {
     parameters.panelJointKind === 'butt' || parameters.panelJointKind === 'tab-slot'
       ? parameters.panelJointKind
       : 'finger';
+  const dividerCount = Number(parameters.panelDividerCount ?? 0);
   const result = project.panelConstructionResult;
   const slotCount =
     result?.parts.flatMap((part) => part.paths).filter((path) => path.contourRole === 'hole')
@@ -87,9 +90,9 @@ export function PanelConstructionPanel() {
             value={jointKind}
             onChange={(event) => setModeParameter('panelJointKind', event.target.value)}
           >
-            <option value="finger">Complementary finger joints</option>
-            <option value="tab-slot">Tabs and through-slots</option>
-            <option value="butt">Straight butt joints</option>
+            <option value="finger">{t('Complementary finger joints')}</option>
+            <option value="tab-slot">{t('Tabs and through-slots')}</option>
+            <option value="butt">{t('Straight butt joints')}</option>
           </select>
           <p className="field-help">
             {jointKind === 'finger'
@@ -99,7 +102,7 @@ export function PanelConstructionPanel() {
                 : 'Straight panels rely on adhesive, tape, or separate fasteners.'}
           </p>
         </div>
-        {jointKind !== 'butt' ? (
+        {jointKind !== 'butt' || dividerCount > 0 ? (
           <div className="slice-number-grid">
             <div className="field-stack">
               <label htmlFor="panel-finger-width">{copy.panelConstruction.fingerWidth}</label>
@@ -119,7 +122,7 @@ export function PanelConstructionPanel() {
                 type="number"
                 min={0}
                 step={0.05}
-                disabled={jointKind !== 'tab-slot'}
+                disabled={jointKind !== 'tab-slot' && dividerCount === 0}
                 value={Number(
                   parameters.panelClearanceMm ?? project.materialProfileSnapshot.clearanceMm,
                 )}
@@ -136,33 +139,71 @@ export function PanelConstructionPanel() {
           />
           <span>{copy.panelConstruction.includeLid}</span>
         </label>
+        <div className="slice-number-grid">
+          <div className="field-stack">
+            <label htmlFor="panel-divider-count">{copy.panelConstruction.dividerCount}</label>
+            <input
+              id="panel-divider-count"
+              type="number"
+              min={0}
+              max={6}
+              step={1}
+              value={Number(parameters.panelDividerCount ?? 0)}
+              onChange={(event) => {
+                const value = event.target.valueAsNumber;
+                if (Number.isFinite(value))
+                  setModeParameter(
+                    'panelDividerCount',
+                    Math.max(0, Math.min(6, Math.round(value))),
+                  );
+              }}
+            />
+          </div>
+          <div className="field-stack">
+            <label htmlFor="panel-divider-axis">{copy.panelConstruction.dividerAxis}</label>
+            <select
+              id="panel-divider-axis"
+              value={parameters.panelDividerAxis === 'depth' ? 'depth' : 'width'}
+              disabled={Number(parameters.panelDividerCount ?? 0) === 0}
+              onChange={(event) => setModeParameter('panelDividerAxis', event.target.value)}
+            >
+              <option value="width">{t('Across the width')}</option>
+              <option value="depth">{t('Across the depth')}</option>
+            </select>
+          </div>
+        </div>
+        {dividerCount > 0 ? (
+          <p className="field-help">{copy.panelConstruction.dividerHelp}</p>
+        ) : null}
       </fieldset>
-      <div className="generation-actions">
-        {status === 'processing' ? (
-          <button type="button" onClick={cancel}>
-            Cancel
-          </button>
-        ) : (
-          <button className="primary-panel-action" type="button" onClick={generate}>
-            {status === 'stale'
-              ? copy.panelConstruction.regenerate
-              : copy.panelConstruction.generate}
-          </button>
-        )}
-        <span aria-live="polite">
-          {status === 'processing'
-            ? 'Building joints…'
-            : result
-              ? `${result.panels.length} panels · ${result.joints.length} joints`
-              : 'Ready to build'}
-        </span>
-      </div>
+      {!hideGenerationAction ? (
+        <div className="generation-actions">
+          {status === 'processing' ? (
+            <button type="button" onClick={cancel}>
+              Cancel
+            </button>
+          ) : (
+            <button className="primary-panel-action" type="button" onClick={generate}>
+              {status === 'stale'
+                ? copy.panelConstruction.regenerate
+                : copy.panelConstruction.generate}
+            </button>
+          )}
+          <span aria-live="polite">
+            {status === 'processing'
+              ? 'Building joints…'
+              : result
+                ? `${result.panels.length} panels · ${result.joints.length} joints`
+                : 'Ready to build'}
+          </span>
+        </div>
+      ) : null}
       {error ? (
         <p className="inline-error" role="alert">
           {error}
         </p>
       ) : null}
-      {result?.parts.length ? (
+      {!hideGenerationAction && result?.parts.length ? (
         <div className="unfold-summary" data-testid="panel-construction-summary">
           <span>{result.panels.length} panels</span>
           <span>{result.joints.length} joints</span>

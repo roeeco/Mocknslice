@@ -3,7 +3,7 @@ import type { ProjectedProfile, TemplateFitSettings } from '../../domain/folding
 import type { Bounds3D, Point2D, SerializableTriangleMesh, Vector3Mm } from '../../domain/geometry';
 import type { ValidationIssue } from '../../domain/validation';
 
-export const FOLDING_ALGORITHM_VERSION = 'convex-template-v1';
+export const FOLDING_ALGORITHM_VERSION = 'standalone-template-v3';
 
 function rounded(value: number): number {
   return Math.round(value * 1_000_000) / 1_000_000;
@@ -313,8 +313,9 @@ export function deterministicFoldingHash(input: {
   materialThicknessMm: number;
 }): string {
   const source = JSON.stringify({
-    positionsMm: input.mesh.positionsMm,
-    indices: input.mesh.indices,
+    ...(input.settings.parameters.standalone === true
+      ? {}
+      : { positionsMm: input.mesh.positionsMm, indices: input.mesh.indices }),
     settings: input.settings,
     materialThicknessMm: input.materialThicknessMm,
     algorithmVersion: FOLDING_ALGORITHM_VERSION,

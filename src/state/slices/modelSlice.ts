@@ -53,7 +53,10 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
         selectedEntityId: id,
         activeSheetId: state.project.sheetLayouts[0]?.id,
         viewportMode: 'three',
-        activeWorkflowStep: 'inspect',
+        activeWorkflowStep: 'import',
+        completedWorkflowSteps: state.completedWorkflowSteps.filter(
+          (step) => step === 'start' || step === 'mode',
+        ),
         sliceGenerationStatus: 'idle',
       };
     }),
@@ -66,6 +69,9 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
         touchProject({ ...project, model: rotateModelMesh90(project.model, axis) }),
       ),
       sliceGenerationStatus: state.project.generatedParts.length > 0 ? 'stale' : 'idle',
+      completedWorkflowSteps: state.completedWorkflowSteps.filter((step) =>
+        ['start', 'mode', 'import'].includes(step),
+      ),
     })),
   scaleModelToDimension: (axis, targetMm) =>
     set((state) => ({
@@ -76,5 +82,30 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
         }),
       ),
       sliceGenerationStatus: state.project.generatedParts.length > 0 ? 'stale' : 'idle',
+      completedWorkflowSteps: state.completedWorkflowSteps.filter((step) =>
+        ['start', 'mode', 'import'].includes(step),
+      ),
     })),
+  scaleModelToLongestDimension: (targetMm) =>
+    set((state) => {
+      const dimensions = state.project.model.dimensions;
+      const entries = [
+        ['x', dimensions.widthMm],
+        ['y', dimensions.heightMm],
+        ['z', dimensions.depthMm],
+      ] as const;
+      const [axis] = entries.reduce((largest, entry) => (entry[1] > largest[1] ? entry : largest));
+      return {
+        ...recordProjectChange(state, (project) =>
+          touchProject({
+            ...project,
+            model: scaleModelMeshToDimension(project.model, axis, targetMm),
+          }),
+        ),
+        sliceGenerationStatus: state.project.generatedParts.length > 0 ? 'stale' : 'idle',
+        completedWorkflowSteps: state.completedWorkflowSteps.filter((step) =>
+          ['start', 'mode', 'import'].includes(step),
+        ),
+      };
+    }),
 });

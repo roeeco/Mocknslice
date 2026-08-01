@@ -7,6 +7,7 @@ import type {
   ProjectedProfile,
   TemplateFitSettings,
   TemplateGenerationResult,
+  TemplateEnvelopeDimensions,
   TemplateKind,
 } from '../../domain/folding';
 import type { Bounds3D, Point2D, SerializableTriangleMesh } from '../../domain/geometry';
@@ -44,6 +45,16 @@ function numberParameter(settings: TemplateFitSettings, name: string, fallback: 
   return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
 }
 
+function closureForSettings(settings: TemplateFitSettings): {
+  style: 'glue' | 'press-fit';
+  slotClearanceMm: number;
+} {
+  return {
+    style: settings.parameters.closureMethod === 'press-fit' ? 'press-fit' : 'glue',
+    slotClearanceMm: Math.max(0, numberParameter(settings, 'slotClearanceMm', 0.2)),
+  };
+}
+
 function bounds2(points: readonly Point2D[]) {
   return points.reduce(
     (bounds, point) => ({
@@ -54,6 +65,65 @@ function bounds2(points: readonly Point2D[]) {
     }),
     { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity },
   );
+}
+
+function envelopeForProfile(profile: ProjectedProfile): TemplateEnvelopeDimensions {
+  if (profile.fitAxis === 'x') {
+    return { widthMm: profile.depthMm, lengthMm: profile.widthMm, heightMm: profile.heightMm };
+  }
+  if (profile.fitAxis === 'y') {
+    return { widthMm: profile.widthMm, lengthMm: profile.heightMm, heightMm: profile.depthMm };
+  }
+  return { widthMm: profile.widthMm, lengthMm: profile.depthMm, heightMm: profile.heightMm };
+}
+
+function profileDimensionsForEnvelope(
+  dimensions: TemplateEnvelopeDimensions,
+  axis: SliceAxis,
+): { widthMm: number; heightMm: number; depthMm: number } {
+  if (axis === 'x') {
+    return {
+      widthMm: dimensions.lengthMm,
+      heightMm: dimensions.heightMm,
+      depthMm: dimensions.widthMm,
+    };
+  }
+  if (axis === 'y') {
+    return {
+      widthMm: dimensions.widthMm,
+      heightMm: dimensions.lengthMm,
+      depthMm: dimensions.heightMm,
+    };
+  }
+  return {
+    widthMm: dimensions.widthMm,
+    heightMm: dimensions.heightMm,
+    depthMm: dimensions.lengthMm,
+  };
+}
+
+function resizedProfile(
+  profile: ProjectedProfile,
+  dimensions: TemplateEnvelopeDimensions,
+): ProjectedProfile {
+  const target = profileDimensionsForEnvelope(dimensions, profile.fitAxis);
+  const extent = bounds2(profile.fittedPoints);
+  const centre = { x: (extent.minX + extent.maxX) / 2, y: (extent.minY + extent.maxY) / 2 };
+  const scaleX = target.widthMm / profile.widthMm;
+  const scaleY = target.heightMm / profile.heightMm;
+  const axisCentre = (profile.axisMinMm + profile.axisMaxMm) / 2;
+  return {
+    ...profile,
+    fittedPoints: profile.fittedPoints.map((point) => ({
+      x: centre.x + (point.x - centre.x) * scaleX,
+      y: centre.y + (point.y - centre.y) * scaleY,
+    })),
+    widthMm: target.widthMm,
+    heightMm: target.heightMm,
+    depthMm: target.depthMm,
+    axisMinMm: axisCentre - target.depthMm / 2,
+    axisMaxMm: axisCentre + target.depthMm / 2,
+  };
 }
 
 function centroid(points: readonly Point2D[]): Point2D {
@@ -232,6 +302,10 @@ function openBoxNet(input: {
       start: { x: x - wallHeightMm, y },
       end: { x, y },
       depthMm: tabDepthMm,
+      ...closureForSettings(settings),
+      receiverPanelId: ids.bottom,
+      receiverStart: { x, y: y - wallHeightMm },
+      receiverEnd: { x, y },
     },
     {
       id: `${partId}-tab-left-top`,
@@ -239,6 +313,10 @@ function openBoxNet(input: {
       start: { x, y: y + heightMm },
       end: { x: x - wallHeightMm, y: y + heightMm },
       depthMm: tabDepthMm,
+      ...closureForSettings(settings),
+      receiverPanelId: ids.top,
+      receiverStart: { x, y: y + heightMm },
+      receiverEnd: { x, y: y + heightMm + wallHeightMm },
     },
     {
       id: `${partId}-tab-right-bottom`,
@@ -246,6 +324,10 @@ function openBoxNet(input: {
       start: { x: x + widthMm, y },
       end: { x: x + widthMm + wallHeightMm, y },
       depthMm: tabDepthMm,
+      ...closureForSettings(settings),
+      receiverPanelId: ids.bottom,
+      receiverStart: { x: x + widthMm, y },
+      receiverEnd: { x: x + widthMm, y: y - wallHeightMm },
     },
     {
       id: `${partId}-tab-right-top`,
@@ -253,6 +335,10 @@ function openBoxNet(input: {
       start: { x: x + widthMm + wallHeightMm, y: y + heightMm },
       end: { x: x + widthMm, y: y + heightMm },
       depthMm: tabDepthMm,
+      ...closureForSettings(settings),
+      receiverPanelId: ids.top,
+      receiverStart: { x: x + widthMm, y: y + heightMm + wallHeightMm },
+      receiverEnd: { x: x + widthMm, y: y + heightMm },
     },
   ];
   const net = buildFoldNet({ partId, name, templateKind, thicknessMm, panels, hinges, tabs });
@@ -406,6 +492,10 @@ function bandNet(input: {
     start: { x: cursor, y: 0 },
     end: { x: cursor, y: depthMm },
     depthMm: seamTabMm,
+    ...closureForSettings(settings),
+    receiverPanelId: panels[0]!.id,
+    receiverStart: { x: 0, y: depthMm },
+    receiverEnd: { x: 0, y: 0 },
   });
 
   if (includeFaces) {
@@ -471,6 +561,10 @@ function bandNet(input: {
         start,
         end,
         depthMm: closureFlapMm,
+        ...closureForSettings(settings),
+        receiverPanelId: faceAId,
+        receiverStart: panels.at(-2)!.outline[1]!,
+        receiverEnd: panels.at(-2)!.outline[2]!,
       });
     }
     assembled.push(
@@ -564,9 +658,13 @@ function pyramidNet(input: FoldTemplateInput, profile: ProjectedProfile): BuiltT
   const topScale = Math.max(0, Math.min(1, numberParameter(input.settings, 'topScale', 0)));
   const tabDepthMm = Math.max(1, numberParameter(input.settings, 'seamTabMm', 8));
   const lowerSection =
-    sectionProfile(input, profile.axisMinMm + profile.depthMm * 0.2) ?? profile.fittedPoints;
+    input.settings.sizeMode === 'custom'
+      ? profile.fittedPoints
+      : (sectionProfile(input, profile.axisMinMm + profile.depthMm * 0.2) ?? profile.fittedPoints);
   const upperSection =
-    sectionProfile(input, profile.axisMaxMm - profile.depthMm * 0.2) ?? profile.fittedPoints;
+    input.settings.sizeMode === 'custom'
+      ? profile.fittedPoints
+      : (sectionProfile(input, profile.axisMaxMm - profile.depthMm * 0.2) ?? profile.fittedPoints);
   const count = Math.max(3, Math.min(12, Math.max(lowerSection.length, upperSection.length)));
   const baseRaw = resamplePolygon(lowerSection, count);
   const upperRaw = resamplePolygon(upperSection, count);
@@ -646,6 +744,15 @@ function pyramidNet(input: FoldTemplateInput, profile: ProjectedProfile): BuiltT
       ),
     );
   }
+  tabs.forEach((tab, index) => {
+    const receiver = panels[((index + 1) % count) + 1]!;
+    Object.assign(tab, {
+      ...closureForSettings(input.settings),
+      receiverPanelId: receiver.id,
+      receiverStart: receiver.outline[1],
+      receiverEnd: receiver.outline[2],
+    });
+  });
   const main = buildFoldNet({
     partId,
     name: topScale === 0 ? 'Pyramid net' : 'Frustum net',
@@ -680,13 +787,21 @@ function pyramidNet(input: FoldTemplateInput, profile: ProjectedProfile): BuiltT
     role: 'lid',
     outline: capOutline,
   };
-  const capTabs: TabSpec[] = capOutline.map((point, index) => ({
-    id: `${capPartId}-tab-${index + 1}`,
-    ownerPanelId: capId,
-    start: point,
-    end: capOutline[(index + 1) % capOutline.length]!,
-    depthMm: tabDepthMm,
-  }));
+  const capTabs: TabSpec[] = capOutline.map((point, index) => {
+    const receiver = panels[index + 1]!;
+    return {
+      id: `${capPartId}-tab-${index + 1}`,
+      ownerPanelId: capId,
+      start: point,
+      end: capOutline[(index + 1) % capOutline.length]!,
+      depthMm: tabDepthMm,
+      ...closureForSettings(input.settings),
+      receiverPanelId: receiver.id,
+      receiverStart: receiver.outline[2]!,
+      receiverEnd: receiver.outline[3]!,
+      emitSlot: false,
+    };
+  });
   const cap = buildFoldNet({
     partId: capPartId,
     name: 'Frustum top cap',
@@ -696,7 +811,28 @@ function pyramidNet(input: FoldTemplateInput, profile: ProjectedProfile): BuiltT
     hinges: [],
     tabs: capTabs,
   });
-  return mergeBuilt(built, {
+  const capReceiverSlits = cap.tabs.flatMap((tab) =>
+    tab.style === 'press-fit' && tab.slotStart && tab.slotEnd && tab.receiverPanelId
+      ? [
+          {
+            id: `${tab.id}-receiver-slit`,
+            operation: 'cut' as const,
+            closed: false,
+            points: [tab.slotStart, tab.slotEnd],
+            panelId: tab.receiverPanelId,
+            tabId: tab.id,
+            edgeId: tab.edgeId,
+          },
+        ]
+      : [],
+  );
+  const mainWithCapSlots: BuiltTemplate = {
+    ...built,
+    parts: built.parts.map((part, index) =>
+      index === 0 ? { ...part, paths: [...part.paths, ...capReceiverSlits] } : part,
+    ),
+  };
+  return mergeBuilt(mainWithCapSlots, {
     panels: [capPanel],
     edges: cap.edges,
     tabs: cap.tabs,
@@ -748,6 +884,40 @@ function incompatibleResult(
   };
 }
 
+function standaloneProfile(input: FoldTemplateInput): ProjectedProfile | undefined {
+  const dimensions = input.settings.envelopeDimensions;
+  if (
+    !dimensions ||
+    [dimensions.widthMm, dimensions.lengthMm, dimensions.heightMm].some(
+      (value) => !Number.isFinite(value) || value <= 0,
+    )
+  ) {
+    return undefined;
+  }
+  const target = profileDimensionsForEnvelope(dimensions, input.settings.fitAxis);
+  const halfWidth = target.widthMm / 2;
+  const halfHeight = target.heightMm / 2;
+  const points = [
+    { x: -halfWidth, y: -halfHeight },
+    { x: halfWidth, y: -halfHeight },
+    { x: halfWidth, y: halfHeight },
+    { x: -halfWidth, y: halfHeight },
+  ];
+  return {
+    sourceModelId: 'standalone-template',
+    fitAxis: input.settings.fitAxis,
+    sourceHullPoints: points.map((point) => ({ ...point })),
+    fittedPoints: points,
+    clearanceMm: 0,
+    simplificationToleranceMm: input.settings.profileToleranceMm,
+    axisMinMm: -target.depthMm / 2,
+    axisMaxMm: target.depthMm / 2,
+    widthMm: target.widthMm,
+    heightMm: target.heightMm,
+    depthMm: target.depthMm,
+  };
+}
+
 export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerationResult {
   if (input.settings.clearanceMm < 0 || input.settings.profileToleranceMm <= 0) {
     return incompatibleResult(input, [
@@ -761,12 +931,77 @@ export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerati
       },
     ]);
   }
-  const extracted = extractProjectedProfile({ ...input, settings: input.settings });
+  const standalone = input.settings.parameters.standalone === true;
+  const parametricProfile = standalone ? standaloneProfile(input) : undefined;
+  if (standalone && !parametricProfile) {
+    return incompatibleResult(input, [
+      {
+        id: `template-dimensions-invalid-${input.modelId}`,
+        severity: 'error',
+        code: 'TEMPLATE_INCOMPATIBLE',
+        message: 'Standalone template width, length, and height must all be positive.',
+        affectedEntityIds: [input.modelId],
+        suggestedAction: 'Enter positive template dimensions and generate again.',
+      },
+    ]);
+  }
+  if (
+    parametricProfile &&
+    Math.min(parametricProfile.widthMm, parametricProfile.heightMm, parametricProfile.depthMm) <
+      input.materialThicknessMm * 2
+  ) {
+    return {
+      ...incompatibleResult(input, [
+        {
+          id: `template-material-minimum-${input.modelId}`,
+          severity: 'error',
+          code: 'TEMPLATE_INCOMPATIBLE',
+          message: 'At least one template dimension is smaller than two material thicknesses.',
+          affectedEntityIds: [input.modelId],
+          suggestedAction: 'Increase the template dimensions or choose thinner material.',
+        },
+      ]),
+      profile: parametricProfile,
+      resolvedDimensions: input.settings.envelopeDimensions!,
+    };
+  }
+  const extracted = standalone
+    ? { profile: parametricProfile, issues: [] as ValidationIssue[] }
+    : extractProjectedProfile({ ...input, settings: input.settings });
   if (!extracted.profile) return incompatibleResult(input, extracted.issues);
-  const profile = extracted.profile;
+  let profile = extracted.profile;
   if (extracted.issues.some((issue) => issue.severity === 'error')) {
     return { ...incompatibleResult(input, extracted.issues), profile };
   }
+  const fittedDimensions = envelopeForProfile(profile);
+  const requestedDimensions =
+    input.settings.sizeMode === 'custom' ? input.settings.envelopeDimensions : undefined;
+  if (requestedDimensions && !standalone) {
+    const undersized =
+      requestedDimensions.widthMm + 1e-6 < fittedDimensions.widthMm ||
+      requestedDimensions.lengthMm + 1e-6 < fittedDimensions.lengthMm ||
+      requestedDimensions.heightMm + 1e-6 < fittedDimensions.heightMm;
+    if (undersized) {
+      const issues: ValidationIssue[] = [
+        ...extracted.issues,
+        {
+          id: `template-dimensions-too-small-${input.modelId}`,
+          severity: 'error',
+          code: 'TEMPLATE_INCOMPATIBLE',
+          message: 'Custom template dimensions are smaller than the fitted model envelope.',
+          affectedEntityIds: [input.modelId],
+          suggestedAction: 'Increase width, length, and height to at least the fitted values.',
+        },
+      ];
+      return {
+        ...incompatibleResult(input, issues),
+        profile,
+        resolvedDimensions: requestedDimensions,
+      };
+    }
+    profile = resizedProfile(profile, requestedDimensions);
+  }
+  const resolvedDimensions = requestedDimensions ?? fittedDimensions;
   const profileExtent = bounds2(profile.fittedPoints);
   const centre = {
     x: (profileExtent.minX + profileExtent.maxX) / 2,
@@ -775,7 +1010,9 @@ export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerati
   const tabDepthMm = Math.max(1, numberParameter(input.settings, 'tabDepthMm', 8));
   const wallHeightMm = Math.max(
     1,
-    numberParameter(input.settings, 'wallHeightMm', profile.depthMm),
+    input.settings.sizeMode === 'custom'
+      ? profile.depthMm
+      : numberParameter(input.settings, 'wallHeightMm', profile.depthMm),
   );
   let built: BuiltTemplate;
   if (input.settings.templateKind === 'open-box' || input.settings.templateKind === 'tray') {
@@ -852,10 +1089,7 @@ export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerati
       name: 'Envelope net',
       templateKind: 'envelope',
       profilePoints: profile.fittedPoints,
-      depthMm: Math.max(
-        profile.depthMm,
-        numberParameter(input.settings, 'gussetDepthMm', profile.depthMm),
-      ),
+      depthMm: profile.depthMm,
       seamTabMm: Math.max(1, numberParameter(input.settings, 'seamTabMm', 8)),
       includeFaces: true,
       closureFlapMm: Math.max(0, numberParameter(input.settings, 'closureFlapMm', 12)),
@@ -908,6 +1142,7 @@ export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerati
     parts: built.parts,
     issues,
     assembledPreview: { panels: built.assembled },
+    resolvedDimensions,
     algorithmVersion: FOLDING_ALGORITHM_VERSION,
     inputHash: deterministicFoldingHash({
       mesh: input.mesh,

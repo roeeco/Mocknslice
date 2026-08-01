@@ -33,9 +33,9 @@ describe('ModelInspectionPanel', () => {
     expect(screen.getByText('fixture.stl')).toBeInTheDocument();
     expect(screen.getByText('Model health')).toBeInTheDocument();
 
-    const width = screen.getByLabelText('Width (X)');
-    await user.clear(width);
-    await user.type(width, '20{Enter}');
+    const longest = screen.getByLabelText('Longest dimension');
+    await user.clear(longest);
+    await user.type(longest, '60{Enter}');
 
     expect(useProjectStore.getState().project.model.dimensions).toEqual({
       widthMm: 20,

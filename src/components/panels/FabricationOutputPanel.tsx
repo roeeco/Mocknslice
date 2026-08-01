@@ -7,7 +7,7 @@ import {
   calculateMaterialUsage,
   prepareFabricationOutput,
 } from '../../geometry/output/prepareFabricationOutput';
-import { copy } from '../../locales/en';
+import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 
 const operationLabels: Record<OperationStyle['operation'], string> = {
@@ -64,7 +64,7 @@ export function FabricationOutputPanel() {
     <section className="panel-section output-panel" aria-labelledby="output-heading">
       <div className="panel-heading-row">
         <p className="eyebrow">Phase 7</p>
-        <span className="phase-badge">Vector output</span>
+        <span className="phase-badge">{t('Vector output')}</span>
       </div>
       <h2 id="output-heading">{copy.fabricationOutput}</h2>
       <p className="field-help output-intro">
@@ -81,16 +81,16 @@ export function FabricationOutputPanel() {
             updateExportSettings({ kerfCompensation: event.target.value as KerfCompensationMode })
           }
         >
-          <option value="none">None</option>
+          <option value="none">{t('None')}</option>
           <option value="material">
             Material profile ({project.materialProfileSnapshot.kerfMm} mm)
           </option>
-          <option value="custom">Custom</option>
+          <option value="custom">{t('Custom')}</option>
         </select>
       </div>
       {settings.kerfCompensation === 'custom' ? (
         <div className="field-stack">
-          <label htmlFor="custom-kerf">Custom kerf</label>
+          <label htmlFor="custom-kerf">{t('Custom kerf')}</label>
           <div className="unit-input">
             <input
               id="custom-kerf"
@@ -117,15 +117,15 @@ export function FabricationOutputPanel() {
             updateExportSettings({ foldLineOutput: event.target.value as FoldLineOutput })
           }
         >
-          <option value="preserve">Preserve mountain / valley layers</option>
-          <option value="score">Combine as score lines</option>
-          <option value="perforate">Perforation pattern</option>
+          <option value="preserve">{t('Preserve mountain / valley layers')}</option>
+          <option value="score">{t('Combine as score lines')}</option>
+          <option value="perforate">{t('Perforation pattern')}</option>
         </select>
       </div>
       {settings.foldLineOutput === 'perforate' ? (
         <div className="slice-number-grid">
           <div className="field-stack">
-            <label htmlFor="perforation-dash">Dash length</label>
+            <label htmlFor="perforation-dash">{t('Dash length')}</label>
             <div className="unit-input">
               <input
                 id="perforation-dash"
@@ -139,7 +139,7 @@ export function FabricationOutputPanel() {
             </div>
           </div>
           <div className="field-stack">
-            <label htmlFor="perforation-gap">Gap length</label>
+            <label htmlFor="perforation-gap">{t('Gap length')}</label>
             <div className="unit-input">
               <input
                 id="perforation-gap"
@@ -166,7 +166,7 @@ export function FabricationOutputPanel() {
         </label>
         {settings.includeLabels ? (
           <div className="field-stack compact-field">
-            <label htmlFor="label-size">Label size</label>
+            <label htmlFor="label-size">{t('Label size')}</label>
             <div className="unit-input">
               <input
                 id="label-size"
@@ -198,7 +198,7 @@ export function FabricationOutputPanel() {
               updateExportSettings({ includeSheetBoundary: event.target.checked })
             }
           />
-          <span>Sheet boundary</span>
+          <span>{t('Sheet boundary')}</span>
         </label>
       </div>
 
@@ -237,26 +237,26 @@ export function FabricationOutputPanel() {
         ))}
       </details>
 
-      <div className="usage-card" aria-label="Material usage estimate">
+      <div className="usage-card" aria-label={t('Material usage estimate')}>
         <div className="panel-heading-row">
-          <strong>Material estimate</strong>
+          <strong>{t('Material estimate')}</strong>
           <span>{Math.round(usage.utilizationPercent * 10) / 10}% used</span>
         </div>
         <dl>
           <div>
-            <dt>Used sheets</dt>
+            <dt>{t('Used sheets')}</dt>
             <dd>{usage.usedSheetCount}</dd>
           </div>
           <div>
-            <dt>Part area</dt>
+            <dt>{t('Part area')}</dt>
             <dd>{areaLabel(usage.placedPartAreaMm2)}</dd>
           </div>
           <div>
-            <dt>Estimated waste</dt>
+            <dt>{t('Estimated waste')}</dt>
             <dd>{areaLabel(usage.estimatedWasteAreaMm2)}</dd>
           </div>
           <div>
-            <dt>Cut length</dt>
+            <dt>{t('Cut length')}</dt>
             <dd>{Math.round(usage.cutLengthMm)} mm</dd>
           </div>
         </dl>
@@ -283,7 +283,7 @@ export function FabricationOutputPanel() {
       {prepared.issues.length > 0 ? (
         <p className="field-help output-issue-summary">
           {prepared.issues.length} output preparation notice
-          {prepared.issues.length === 1 ? '' : 's'} appear under Checks & warnings.
+          {prepared.issues.length === 1 ? '' : 's'}. Review them in Inspect before exporting.
         </p>
       ) : null}
     </section>

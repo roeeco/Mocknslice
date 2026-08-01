@@ -61,7 +61,7 @@ export interface FabricationPart {
   };
   construction?: {
     panelId: string;
-    role: 'base' | 'front' | 'back' | 'left' | 'right' | 'lid';
+    role: 'base' | 'front' | 'back' | 'left' | 'right' | 'lid' | `divider-${number}`;
     jointIds: string[];
   };
 }

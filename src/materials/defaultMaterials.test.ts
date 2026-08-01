@@ -2,13 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { DEFAULT_MATERIALS, getDefaultMaterial } from './defaultMaterials';
 
 describe('default materials', () => {
-  it('provides the five foundation profiles in explicit millimetres', () => {
+  it('provides the foundation and user-requested profiles in explicit millimetres', () => {
     expect(DEFAULT_MATERIALS.map((material) => material.id)).toEqual([
       'paper-160gsm',
       'card-300gsm',
       'chipboard-1mm',
+      'corrugated-1mm',
       'corrugated-3mm',
       'plywood-3mm',
+      'plywood-5mm',
+      'plywood-10mm',
+      'custom-material',
     ]);
     expect(DEFAULT_MATERIALS.every((material) => material.thicknessMm >= 0)).toBe(true);
     expect(DEFAULT_MATERIALS.every((material) => material.defaultSheetWidthMm > 0)).toBe(true);

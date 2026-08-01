@@ -24,6 +24,7 @@ function CameraRig() {
   const dimensions = useProjectStore((state) => state.project.model.dimensions);
   const unfoldingResult = useProjectStore((state) => state.project.unfoldingResult);
   const panelResult = useProjectStore((state) => state.project.panelConstructionResult);
+  const foldingResult = useProjectStore((state) => state.project.foldingResult);
 
   useEffect(() => {
     const unfoldedPoints = unfoldingResult?.faces.flatMap((face) => face.points2D) ?? [];
@@ -44,6 +45,9 @@ function CameraRig() {
       panelResult?.settings.innerWidthMm ?? 0,
       panelResult?.settings.innerDepthMm ?? 0,
       panelResult?.settings.innerHeightMm ?? 0,
+      foldingResult?.resolvedDimensions?.widthMm ?? 0,
+      foldingResult?.resolvedDimensions?.lengthMm ?? 0,
+      foldingResult?.resolvedDimensions?.heightMm ?? 0,
       10,
     );
     const distance = largestDimension * 2.45;
@@ -55,7 +59,7 @@ function CameraRig() {
     camera.far = Math.max(1000, largestDimension * 20);
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
-  }, [camera, dimensions, panelResult, preset, resetToken, unfoldingResult]);
+  }, [camera, dimensions, foldingResult, panelResult, preset, resetToken, unfoldingResult]);
 
   return null;
 }
@@ -79,9 +83,23 @@ export function ModelScene() {
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
   const fabricationMode = useProjectStore((state) => state.project.fabricationMode);
+  const foldingResult = useProjectStore((state) => state.project.foldingResult);
   const { widthMm, heightMm, depthMm } = model.dimensions;
   const selected = selectedEntityId === model.id;
-  const largestDimension = Math.max(widthMm, heightMm, depthMm, 10);
+  const templateDimensions = foldingResult?.resolvedDimensions;
+  const largestDimension = Math.max(
+    widthMm,
+    heightMm,
+    depthMm,
+    templateDimensions?.widthMm ?? 0,
+    templateDimensions?.lengthMm ?? 0,
+    templateDimensions?.heightMm ?? 0,
+    10,
+  );
+  const floorY =
+    fabricationMode === 'fold-template'
+      ? -(templateDimensions?.heightMm ?? heightMm) / 2
+      : -heightMm / 2;
 
   return (
     <>
@@ -95,7 +113,9 @@ export function ModelScene() {
         position={[-largestDimension, largestDimension * 0.5, -largestDimension]}
         intensity={0.8}
       />
-      {fabricationMode !== 'panel-construction' ? (
+      {model.source.kind === 'imported' &&
+      fabricationMode !== 'panel-construction' &&
+      fabricationMode !== 'fold-template' ? (
         <mesh
           onClick={(event) => {
             event.stopPropagation();
@@ -126,7 +146,7 @@ export function ModelScene() {
       <PanelConstructionAssembly />
       <Grid
         args={[largestDimension * 6, largestDimension * 6]}
-        position={[0, -heightMm / 2, 0]}
+        position={[0, floorY, 0]}
         cellSize={10}
         sectionSize={50}
         cellColor="#a8a59c"

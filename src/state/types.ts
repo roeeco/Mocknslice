@@ -2,10 +2,12 @@ import type { StateCreator } from 'zustand';
 import type { ExportSettings } from '../domain/exports';
 import type { FabricationMode, SheetLayout } from '../domain/fabrication';
 import type { MaterialProfile } from '../domain/material';
+import type { TemplateKind } from '../domain/folding';
 import type { ModelAxis, StlUnit } from '../domain/model';
 import type { NormalizedMeshResult } from '../geometry/mesh/normalizeMesh';
 import type { ProjectData } from '../domain/project';
 import type { ValidationIssue } from '../domain/validation';
+import type { Locale } from '../locales';
 
 export type AutosaveStatus = 'idle' | 'pending' | 'saving' | 'saved' | 'error';
 export type ViewportMode = 'three' | 'two';
@@ -35,12 +37,15 @@ export interface ModelSlice {
   cancelModelImport: () => void;
   rotateModel90: (axis: ModelAxis) => void;
   scaleModelToDimension: (axis: ModelAxis, targetMm: number) => void;
+  scaleModelToLongestDimension: (targetMm: number) => void;
 }
 
 export interface FabricationSlice {
   sliceGenerationStatus: 'idle' | 'processing' | 'ready' | 'error' | 'cancelled' | 'stale';
   sliceGenerationError: string | undefined;
   setFabricationMode: (mode: FabricationMode) => void;
+  setWorkflowSourceMode: (mode: 'import' | 'template') => void;
+  selectTemplateSource: (kind: TemplateKind) => void;
   setModeParameter: (name: string, value: number | string | boolean) => void;
   generateSlices: () => void;
   generateWaffleSlices: () => void;
@@ -71,15 +76,20 @@ export interface LayoutSlice {
 }
 
 export interface ViewportSlice {
+  locale: Locale;
   viewportMode: ViewportMode;
   cameraPreset: CameraPreset;
   cameraResetToken: number;
   activeWorkflowStep: WorkflowStep;
+  completedWorkflowSteps: WorkflowStep[];
   foldPreviewProgress: number;
   setViewportMode: (mode: ViewportMode) => void;
+  setLocale: (locale: Locale) => void;
   setCameraPreset: (preset: CameraPreset) => void;
   fitCamera: () => void;
   setActiveWorkflowStep: (step: WorkflowStep) => void;
+  completeWorkflowStep: (step: WorkflowStep) => void;
+  invalidateWorkflowFrom: (step: WorkflowStep) => void;
   setFoldPreviewProgress: (progress: number) => void;
 }
 
@@ -91,6 +101,7 @@ export interface SelectionSlice {
 export interface MaterialLibrarySlice {
   materials: readonly MaterialProfile[];
   selectMaterial: (id: string) => void;
+  updateCustomMaterial: (patch: Partial<MaterialProfile>) => void;
 }
 
 export interface HistorySlice {

@@ -8,7 +8,7 @@ const cube = createCubeMesh(40);
 
 function settings(
   templateKind: TemplateKind,
-  parameters: Record<string, number> = {},
+  parameters: Record<string, number | string | boolean> = {},
 ): TemplateFitSettings {
   return {
     templateKind,
@@ -31,7 +31,10 @@ function settings(
   };
 }
 
-function generate(templateKind: TemplateKind, parameters?: Record<string, number>) {
+function generate(
+  templateKind: TemplateKind,
+  parameters?: Record<string, number | string | boolean>,
+) {
   return generateFoldTemplate({
     mesh: cube.mesh,
     bounds: cube.bounds,
@@ -77,7 +80,7 @@ describe('generateFoldTemplate', () => {
     expect(first.panels).toHaveLength(panelCount);
     expect(first.assembledPreview.panels).toHaveLength(panelCount);
     expect(first.inputHash).toMatch(/^sf6-[0-9a-f]{8}$/);
-    expect(first.algorithmVersion).toBe('convex-template-v1');
+    expect(first.algorithmVersion).toBe('standalone-template-v3');
     expect(first.parts.flatMap((part) => part.paths).some((path) => path.operation === 'cut')).toBe(
       true,
     );
@@ -118,11 +121,74 @@ describe('generateFoldTemplate', () => {
   });
 
   it('creates a separate fitted cap for a truncated pyramid', () => {
-    const result = generate('pyramid-frustum', { topScale: 0.5 });
+    const result = generate('pyramid-frustum', {
+      topScale: 0.5,
+      closureMethod: 'press-fit',
+      slotClearanceMm: 0.2,
+    });
     expect(result.parts).toHaveLength(2);
     expect(result.parts[1]?.name).toBe('Frustum top cap');
     expect(result.tabs.length).toBeGreaterThan(4);
+    expect(
+      result.tabs
+        .filter((tab) => tab.partId === 'fold-pyramid-cap')
+        .every((tab) =>
+          result.parts[0]?.paths.some((path) => path.id === `${tab.id}-receiver-slit`),
+        ),
+    ).toBe(true);
   });
+
+  it.each([
+    ['open-box', 4],
+    ['box-with-lid', 8],
+    ['tray', 4],
+    ['sleeve', 1],
+    ['envelope', 2],
+    ['regular-prism', 1],
+    ['pyramid-frustum', 4],
+  ] as const)(
+    'creates bounded press-fit lips and matching slits for %s',
+    (templateKind, expectedTabs) => {
+      const result = generateFoldTemplate({
+        mesh: cube.mesh,
+        bounds: cube.bounds,
+        modelId: 'ignored-model',
+        materialThicknessMm: 1,
+        settings: {
+          ...settings(templateKind, {
+            standalone: true,
+            closureMethod: 'press-fit',
+            slotClearanceMm: 0.2,
+            tabDepthMm: 100,
+            seamTabMm: 100,
+          }),
+          sizeMode: 'custom',
+          envelopeDimensions: { widthMm: 80, lengthMm: 60, heightMm: 40 },
+        },
+      });
+
+      expect(result.profile.sourceModelId).toBe('standalone-template');
+      expect(result.resolvedDimensions).toEqual({ widthMm: 80, lengthMm: 60, heightMm: 40 });
+      expect(result.tabs).toHaveLength(expectedTabs);
+      expect(result.issues.some((issue) => issue.severity === 'error')).toBe(false);
+      for (const tab of result.tabs) {
+        const baseLength = Math.hypot(
+          tab.baseEnd.x - tab.baseStart.x,
+          tab.baseEnd.y - tab.baseStart.y,
+        );
+        expect(tab.style).toBe('press-fit');
+        expect(tab.receiverPanelId).toBeDefined();
+        expect(tab.slotStart).toBeDefined();
+        expect(tab.slotEnd).toBeDefined();
+        expect(tab.depthMm).toBeLessThanOrEqual(Math.min(baseLength * 0.35, 15) + 1e-6);
+        expect(
+          result.parts
+            .flatMap((part) => part.paths)
+            .some((path) => path.id === `${tab.id}-receiver-slit`),
+        ).toBe(true);
+      }
+    },
+  );
 
   it('records matched fold edges, glue tabs, and panel labels', () => {
     const result = generate('open-box');
@@ -140,6 +206,47 @@ describe('generateFoldTemplate', () => {
     expect(result.issues.map((issue) => issue.code)).toContain('TEMPLATE_INCOMPATIBLE');
   });
 
+  it.each(['x', 'y', 'z'] as const)(
+    'resizes a custom template envelope without changing the source mesh on %s',
+    (fitAxis) => {
+      const result = generateFoldTemplate({
+        mesh: cube.mesh,
+        bounds: cube.bounds,
+        modelId: 'cube',
+        materialThicknessMm: 1,
+        settings: {
+          ...settings('sleeve'),
+          fitAxis,
+          sizeMode: 'custom',
+          envelopeDimensions: { widthMm: 60, lengthMm: 70, heightMm: 80 },
+        },
+      });
+      expect(result.resolvedDimensions).toEqual({ widthMm: 60, lengthMm: 70, heightMm: 80 });
+      expect(result.issues.some((issue) => issue.severity === 'error')).toBe(false);
+      expect(cube.mesh.positionsMm).toEqual(createCubeMesh(40).mesh.positionsMm);
+    },
+  );
+
+  it('rejects a custom template envelope smaller than the fitted profile', () => {
+    const result = generateFoldTemplate({
+      mesh: cube.mesh,
+      bounds: cube.bounds,
+      modelId: 'cube',
+      materialThicknessMm: 1,
+      settings: {
+        ...settings('open-box'),
+        sizeMode: 'custom',
+        envelopeDimensions: { widthMm: 20, lengthMm: 20, heightMm: 20 },
+      },
+    });
+    expect(result.parts).toHaveLength(0);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ severity: 'error', code: 'TEMPLATE_INCOMPATIBLE' }),
+      ]),
+    );
+  });
+
   it('rejects a profile that is too narrow for the selected material', () => {
     const result = generateFoldTemplate({
       mesh: cube.mesh,
@@ -151,5 +258,38 @@ describe('generateFoldTemplate', () => {
     expect(result.parts).toHaveLength(0);
     expect(result.profile.fittedPoints).not.toHaveLength(0);
     expect(result.issues.map((issue) => issue.code)).toContain('PROFILE_FEATURE_TOO_NARROW');
+  });
+
+  it('rejects standalone dimensions and press-fit clearance that cannot support the material', () => {
+    const tooThin = generateFoldTemplate({
+      mesh: cube.mesh,
+      bounds: cube.bounds,
+      modelId: 'standalone',
+      materialThicknessMm: 5,
+      settings: {
+        ...settings('open-box', { standalone: true }),
+        sizeMode: 'custom',
+        envelopeDimensions: { widthMm: 8, lengthMm: 40, heightMm: 40 },
+      },
+    });
+    const looseSlot = generateFoldTemplate({
+      mesh: cube.mesh,
+      bounds: cube.bounds,
+      modelId: 'standalone',
+      materialThicknessMm: 1,
+      settings: {
+        ...settings('open-box', {
+          standalone: true,
+          closureMethod: 'press-fit',
+          slotClearanceMm: 20,
+        }),
+        sizeMode: 'custom',
+        envelopeDimensions: { widthMm: 80, lengthMm: 60, heightMm: 40 },
+      },
+    });
+
+    expect(tooThin.parts).toHaveLength(0);
+    expect(tooThin.issues.map((issue) => issue.code)).toContain('TEMPLATE_INCOMPATIBLE');
+    expect(looseSlot.issues.map((issue) => issue.code)).toContain('PRESS_FIT_CLEARANCE_TOO_LARGE');
   });
 });
