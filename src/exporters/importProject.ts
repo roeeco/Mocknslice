@@ -42,6 +42,20 @@ const operations = new Set([
   'guide',
 ]);
 
+const templateKinds = new Set([
+  'open-box',
+  'box-with-lid',
+  'tray',
+  'sleeve',
+  'envelope',
+  'regular-prism',
+  'pyramid-frustum',
+]);
+
+function isPoint2D(value: unknown): boolean {
+  return isRecord(value) && isFiniteNumber(value.x) && isFiniteNumber(value.y);
+}
+
 function isModel(value: unknown): boolean {
   if (!isRecord(value) || !isString(value.id) || !isString(value.name)) return false;
   const source = value.source;
@@ -143,9 +157,10 @@ function isFabricationPath(value: unknown): boolean {
     operations.has(value.operation) &&
     typeof value.closed === 'boolean' &&
     Array.isArray(value.points) &&
-    value.points.every(
-      (point) => isRecord(point) && isFiniteNumber(point.x) && isFiniteNumber(point.y),
-    ) &&
+    value.points.every(isPoint2D) &&
+    (value.panelId === undefined || isString(value.panelId)) &&
+    (value.edgeId === undefined || isString(value.edgeId)) &&
+    (value.tabId === undefined || isString(value.tabId)) &&
     (value.contourRole === undefined ||
       value.contourRole === 'outer' ||
       value.contourRole === 'hole') &&
@@ -166,12 +181,24 @@ function isFabricationPart(value: unknown): boolean {
   if (!isRecord(value)) return false;
   const slice = value.slice;
   const waffle = value.waffle;
+  const folding = value.folding;
   return (
     isString(value.id) &&
     isString(value.name) &&
     isFiniteNumber(value.thicknessMm) &&
     Array.isArray(value.paths) &&
     value.paths.every(isFabricationPath) &&
+    (value.labels === undefined ||
+      (Array.isArray(value.labels) &&
+        value.labels.every(
+          (label) =>
+            isRecord(label) &&
+            isString(label.id) &&
+            isString(label.text) &&
+            isPoint2D(label.position) &&
+            (label.operation === 'engrave' || label.operation === 'guide') &&
+            (label.entityId === undefined || isString(label.entityId)),
+        ))) &&
     (slice === undefined ||
       (isRecord(slice) &&
         (slice.axis === 'x' || slice.axis === 'y' || slice.axis === 'z') &&
@@ -181,7 +208,121 @@ function isFabricationPart(value: unknown): boolean {
       (isRecord(waffle) &&
         (waffle.family === 'a' || waffle.family === 'b') &&
         Number.isInteger(waffle.slotCount) &&
-        (waffle.slotCount as number) >= 0))
+        (waffle.slotCount as number) >= 0)) &&
+    (folding === undefined ||
+      (isRecord(folding) && isString(folding.templateKind) && isStringArray(folding.panelIds)))
+  );
+}
+
+function isTemplateFitSettings(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    isString(value.templateKind) &&
+    templateKinds.has(value.templateKind) &&
+    (value.fitAxis === 'x' || value.fitAxis === 'y' || value.fitAxis === 'z') &&
+    isFiniteNumber(value.clearanceMm) &&
+    isFiniteNumber(value.profileToleranceMm) &&
+    isRecord(value.parameters) &&
+    Object.values(value.parameters).every(
+      (parameter) =>
+        typeof parameter === 'string' ||
+        typeof parameter === 'boolean' ||
+        isFiniteNumber(parameter),
+    )
+  );
+}
+
+function isProjectedProfile(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    isString(value.sourceModelId) &&
+    (value.fitAxis === 'x' || value.fitAxis === 'y' || value.fitAxis === 'z') &&
+    Array.isArray(value.sourceHullPoints) &&
+    value.sourceHullPoints.every(isPoint2D) &&
+    Array.isArray(value.fittedPoints) &&
+    value.fittedPoints.every(isPoint2D) &&
+    isFiniteNumber(value.clearanceMm) &&
+    isFiniteNumber(value.simplificationToleranceMm) &&
+    isFiniteNumber(value.axisMinMm) &&
+    isFiniteNumber(value.axisMaxMm) &&
+    isFiniteNumber(value.widthMm) &&
+    isFiniteNumber(value.heightMm) &&
+    isFiniteNumber(value.depthMm)
+  );
+}
+
+function isTemplateGenerationResult(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  const preview = value.assembledPreview;
+  return (
+    isTemplateFitSettings(value.settings) &&
+    isProjectedProfile(value.profile) &&
+    Array.isArray(value.panels) &&
+    value.panels.every(
+      (panel) =>
+        isRecord(panel) &&
+        isString(panel.id) &&
+        isString(panel.partId) &&
+        isString(panel.name) &&
+        isString(panel.role) &&
+        Array.isArray(panel.outline) &&
+        panel.outline.every(isPoint2D),
+    ) &&
+    Array.isArray(value.edges) &&
+    value.edges.every(
+      (edge) =>
+        isRecord(edge) &&
+        isString(edge.id) &&
+        isString(edge.partId) &&
+        isString(edge.panelAId) &&
+        (edge.panelBId === undefined || isString(edge.panelBId)) &&
+        (edge.disposition === 'boundary' ||
+          edge.disposition === 'hinge' ||
+          edge.disposition === 'seam') &&
+        (edge.foldDirection === undefined ||
+          edge.foldDirection === 'mountain' ||
+          edge.foldDirection === 'valley') &&
+        (edge.targetAngleDeg === undefined || isFiniteNumber(edge.targetAngleDeg)) &&
+        (edge.pairLabel === undefined || isString(edge.pairLabel)) &&
+        isPoint2D(edge.start) &&
+        isPoint2D(edge.end),
+    ) &&
+    Array.isArray(value.tabs) &&
+    value.tabs.every(
+      (tab) =>
+        isRecord(tab) &&
+        isString(tab.id) &&
+        isString(tab.partId) &&
+        isString(tab.edgeId) &&
+        isString(tab.ownerPanelId) &&
+        tab.style === 'glue' &&
+        isFiniteNumber(tab.depthMm) &&
+        isFiniteNumber(tab.shoulderAngleDeg) &&
+        typeof tab.enabled === 'boolean' &&
+        isPoint2D(tab.baseStart) &&
+        isPoint2D(tab.baseEnd) &&
+        Array.isArray(tab.outline) &&
+        tab.outline.every(isPoint2D),
+    ) &&
+    Array.isArray(value.parts) &&
+    value.parts.every(isFabricationPart) &&
+    Array.isArray(value.issues) &&
+    value.issues.every(isValidationIssue) &&
+    isRecord(preview) &&
+    Array.isArray(preview.panels) &&
+    preview.panels.every(
+      (panel) =>
+        isRecord(panel) &&
+        isString(panel.id) &&
+        isString(panel.partId) &&
+        isString(panel.name) &&
+        Array.isArray(panel.verticesMm) &&
+        panel.verticesMm.every(
+          (point) => Array.isArray(point) && point.length === 3 && point.every(isFiniteNumber),
+        ),
+    ) &&
+    isString(value.algorithmVersion) &&
+    isString(value.inputHash)
   );
 }
 
@@ -263,6 +404,7 @@ function isProjectData(value: unknown): value is ProjectData {
     value.generatedParts.every(isFabricationPart) &&
     (value.generationIssues === undefined ||
       (Array.isArray(value.generationIssues) && value.generationIssues.every(isValidationIssue))) &&
+    (value.foldingResult === undefined || isTemplateGenerationResult(value.foldingResult)) &&
     Array.isArray(value.sheetLayouts) &&
     value.sheetLayouts.every(isSheetLayout) &&
     isExportSettings(value.exportSettings) &&
@@ -275,7 +417,7 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
     throw new ProjectImportError('This file is not a SliceFold project.');
   }
 
-  if (value.version !== 1) {
+  if (value.version !== 1 && value.version !== 2) {
     throw new ProjectImportError(
       `Project version ${String(value.version)} is not supported by this build.`,
     );
@@ -287,7 +429,7 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
 
   return {
     format: 'slicefold-project',
-    version: 1,
+    version: 2,
     project: value.project,
   };
 }

@@ -394,6 +394,9 @@ h2 {
 .waffle-b-swatch {
   background: #3f7f70;
 }
+.fold-swatch {
+  background: #d85c2f;
+}
 .legend-line {
   width: 12px;
   border-top: 1px solid #777;
@@ -712,6 +715,78 @@ h2 {
 
 .waffle-intro {
   margin-top: 0.55rem;
+}
+
+.fold-intro {
+  margin-top: 0.55rem;
+}
+
+.profile-preview {
+  margin-top: 1rem;
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  background: #fffdf8;
+}
+
+.profile-preview .panel-heading-row {
+  font-size: 0.68rem;
+}
+
+.profile-preview .panel-heading-row span {
+  color: var(--muted);
+}
+
+.profile-preview svg {
+  width: 100%;
+  height: 110px;
+  margin-top: 0.5rem;
+}
+
+.profile-preview polygon {
+  vector-effect: non-scaling-stroke;
+}
+
+.fitted-profile {
+  fill: #d85c2f26;
+  stroke: #d85c2f;
+  stroke-width: 1.2;
+}
+
+.source-profile {
+  fill: #315c5226;
+  stroke: #315c52;
+  stroke-width: 1;
+  stroke-dasharray: 3 2;
+}
+
+.profile-legend {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.58rem;
+}
+
+.profile-legend span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.profile-legend i {
+  width: 0.65rem;
+  height: 0.65rem;
+  display: inline-block;
+  border: 1px solid;
+}
+
+.source-key {
+  background: #315c5226;
+  border-color: #315c52 !important;
+}
+
+.fit-key {
+  background: #d85c2f26;
+  border-color: #d85c2f !important;
 }
 
 .slot-width-readout {

@@ -60,6 +60,15 @@ export function ThreeViewport() {
               <i className="legend-swatch waffle-b-swatch" /> Family B
             </span>
           </>
+        ) : fabricationMode === 'fold-template' ? (
+          <>
+            <span>
+              <i className="legend-swatch model-swatch" /> Ghosted model
+            </span>
+            <span>
+              <i className="legend-swatch fold-swatch" /> Assembled template
+            </span>
+          </>
         ) : (
           <span>
             <i className="legend-swatch model-swatch" /> Model

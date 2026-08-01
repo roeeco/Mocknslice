@@ -13,6 +13,9 @@ export interface FabricationPath {
   closed: boolean;
   points: Point2D[];
   contourRole?: ContourRole;
+  panelId?: string;
+  edgeId?: string;
+  tabId?: string;
   slot?: {
     pairedPartId: string;
     intersectionAxis: SliceAxis;
@@ -23,11 +26,20 @@ export interface FabricationPath {
   };
 }
 
+export interface FabricationLabel {
+  id: string;
+  text: string;
+  position: Point2D;
+  operation: 'engrave' | 'guide';
+  entityId?: string;
+}
+
 export interface FabricationPart {
   id: string;
   name: string;
   label?: string;
   paths: FabricationPath[];
+  labels?: FabricationLabel[];
   thicknessMm: Millimetres;
   sourceReference?: string;
   slice?: {
@@ -38,6 +50,10 @@ export interface FabricationPart {
   waffle?: {
     family: 'a' | 'b';
     slotCount: number;
+  };
+  folding?: {
+    templateKind: string;
+    panelIds: string[];
   };
 }
 

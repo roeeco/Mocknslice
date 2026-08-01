@@ -88,6 +88,66 @@ export function createCylinderSoup(radius = 10, height = 30, sides = 24): Triang
   return soupFromIndexed(vertices, indices);
 }
 
+export function createConeSoup(radius = 12, height = 30, sides = 20): TriangleSoup {
+  const vertices: Vertex[] = [];
+  const bottom = -height / 2;
+  for (let index = 0; index < sides; index += 1) {
+    const angle = (index / sides) * Math.PI * 2;
+    vertices.push([Math.cos(angle) * radius, Math.sin(angle) * radius, bottom]);
+  }
+  const baseCentre = vertices.push([0, 0, bottom]) - 1;
+  const apex = vertices.push([0, 0, height / 2]) - 1;
+  const indices: number[] = [];
+  for (let index = 0; index < sides; index += 1) {
+    const next = (index + 1) % sides;
+    indices.push(baseCentre, next, index, index, next, apex);
+  }
+  return soupFromIndexed(vertices, indices);
+}
+
+export function createAsymmetricTetraSoup(): TriangleSoup {
+  return soupFromIndexed(
+    [
+      [-13, -8, -11],
+      [17, -6, -7],
+      [-4, 19, -3],
+      [3, 2, 23],
+    ],
+    [0, 2, 1, 0, 1, 3, 1, 2, 3, 2, 0, 3],
+  );
+}
+
+export function createTaperedPrismSoup(
+  bottomWidth = 30,
+  bottomHeight = 24,
+  topScale = 0.45,
+  depth = 36,
+): TriangleSoup {
+  const bottomX = bottomWidth / 2;
+  const bottomY = bottomHeight / 2;
+  const topX = bottomX * topScale;
+  const topY = bottomY * topScale;
+  const z0 = -depth / 2;
+  const z1 = depth / 2;
+  const vertices: Vertex[] = [
+    [-bottomX, -bottomY, z0],
+    [bottomX, -bottomY, z0],
+    [bottomX, bottomY, z0],
+    [-bottomX, bottomY, z0],
+    [-topX, -topY, z1],
+    [topX, -topY, z1],
+    [topX, topY, z1],
+    [-topX, topY, z1],
+  ];
+  return soupFromIndexed(
+    vertices,
+    [
+      0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 1, 2, 6, 1, 6, 5, 2, 3, 7, 2, 7, 6, 3,
+      0, 4, 3, 4, 7,
+    ],
+  );
+}
+
 export function createHollowPrismSoup(outerSize = 30, innerSize = 12, height = 20): TriangleSoup {
   const outer = outerSize / 2;
   const inner = innerSize / 2;

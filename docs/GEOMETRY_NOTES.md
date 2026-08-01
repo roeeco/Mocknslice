@@ -65,9 +65,9 @@ Persisted placement means: rotate each part point around `(0, 0)`, then translat
 
 Validation uses transformed axis-aligned bounds for sheet boundaries, margins, and pairwise overlap. It also reports invalid sheet dimensions, missing placement references, unplaced parts, and parts placed more than once.
 
-## Planned shape-aware template fitting
+## Shape-aware template fitting
 
-Phase 6 will fit fixed folding-template topologies to an imported model without unfolding its faces. The selected axis determines an orthographic projection using the same axis mapping as slicing. The pure fitting pipeline will:
+Phase 6 fits fixed folding-template topologies to an imported model without unfolding its faces. The selected axis determines an orthographic projection using the same axis mapping as slicing. The pure fitting pipeline:
 
 1. Deduplicate and deterministically sort projected mesh vertices.
 2. Build a monotone-chain convex hull.
@@ -79,6 +79,16 @@ Phase 6 will fit fixed folding-template topologies to an imported model without 
 Default simplification tolerance is `1 mm`; the effective minimum edge is `max(2 mm, material thickness × 2)`. The source projection and fitted outline remain separately serializable so the interface can show every automated change. Detailed template rules and planned types are in [FOLDING_PLAN.md](FOLDING_PLAN.md).
 
 Concave silhouettes, projection holes, and arbitrary face unfolding are deliberately excluded. A template incompatibility is reported rather than repaired by changing topology.
+
+Open boxes, lidded boxes, and trays use fitted profile extents. Sleeves use the convex perimeter as a segmented band. Envelopes and regular prisms add matched convex faces, while pyramids and frustums connect corresponding sampled end profiles. The flat-net builder removes shared hinges from cut paths, emits explicit mountain/valley or score paths, creates shouldered glue tabs, assigns stable pair labels, and validates panel/tab overlap.
+
+## Phase 6 limitations
+
+- Convex fitting encloses concavities and holes instead of following them.
+- The assembled preview displays the final panel positions; it is not a folding animation, collision solver, or structural simulation.
+- Glue-tab and panel-overlap checks are geometric and do not model material grain, bend allowance, glue access, or assembly order.
+- Profile simplification is enclosure-preserving and deterministic, but it is not a user-editable curve or seam workflow.
+- Arbitrary face unfolding, textures, PDO import, and editable mesh seams remain deferred research.
 
 ## Phase 3 limitations
 

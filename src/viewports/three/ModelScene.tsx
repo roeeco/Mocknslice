@@ -6,6 +6,7 @@ import type { SerializableTriangleMesh } from '../../domain/geometry';
 import { useProjectStore } from '../../state/useProjectStore';
 import type { CameraPreset } from '../../state/types';
 import { FabricationParts } from './FabricationParts';
+import { FoldingAssembly } from './FoldingAssembly';
 
 const cameraDirections: Record<CameraPreset, [number, number, number]> = {
   isometric: [1, 0.82, 1],
@@ -99,6 +100,7 @@ export function ModelScene() {
         {!model.mesh ? <Edges color={selected ? '#7c2d12' : '#17322d'} /> : null}
       </mesh>
       <FabricationParts />
+      <FoldingAssembly />
       <Grid
         args={[largestDimension * 6, largestDimension * 6]}
         position={[0, -heightMm / 2, 0]}

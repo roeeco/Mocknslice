@@ -17,9 +17,9 @@ Users can return to any earlier step: Start, Choose mode, Import or create, Conf
 
 The desktop workspace uses workflow navigation on the left, a synchronized 3D or 2D viewport in the centre, and parameters plus structured validation on the right.
 
-For planned folding work, the user will import and orient an STL, choose a general template, fit it to a convex projected profile with explicit clearance, inspect the assembled construction and flat net, then arrange and export it. See [Shape-aware folding plan](FOLDING_PLAN.md).
+For folding work, the user imports and orients an STL, chooses a general template, fits it to a convex projected profile with explicit clearance, inspects the assembled construction and flat net, then arranges and exports it. See [Shape-aware folding plan](FOLDING_PLAN.md).
 
-## Current implementation through Phase 5
+## Current implementation through Phase 6
 
 The foundation includes a generated 40 mm cube, material and mode selection, a three-column responsive shell, 3D orbit and camera presets, a 2D sheet empty state, local project autosave, project JSON import/export, undo/redo, and structured validation.
 
@@ -32,6 +32,8 @@ Generated parts are preserved but marked stale when source geometry or slice par
 Phase 4 adds configurable sheet width, height, margins, and spacing; deterministic row placement across multiple sheets; add, duplicate, and delete sheet actions; manual drag and precise placement controls; 90° or numeric rotation; structured boundary, margin, overlap, duplicate, and unplaced-part checks; and operation-layered SVG export for the active sheet. Layout and selection stay synchronized with the assembled 3D preview. Complex polygon nesting remains deferred.
 
 Phase 5 adds orthogonal waffle construction from any two different X/Y/Z axes. Each family has independent spacing, while material thickness plus explicit clearance determines complementary half-depth slot width. Users can alternate slot entry sides, reverse the complete assembly pattern, inspect colour-labelled families in 3D, inspect open U-shaped slot cuts in 2D, arrange all parts on sheets, and export the active sheet as layered SVG. Structured checks report missing intersections, narrow sections, slots that do not fit, overlapping slots, and hole-based entries that need manual assembly review.
+
+Phase 6 adds deterministic X/Y/Z projection, convex hull offset and visible simplification, seven shape-aware template families, material-aware fit warnings, stable panel/edge/tab IDs, an explicit worker-based Generate/Regenerate action, source-versus-fitted profile inspection, the imported model ghosted inside an assembled panel preview, selectable and labelled 2D nets, multi-sheet arrangement, and cut/score/mountain/valley/engrave/guide SVG layers. The complete result persists in version 2 project files with an explicit version 1 migration.
 
 ## Roadmap
 

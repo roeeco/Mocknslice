@@ -4,9 +4,10 @@ import { serializeProject } from './exportProject';
 import { parseProjectFile, ProjectImportError } from './importProject';
 import { normalizeMesh } from '../geometry/mesh/normalizeMesh';
 import { createCubeSoup } from '../test-fixtures/generatedMeshes';
+import { generateFoldTemplate } from '../geometry/folding/generateFoldTemplate';
 
 describe('SliceFold project format', () => {
-  it('round-trips a version 1 project without losing fabrication data', () => {
+  it('round-trips the current version without losing fabrication data', () => {
     const project = createProject('Round trip');
     project.generatedParts = [
       {
@@ -62,6 +63,44 @@ describe('SliceFold project format', () => {
     });
     expect(restored.generatedParts[0]?.waffle).toEqual({ family: 'a', slotCount: 1 });
     expect(restored.generatedParts[0]?.paths[1]?.slot?.widthMm).toBe(2);
+  });
+
+  it('migrates a valid version 1 project through the version 2 reader', () => {
+    const project = createProject('Legacy');
+    const legacy = JSON.stringify({ format: 'slicefold-project', version: 1, project });
+
+    expect(parseProjectFile(legacy)).toEqual(project);
+    expect(JSON.parse(serializeProject(project))).toMatchObject({ version: 2 });
+  });
+
+  it('round-trips a serializable folding result with stable panel references', () => {
+    const project = createProject('Folded');
+    if (!project.model.mesh || !project.model.bounds)
+      throw new Error('Fixture model is incomplete.');
+    const result = generateFoldTemplate({
+      mesh: project.model.mesh,
+      bounds: project.model.bounds,
+      modelId: project.model.id,
+      materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
+      settings: {
+        templateKind: 'sleeve',
+        fitAxis: 'z',
+        clearanceMm: 1,
+        profileToleranceMm: 0.5,
+        parameters: { seamTabMm: 8 },
+      },
+    });
+    project.fabricationMode = 'fold-template';
+    project.foldingResult = result;
+    project.generatedParts = result.parts;
+
+    const restored = parseProjectFile(serializeProject(project));
+    expect(restored.foldingResult).toEqual(result);
+    expect(restored.generatedParts[0]?.folding?.panelIds).toEqual(
+      result.panels
+        .filter((panel) => panel.partId === result.parts[0]?.id)
+        .map((panel) => panel.id),
+    );
   });
 
   it('rejects unrelated JSON with an understandable error', () => {

@@ -43,18 +43,22 @@ function PartOnSheet({
   part,
   placement,
   selected,
+  selectedEntityId,
   invalid,
   strokeByOperation,
   onPointerDown,
   onSelect,
+  onSelectEntity,
 }: {
   part: FabricationPart;
   placement: SheetPlacement;
   selected: boolean;
+  selectedEntityId: string | undefined;
   invalid: boolean;
   strokeByOperation: Map<string, string>;
   onPointerDown: (event: PointerEvent<SVGGElement>) => void;
   onSelect: () => void;
+  onSelectEntity: (id: string) => void;
 }) {
   const bounds = transformedBoundsForPart(part, placement);
   const handleKeyDown = (event: KeyboardEvent<SVGGElement>) => {
@@ -75,25 +79,40 @@ function PartOnSheet({
       onKeyDown={handleKeyDown}
       onClick={onSelect}
     >
-      {part.paths.map((path) => (
-        <path
-          key={path.id}
-          d={pathData(path.points, placement, path.closed)}
-          fill={
-            path.contourRole === 'outer'
-              ? '#f8f5ed'
-              : path.contourRole === 'hole'
-                ? '#dedbd2'
-                : 'none'
-          }
-          fillRule="evenodd"
-          stroke={strokeByOperation.get(path.operation) ?? '#222222'}
-          strokeWidth={selected ? 0.65 : 0.35}
-          vectorEffect="non-scaling-stroke"
-          data-operation={path.operation}
-          data-slot={path.slot ? 'true' : undefined}
-        />
-      ))}
+      {part.paths.map((path) => {
+        const entityId = path.tabId ?? path.edgeId ?? path.panelId;
+        const entitySelected = [path.tabId, path.edgeId, path.panelId].includes(selectedEntityId);
+        return (
+          <path
+            key={path.id}
+            d={pathData(path.points, placement, path.closed)}
+            fill={
+              path.contourRole === 'outer'
+                ? '#f8f5ed'
+                : path.contourRole === 'hole'
+                  ? '#dedbd2'
+                  : 'none'
+            }
+            fillRule="evenodd"
+            stroke={strokeByOperation.get(path.operation) ?? '#222222'}
+            strokeWidth={selected || entitySelected ? 0.65 : 0.35}
+            vectorEffect="non-scaling-stroke"
+            data-operation={path.operation}
+            data-slot={path.slot ? 'true' : undefined}
+            data-panel-id={path.panelId}
+            data-edge-id={path.edgeId}
+            data-tab-id={path.tabId}
+            onClick={
+              entityId
+                ? (event) => {
+                    event.stopPropagation();
+                    onSelectEntity(entityId);
+                  }
+                : undefined
+            }
+          />
+        );
+      })}
       {part.label && bounds ? (
         <text
           x={bounds.minX + 2}
@@ -105,6 +124,32 @@ function PartOnSheet({
           {part.label}
         </text>
       ) : null}
+      {part.labels?.map((label) => {
+        const point = transformPoint(label.position, placement);
+        const entitySelected = label.entityId === selectedEntityId;
+        return (
+          <text
+            key={label.id}
+            x={point.x}
+            y={point.y}
+            fontSize="2.4"
+            textAnchor="middle"
+            fill={entitySelected ? '#d85c2f' : '#1f2724'}
+            data-operation={label.operation}
+            data-entity-id={label.entityId}
+            onClick={
+              label.entityId
+                ? (event) => {
+                    event.stopPropagation();
+                    onSelectEntity(label.entityId!);
+                  }
+                : undefined
+            }
+          >
+            {label.text}
+          </text>
+        );
+      })}
     </g>
   );
 }
@@ -230,10 +275,12 @@ export function TwoViewport() {
             part={part}
             placement={placement}
             selected={selectedEntityId === part.id}
+            selectedEntityId={selectedEntityId}
             invalid={invalidIds.has(part.id)}
             strokeByOperation={strokeByOperation}
             onPointerDown={(event) => beginDrag(event, placement)}
             onSelect={() => selectEntity(part.id)}
+            onSelectEntity={selectEntity}
           />
         ))}
       </svg>

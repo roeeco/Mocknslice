@@ -9,7 +9,7 @@
 - `npm run test:e2e` — Playwright Chromium smoke tests against the Vite development server.
 - `npm run build` — TypeScript project build and production Vite bundle.
 
-## Coverage through Phase 5
+## Coverage through Phase 6
 
 Tests verify default material profiles and snapshot isolation, versioned project JSON round-trips and rejection paths, IndexedDB save/list/restore/delete behaviour, parameter panel state changes and undo, ASCII and binary STL parsing, cube normalization, unit conversion, degenerate-triangle reporting, open/non-manifold/disconnected topology, scaling, orientation, and model inspection controls.
 
@@ -19,13 +19,13 @@ Phase 4 tests deterministic row and multi-sheet arrangement, rotate-then-transla
 
 Phase 5 geometry tests cover X/Y, X/Z, and Y/Z cube families, deterministic complementary slot counts, exact thickness-plus-clearance width, alternating and reversed directions, overlapping slot warnings, parallel-axis rejection, and manual review for hole-based slot entries. Component tests cover material-aware defaults and serializable waffle controls. Project and golden SVG tests round-trip and export open slot metadata. Playwright uses the real waffle worker to generate the built-in cube, verifies both 3D families and eight 2D slot paths, and inspects the downloaded active-sheet SVG.
 
-## Planned Phase 6 folding coverage
+## Phase 6 folding coverage
 
-- Assert that X, Y, and Z convex profiles enclose every projected point plus clearance for cube, cylinder, cone, asymmetric, and tapered fixtures.
-- Golden-test every template family for deterministic panel outlines, shared-edge lengths, fold direction, tab placement, paired labels, and operation-layered SVG.
-- Cover zero-area projections, failed offsets, visible simplification, excessive profile complexity, narrow material features, incompatible templates, tab overlap, net overlap, and off-sheet parts.
-- Test worker progress, cancellation, stale-result rejection, project round trips, and undo/redo for fit settings and generated nets.
-- Use Playwright for the complete import, template selection, clearance, generation, assembled/flat preview, arrangement, and export path.
+- X, Y, and Z convex-profile fixtures assert requested clearance around cube, cylinder, cone, asymmetric tetrahedron, and tapered prism projections.
+- Every template family has deterministic topology tests covering panel/part counts, shared hinge endpoints, fold direction, stable pair labels, tab ownership and placement, assembled panels, and output hashing.
+- Focused tests cover zero-area projections, visible enclosure-preserving simplification, incompatible short walls, pyramid/frustum variants, material warnings, project version migration, and operation-layered SVG metadata.
+- Component tests cover conditional family controls and simultaneous source/fitted profile inspection.
+- Playwright imports a real STL, selects and adjusts a template, generates through the real worker, verifies assembled and flat previews, and inspects the downloaded layered SVG.
 
 ## Known Phase 1 baselines
 

@@ -171,3 +171,52 @@ test('generates complementary waffle slots and exports them on the active sheet'
   expect(svg).toContain('id="operation-cut"');
   expect(svg).not.toContain('<image');
 });
+
+test('imports an STL, fits a folding template, previews its net, and exports operation layers', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.getByLabel('Choose STL model').setInputFiles({
+    name: 'tetrahedron.stl',
+    mimeType: 'model/stl',
+    buffer: Buffer.from(tetrahedronStl),
+  });
+  await expect(page.getByText('STL imported and inspected.')).toBeVisible();
+
+  await page.getByLabel('Fabrication mode').selectOption('fold-template');
+  await expect(page.getByRole('heading', { name: 'Shape-aware folding template' })).toBeVisible();
+  await expect(page.getByLabel('Template family')).toHaveValue('open-box');
+  await page.getByLabel('Fitting axis').selectOption('z');
+  await page.getByLabel('Clearance').fill('1.5');
+  await page.getByRole('button', { name: 'Generate template' }).click();
+
+  await expect(page.getByText('5 panels · 4 tabs', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('fold-profile-preview')).toBeVisible();
+  await expect(page.getByText('Ghosted model', { exact: true })).toBeVisible();
+  await expect(page.getByText('Assembled template', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: '2D parts' }).click();
+  await expect(page.getByRole('button', { name: 'Open box net on sheet' })).toBeVisible();
+  await expect(page.locator('path[data-panel-id]')).not.toHaveCount(0);
+  await expect(page.locator('path[data-edge-id]')).not.toHaveCount(0);
+  await expect(page.locator('path[data-tab-id]')).not.toHaveCount(0);
+  await page.getByRole('button', { name: '3D model' }).click();
+  await expect(page.getByText('Assembled template', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '2D parts' }).click();
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export sheet SVG' }).click();
+  const download = await downloadPromise;
+  const stream = await download.createReadStream();
+  const chunks: Uint8Array[] = [];
+  for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
+  const svg = Buffer.concat(chunks).toString('utf8');
+  expect(svg).toContain('&quot;mode&quot;:&quot;fold-template&quot;');
+  expect(svg).toContain('id="operation-cut"');
+  expect(svg).toContain('id="operation-score"');
+  expect(svg).toContain('id="operation-valley-fold"');
+  expect(svg).toContain('data-panel-id=');
+  expect(svg).toContain('data-edge-id=');
+  expect(svg).toContain('data-tab-id=');
+  expect(svg).toContain('data-entity-id=');
+});

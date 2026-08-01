@@ -34,6 +34,14 @@ function decimal(value: number): string {
   return String(Math.round(value * 1_000_000) / 1_000_000);
 }
 
+function pathEntityAttributes(path: FabricationPart['paths'][number]): string {
+  return [
+    path.panelId ? ` data-panel-id="${escapeXml(path.panelId)}"` : '',
+    path.edgeId ? ` data-edge-id="${escapeXml(path.edgeId)}"` : '',
+    path.tabId ? ` data-tab-id="${escapeXml(path.tabId)}"` : '',
+  ].join('');
+}
+
 function pointBounds(points: Point2D[]): {
   minX: number;
   minY: number;
@@ -107,8 +115,17 @@ export function createSvgDocument(project: ProjectData): string {
         (candidate) => candidate.operation === operation,
       )) {
         lines.push(
-          `    <path id="${escapeXml(path.id)}" data-part-id="${escapeXml(placement.part.id)}" data-contour-role="${path.contourRole ?? 'path'}" d="${pathData(path.points, placement.offsetX, placement.offsetY, path.closed)}"/>`,
+          `    <path id="${escapeXml(path.id)}" data-part-id="${escapeXml(placement.part.id)}" data-contour-role="${path.contourRole ?? 'path'}"${pathEntityAttributes(path)} d="${pathData(path.points, placement.offsetX, placement.offsetY, path.closed)}"/>`,
         );
+      }
+      if (project.exportSettings.includeLabels) {
+        for (const label of placement.part.labels?.filter(
+          (candidate) => candidate.operation === operation,
+        ) ?? []) {
+          lines.push(
+            `    <text id="${escapeXml(label.id)}" data-part-id="${escapeXml(placement.part.id)}"${label.entityId ? ` data-entity-id="${escapeXml(label.entityId)}"` : ''} x="${decimal(label.position.x + placement.offsetX)}" y="${decimal(label.position.y + placement.offsetY)}" fill="${escapeXml(style?.stroke ?? '#000000')}" stroke="none" font-family="sans-serif" font-size="2.4" text-anchor="middle">${escapeXml(label.text)}</text>`,
+          );
+        }
       }
     }
     lines.push('  </g>');
@@ -184,8 +201,17 @@ export function createSheetSvgDocument(project: ProjectData, sheetId: string): s
     for (const { part, placement } of placements) {
       for (const path of part.paths.filter((candidate) => candidate.operation === operation)) {
         lines.push(
-          `    <path id="${escapeXml(path.id)}" data-part-id="${escapeXml(part.id)}" data-contour-role="${path.contourRole ?? 'path'}" d="${placedPathData(path.points, placement, path.closed)}"/>`,
+          `    <path id="${escapeXml(path.id)}" data-part-id="${escapeXml(part.id)}" data-contour-role="${path.contourRole ?? 'path'}"${pathEntityAttributes(path)} d="${placedPathData(path.points, placement, path.closed)}"/>`,
         );
+      }
+      if (project.exportSettings.includeLabels) {
+        for (const label of part.labels?.filter((candidate) => candidate.operation === operation) ??
+          []) {
+          const point = transformPoint(label.position, placement);
+          lines.push(
+            `    <text id="${escapeXml(label.id)}" data-part-id="${escapeXml(part.id)}"${label.entityId ? ` data-entity-id="${escapeXml(label.entityId)}"` : ''} x="${decimal(point.x)}" y="${decimal(point.y)}" fill="${escapeXml(style?.stroke ?? '#000000')}" stroke="none" font-family="sans-serif" font-size="2.4" text-anchor="middle">${escapeXml(label.text)}</text>`,
+          );
+        }
       }
     }
     lines.push('  </g>');

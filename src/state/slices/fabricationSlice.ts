@@ -2,11 +2,13 @@ import type { AppSliceCreator, FabricationSlice } from '../types';
 import { recordProjectChange, touchProject } from '../projectChange';
 import { validationIssuesForProject } from '../../validation/projectValidation';
 import {
+  generateFoldTemplateInWorker,
   generateStackedSlicesInWorker,
   generateWaffleSlicesInWorker,
   type GeometryTask,
 } from '../../workers/geometryWorkerClient';
 import type { SliceAxis } from '../../domain/fabrication';
+import type { TemplateFitSettings, TemplateKind } from '../../domain/folding';
 import type { ProjectData } from '../../domain/project';
 import type {
   StackedSliceSettings,
@@ -82,6 +84,54 @@ function waffleSettingsMatch(a: WaffleSliceSettings, b: WaffleSliceSettings): bo
   );
 }
 
+const templateKinds = new Set<TemplateKind>([
+  'open-box',
+  'box-with-lid',
+  'tray',
+  'sleeve',
+  'envelope',
+  'regular-prism',
+  'pyramid-frustum',
+]);
+
+function foldSettingsForProject(project: ProjectData): TemplateFitSettings {
+  const rawKind = project.modeParameters.foldTemplateKind;
+  const templateKind =
+    typeof rawKind === 'string' && templateKinds.has(rawKind as TemplateKind)
+      ? (rawKind as TemplateKind)
+      : 'open-box';
+  const rawAxis = project.modeParameters.foldFitAxis;
+  const fitAxis: SliceAxis = rawAxis === 'x' || rawAxis === 'y' || rawAxis === 'z' ? rawAxis : 'z';
+  return {
+    templateKind,
+    fitAxis,
+    clearanceMm: nonNegativeNumber(
+      project.modeParameters.foldClearanceMm,
+      project.materialProfileSnapshot.clearanceMm,
+    ),
+    profileToleranceMm: positiveNumber(project.modeParameters.foldProfileToleranceMm, 1),
+    parameters: {
+      wallHeightMm: positiveNumber(project.modeParameters.foldWallHeightMm, 20),
+      tabDepthMm: positiveNumber(project.modeParameters.foldTabDepthMm, 8),
+      lidDepthMm: positiveNumber(project.modeParameters.foldLidDepthMm, 15),
+      lidClearanceMm: nonNegativeNumber(project.modeParameters.foldLidClearanceMm, 0.5),
+      gussetDepthMm: positiveNumber(project.modeParameters.foldGussetDepthMm, 20),
+      closureFlapMm: nonNegativeNumber(project.modeParameters.foldClosureFlapMm, 12),
+      prismSides: Math.round(positiveNumber(project.modeParameters.foldPrismSides, 6)),
+      prismRotationDeg:
+        typeof project.modeParameters.foldPrismRotationDeg === 'number'
+          ? project.modeParameters.foldPrismRotationDeg
+          : 0,
+      topScale: nonNegativeNumber(project.modeParameters.foldTopScale, 0),
+      seamTabMm: positiveNumber(project.modeParameters.foldSeamTabMm, 8),
+    },
+  };
+}
+
+function foldSettingsMatch(a: TemplateFitSettings, b: TemplateFitSettings): boolean {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
 export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, get) => ({
   sliceGenerationStatus: 'idle',
   sliceGenerationError: undefined,
@@ -143,6 +193,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               ...currentProject,
               generatedParts: result.parts,
               generationIssues: result.issues,
+              foldingResult: undefined,
               sheetLayouts: template
                 ? arrangePartsInRows(result.parts, template)
                 : currentProject.sheetLayouts,
@@ -218,6 +269,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               ...currentProject,
               generatedParts: result.parts,
               generationIssues: result.issues,
+              foldingResult: undefined,
               sheetLayouts: template
                 ? arrangePartsInRows(result.parts, template)
                 : currentProject.sheetLayouts,
@@ -241,6 +293,77 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
           sliceGenerationStatus: 'error',
           sliceGenerationError:
             error instanceof Error ? error.message : 'Waffle generation failed.',
+        });
+      })
+      .finally(() => {
+        if (activeTask === task) activeTask = undefined;
+      });
+  },
+  generateFoldTemplate: () => {
+    const { project } = get();
+    if (!project.model.mesh || !project.model.bounds) {
+      set({
+        sliceGenerationStatus: 'error',
+        sliceGenerationError: 'This model has no geometry to fit.',
+      });
+      return;
+    }
+    activeTask?.cancel();
+    const settings = foldSettingsForProject(project);
+    const sourceMesh = project.model.mesh;
+    const task = generateFoldTemplateInWorker({
+      mesh: sourceMesh,
+      bounds: project.model.bounds,
+      modelId: project.model.id,
+      materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
+      settings,
+    });
+    activeTask = task;
+    set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
+    void task.promise
+      .then((result) => {
+        set((state) => {
+          if (
+            state.project.model.id !== project.model.id ||
+            state.project.model.mesh !== sourceMesh ||
+            state.project.fabricationMode !== 'fold-template' ||
+            !foldSettingsMatch(foldSettingsForProject(state.project), settings)
+          ) {
+            return {
+              sliceGenerationStatus: 'stale',
+              sliceGenerationError: 'The source or template settings changed. Generate again.',
+            };
+          }
+          const changed = recordProjectChange(state, (currentProject) => {
+            const template = currentProject.sheetLayouts[0];
+            return touchProject({
+              ...currentProject,
+              generatedParts: result.parts,
+              generationIssues: result.issues,
+              foldingResult: result,
+              sheetLayouts: template
+                ? arrangePartsInRows(result.parts, template)
+                : currentProject.sheetLayouts,
+            });
+          });
+          const nextProject = changed.project ?? state.project;
+          return {
+            ...changed,
+            sliceGenerationStatus: 'ready',
+            sliceGenerationError: undefined,
+            validationIssues: validationIssuesForProject(nextProject),
+            selectedEntityId: result.panels[0]?.id ?? result.parts[0]?.id,
+            activeSheetId: nextProject.sheetLayouts[0]?.id,
+            activeWorkflowStep: 'arrange',
+          };
+        });
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+        set({
+          sliceGenerationStatus: 'error',
+          sliceGenerationError:
+            error instanceof Error ? error.message : 'Template generation failed.',
         });
       })
       .finally(() => {

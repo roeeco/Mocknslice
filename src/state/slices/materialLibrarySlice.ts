@@ -16,6 +16,8 @@ export const createMaterialLibrarySlice: AppSliceCreator<MaterialLibrarySlice> =
           parameters.waffleThicknessMm = material.thicknessMm;
         if (parameters.waffleClearanceMm === previous.clearanceMm)
           parameters.waffleClearanceMm = material.clearanceMm;
+        if (parameters.foldClearanceMm === previous.clearanceMm)
+          parameters.foldClearanceMm = material.clearanceMm;
         return touchProject({
           ...project,
           modeParameters: parameters,

@@ -3,6 +3,8 @@ import { createProject } from '../app/createProject';
 import golden from '../test-fixtures/golden/stacked-slices.svg?raw';
 import sheetGolden from '../test-fixtures/golden/sheet-layout.svg?raw';
 import { createSheetSvgDocument, createSvgDocument } from './exportSvg';
+import { generateFoldTemplate } from '../geometry/folding/generateFoldTemplate';
+import { arrangePartsInRows } from '../geometry/layout/arrangeParts';
 
 describe('createSvgDocument', () => {
   it('matches the deterministic millimetre SVG golden file', () => {
@@ -102,5 +104,37 @@ describe('createSvgDocument', () => {
       },
     ];
     expect(createSheetSvgDocument(project, 'sheet-golden')).toBe(sheetGolden);
+  });
+
+  it('preserves folding operation layers, labels, and entity metadata', () => {
+    const project = createProject('Fold layers');
+    if (!project.model.mesh || !project.model.bounds)
+      throw new Error('Fixture model is incomplete.');
+    const result = generateFoldTemplate({
+      mesh: project.model.mesh,
+      bounds: project.model.bounds,
+      modelId: project.model.id,
+      materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
+      settings: {
+        templateKind: 'open-box',
+        fitAxis: 'z',
+        clearanceMm: 1,
+        profileToleranceMm: 0.5,
+        parameters: { wallHeightMm: 20, tabDepthMm: 8 },
+      },
+    });
+    project.fabricationMode = 'fold-template';
+    project.generatedParts = result.parts;
+    project.foldingResult = result;
+    project.sheetLayouts = arrangePartsInRows(result.parts, project.sheetLayouts[0]!);
+
+    const svg = createSheetSvgDocument(project, project.sheetLayouts[0]!.id);
+    expect(svg).toContain('id="operation-cut"');
+    expect(svg).toContain('id="operation-score"');
+    expect(svg).toContain('id="operation-valley-fold"');
+    expect(svg).toContain('data-panel-id=');
+    expect(svg).toContain('data-edge-id=');
+    expect(svg).toContain('data-tab-id=');
+    expect(svg).toContain('data-entity-id=');
   });
 });

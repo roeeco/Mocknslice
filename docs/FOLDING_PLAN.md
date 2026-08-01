@@ -1,6 +1,6 @@
 # Shape-aware folding plan
 
-- Status: Planned for Phase 6
+- Status: Implemented in Phase 6
 - Prerequisite: Phase 4 sheet layout
 - Inspiration: [Papercraft Maker](https://papercraft-maker.com/) import, process, choose, preview, and export workflow
 
@@ -31,7 +31,7 @@ All calculations use millimetres and pure serializable data.
 - More than 24 final profile edges emits `PROFILE_COMPLEXITY_HIGH`; generation remains available unless a material minimum is violated.
 - Identical mesh data, orientation, material, and fit settings must produce byte-equivalent domain output. Persist an algorithm version and deterministic input hash with the result.
 
-Profile extraction and template generation run through the geometry worker with progress, cancellation, and stale-result rejection. They must not create Three.js objects.
+Profile extraction and template generation run through the geometry worker with cancellation and stale-result rejection. They do not create Three.js objects.
 
 ## Template families
 
@@ -47,7 +47,7 @@ Profile extraction and template generation run through the geometry worker with 
 
 If a template cannot maintain matching shared-edge lengths or a physically connected net, return `TEMPLATE_INCOMPATIBLE` instead of silently changing the requested template.
 
-## Planned serializable domain
+## Serializable domain
 
 ```ts
 type TemplateKind =
@@ -142,6 +142,8 @@ Only definitely unusable geometry blocks export. Simplification and complexity r
 - 2D and 3D selection use the same panel, edge, tab, and part IDs.
 - Project persistence, undo/redo, regeneration, cancellation, and stale-result handling cover all fit settings.
 - Playwright demonstrates STL import, template selection, clearance adjustment, generation, both previews, sheet arrangement, and SVG export.
+
+These criteria are covered by pure geometry invariants, deterministic template fixtures, project/SVG round trips, component tests, and the browser workflow. Project format version 2 persists the complete generation result; version 1 files migrate through the explicit import branch.
 
 ## Deferred work
 

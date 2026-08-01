@@ -8,6 +8,7 @@ import { ModelInspectionPanel } from '../../components/panels/ModelInspectionPan
 import { StackedSlicePanel } from '../../components/panels/StackedSlicePanel';
 import { LayoutPanel } from '../../components/panels/LayoutPanel';
 import { WaffleSlicePanel } from '../../components/panels/WaffleSlicePanel';
+import { FoldTemplatePanel } from '../../components/panels/FoldTemplatePanel';
 import { AppHeader } from './AppHeader';
 
 export function AppShell({ children }: PropsWithChildren) {
@@ -33,6 +34,7 @@ export function AppShell({ children }: PropsWithChildren) {
         <ParameterPanel />
         <StackedSlicePanel />
         <WaffleSlicePanel />
+        <FoldTemplatePanel />
         <LayoutPanel />
         <ModelImportPanel />
         <ModelInspectionPanel />
