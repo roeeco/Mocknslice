@@ -1,4 +1,4 @@
-import { createProject } from '../../app/createProject';
+import { createProject, prepareProjectForUse } from '../../app/createProject';
 import type { AppSliceCreator, ProjectSlice } from '../types';
 import { recordProjectChange, touchProject } from '../projectChange';
 import {
@@ -17,18 +17,23 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
       future: [],
       autosaveStatus: 'pending',
       validationIssues: foundationValidationIssues(),
+      sliceGenerationStatus: 'idle',
+      sliceGenerationError: undefined,
     }),
   hydrateProject: (project) =>
-    set((state) => ({
-      project: project ?? state.project,
-      hasHydrated: true,
-      past: [],
-      future: [],
-      autosaveStatus: project ? 'saved' : 'pending',
-      validationIssues: project
-        ? validationIssuesForProject(project)
-        : validationIssuesForProject(state.project),
-    })),
+    set((state) => {
+      const prepared = prepareProjectForUse(project ?? state.project);
+      return {
+        project: prepared,
+        hasHydrated: true,
+        past: [],
+        future: [],
+        autosaveStatus: project ? 'saved' : 'pending',
+        validationIssues: validationIssuesForProject(prepared),
+        sliceGenerationStatus: prepared.generatedParts.length > 0 ? 'ready' : 'idle',
+        sliceGenerationError: undefined,
+      };
+    }),
   renameProject: (name) =>
     set((state) =>
       recordProjectChange(state, (project) =>
@@ -39,11 +44,16 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
       ),
     ),
   replaceProject: (project) =>
-    set((state) => ({
-      ...recordProjectChange(state, () => touchProject(project)),
-      hasHydrated: true,
-      validationIssues: validationIssuesForProject(project),
-      activeWorkflowStep: project.model.source.kind === 'imported' ? 'inspect' : 'start',
-    })),
+    set((state) => {
+      const prepared = prepareProjectForUse(project);
+      return {
+        ...recordProjectChange(state, () => touchProject(prepared)),
+        hasHydrated: true,
+        validationIssues: validationIssuesForProject(prepared),
+        activeWorkflowStep: prepared.model.source.kind === 'imported' ? 'inspect' : 'start',
+        sliceGenerationStatus: prepared.generatedParts.length > 0 ? 'ready' : 'idle',
+        sliceGenerationError: undefined,
+      };
+    }),
   setAutosaveStatus: (autosaveStatus) => set({ autosaveStatus }),
 });

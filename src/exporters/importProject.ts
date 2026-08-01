@@ -1,4 +1,5 @@
 import type { ProjectData, SliceFoldProjectFile } from '../domain/project';
+import { createCubeMesh } from '../geometry/mesh/createPrimitiveMesh';
 
 export class ProjectImportError extends Error {
   constructor(message: string) {
@@ -143,18 +144,39 @@ function isFabricationPath(value: unknown): boolean {
     Array.isArray(value.points) &&
     value.points.every(
       (point) => isRecord(point) && isFiniteNumber(point.x) && isFiniteNumber(point.y),
-    )
+    ) &&
+    (value.contourRole === undefined ||
+      value.contourRole === 'outer' ||
+      value.contourRole === 'hole')
   );
 }
 
 function isFabricationPart(value: unknown): boolean {
   if (!isRecord(value)) return false;
+  const slice = value.slice;
   return (
     isString(value.id) &&
     isString(value.name) &&
     isFiniteNumber(value.thicknessMm) &&
     Array.isArray(value.paths) &&
-    value.paths.every(isFabricationPath)
+    value.paths.every(isFabricationPath) &&
+    (slice === undefined ||
+      (isRecord(slice) &&
+        (slice.axis === 'x' || slice.axis === 'y' || slice.axis === 'z') &&
+        isFiniteNumber(slice.positionMm) &&
+        Number.isInteger(slice.planeIndex)))
+  );
+}
+
+function isValidationIssue(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    isString(value.id) &&
+    (value.severity === 'info' || value.severity === 'warning' || value.severity === 'error') &&
+    isString(value.code) &&
+    isString(value.message) &&
+    isStringArray(value.affectedEntityIds) &&
+    (value.suggestedAction === undefined || isString(value.suggestedAction))
   );
 }
 
@@ -222,6 +244,8 @@ function isProjectData(value: unknown): value is ProjectData {
     ) &&
     Array.isArray(value.generatedParts) &&
     value.generatedParts.every(isFabricationPart) &&
+    (value.generationIssues === undefined ||
+      (Array.isArray(value.generationIssues) && value.generationIssues.every(isValidationIssue))) &&
     Array.isArray(value.sheetLayouts) &&
     value.sheetLayouts.every(isSheetLayout) &&
     isExportSettings(value.exportSettings) &&
@@ -260,5 +284,19 @@ export function parseProjectFile(source: string): ProjectData {
     throw new ProjectImportError('The selected file is not valid JSON.');
   }
 
-  return migrateProjectFile(parsed).project;
+  const project = migrateProjectFile(parsed).project;
+  if (project.model.source.kind === 'built-in' && (!project.model.mesh || !project.model.bounds)) {
+    const primitive = createCubeMesh(project.model.dimensions.widthMm);
+    return {
+      ...project,
+      model: {
+        ...project.model,
+        mesh: primitive.mesh,
+        bounds: primitive.bounds,
+        healthReport: primitive.healthReport,
+      },
+      generationIssues: project.generationIssues ?? [],
+    };
+  }
+  return { ...project, generationIssues: project.generationIssues ?? [] };
 }

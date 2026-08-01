@@ -38,8 +38,12 @@ export interface ModelSlice {
 }
 
 export interface FabricationSlice {
+  sliceGenerationStatus: 'idle' | 'processing' | 'ready' | 'error' | 'cancelled' | 'stale';
+  sliceGenerationError: string | undefined;
   setFabricationMode: (mode: FabricationMode) => void;
   setModeParameter: (name: string, value: number | string | boolean) => void;
+  generateSlices: () => void;
+  cancelSliceGeneration: () => void;
 }
 
 export interface ViewportSlice {

@@ -24,7 +24,7 @@ describe('model state slice', () => {
     );
     useProjectStore.getState().undo();
     expect(useProjectStore.getState().validationIssues.map((issue) => issue.code)).toEqual([
-      'PHASE_2_STL_INSPECTION',
+      'STACKED_SLICING_READY',
     ]);
     useProjectStore.getState().redo();
     expect(useProjectStore.getState().validationIssues.map((issue) => issue.code)).toContain(

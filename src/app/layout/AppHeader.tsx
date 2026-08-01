@@ -1,5 +1,6 @@
 import { useRef, useState, type ChangeEvent } from 'react';
 import { createProjectDownload } from '../../exporters/exportProject';
+import { createSvgDownload } from '../../exporters/exportSvg';
 import { parseProjectFile, ProjectImportError } from '../../exporters/importProject';
 import { copy } from '../../locales/en';
 import { useProjectStore } from '../../state/useProjectStore';
@@ -90,6 +91,16 @@ export function AppHeader() {
         </button>
         <button type="button" onClick={() => fileInputRef.current?.click()}>
           {copy.importProject}
+        </button>
+        <button
+          type="button"
+          onClick={() => createSvgDownload(project)}
+          disabled={project.generatedParts.length === 0}
+          title={
+            project.generatedParts.length === 0 ? 'Generate parts before exporting SVG.' : undefined
+          }
+        >
+          {copy.exportSvg}
         </button>
         <button
           className="primary-action"

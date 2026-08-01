@@ -20,7 +20,7 @@ export function ParameterPanel() {
     <section className="panel-section" aria-labelledby="parameters-heading">
       <div className="panel-heading-row">
         <p className="eyebrow">Setup</p>
-        <span className="phase-badge">Phase 2</span>
+        <span className="phase-badge">Phase 3</span>
       </div>
       <h2 id="parameters-heading">{copy.parametersPanel}</h2>
 
@@ -47,9 +47,7 @@ export function ParameterPanel() {
             </option>
           ))}
         </select>
-        <p className="field-help">
-          Mode selection is saved now; geometry generation arrives by phase.
-        </p>
+        <p className="field-help">Stacked slices are available now. Other modes remain planned.</p>
       </div>
 
       <div className="field-stack">

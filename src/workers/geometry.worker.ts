@@ -2,6 +2,7 @@
 
 import { normalizeMesh } from '../geometry/mesh/normalizeMesh';
 import { parseStl } from '../importers/importSTL';
+import { generateStackedSlices } from '../geometry/slicing/generateStackedSlices';
 import type { GeometryWorkerRequest, GeometryWorkerResponse } from './protocol';
 
 const context: DedicatedWorkerGlobalScope = self as DedicatedWorkerGlobalScope;
@@ -9,13 +10,30 @@ const context: DedicatedWorkerGlobalScope = self as DedicatedWorkerGlobalScope;
 context.onmessage = (event: MessageEvent<GeometryWorkerRequest>) => {
   const request = event.data;
   try {
-    const soup = parseStl(request.payload.arrayBuffer);
-    const result = normalizeMesh(soup, { assumedUnit: request.payload.assumedUnit });
-    const response: GeometryWorkerResponse = { id: request.id, ok: true, result };
-    context.postMessage(response);
+    if (request.type === 'normalize-stl') {
+      const soup = parseStl(request.payload.arrayBuffer);
+      const result = normalizeMesh(soup, { assumedUnit: request.payload.assumedUnit });
+      const response: GeometryWorkerResponse = {
+        id: request.id,
+        type: request.type,
+        ok: true,
+        result,
+      };
+      context.postMessage(response);
+    } else {
+      const result = generateStackedSlices(request.payload);
+      const response: GeometryWorkerResponse = {
+        id: request.id,
+        type: request.type,
+        ok: true,
+        result,
+      };
+      context.postMessage(response);
+    }
   } catch (error) {
     const response: GeometryWorkerResponse = {
       id: request.id,
+      type: request.type,
       ok: false,
       error: error instanceof Error ? error.message : 'STL processing failed.',
     };

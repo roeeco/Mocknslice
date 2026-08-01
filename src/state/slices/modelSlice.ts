@@ -20,6 +20,8 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
         ...recordProjectChange(state, (project) =>
           touchProject({
             ...project,
+            generatedParts: [],
+            generationIssues: [],
             model: {
               id,
               name: modelName(fileName),
@@ -47,24 +49,27 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
         selectedEntityId: id,
         viewportMode: 'three',
         activeWorkflowStep: 'inspect',
+        sliceGenerationStatus: 'idle',
       };
     }),
   failModelImport: (modelImportError) => set({ modelImportStatus: 'error', modelImportError }),
   cancelModelImport: () =>
     set({ modelImportStatus: 'cancelled', modelImportError: 'STL import was cancelled.' }),
   rotateModel90: (axis) =>
-    set((state) =>
-      recordProjectChange(state, (project) =>
+    set((state) => ({
+      ...recordProjectChange(state, (project) =>
         touchProject({ ...project, model: rotateModelMesh90(project.model, axis) }),
       ),
-    ),
+      sliceGenerationStatus: state.project.generatedParts.length > 0 ? 'stale' : 'idle',
+    })),
   scaleModelToDimension: (axis, targetMm) =>
-    set((state) =>
-      recordProjectChange(state, (project) =>
+    set((state) => ({
+      ...recordProjectChange(state, (project) =>
         touchProject({
           ...project,
           model: scaleModelMeshToDimension(project.model, axis, targetMm),
         }),
       ),
-    ),
+      sliceGenerationStatus: state.project.generatedParts.length > 0 ? 'stale' : 'idle',
+    })),
 });

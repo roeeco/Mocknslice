@@ -5,12 +5,12 @@ import { createMeshValidationIssues } from '../geometry/mesh/createMeshValidatio
 export function foundationValidationIssues(): ValidationIssue[] {
   return [
     {
-      id: 'foundation-slicing-unavailable',
+      id: 'stacked-slicing-ready',
       severity: 'info',
-      code: 'PHASE_2_STL_INSPECTION',
-      message: 'Import an STL to inspect it; slice generation begins in Phase 3.',
+      code: 'STACKED_SLICING_READY',
+      message: 'Choose an axis and spacing, then generate stacked slices.',
       affectedEntityIds: [],
-      suggestedAction: 'Inspect the example cube or import an STL model.',
+      suggestedAction: 'Generate the example cube or import an STL model.',
     },
   ];
 }
@@ -18,7 +18,10 @@ export function foundationValidationIssues(): ValidationIssue[] {
 export function validationIssuesForProject(project: ProjectData): ValidationIssue[] {
   const { model } = project;
   if (model.healthReport && model.importSettings) {
-    return createMeshValidationIssues(model.healthReport, model.importSettings, model.id);
+    return [
+      ...createMeshValidationIssues(model.healthReport, model.importSettings, model.id),
+      ...(project.generationIssues ?? []),
+    ];
   }
-  return foundationValidationIssues();
+  return [...foundationValidationIssues(), ...(project.generationIssues ?? [])];
 }

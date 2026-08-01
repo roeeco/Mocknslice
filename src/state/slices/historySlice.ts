@@ -15,6 +15,7 @@ export const createHistorySlice: AppSliceCreator<HistorySlice> = (set) => ({
         future: [state.project, ...state.future],
         autosaveStatus: 'pending',
         validationIssues: validationIssuesForProject(previous),
+        sliceGenerationStatus: previous.generatedParts.length > 0 ? 'ready' : 'idle',
       };
     }),
   redo: () =>
@@ -28,6 +29,7 @@ export const createHistorySlice: AppSliceCreator<HistorySlice> = (set) => ({
         future: remaining,
         autosaveStatus: 'pending',
         validationIssues: validationIssuesForProject(next),
+        sliceGenerationStatus: next.generatedParts.length > 0 ? 'ready' : 'idle',
       };
     }),
 });

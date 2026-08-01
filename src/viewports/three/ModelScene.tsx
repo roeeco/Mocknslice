@@ -5,6 +5,7 @@ import { BufferGeometry, Float32BufferAttribute } from 'three';
 import type { SerializableTriangleMesh } from '../../domain/geometry';
 import { useProjectStore } from '../../state/useProjectStore';
 import type { CameraPreset } from '../../state/types';
+import { FabricationParts } from './FabricationParts';
 
 const cameraDirections: Record<CameraPreset, [number, number, number]> = {
   isometric: [1, 0.82, 1],
@@ -55,6 +56,7 @@ function ImportedGeometry({ mesh }: { mesh: SerializableTriangleMesh }) {
 
 export function ModelScene() {
   const model = useProjectStore((state) => state.project.model);
+  const hasParts = useProjectStore((state) => state.project.generatedParts.length > 0);
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
   const { widthMm, heightMm, depthMm } = model.dimensions;
@@ -86,9 +88,17 @@ export function ModelScene() {
         ) : (
           <boxGeometry args={[widthMm, heightMm, depthMm]} />
         )}
-        <meshStandardMaterial color={selected ? '#f97316' : '#315c52'} roughness={0.72} side={2} />
+        <meshStandardMaterial
+          color={selected ? '#f97316' : '#315c52'}
+          roughness={0.72}
+          side={2}
+          transparent={hasParts}
+          opacity={hasParts ? 0.16 : 1}
+          depthWrite={!hasParts}
+        />
         {!model.mesh ? <Edges color={selected ? '#7c2d12' : '#17322d'} /> : null}
       </mesh>
+      <FabricationParts />
       <Grid
         args={[largestDimension * 6, largestDimension * 6]}
         position={[0, -heightMm / 2, 0]}

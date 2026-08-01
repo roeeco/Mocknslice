@@ -77,3 +77,32 @@ test('imports, inspects, scales, and rotates an STL model', async ({ page }) => 
   await expect(page.getByLabel('Height (Y)')).toHaveValue('60');
   await expect(page.getByLabel('Depth (Z)')).toHaveValue('40');
 });
+
+test('generates cube slices, previews parts, and exports fabrication SVG', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page.getByLabel('Slice axis')).toHaveValue('z');
+  await expect(page.getByLabel('Slice spacing')).toHaveValue('10');
+  await page.getByRole('button', { name: 'Generate slices' }).click();
+  await expect(page.getByText('4 parts', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: '2D parts' }).click();
+  const firstPart = page.getByRole('button', { name: /Slice Z1 cut preview/ });
+  const secondPart = page.getByRole('button', { name: /Slice Z2 cut preview/ });
+  await expect(firstPart).toBeVisible();
+  await secondPart.click();
+  await expect(secondPart).toHaveAttribute('aria-pressed', 'true');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export SVG' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/\.svg$/);
+  const stream = await download.createReadStream();
+  const chunks: Uint8Array[] = [];
+  for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
+  const svg = Buffer.concat(chunks).toString('utf8');
+  expect(svg).toContain('width="185mm"');
+  expect(svg).toContain('id="operation-cut"');
+  expect(svg).toContain('data-contour-role="outer"');
+  expect(svg).not.toContain('<image');
+});
