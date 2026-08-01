@@ -8,9 +8,9 @@
 3. Stacked-slice MVP
 4. Sheet layout
 5. Orthogonal waffle mode
-6. Deterministic folding templates
+6. Shape-aware deterministic folding templates fitted to convex STL projections
 7. Improved fabrication output
-8. Low-poly generic unfolding after a feasibility spike
+8. Advanced mesh unfolding research, not currently scheduled
 9. Advanced features
 
 Finish each phase with passing typecheck, lint, unit tests, production build, relevant end-to-end smoke tests, current documentation, deterministic geometry tests where applicable, and a built-in demonstration path.

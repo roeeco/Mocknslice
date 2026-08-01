@@ -17,6 +17,8 @@ Users can return to any earlier step: Start, Choose mode, Import or create, Conf
 
 The desktop workspace uses workflow navigation on the left, a synchronized 3D or 2D viewport in the centre, and parameters plus structured validation on the right.
 
+For planned folding work, the user will import and orient an STL, choose a general template, fit it to a convex projected profile with explicit clearance, inspect the assembled construction and flat net, then arrange and export it. See [Shape-aware folding plan](FOLDING_PLAN.md).
+
 ## Current implementation through Phase 3
 
 The foundation includes a generated 40 mm cube, material and mode selection, a three-column responsive shell, 3D orbit and camera presets, a 2D sheet empty state, local project autosave, project JSON import/export, undo/redo, and structured validation.
@@ -34,7 +36,7 @@ Generated parts are preserved but marked stale when source geometry or slice par
 3. Stacked-slice public MVP
 4. Basic sheet layout
 5. Orthogonal waffle slices
-6. Deterministic folding templates
+6. Shape-aware deterministic folding templates
 7. Improved fabrication output
-8. Low-poly mesh unfolding after a feasibility spike
+8. Advanced mesh unfolding research, not currently scheduled
 9. Advanced fabrication modes

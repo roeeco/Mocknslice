@@ -21,3 +21,7 @@ Older version 1 built-in-cube projects are enriched in memory with deterministic
 ## Fabrication SVG
 
 Phase 3 exports a standalone, vector-only SVG with millimetre `width` and `height`, a matching `viewBox`, project metadata, a group for every supported operation, stable path IDs, part IDs, contour roles, configured operation strokes, and optional engraved labels and boundary. Parts use a deterministic row preview with 5 mm margins and gaps. Proper sheet placement and nesting belong to Phase 4.
+
+## Planned folding migration
+
+Phase 6 shape-aware folding will add fit settings, projected/fitted profiles, panels, fold edges, tabs, algorithm version, input hash, and generation issues. These fields must ship with an explicit project-file version bump and migration; they must not be added silently to version 1. The planned contract is documented in [FOLDING_PLAN.md](FOLDING_PLAN.md).

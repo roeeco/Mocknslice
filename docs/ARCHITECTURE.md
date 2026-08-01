@@ -4,11 +4,13 @@
 
 ### Domain
 
-`src/domain/` contains serializable TypeScript types for projects, models, materials, fabrication parts, sheet layouts, operations, exports, and validation. It imports neither React nor Three.js. Fabrication dimensions have `Mm` names or use the `Millimetres` alias.
+`src/domain/` contains serializable TypeScript types for projects, models, materials, fabrication parts, sheet layouts, operations, exports, and validation. Planned folding types add projected profiles, panels, fold edges, and tabs without render objects. The domain imports neither React nor Three.js. Fabrication dimensions have `Mm` names or use the `Millimetres` alias.
 
 ### Geometry engine
 
 `src/geometry/` exposes pure functions for mesh normalization, topology validation, model transforms, plane placement, triangle-plane intersection, endpoint welding, contour tracing, and outer/hole classification. Future modules add offsets, slots, folding, and layout. Functions run in unit tests without a browser. Expensive orchestration uses typed messages under `src/workers/` while calling the same pure functions.
+
+Phase 6 shape fitting will add deterministic axis projection, convex hull, convex offset, visible simplification, and template generators. These functions return serializable source/fitted profiles, panels, fold edges, tabs, fabrication parts, and structured issues. The worker will orchestrate fitting and generation with progress, cancellation, input hashes, and stale-result rejection.
 
 STL parsing/normalization and stacked-slice generation run as cancellable Web Worker requests. The worker returns plain serializable mesh, bounds, health data, parts, and validation issues; it does not return Three.js objects.
 

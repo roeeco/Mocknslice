@@ -40,6 +40,21 @@ Triangle intersections within the contour epsilon are welded through neighbourin
 
 Part thickness controls the extruded assembled preview and fabrication metadata. It does not change plane spacing. Thickness greater than spacing is allowed but reported because assembled parts overlap.
 
+## Planned shape-aware template fitting
+
+Phase 6 will fit fixed folding-template topologies to an imported model without unfolding its faces. The selected axis determines an orthographic projection using the same axis mapping as slicing. The pure fitting pipeline will:
+
+1. Deduplicate and deterministically sort projected mesh vertices.
+2. Build a monotone-chain convex hull.
+3. Offset the convex hull outward by explicit clearance.
+4. Simplify short edges while preserving a convex enclosure.
+5. Pass the fitted profile and axial extent to a pure template generator.
+6. Validate shared-edge lengths, material minimums, tabs, net overlap, and sheet bounds.
+
+Default simplification tolerance is `1 mm`; the effective minimum edge is `max(2 mm, material thickness × 2)`. The source projection and fitted outline remain separately serializable so the interface can show every automated change. Detailed template rules and planned types are in [FOLDING_PLAN.md](FOLDING_PLAN.md).
+
+Concave silhouettes, projection holes, and arbitrary face unfolding are deliberately excluded. A template incompatibility is reported rather than repaired by changing topology.
+
 ## Phase 3 limitations
 
 - Shells are edge-connected components; faces touching at only one vertex remain separate shells.
