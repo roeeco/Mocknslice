@@ -46,11 +46,55 @@ function isModel(value: unknown): boolean {
   const source = value.source;
   const dimensions = value.dimensions;
   const transform = value.transform;
+  const mesh = value.mesh;
+  const bounds = value.bounds;
+  const healthReport = value.healthReport;
+  const importSettings = value.importSettings;
 
   const validSource =
     isRecord(source) &&
     ((source.kind === 'built-in' && source.primitive === 'cube') ||
       (source.kind === 'imported' && isString(source.fileName) && isString(source.format)));
+
+  const validMesh =
+    mesh === undefined ||
+    (isRecord(mesh) &&
+      Array.isArray(mesh.positionsMm) &&
+      mesh.positionsMm.every(isFiniteNumber) &&
+      Array.isArray(mesh.indices) &&
+      mesh.indices.every((index) => Number.isInteger(index) && index >= 0));
+  const validBounds =
+    bounds === undefined ||
+    (isRecord(bounds) &&
+      Array.isArray(bounds.minMm) &&
+      bounds.minMm.length === 3 &&
+      bounds.minMm.every(isFiniteNumber) &&
+      Array.isArray(bounds.maxMm) &&
+      bounds.maxMm.length === 3 &&
+      bounds.maxMm.every(isFiniteNumber));
+  const validHealth =
+    healthReport === undefined ||
+    (isRecord(healthReport) &&
+      isFiniteNumber(healthReport.triangleCount) &&
+      isFiniteNumber(healthReport.openEdgeCount) &&
+      isFiniteNumber(healthReport.nonManifoldEdgeCount) &&
+      isFiniteNumber(healthReport.disconnectedShellCount) &&
+      isFiniteNumber(healthReport.orientationIssueCount) &&
+      isFiniteNumber(healthReport.weldedVertexCount) &&
+      isFiniteNumber(healthReport.signedVolumeMm3) &&
+      typeof healthReport.likelyInverted === 'boolean' &&
+      typeof healthReport.inspected === 'boolean');
+  const validImportSettings =
+    importSettings === undefined ||
+    (isRecord(importSettings) &&
+      isString(importSettings.assumedUnit) &&
+      isFiniteNumber(importSettings.sourceUnitToMm) &&
+      isFiniteNumber(importSettings.mergeToleranceMm) &&
+      isFiniteNumber(importSettings.removedZeroAreaTriangleCount) &&
+      Array.isArray(importSettings.centreOffsetMm) &&
+      importSettings.centreOffsetMm.length === 3 &&
+      importSettings.centreOffsetMm.every(isFiniteNumber) &&
+      isFiniteNumber(importSettings.dimensionScale));
 
   return (
     validSource &&
@@ -67,7 +111,11 @@ function isModel(value: unknown): boolean {
     transform.rotationDeg.every(isFiniteNumber) &&
     Array.isArray(transform.scale) &&
     transform.scale.length === 3 &&
-    transform.scale.every(isFiniteNumber)
+    transform.scale.every(isFiniteNumber) &&
+    validMesh &&
+    validBounds &&
+    validHealth &&
+    validImportSettings
   );
 }
 

@@ -1,6 +1,10 @@
 import { createProject } from '../../app/createProject';
 import type { AppSliceCreator, ProjectSlice } from '../types';
 import { recordProjectChange, touchProject } from '../projectChange';
+import {
+  foundationValidationIssues,
+  validationIssuesForProject,
+} from '../../validation/projectValidation';
 
 export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
   project: createProject(),
@@ -12,6 +16,7 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
       past: [],
       future: [],
       autosaveStatus: 'pending',
+      validationIssues: foundationValidationIssues(),
     }),
   hydrateProject: (project) =>
     set((state) => ({
@@ -20,6 +25,9 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
       past: [],
       future: [],
       autosaveStatus: project ? 'saved' : 'pending',
+      validationIssues: project
+        ? validationIssuesForProject(project)
+        : validationIssuesForProject(state.project),
     })),
   renameProject: (name) =>
     set((state) =>
@@ -34,6 +42,8 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
     set((state) => ({
       ...recordProjectChange(state, () => touchProject(project)),
       hasHydrated: true,
+      validationIssues: validationIssuesForProject(project),
+      activeWorkflowStep: project.model.source.kind === 'imported' ? 'inspect' : 'start',
     })),
   setAutosaveStatus: (autosaveStatus) => set({ autosaveStatus }),
 });

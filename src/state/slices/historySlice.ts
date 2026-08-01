@@ -1,4 +1,5 @@
 import type { AppSliceCreator, HistorySlice } from '../types';
+import { validationIssuesForProject } from '../../validation/projectValidation';
 
 export const createHistorySlice: AppSliceCreator<HistorySlice> = (set) => ({
   past: [],
@@ -13,6 +14,7 @@ export const createHistorySlice: AppSliceCreator<HistorySlice> = (set) => ({
         past: state.past.slice(0, -1),
         future: [state.project, ...state.future],
         autosaveStatus: 'pending',
+        validationIssues: validationIssuesForProject(previous),
       };
     }),
   redo: () =>
@@ -25,6 +27,7 @@ export const createHistorySlice: AppSliceCreator<HistorySlice> = (set) => ({
         past: [...state.past, state.project],
         future: remaining,
         autosaveStatus: 'pending',
+        validationIssues: validationIssuesForProject(next),
       };
     }),
 });

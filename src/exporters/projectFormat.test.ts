@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { createProject } from '../app/createProject';
 import { serializeProject } from './exportProject';
 import { parseProjectFile, ProjectImportError } from './importProject';
+import { normalizeMesh } from '../geometry/mesh/normalizeMesh';
+import { createCubeSoup } from '../test-fixtures/generatedMeshes';
 
 describe('SliceFold project format', () => {
   it('round-trips a version 1 project without losing fabrication data', () => {
@@ -33,5 +35,22 @@ describe('SliceFold project format', () => {
     expect(() => parseProjectFile(JSON.stringify(malformed))).toThrow(
       'The project file is incomplete or damaged.',
     );
+  });
+
+  it('round-trips persisted normalized STL geometry and health data', () => {
+    const project = createProject('Imported model');
+    const normalized = normalizeMesh(createCubeSoup(20), { assumedUnit: 'millimetres' });
+    project.model = {
+      id: 'model-imported',
+      name: 'cube',
+      source: { kind: 'imported', fileName: 'cube.stl', format: 'stl' },
+      transform: { positionMm: [0, 0, 0], rotationDeg: [0, 0, 0], scale: [1, 1, 1] },
+      ...normalized,
+    };
+
+    const restored = parseProjectFile(serializeProject(project));
+    expect(restored.model.mesh).toEqual(normalized.mesh);
+    expect(restored.model.healthReport).toEqual(normalized.healthReport);
+    expect(restored.model.importSettings?.assumedUnit).toBe('millimetres');
   });
 });

@@ -20,7 +20,7 @@ export function ParameterPanel() {
     <section className="panel-section" aria-labelledby="parameters-heading">
       <div className="panel-heading-row">
         <p className="eyebrow">Setup</p>
-        <span className="phase-badge">Foundation</span>
+        <span className="phase-badge">Phase 2</span>
       </div>
       <h2 id="parameters-heading">{copy.parametersPanel}</h2>
 

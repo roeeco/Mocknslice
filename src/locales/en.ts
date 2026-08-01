@@ -22,6 +22,10 @@ export const copy = {
   kerf: 'Kerf',
   clearance: 'Clearance',
   dimensions: 'Model dimensions',
+  importStl: 'Import STL model',
+  stlUnits: 'Assumed STL units',
+  modelInspection: 'Model inspection',
+  modelHealth: 'Model health',
   workflow: {
     start: 'Start',
     mode: 'Choose mode',

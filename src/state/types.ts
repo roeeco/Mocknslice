@@ -2,7 +2,8 @@ import type { StateCreator } from 'zustand';
 import type { ExportSettings } from '../domain/exports';
 import type { FabricationMode } from '../domain/fabrication';
 import type { MaterialProfile } from '../domain/material';
-import type { ModelHealthReport } from '../domain/model';
+import type { ModelAxis, StlUnit } from '../domain/model';
+import type { NormalizedMeshResult } from '../geometry/mesh/normalizeMesh';
 import type { ProjectData } from '../domain/project';
 import type { ValidationIssue } from '../domain/validation';
 
@@ -24,8 +25,16 @@ export interface ProjectSlice {
 }
 
 export interface ModelSlice {
-  modelHealthReport: ModelHealthReport;
-  setModelHealthReport: (report: ModelHealthReport) => void;
+  assumedStlUnit: StlUnit;
+  modelImportStatus: 'idle' | 'processing' | 'ready' | 'error' | 'cancelled';
+  modelImportError: string | undefined;
+  setAssumedStlUnit: (unit: StlUnit) => void;
+  startModelImport: () => void;
+  completeModelImport: (fileName: string, result: NormalizedMeshResult) => void;
+  failModelImport: (message: string) => void;
+  cancelModelImport: () => void;
+  rotateModel90: (axis: ModelAxis) => void;
+  scaleModelToDimension: (axis: ModelAxis, targetMm: number) => void;
 }
 
 export interface FabricationSlice {
@@ -36,9 +45,11 @@ export interface FabricationSlice {
 export interface ViewportSlice {
   viewportMode: ViewportMode;
   cameraPreset: CameraPreset;
+  cameraResetToken: number;
   activeWorkflowStep: WorkflowStep;
   setViewportMode: (mode: ViewportMode) => void;
   setCameraPreset: (preset: CameraPreset) => void;
+  fitCamera: () => void;
   setActiveWorkflowStep: (step: WorkflowStep) => void;
 }
 
