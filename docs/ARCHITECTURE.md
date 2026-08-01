@@ -8,9 +8,9 @@
 
 ### Geometry engine
 
-`src/geometry/` exposes pure functions for mesh normalization, topology validation, and model transforms. Future modules add intersection, contour reconstruction, offsets, slices, slots, folding, and layout. Functions run in unit tests without a browser. Expensive orchestration uses typed messages under `src/workers/` while calling the same pure functions.
+`src/geometry/` exposes pure functions for mesh normalization, topology validation, model transforms, plane placement, triangle-plane intersection, endpoint welding, contour tracing, and outer/hole classification. Future modules add offsets, slots, folding, and layout. Functions run in unit tests without a browser. Expensive orchestration uses typed messages under `src/workers/` while calling the same pure functions.
 
-STL parsing and normalization run in a cancellable Web Worker. The worker returns plain serializable mesh, bounds, import settings, and health data; it does not return Three.js objects.
+STL parsing/normalization and stacked-slice generation run as cancellable Web Worker requests. The worker returns plain serializable mesh, bounds, health data, parts, and validation issues; it does not return Three.js objects.
 
 ### Application state
 
@@ -18,7 +18,7 @@ STL parsing and normalization run in a cancellable Web Worker. The worker return
 
 ### Presentation
 
-`src/app/`, `src/components/`, and `src/viewports/` implement the shell and views. Three.js buffer geometry is recreated and disposed inside the 3D presentation boundary from serializable mesh data. Selection is synchronized through domain IDs. A viewport error boundary prevents a rendering failure from removing project and inspection controls.
+`src/app/`, `src/components/`, and `src/viewports/` implement the shell and views. Three.js buffer and extruded part geometry is recreated and disposed inside the 3D presentation boundary from serializable mesh and contour data. The 2D preview renders the same paths as SVG. Selection is synchronized through domain IDs. A viewport error boundary prevents a rendering failure from removing project and inspection controls.
 
 ### Persistence and file exchange
 
@@ -26,7 +26,7 @@ STL parsing and normalization run in a cancellable Web Worker. The worker return
 
 ## Data flow
 
-User input updates a focused Zustand action. Meaningful project actions record a previous project snapshot, update the serializable project, and schedule repository autosave. Presentation selectors reconstruct view data. Project JSON export serializes the same project data; import validates and replaces it through history.
+User input updates a focused Zustand action. Meaningful project actions record a previous project snapshot, update the serializable project, and schedule repository autosave. Parameter or model changes preserve generated geometry but mark it stale. Presentation selectors reconstruct view data. Project JSON export serializes the same project data; import validates and replaces it through history. Fabrication SVG export deterministically places parts in a simple row without claiming to be a sheet-layout or nesting engine.
 
 ## Dependency rules
 

@@ -17,13 +17,15 @@ Users can return to any earlier step: Start, Choose mode, Import or create, Conf
 
 The desktop workspace uses workflow navigation on the left, a synchronized 3D or 2D viewport in the centre, and parameters plus structured validation on the right.
 
-## Current implementation through Phase 2
+## Current implementation through Phase 3
 
 The foundation includes a generated 40 mm cube, material and mode selection, a three-column responsive shell, 3D orbit and camera presets, a 2D sheet empty state, local project autosave, project JSON import/export, undo/redo, and structured validation.
 
 Phase 2 adds ASCII and binary STL import, explicit source-unit selection, worker-based mesh normalization, proportional dimension correction, 90° orientation controls, centred bounds, persistent normalized mesh data, 3D imported-model preview, and a model-health report for open edges, non-manifold edges, shells, and face orientation.
 
-Production slicing, generated fabrication parts, sheet arrangement, and SVG export are intentionally unavailable. They follow in Phases 3–4.
+Phase 3 adds X/Y/Z stacked-slice generation, independent spacing and thickness controls, worker-based triangle intersection and contour reconstruction, outer/hole classification, stable part labels, structured geometry warnings, synchronized assembled and flat previews, and deterministic millimetre SVG export.
+
+Generated parts are preserved but marked stale when source geometry or slice parameters change. Regeneration is explicit and enters undo/autosave history as one project action. Phase 3 uses a simple row for SVG preview placement; production sheet arrangement and nesting remain Phase 4 work.
 
 ## Roadmap
 

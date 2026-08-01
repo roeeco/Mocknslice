@@ -22,22 +22,32 @@ Health inspection counts undirected edge uses, open edges, edges shared by more 
 
 Dimension correction uniformly scales all positions. Orientation controls apply deterministic 90° rotations to positions, then recalculate bounds and health data. Both operations participate in project undo/redo.
 
-## Planned stacked-slice pipeline
+## Stacked-slice pipeline
 
 1. Normalize a mesh with a documented vertex tolerance.
 2. Intersect triangles with axis-aligned slice planes.
 3. Weld segment endpoints within a configurable epsilon.
 4. Trace closed contours and report open or ambiguous results.
 5. Classify outer contours and holes.
-6. Apply material-aware offsets only after contour validity is known.
-7. Convert valid contour sets into serializable fabrication parts.
+6. Normalize outer contours counter-clockwise and holes clockwise.
+7. Convert each outer island plus its contained holes into a serializable fabrication part.
 
-Each step will be a pure function with deterministic cube and cylinder fixtures before it is moved behind worker orchestration.
+Each step is a pure function. Worker orchestration calls the same pipeline used by deterministic cube, cylinder, hollow-prism, and open-mesh tests.
 
-## Phase 2 limitations
+Slice planes begin half a spacing interval inside the model bounds and repeat at the requested spacing. If spacing is at least the model extent, one plane is placed at the midpoint. This avoids generating faces directly on model boundary planes. X planes project to Z/Y part coordinates, Y planes to X/Z, and Z planes to X/Y.
+
+Triangle intersections within the contour epsilon are welded through neighbouring spatial-hash cells. Duplicate graph edges are discarded. Degree-one nodes form open contours and nodes with degree above two are ambiguous; both conditions produce structured warnings rather than automatic closure. Closed contour nesting depth determines outer/hole roles.
+
+Part thickness controls the extruded assembled preview and fabrication metadata. It does not change plane spacing. Thickness greater than spacing is allowed but reported because assembled parts overlap.
+
+## Phase 3 limitations
 
 - Shells are edge-connected components; faces touching at only one vertex remain separate shells.
 - Face inversion is a best-effort signed-volume check and is withheld for an already invalid topology.
 - The normalized mesh is persisted, but original STL bytes are not embedded in the project file.
 - Import shows active/cancelled state but not percentage progress because parsing and normalization are currently one deterministic worker operation.
-- No automatic repair, contouring, offsets, or fabrication output is implemented.
+- Slice planes are axis-aligned; arbitrary planes and orthogonal waffle intersections come later.
+- No automatic repair, kerf offset, clearance offset, simplification, or smoothing is applied.
+- A plane exactly coplanar with model faces is reported and may require a spacing adjustment.
+- Self-intersecting source contours are not repaired.
+- The assembled preview is visual verification, not a collision or structural simulation.
