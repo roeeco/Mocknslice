@@ -1,0 +1,4 @@
+interface:
+  display_name: "Develop SliceFold"
+  short_description: "Build SliceFold safely in staged phases"
+  default_prompt: "Use $develop-slicefold to implement the next verified SliceFold phase."
