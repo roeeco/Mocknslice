@@ -11,6 +11,7 @@ import { WaffleSlicePanel } from '../../components/panels/WaffleSlicePanel';
 import { FoldTemplatePanel } from '../../components/panels/FoldTemplatePanel';
 import { FabricationOutputPanel } from '../../components/panels/FabricationOutputPanel';
 import { MeshUnfoldPanel } from '../../components/panels/MeshUnfoldPanel';
+import { PanelConstructionPanel } from '../../components/panels/PanelConstructionPanel';
 import { AppHeader } from './AppHeader';
 
 export function AppShell({ children }: PropsWithChildren) {
@@ -38,6 +39,7 @@ export function AppShell({ children }: PropsWithChildren) {
         <WaffleSlicePanel />
         <FoldTemplatePanel />
         <MeshUnfoldPanel />
+        <PanelConstructionPanel />
         <LayoutPanel />
         <FabricationOutputPanel />
         <ModelImportPanel />

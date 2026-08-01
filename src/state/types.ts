@@ -46,6 +46,7 @@ export interface FabricationSlice {
   generateWaffleSlices: () => void;
   generateFoldTemplate: () => void;
   generateMeshUnfold: () => void;
+  generatePanelConstruction: () => void;
   cancelSliceGeneration: () => void;
 }
 

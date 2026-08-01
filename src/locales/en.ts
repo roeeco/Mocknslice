@@ -67,6 +67,20 @@ export const copy = {
   partThickness: 'Part thickness',
   generateSlices: 'Generate slices',
   cancelGeneration: 'Cancel',
+  panelConstruction: {
+    heading: 'Panel construction',
+    intro:
+      'Create a rectangular enclosure as separate, labelled sheet panels. Joint profiles use the selected material thickness; always cut a small fit test first.',
+    insideWidth: 'Inside width (mm)',
+    insideDepth: 'Inside depth (mm)',
+    insideHeight: 'Inside height (mm)',
+    edgeJoint: 'Edge joint',
+    fingerWidth: 'Target finger width (mm)',
+    slotClearance: 'Slot clearance (mm)',
+    includeLid: 'Include a fully jointed lid',
+    generate: 'Generate panels',
+    regenerate: 'Regenerate panels',
+  },
   workflow: {
     start: 'Start',
     mode: 'Choose mode',

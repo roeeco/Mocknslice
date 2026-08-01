@@ -6,6 +6,7 @@ import { normalizeMesh } from '../geometry/mesh/normalizeMesh';
 import { createCubeSoup } from '../test-fixtures/generatedMeshes';
 import { generateFoldTemplate } from '../geometry/folding/generateFoldTemplate';
 import { generateMeshUnfold } from '../geometry/unfolding/generateMeshUnfold';
+import { generatePanelConstruction } from '../geometry/panelConstruction/generatePanelConstruction';
 
 describe('SliceFold project format', () => {
   it('round-trips the current version without losing fabrication data', () => {
@@ -71,7 +72,7 @@ describe('SliceFold project format', () => {
     const legacy = JSON.stringify({ format: 'slicefold-project', version: 1, project });
 
     expect(parseProjectFile(legacy)).toEqual(project);
-    expect(JSON.parse(serializeProject(project))).toMatchObject({ version: 4 });
+    expect(JSON.parse(serializeProject(project))).toMatchObject({ version: 5 });
   });
 
   it('adds Phase 7 output defaults while migrating a version 2 project', () => {
@@ -95,6 +96,16 @@ describe('SliceFold project format', () => {
       perforationGapMm: 1,
       labelFontSizeMm: 3,
     });
+  });
+
+  it('accepts a valid version 4 project without Phase 9 construction data', () => {
+    const project = createProject('Version 4');
+    const file = JSON.parse(serializeProject(project)) as Record<string, unknown>;
+    file.version = 4;
+    const storedProject = file.project as Record<string, unknown>;
+    delete storedProject.panelConstructionResult;
+
+    expect(parseProjectFile(JSON.stringify(file))).toEqual(project);
   });
 
   it('round-trips a serializable folding result with stable panel references', () => {
@@ -151,6 +162,37 @@ describe('SliceFold project format', () => {
     expect(restored.unfoldingResult).toEqual(result);
     expect(restored.generatedParts[0]?.unfolding?.faceIds).toEqual(
       result.faces.filter((face) => face.partId === result.parts[0]?.id).map((face) => face.id),
+    );
+  });
+
+  it('round-trips a serializable panel-construction result with stable joint references', () => {
+    const project = createProject('Panel kit');
+    const result = generatePanelConstruction({
+      modelId: project.model.id,
+      material: {
+        id: project.materialProfileSnapshot.id,
+        category: project.materialProfileSnapshot.category,
+        thicknessMm: project.materialProfileSnapshot.thicknessMm,
+        kerfMm: project.materialProfileSnapshot.kerfMm,
+      },
+      settings: {
+        innerWidthMm: 80,
+        innerDepthMm: 60,
+        innerHeightMm: 50,
+        jointKind: 'tab-slot',
+        fingerWidthMm: 10,
+        clearanceMm: 0.15,
+        includeLid: false,
+      },
+    });
+    project.fabricationMode = 'panel-construction';
+    project.panelConstructionResult = result;
+    project.generatedParts = result.parts;
+
+    const restored = parseProjectFile(serializeProject(project));
+    expect(restored.panelConstructionResult).toEqual(result);
+    expect(restored.generatedParts[0]?.construction?.jointIds).toEqual(
+      result.parts[0]?.construction?.jointIds,
     );
   });
 

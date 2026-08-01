@@ -59,6 +59,11 @@ export interface FabricationPart {
     islandIndex: number;
     faceIds: string[];
   };
+  construction?: {
+    panelId: string;
+    role: 'base' | 'front' | 'back' | 'left' | 'right' | 'lid';
+    jointIds: string[];
+  };
 }
 
 export interface SheetPlacement {

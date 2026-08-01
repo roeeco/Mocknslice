@@ -187,6 +187,7 @@ function isFabricationPart(value: unknown): boolean {
   const waffle = value.waffle;
   const folding = value.folding;
   const unfolding = value.unfolding;
+  const construction = value.construction;
   return (
     isString(value.id) &&
     isString(value.name) &&
@@ -219,7 +220,17 @@ function isFabricationPart(value: unknown): boolean {
     (unfolding === undefined ||
       (isRecord(unfolding) &&
         Number.isInteger(unfolding.islandIndex) &&
-        isStringArray(unfolding.faceIds)))
+        isStringArray(unfolding.faceIds))) &&
+    (construction === undefined ||
+      (isRecord(construction) &&
+        isString(construction.panelId) &&
+        (construction.role === 'base' ||
+          construction.role === 'front' ||
+          construction.role === 'back' ||
+          construction.role === 'left' ||
+          construction.role === 'right' ||
+          construction.role === 'lid') &&
+        isStringArray(construction.jointIds)))
   );
 }
 
@@ -434,6 +445,87 @@ function isMeshUnfoldResult(value: unknown): boolean {
   );
 }
 
+const panelRoles = new Set(['base', 'front', 'back', 'left', 'right', 'lid']);
+const panelEdges = new Set(['bottom', 'right', 'top', 'left']);
+const panelJointKinds = new Set(['butt', 'finger', 'tab-slot']);
+
+function isPanelConstructionResult(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  const settings = value.settings;
+  const material = value.material;
+  const preview = value.assembledPreview;
+  return (
+    isRecord(settings) &&
+    isFiniteNumber(settings.innerWidthMm) &&
+    isFiniteNumber(settings.innerDepthMm) &&
+    isFiniteNumber(settings.innerHeightMm) &&
+    isString(settings.jointKind) &&
+    panelJointKinds.has(settings.jointKind) &&
+    isFiniteNumber(settings.fingerWidthMm) &&
+    isFiniteNumber(settings.clearanceMm) &&
+    typeof settings.includeLid === 'boolean' &&
+    isRecord(material) &&
+    isString(material.id) &&
+    isString(material.category) &&
+    isFiniteNumber(material.thicknessMm) &&
+    isFiniteNumber(material.kerfMm) &&
+    Array.isArray(value.panels) &&
+    value.panels.every(
+      (panel) =>
+        isRecord(panel) &&
+        isString(panel.id) &&
+        isString(panel.partId) &&
+        isString(panel.name) &&
+        isString(panel.role) &&
+        panelRoles.has(panel.role) &&
+        isFiniteNumber(panel.widthMm) &&
+        isFiniteNumber(panel.heightMm) &&
+        Array.isArray(panel.outline) &&
+        panel.outline.every(isPoint2D) &&
+        isRecord(panel.edgeJointIds) &&
+        Object.entries(panel.edgeJointIds).every(
+          ([edge, jointId]) => panelEdges.has(edge) && isString(jointId),
+        ),
+    ) &&
+    Array.isArray(value.joints) &&
+    value.joints.every(
+      (joint) =>
+        isRecord(joint) &&
+        isString(joint.id) &&
+        isString(joint.kind) &&
+        panelJointKinds.has(joint.kind) &&
+        isString(joint.panelAId) &&
+        isString(joint.panelBId) &&
+        isString(joint.edgeA) &&
+        panelEdges.has(joint.edgeA) &&
+        isString(joint.edgeB) &&
+        panelEdges.has(joint.edgeB) &&
+        isFiniteNumber(joint.sharedLengthMm) &&
+        Number.isInteger(joint.fingerCount) &&
+        isFiniteNumber(joint.clearanceMm) &&
+        isString(joint.pairLabel) &&
+        (joint.tabOwnerPanelId === undefined || isString(joint.tabOwnerPanelId)),
+    ) &&
+    Array.isArray(value.parts) &&
+    value.parts.every(isFabricationPart) &&
+    Array.isArray(value.issues) &&
+    value.issues.every(isValidationIssue) &&
+    isRecord(preview) &&
+    Array.isArray(preview.panels) &&
+    preview.panels.every(
+      (panel) =>
+        isRecord(panel) &&
+        isString(panel.id) &&
+        isString(panel.partId) &&
+        isString(panel.name) &&
+        Array.isArray(panel.verticesMm) &&
+        panel.verticesMm.every(isVector3),
+    ) &&
+    isString(value.algorithmVersion) &&
+    isString(value.inputHash)
+  );
+}
+
 function isValidationIssue(value: unknown): boolean {
   return (
     isRecord(value) &&
@@ -543,6 +635,8 @@ function isProjectData(value: unknown): value is ProjectData {
       (Array.isArray(value.generationIssues) && value.generationIssues.every(isValidationIssue))) &&
     (value.foldingResult === undefined || isTemplateGenerationResult(value.foldingResult)) &&
     (value.unfoldingResult === undefined || isMeshUnfoldResult(value.unfoldingResult)) &&
+    (value.panelConstructionResult === undefined ||
+      isPanelConstructionResult(value.panelConstructionResult)) &&
     Array.isArray(value.sheetLayouts) &&
     value.sheetLayouts.every(isSheetLayout) &&
     isExportSettings(value.exportSettings) &&
@@ -555,7 +649,13 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
     throw new ProjectImportError('This file is not a SliceFold project.');
   }
 
-  if (value.version !== 1 && value.version !== 2 && value.version !== 3 && value.version !== 4) {
+  if (
+    value.version !== 1 &&
+    value.version !== 2 &&
+    value.version !== 3 &&
+    value.version !== 4 &&
+    value.version !== 5
+  ) {
     throw new ProjectImportError(
       `Project version ${String(value.version)} is not supported by this build.`,
     );
@@ -566,7 +666,7 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
   }
 
   if (
-    (value.version === 3 || value.version === 4) &&
+    (value.version === 3 || value.version === 4 || value.version === 5) &&
     !isCurrentExportSettings(value.project.exportSettings)
   ) {
     throw new ProjectImportError('The project file is incomplete or damaged.');
@@ -588,7 +688,7 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
 
   return {
     format: 'slicefold-project',
-    version: 4,
+    version: 5,
     project,
   };
 }

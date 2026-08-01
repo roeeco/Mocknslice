@@ -6,6 +6,7 @@ import { createSheetSvgDocument, createSvgDocument } from './exportSvg';
 import { generateFoldTemplate } from '../geometry/folding/generateFoldTemplate';
 import { arrangePartsInRows } from '../geometry/layout/arrangeParts';
 import { generateMeshUnfold } from '../geometry/unfolding/generateMeshUnfold';
+import { generatePanelConstruction } from '../geometry/panelConstruction/generatePanelConstruction';
 
 describe('createSvgDocument', () => {
   it('matches the deterministic millimetre SVG golden file', () => {
@@ -161,7 +162,7 @@ describe('createSvgDocument', () => {
     project.sheetLayouts = arrangePartsInRows(result.parts, project.sheetLayouts[0]!);
 
     const svg = createSheetSvgDocument(project, project.sheetLayouts[0]!.id);
-    expect(svg).toContain('&quot;projectFormatVersion&quot;:4');
+    expect(svg).toContain('&quot;projectFormatVersion&quot;:5');
     expect(svg).toContain('&quot;mode&quot;:&quot;mesh-unfold&quot;');
     expect(svg).toContain('id="operation-cut"');
     expect(svg).toMatch(/id="operation-(mountain|valley)-fold"/);
@@ -170,6 +171,40 @@ describe('createSvgDocument', () => {
     expect(svg).toContain('data-tab-id="unfold-tab-');
     expect(svg).toContain('>T1</text>');
     expect(svg).toContain('>S1</text>');
+  });
+
+  it('exports panel outlines, tab slots, and paired joint labels', () => {
+    const project = createProject('Panel layers');
+    const result = generatePanelConstruction({
+      modelId: project.model.id,
+      material: {
+        id: 'plywood-3mm',
+        category: 'sheet-wood',
+        thicknessMm: 3,
+        kerfMm: 0.18,
+      },
+      settings: {
+        innerWidthMm: 80,
+        innerDepthMm: 60,
+        innerHeightMm: 50,
+        jointKind: 'tab-slot',
+        fingerWidthMm: 10,
+        clearanceMm: 0.15,
+        includeLid: false,
+      },
+    });
+    project.fabricationMode = 'panel-construction';
+    project.generatedParts = result.parts;
+    project.panelConstructionResult = result;
+    project.sheetLayouts = arrangePartsInRows(result.parts, project.sheetLayouts[0]!);
+
+    const svg = createSheetSvgDocument(project, project.sheetLayouts[0]!.id);
+    expect(svg).toContain('&quot;projectFormatVersion&quot;:5');
+    expect(svg).toContain('&quot;mode&quot;:&quot;panel-construction&quot;');
+    expect(svg).toContain('data-panel-id="construction-panel-');
+    expect(svg).toContain('data-edge-id="construction-joint-');
+    expect(svg).toContain('data-contour-role="hole"');
+    expect(svg).toContain('>J1</text>');
   });
 
   it('exports kerf, perforation, registration, label-size, and style settings visibly', () => {

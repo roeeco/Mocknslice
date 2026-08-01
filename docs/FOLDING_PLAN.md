@@ -143,7 +143,7 @@ Only definitely unusable geometry blocks export. Simplification and complexity r
 - Project persistence, undo/redo, regeneration, cancellation, and stale-result handling cover all fit settings.
 - Playwright demonstrates STL import, template selection, clearance adjustment, generation, both previews, sheet arrangement, and SVG export.
 
-These criteria are covered by pure geometry invariants, deterministic template fixtures, project/SVG round trips, component tests, and the browser workflow. Project format version 2 introduced persistence for the complete generation result; current version 4 retains it alongside Phase 7 output settings and optional Phase 8 low-poly unfolding data. Versions 1–3 migrate through explicit import branches.
+These criteria are covered by pure geometry invariants, deterministic template fixtures, project/SVG round trips, component tests, and the browser workflow. Project format version 2 introduced persistence for the complete generation result; current version 5 retains it alongside Phase 7 output settings and optional Phase 8/9 advanced geometry. Versions 1–4 migrate through explicit import branches.
 
 ## Deferred work
 

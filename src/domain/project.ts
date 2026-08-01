@@ -5,6 +5,7 @@ import type { ModelData } from './model';
 import type { ValidationIssue } from './validation';
 import type { TemplateGenerationResult } from './folding';
 import type { MeshUnfoldResult } from './unfolding';
+import type { PanelConstructionResult } from './panelConstruction';
 
 export interface ProjectMetadata {
   id: string;
@@ -23,6 +24,7 @@ export interface ProjectData {
   generationIssues?: ValidationIssue[];
   foldingResult?: TemplateGenerationResult | undefined;
   unfoldingResult?: MeshUnfoldResult | undefined;
+  panelConstructionResult?: PanelConstructionResult | undefined;
   sheetLayouts: SheetLayout[];
   exportSettings: ExportSettings;
   acknowledgedWarningIds: string[];
@@ -52,5 +54,15 @@ export interface SliceFoldProjectFileV4 {
   project: ProjectData;
 }
 
+export interface SliceFoldProjectFileV5 {
+  format: 'slicefold-project';
+  version: 5;
+  project: ProjectData;
+}
+
 export type SliceFoldProjectFile =
-  SliceFoldProjectFileV1 | SliceFoldProjectFileV2 | SliceFoldProjectFileV3 | SliceFoldProjectFileV4;
+  | SliceFoldProjectFileV1
+  | SliceFoldProjectFileV2
+  | SliceFoldProjectFileV3
+  | SliceFoldProjectFileV4
+  | SliceFoldProjectFileV5;

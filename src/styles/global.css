@@ -400,6 +400,9 @@ h2 {
 .unfold-swatch {
   background: #3f7f70;
 }
+.construction-swatch {
+  background: #d15e35;
+}
 .legend-line {
   width: 12px;
   border-top: 1px solid #777;
@@ -792,6 +795,10 @@ h2 {
 .unfold-edge-row small {
   color: var(--muted);
   text-transform: capitalize;
+}
+
+.panel-lid-option {
+  margin-top: 0.8rem;
 }
 
 .profile-preview {

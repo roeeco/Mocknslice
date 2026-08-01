@@ -23,6 +23,7 @@ describe('ParameterPanel', () => {
     expect(useProjectStore.getState().project.materialProfileSnapshot.id).toBe('plywood-3mm');
     expect(useProjectStore.getState().project.modeParameters.waffleThicknessMm).toBe(3);
     expect(useProjectStore.getState().project.modeParameters.waffleClearanceMm).toBe(0.15);
+    expect(useProjectStore.getState().project.modeParameters.panelClearanceMm).toBe(0.15);
 
     useProjectStore.getState().undo();
     expect(useProjectStore.getState().project.materialProfileSnapshot.id).toBe('card-300gsm');

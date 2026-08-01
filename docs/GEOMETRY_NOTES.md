@@ -157,6 +157,29 @@ Automatic search is deterministic optimization, not a global optimum guarantee. 
 - The fold slider is rigid kinematic preview only. It does not simulate thickness, bend allowance, collision, glue order, material grain, or structural behaviour.
 - Disconnected closed shells produce multiple labelled islands. Paired labels guide assembly but do not establish a physical assembly sequence.
 
+## Parametric panel construction
+
+Phase 9's first advanced feature builds a rectangular enclosure from five or six separate nominal panels.
+
+1. Use explicit inside width, depth, and height plus the selected material thickness.
+2. Pair the base to four walls, pair adjacent vertical wall edges, and optionally pair a lid to all four top edges.
+3. Choose an odd segment count nearest the target finger width so reversing edge direction preserves alternating parity.
+4. For finger joints, protrude material-thickness fingers on alternating complementary segments of both paired outlines.
+5. For tab-slot joints, protrude alternate tabs from panel A and add clearance-expanded closed through-slot paths just inside panel B's paired edge.
+6. For butt joints, retain straight nominal outlines and report the need for adhesive or separate fasteners.
+7. Add stable `Jn` labels to both panels, exact outer/hole contour roles, panel/joint IDs, nominal assembled surfaces, structured issues, and an `sf9-` input hash.
+
+The target finger width chooses a stable segment count; it is not silently substituted as the final pitch. Slot clearance affects tab-slot holes. Finger-joint fit is controlled by exact outlines plus the existing kerf-output settings, so a physical scrap test remains required.
+
+## Phase 9 panel-construction limitations
+
+- The generator currently produces only rectangular open or closed enclosure kits.
+- The assembled preview displays nominal zero-thickness surfaces and does not model the stepped fingers, slot penetration, collision, or insertion order.
+- A jointed lid receives an assembly-order warning because all closing edges may not be simultaneously insertable in rigid material.
+- Finger and tab-slot joints on paper/card receive a material warning; the generator does not replace them automatically.
+- There are no angled panels, dividers, ribs, locking tabs, hinges, reinforcement folds, fastener holes, dog-bones, or CNC tool-radius compensation yet.
+- Kerf, grain, glue, press-fit tolerance, and real material variation require a physical fit test.
+
 ## Phase 7 limitations
 
 - Kerf compensation is not applied to open slot or folding-net cut paths; the interface reports every affected part.

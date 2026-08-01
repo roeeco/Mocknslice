@@ -4,6 +4,8 @@ import type { FoldTemplateInput } from '../geometry/folding/generateFoldTemplate
 import type { TemplateGenerationResult } from '../domain/folding';
 import type { MeshUnfoldResult } from '../domain/unfolding';
 import type { MeshUnfoldInput } from '../geometry/unfolding/generateMeshUnfold';
+import type { PanelConstructionResult } from '../domain/panelConstruction';
+import type { PanelConstructionInput } from '../geometry/panelConstruction/generatePanelConstruction';
 import type {
   StackedSliceInput,
   StackedSliceResult,
@@ -44,12 +46,19 @@ export interface GenerateMeshUnfoldRequest {
   payload: MeshUnfoldInput;
 }
 
+export interface GeneratePanelConstructionRequest {
+  id: string;
+  type: 'generate-panel-construction';
+  payload: PanelConstructionInput;
+}
+
 export type GeometryWorkerRequest =
   | NormalizeStlRequest
   | GenerateStackedSlicesRequest
   | GenerateWaffleSlicesRequest
   | GenerateFoldTemplateRequest
-  | GenerateMeshUnfoldRequest;
+  | GenerateMeshUnfoldRequest
+  | GeneratePanelConstructionRequest;
 
 export type GeometryWorkerResponse =
   | { id: string; type: 'normalize-stl'; ok: true; result: NormalizedMeshResult }
@@ -57,4 +66,10 @@ export type GeometryWorkerResponse =
   | { id: string; type: 'generate-waffle-slices'; ok: true; result: WaffleSliceResult }
   | { id: string; type: 'generate-fold-template'; ok: true; result: TemplateGenerationResult }
   | { id: string; type: 'generate-mesh-unfold'; ok: true; result: MeshUnfoldResult }
+  | {
+      id: string;
+      type: 'generate-panel-construction';
+      ok: true;
+      result: PanelConstructionResult;
+    }
   | { id: string; type: GeometryWorkerRequest['type']; ok: false; error: string };

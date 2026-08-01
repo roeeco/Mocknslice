@@ -112,6 +112,7 @@ function PartOnSheet({
             }
             vectorEffect="non-scaling-stroke"
             data-operation={path.operation}
+            data-contour-role={path.contourRole}
             data-slot={path.slot ? 'true' : undefined}
             data-panel-id={path.panelId}
             data-edge-id={path.edgeId}

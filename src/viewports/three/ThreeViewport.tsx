@@ -78,6 +78,10 @@ export function ThreeViewport() {
               <i className="legend-swatch unfold-swatch" /> Fold preview
             </span>
           </>
+        ) : fabricationMode === 'panel-construction' ? (
+          <span>
+            <i className="legend-swatch construction-swatch" /> Assembled panel kit
+          </span>
         ) : (
           <span>
             <i className="legend-swatch model-swatch" /> Model

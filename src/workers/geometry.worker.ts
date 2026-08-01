@@ -6,6 +6,7 @@ import { generateStackedSlices } from '../geometry/slicing/generateStackedSlices
 import { generateWaffleSlices } from '../geometry/slicing/generateWaffleSlices';
 import { generateFoldTemplate } from '../geometry/folding/generateFoldTemplate';
 import { generateMeshUnfold } from '../geometry/unfolding/generateMeshUnfold';
+import { generatePanelConstruction } from '../geometry/panelConstruction/generatePanelConstruction';
 import type { GeometryWorkerRequest, GeometryWorkerResponse } from './protocol';
 
 const context: DedicatedWorkerGlobalScope = self as DedicatedWorkerGlobalScope;
@@ -50,8 +51,17 @@ context.onmessage = (event: MessageEvent<GeometryWorkerRequest>) => {
         result,
       };
       context.postMessage(response);
-    } else {
+    } else if (request.type === 'generate-mesh-unfold') {
       const result = generateMeshUnfold(request.payload);
+      const response: GeometryWorkerResponse = {
+        id: request.id,
+        type: request.type,
+        ok: true,
+        result,
+      };
+      context.postMessage(response);
+    } else {
+      const result = generatePanelConstruction(request.payload);
       const response: GeometryWorkerResponse = {
         id: request.id,
         type: request.type,

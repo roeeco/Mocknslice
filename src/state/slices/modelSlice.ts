@@ -24,6 +24,7 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
             generationIssues: [],
             foldingResult: undefined,
             unfoldingResult: undefined,
+            panelConstructionResult: undefined,
             sheetLayouts: project.sheetLayouts.map((sheet) => ({ ...sheet, placements: [] })),
             model: {
               id,

@@ -8,6 +8,7 @@ import type { CameraPreset } from '../../state/types';
 import { FabricationParts } from './FabricationParts';
 import { FoldingAssembly } from './FoldingAssembly';
 import { MeshUnfoldAssembly } from './MeshUnfoldAssembly';
+import { PanelConstructionAssembly } from './PanelConstructionAssembly';
 
 const cameraDirections: Record<CameraPreset, [number, number, number]> = {
   isometric: [1, 0.82, 1],
@@ -22,6 +23,7 @@ function CameraRig() {
   const resetToken = useProjectStore((state) => state.cameraResetToken);
   const dimensions = useProjectStore((state) => state.project.model.dimensions);
   const unfoldingResult = useProjectStore((state) => state.project.unfoldingResult);
+  const panelResult = useProjectStore((state) => state.project.panelConstructionResult);
 
   useEffect(() => {
     const unfoldedPoints = unfoldingResult?.faces.flatMap((face) => face.points2D) ?? [];
@@ -39,6 +41,9 @@ function CameraRig() {
       dimensions.depthMm,
       unfoldedWidth,
       unfoldedHeight,
+      panelResult?.settings.innerWidthMm ?? 0,
+      panelResult?.settings.innerDepthMm ?? 0,
+      panelResult?.settings.innerHeightMm ?? 0,
       10,
     );
     const distance = largestDimension * 2.45;
@@ -50,7 +55,7 @@ function CameraRig() {
     camera.far = Math.max(1000, largestDimension * 20);
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
-  }, [camera, dimensions, preset, resetToken, unfoldingResult]);
+  }, [camera, dimensions, panelResult, preset, resetToken, unfoldingResult]);
 
   return null;
 }
@@ -73,6 +78,7 @@ export function ModelScene() {
   const hasParts = useProjectStore((state) => state.project.generatedParts.length > 0);
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
+  const fabricationMode = useProjectStore((state) => state.project.fabricationMode);
   const { widthMm, heightMm, depthMm } = model.dimensions;
   const selected = selectedEntityId === model.id;
   const largestDimension = Math.max(widthMm, heightMm, depthMm, 10);
@@ -89,32 +95,35 @@ export function ModelScene() {
         position={[-largestDimension, largestDimension * 0.5, -largestDimension]}
         intensity={0.8}
       />
-      <mesh
-        onClick={(event) => {
-          event.stopPropagation();
-          selectEntity(model.id);
-        }}
-        castShadow
-        receiveShadow
-      >
-        {model.mesh ? (
-          <ImportedGeometry mesh={model.mesh} />
-        ) : (
-          <boxGeometry args={[widthMm, heightMm, depthMm]} />
-        )}
-        <meshStandardMaterial
-          color={selected ? '#f97316' : '#315c52'}
-          roughness={0.72}
-          side={2}
-          transparent={hasParts}
-          opacity={hasParts ? 0.16 : 1}
-          depthWrite={!hasParts}
-        />
-        {!model.mesh ? <Edges color={selected ? '#7c2d12' : '#17322d'} /> : null}
-      </mesh>
+      {fabricationMode !== 'panel-construction' ? (
+        <mesh
+          onClick={(event) => {
+            event.stopPropagation();
+            selectEntity(model.id);
+          }}
+          castShadow
+          receiveShadow
+        >
+          {model.mesh ? (
+            <ImportedGeometry mesh={model.mesh} />
+          ) : (
+            <boxGeometry args={[widthMm, heightMm, depthMm]} />
+          )}
+          <meshStandardMaterial
+            color={selected ? '#f97316' : '#315c52'}
+            roughness={0.72}
+            side={2}
+            transparent={hasParts}
+            opacity={hasParts ? 0.16 : 1}
+            depthWrite={!hasParts}
+          />
+          {!model.mesh ? <Edges color={selected ? '#7c2d12' : '#17322d'} /> : null}
+        </mesh>
+      ) : null}
       <FabricationParts />
       <FoldingAssembly />
       <MeshUnfoldAssembly />
+      <PanelConstructionAssembly />
       <Grid
         args={[largestDimension * 6, largestDimension * 6]}
         position={[0, -heightMm / 2, 0]}

@@ -20,7 +20,7 @@ export function ParameterPanel() {
     <section className="panel-section" aria-labelledby="parameters-heading">
       <div className="panel-heading-row">
         <p className="eyebrow">Setup</p>
-        <span className="phase-badge">Phase 8</span>
+        <span className="phase-badge">Phase 9</span>
       </div>
       <h2 id="parameters-heading">{copy.parametersPanel}</h2>
 
@@ -48,7 +48,8 @@ export function ParameterPanel() {
           ))}
         </select>
         <p className="field-help">
-          Slicing, fitted templates, and bounded low-poly mesh unfolding are available.
+          Slicing, fitted templates, mesh unfolding, and parametric panel construction are
+          available.
         </p>
       </div>
 

@@ -4,6 +4,7 @@ import { validationIssuesForProject } from '../../validation/projectValidation';
 import {
   generateFoldTemplateInWorker,
   generateMeshUnfoldInWorker,
+  generatePanelConstructionInWorker,
   generateStackedSlicesInWorker,
   generateWaffleSlicesInWorker,
   type GeometryTask,
@@ -11,6 +12,11 @@ import {
 import type { SliceAxis } from '../../domain/fabrication';
 import type { TemplateFitSettings, TemplateKind } from '../../domain/folding';
 import type { MeshUnfoldSettings, MeshUnfoldStrategy } from '../../domain/unfolding';
+import type {
+  PanelConstructionMaterial,
+  PanelConstructionSettings,
+  PanelJointKind,
+} from '../../domain/panelConstruction';
 import type { ProjectData } from '../../domain/project';
 import type {
   StackedSliceSettings,
@@ -173,6 +179,45 @@ function unfoldSettingsMatch(first: MeshUnfoldSettings, second: MeshUnfoldSettin
   return JSON.stringify(first) === JSON.stringify(second);
 }
 
+function panelSettingsForProject(project: ProjectData): PanelConstructionSettings {
+  const rawJoint = project.modeParameters.panelJointKind;
+  const jointKind: PanelJointKind =
+    rawJoint === 'butt' || rawJoint === 'tab-slot' ? rawJoint : 'finger';
+  return {
+    innerWidthMm: positiveNumber(project.modeParameters.panelInnerWidthMm, 80),
+    innerDepthMm: positiveNumber(project.modeParameters.panelInnerDepthMm, 60),
+    innerHeightMm: positiveNumber(project.modeParameters.panelInnerHeightMm, 50),
+    jointKind,
+    fingerWidthMm: positiveNumber(project.modeParameters.panelFingerWidthMm, 10),
+    clearanceMm: nonNegativeNumber(
+      project.modeParameters.panelClearanceMm,
+      project.materialProfileSnapshot.clearanceMm,
+    ),
+    includeLid: Boolean(project.modeParameters.panelIncludeLid),
+  };
+}
+
+function panelMaterialForProject(project: ProjectData): PanelConstructionMaterial {
+  const material = project.materialProfileSnapshot;
+  return {
+    id: material.id,
+    category: material.category,
+    thicknessMm: material.thicknessMm,
+    kerfMm: material.kerfMm,
+  };
+}
+
+function panelInputMatches(
+  project: ProjectData,
+  settings: PanelConstructionSettings,
+  material: PanelConstructionMaterial,
+): boolean {
+  return (
+    JSON.stringify(panelSettingsForProject(project)) === JSON.stringify(settings) &&
+    JSON.stringify(panelMaterialForProject(project)) === JSON.stringify(material)
+  );
+}
+
 export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, get) => ({
   sliceGenerationStatus: 'idle',
   sliceGenerationError: undefined,
@@ -236,6 +281,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               generationIssues: result.issues,
               foldingResult: undefined,
               unfoldingResult: undefined,
+              panelConstructionResult: undefined,
               sheetLayouts: template
                 ? arrangePartsInRows(result.parts, template)
                 : currentProject.sheetLayouts,
@@ -313,6 +359,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               generationIssues: result.issues,
               foldingResult: undefined,
               unfoldingResult: undefined,
+              panelConstructionResult: undefined,
               sheetLayouts: template
                 ? arrangePartsInRows(result.parts, template)
                 : currentProject.sheetLayouts,
@@ -385,6 +432,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               generationIssues: result.issues,
               foldingResult: result,
               unfoldingResult: undefined,
+              panelConstructionResult: undefined,
               sheetLayouts: template
                 ? arrangePartsInRows(result.parts, template)
                 : currentProject.sheetLayouts,
@@ -456,6 +504,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               generationIssues: result.issues,
               foldingResult: undefined,
               unfoldingResult: result,
+              panelConstructionResult: undefined,
               sheetLayouts: template
                 ? arrangePartsInRows(result.parts, template)
                 : currentProject.sheetLayouts,
@@ -483,6 +532,72 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
         set({
           sliceGenerationStatus: 'error',
           sliceGenerationError: error instanceof Error ? error.message : 'Mesh unfolding failed.',
+        });
+      })
+      .finally(() => {
+        if (activeTask === task) activeTask = undefined;
+      });
+  },
+  generatePanelConstruction: () => {
+    const { project } = get();
+    activeTask?.cancel();
+    const settings = panelSettingsForProject(project);
+    const material = panelMaterialForProject(project);
+    const task = generatePanelConstructionInWorker({
+      modelId: project.model.id,
+      material,
+      settings,
+    });
+    activeTask = task;
+    set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
+    void task.promise
+      .then((result) => {
+        set((state) => {
+          if (
+            state.project.model.id !== project.model.id ||
+            state.project.fabricationMode !== 'panel-construction' ||
+            !panelInputMatches(state.project, settings, material)
+          ) {
+            return {
+              sliceGenerationStatus: 'stale',
+              sliceGenerationError: 'The material or panel settings changed. Generate again.',
+            };
+          }
+          const changed = recordProjectChange(state, (currentProject) => {
+            const template = currentProject.sheetLayouts[0];
+            return touchProject({
+              ...currentProject,
+              generatedParts: result.parts,
+              generationIssues: result.issues,
+              foldingResult: undefined,
+              unfoldingResult: undefined,
+              panelConstructionResult: result,
+              sheetLayouts: template
+                ? arrangePartsInRows(result.parts, template)
+                : currentProject.sheetLayouts,
+            });
+          });
+          const nextProject = changed.project ?? state.project;
+          return {
+            ...changed,
+            sliceGenerationStatus: result.parts.length > 0 ? 'ready' : 'error',
+            sliceGenerationError:
+              result.parts.length > 0
+                ? undefined
+                : (result.issues.find((issue) => issue.severity === 'error')?.message ??
+                  'Panel generation failed.'),
+            validationIssues: validationIssuesForProject(nextProject),
+            selectedEntityId: result.panels[0]?.id ?? result.parts[0]?.id,
+            activeSheetId: nextProject.sheetLayouts[0]?.id,
+            activeWorkflowStep: result.parts.length > 0 ? 'arrange' : state.activeWorkflowStep,
+          };
+        });
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+        set({
+          sliceGenerationStatus: 'error',
+          sliceGenerationError: error instanceof Error ? error.message : 'Panel generation failed.',
         });
       })
       .finally(() => {

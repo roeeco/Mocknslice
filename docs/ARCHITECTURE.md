@@ -14,7 +14,9 @@ Phase 6 shape fitting implements deterministic axis projection, convex hull, con
 
 Phase 8 topology and unfolding remain pure geometry. The engine builds indexed triangle adjacency, rejects unsupported topology, derives a deterministic acyclic hinge forest, flattens rigid triangles, scores face overlaps, adds paired seams and tabs, and returns a stable hash. The fold-preview helper derives animated vertices without mutating the stored result.
 
-STL parsing/normalization, stacked-slice generation, two-family waffle generation, folding-template generation, and low-poly mesh unfolding run as cancellable Web Worker requests. The worker returns plain serializable geometry and validation data; it does not return Three.js objects.
+Phase 9 panel construction is another pure generator. It converts inside dimensions, a material snapshot, joint family, target pitch, clearance, and lid choice into serializable panel outlines, slot holes, paired joints, labels, nominal assembled surfaces, issues, and an input hash. It adds no polygon or solid dependency.
+
+STL parsing/normalization, stacked-slice generation, two-family waffle generation, folding-template generation, low-poly mesh unfolding, and panel construction run as cancellable Web Worker requests. The worker returns plain serializable geometry and validation data; it does not return Three.js objects.
 
 ### Application state
 
@@ -28,11 +30,11 @@ STL parsing/normalization, stacked-slice generation, two-family waffle generatio
 
 `src/persistence/` defines a repository interface and IndexedDB implementation. `src/exporters/` owns versioned project serialization, validation, and migration entry points. The browser stores named project data and the last autosave pointer in separate object stores.
 
-Phase 7 derives prepared parts at export/preview time from generated parts plus serializable output settings. Kerf offsets and fold-line conversion never replace generated source geometry. The 2D viewport, SVG exporter, and PDF exporter call the same pure preparation function. PDF objects and content streams are emitted directly as deterministic vector data; no canvas capture or raster content is used. Project version 4 adds the optional Phase 8 unfolding result while versions 1–3 migrate through the same validation boundary.
+Phase 7 derives prepared parts at export/preview time from generated parts plus serializable output settings. Kerf offsets and fold-line conversion never replace generated source geometry. The 2D viewport, SVG exporter, and PDF exporter call the same pure preparation function. PDF objects and content streams are emitted directly as deterministic vector data; no canvas capture or raster content is used. Project version 5 adds the optional Phase 9 construction result while versions 1–4 migrate through the same validation boundary.
 
 ## Data flow
 
-User input updates a focused Zustand action. Meaningful project actions record a previous project snapshot, update the serializable project, and schedule repository autosave. Parameter, material, mode, or model changes preserve generated geometry but mark it stale. Stacked, waffle, template, and mesh-unfold generation create a deterministic initial layout from the first sheet's settings. Presentation selectors reconstruct transformed geometry from persisted placements, assembled panels, or unfolded triangle hinges. Project JSON export serializes the same project data; import validates and replaces it through history. Fabrication SVG exports the active sheet and PDF exports all used sheets using those same numeric transforms and prepared paths.
+User input updates a focused Zustand action. Meaningful project actions record a previous project snapshot, update the serializable project, and schedule repository autosave. Parameter, material, mode, or model changes preserve generated geometry but mark it stale. Stacked, waffle, template, mesh-unfold, and panel construction generation create a deterministic initial layout from the first sheet's settings. Presentation selectors reconstruct transformed geometry from persisted placements, assembled panels, or unfolded triangle hinges. Project JSON export serializes the same project data; import validates and replaces it through history. Fabrication SVG exports the active sheet and PDF exports all used sheets using those same numeric transforms and prepared paths.
 
 ## Dependency rules
 

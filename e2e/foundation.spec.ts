@@ -264,11 +264,48 @@ test('imports a low-poly STL, unfolds it, edits seams, previews folding, and exp
   for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
   const svg = Buffer.concat(chunks).toString('utf8');
   expect(svg).toContain('&quot;mode&quot;:&quot;mesh-unfold&quot;');
-  expect(svg).toContain('&quot;projectFormatVersion&quot;:4');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:5');
   expect(svg).toContain('data-panel-id="unfold-face-');
   expect(svg).toContain('data-edge-id="unfold-edge-');
   expect(svg).toContain('data-tab-id="unfold-tab-');
   expect(svg).toContain('>T1</text>');
+});
+
+test('builds a tab-slot panel enclosure, previews it, and exports labelled joint geometry', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.getByLabel('Material profile').selectOption('plywood-3mm');
+  await page.getByLabel('Fabrication mode').selectOption('panel-construction');
+
+  await expect(page.getByRole('heading', { name: 'Panel construction' })).toBeVisible();
+  await expect(page.getByLabel('Inside width (mm)')).toHaveValue('80');
+  await page.getByLabel('Edge joint').selectOption('tab-slot');
+  await page.getByLabel('Slot clearance (mm)').fill('0.2');
+  await page.getByRole('button', { name: 'Generate panels' }).click();
+
+  await expect(page.getByText('5 panels · 8 joints', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('panel-construction-summary')).toContainText('slots');
+  await expect(page.getByText('Assembled panel kit', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: '2D parts' }).click();
+  await expect(page.getByRole('button', { name: 'Base panel on sheet' })).toBeVisible();
+  await expect(page.locator('path[data-contour-role="hole"]')).not.toHaveCount(0);
+  await expect(page.locator('path[data-edge-id^="construction-joint-"]')).not.toHaveCount(0);
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export sheet SVG' }).click();
+  const download = await downloadPromise;
+  const stream = await download.createReadStream();
+  const chunks: Uint8Array[] = [];
+  for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
+  const svg = Buffer.concat(chunks).toString('utf8');
+  expect(svg).toContain('&quot;mode&quot;:&quot;panel-construction&quot;');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:5');
+  expect(svg).toContain('data-panel-id="construction-panel-');
+  expect(svg).toContain('data-edge-id="construction-joint-');
+  expect(svg).toContain('data-contour-role="hole"');
+  expect(svg).toContain('>J1</text>');
 });
 
 test('prepares kerf, perforations, labels, registration marks, styles, and PDF output', async ({
@@ -308,7 +345,7 @@ test('prepares kerf, perforations, labels, registration marks, styles, and PDF o
   const svgChunks: Uint8Array[] = [];
   for await (const chunk of svgStream as AsyncIterable<Uint8Array>) svgChunks.push(chunk);
   const svg = Buffer.concat(svgChunks).toString('utf8');
-  expect(svg).toContain('&quot;projectFormatVersion&quot;:4');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:5');
   expect(svg).toContain('&quot;kerfMm&quot;:0.1');
   expect(svg).toContain('id="operation-perforate"');
   expect(svg).toContain('data-registration-mark="true"');
