@@ -8,17 +8,17 @@
 
 ### Geometry engine
 
-Future code under `src/geometry/` will expose pure functions for normalization, intersection, contour reconstruction, offsets, slices, slots, folding, and layout. Functions must run in unit tests without a browser. Expensive orchestration will use typed messages under `src/workers/` while calling the same pure functions.
+`src/geometry/` exposes pure functions for mesh normalization, topology validation, and model transforms. Future modules add intersection, contour reconstruction, offsets, slices, slots, folding, and layout. Functions run in unit tests without a browser. Expensive orchestration uses typed messages under `src/workers/` while calling the same pure functions.
 
-No production geometry engine is implemented in Phase 1.
+STL parsing and normalization run in a cancellable Web Worker. The worker returns plain serializable mesh, bounds, import settings, and health data; it does not return Three.js objects.
 
 ### Application state
 
-`src/state/` composes separate Zustand slices for project lifecycle, model inspection, fabrication settings, viewport state, selection, material library, history, export settings, and validation. Persistent state contains plain data only. Project-changing actions record undo history and mark autosave pending; camera and viewport changes do not enter history.
+`src/state/` composes separate Zustand slices for project lifecycle, model import and inspection, fabrication settings, viewport state, selection, material library, history, export settings, and validation. Persistent state contains plain data only. Imported mesh positions and indices are plain arrays. Project-changing actions record undo history and mark autosave pending; camera and viewport changes do not enter history.
 
 ### Presentation
 
-`src/app/`, `src/components/`, and `src/viewports/` implement the shell and views. Three.js objects are created inside the 3D presentation boundary from serializable model dimensions. Selection is synchronized through domain IDs.
+`src/app/`, `src/components/`, and `src/viewports/` implement the shell and views. Three.js buffer geometry is recreated and disposed inside the 3D presentation boundary from serializable mesh data. Selection is synchronized through domain IDs. A viewport error boundary prevents a rendering failure from removing project and inspection controls.
 
 ### Persistence and file exchange
 

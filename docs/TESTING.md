@@ -9,9 +9,9 @@
 - `npm run test:e2e` — Playwright Chromium smoke tests against the Vite development server.
 - `npm run build` — TypeScript project build and production Vite bundle.
 
-## Phase 1 coverage
+## Coverage through Phase 2
 
-Tests verify default material profiles and snapshot isolation, versioned project JSON round-trips and rejection paths, IndexedDB save/list/restore/delete behaviour, parameter panel state changes and undo, and browser smoke flows for the shell, project editing, and 2D sheet view.
+Tests verify default material profiles and snapshot isolation, versioned project JSON round-trips and rejection paths, IndexedDB save/list/restore/delete behaviour, parameter panel state changes and undo, ASCII and binary STL parsing, cube normalization, unit conversion, degenerate-triangle reporting, open/non-manifold/disconnected topology, scaling, orientation, model inspection controls, and browser smoke flows through a real worker-backed STL upload.
 
 Future geometry tests must use deterministic generated fixtures and assert contour closure, dimensions, hole classification, offset direction, slot width, and operation-layered export output.
 
