@@ -1,7 +1,8 @@
-import type { FabricationPart } from '../domain/fabrication';
+import type { FabricationPart, SheetPlacement } from '../domain/fabrication';
 import type { Point2D } from '../domain/geometry';
 import type { OperationType } from '../domain/operations';
 import type { ProjectData } from '../domain/project';
+import { transformPoint, transformedBoundsForPart } from '../geometry/layout/partPlacement';
 
 const operations: OperationType[] = [
   'cut',
@@ -140,6 +141,86 @@ export function createSvgDownload(project: ProjectData): void {
     .replace(/(^-|-$)/g, '');
   anchor.href = url;
   anchor.download = `${safeName || 'slicefold-parts'}.svg`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+function placedPathData(points: Point2D[], placement: SheetPlacement, closed: boolean): string {
+  if (points.length === 0) return '';
+  const commands = points.map((point, index) => {
+    const transformed = transformPoint(point, placement);
+    return `${index === 0 ? 'M' : 'L'} ${decimal(transformed.x)} ${decimal(transformed.y)}`;
+  });
+  return `${commands.join(' ')}${closed ? ' Z' : ''}`;
+}
+
+export function createSheetSvgDocument(project: ProjectData, sheetId: string): string {
+  const sheet = project.sheetLayouts.find((candidate) => candidate.id === sheetId);
+  if (!sheet) throw new Error(`Sheet ${sheetId} does not exist.`);
+  const partsById = new Map(project.generatedParts.map((part) => [part.id, part]));
+  const placements = sheet.placements.flatMap((placement) => {
+    const part = partsById.get(placement.partId);
+    return part ? [{ part, placement }] : [];
+  });
+  const styleByOperation = new Map(
+    project.exportSettings.operationStyles.map((style) => [style.operation, style]),
+  );
+  const sheetIndex = project.sheetLayouts.findIndex((candidate) => candidate.id === sheetId);
+  const lines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${decimal(sheet.widthMm)}mm" height="${decimal(sheet.heightMm)}mm" viewBox="0 0 ${decimal(sheet.widthMm)} ${decimal(sheet.heightMm)}">`,
+    `  <metadata>${escapeXml(JSON.stringify({ application: 'SliceFold', projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', sheetId: sheet.id, sheetNumber: sheetIndex + 1 }))}</metadata>`,
+  ];
+  if (project.exportSettings.includeSheetBoundary) {
+    lines.push(
+      `  <rect id="sheet-boundary" x="0.05" y="0.05" width="${decimal(Math.max(0, sheet.widthMm - 0.1))}" height="${decimal(Math.max(0, sheet.heightMm - 0.1))}" fill="none" stroke="#777777" stroke-width="0.1"/>`,
+    );
+  }
+  for (const operation of operations) {
+    const style = styleByOperation.get(operation);
+    lines.push(
+      `  <g id="operation-${operation}" data-operation="${operation}" fill="none" stroke="${escapeXml(style?.stroke ?? '#000000')}" stroke-width="${decimal(style?.strokeWidthMm ?? 0.1)}">`,
+    );
+    for (const { part, placement } of placements) {
+      for (const path of part.paths.filter((candidate) => candidate.operation === operation)) {
+        lines.push(
+          `    <path id="${escapeXml(path.id)}" data-part-id="${escapeXml(part.id)}" data-contour-role="${path.contourRole ?? 'path'}" d="${placedPathData(path.points, placement, path.closed)}"/>`,
+        );
+      }
+    }
+    lines.push('  </g>');
+  }
+  if (project.exportSettings.includeLabels) {
+    lines.push(
+      '  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="3">',
+    );
+    for (const { part, placement } of placements) {
+      if (!part.label) continue;
+      const bounds = transformedBoundsForPart(part, placement);
+      if (!bounds) continue;
+      lines.push(
+        `    <text id="label-${escapeXml(part.id)}" x="${decimal(bounds.minX + 2)}" y="${decimal(bounds.minY + 4)}">${escapeXml(part.label)}</text>`,
+      );
+    }
+    lines.push('  </g>');
+  }
+  lines.push('</svg>', '');
+  return lines.join('\n');
+}
+
+export function createSheetSvgDownload(project: ProjectData, sheetId: string): void {
+  const sheetIndex = project.sheetLayouts.findIndex((sheet) => sheet.id === sheetId);
+  if (sheetIndex < 0) return;
+  const blob = new Blob([createSheetSvgDocument(project, sheetId)], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  const safeName = project.metadata.name
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+  anchor.href = url;
+  anchor.download = `${safeName || 'slicefold'}-sheet-${sheetIndex + 1}.svg`;
   anchor.click();
   URL.revokeObjectURL(url);
 }

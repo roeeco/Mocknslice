@@ -78,31 +78,58 @@ test('imports, inspects, scales, and rotates an STL model', async ({ page }) => 
   await expect(page.getByLabel('Depth (Z)')).toHaveValue('40');
 });
 
-test('generates cube slices, previews parts, and exports fabrication SVG', async ({ page }) => {
+test('generates, arranges, rotates, and exports a selected fabrication sheet', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.getByLabel('Slice axis')).toHaveValue('z');
   await expect(page.getByLabel('Slice spacing')).toHaveValue('10');
   await page.getByRole('button', { name: 'Generate slices' }).click();
   await expect(page.getByText('4 parts', { exact: true })).toBeVisible();
+  await expect(page.getByText('4 of 4 parts placed · 1 sheet', { exact: true })).toBeVisible();
 
   await page.getByRole('button', { name: '2D parts' }).click();
-  const firstPart = page.getByRole('button', { name: /Slice Z1 cut preview/ });
-  const secondPart = page.getByRole('button', { name: /Slice Z2 cut preview/ });
+  const firstPart = page.getByRole('button', { name: 'Slice Z1 on sheet' });
+  const secondPart = page.getByRole('button', { name: 'Slice Z2 on sheet' });
   await expect(firstPart).toBeVisible();
   await secondPart.click();
   await expect(secondPart).toHaveAttribute('aria-pressed', 'true');
+  const xBeforeDrag = await page.getByLabel('Position X').inputValue();
+  const secondPartBounds = await secondPart.boundingBox();
+  if (!secondPartBounds) throw new Error('The second sheet part has no rendered bounds.');
+  await page.mouse.move(
+    secondPartBounds.x + secondPartBounds.width / 2,
+    secondPartBounds.y + secondPartBounds.height / 2,
+  );
+  await page.mouse.down();
+  await page.mouse.move(
+    secondPartBounds.x + secondPartBounds.width / 2 + 12,
+    secondPartBounds.y + secondPartBounds.height / 2 + 8,
+    { steps: 3 },
+  );
+  await page.mouse.up();
+  await expect.poll(() => page.getByLabel('Position X').inputValue()).not.toBe(xBeforeDrag);
+  await page.getByRole('button', { name: 'Rotate 90°' }).click();
+  await expect(page.getByLabel('Rotation')).toHaveValue('90');
+
+  await page.getByLabel('Sheet width').fill('60');
+  await page.getByLabel('Sheet height').fill('60');
+  await page.getByRole('button', { name: 'Arrange all parts' }).click();
+  await expect(page.getByText('4 of 4 parts placed · 4 sheets', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Sheet 2' }).click();
+  await expect(page.getByRole('button', { name: 'Slice Z2 on sheet' })).toBeVisible();
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Export SVG' }).click();
+  await page.getByRole('button', { name: 'Export sheet SVG' }).click();
   const download = await downloadPromise;
-  expect(download.suggestedFilename()).toMatch(/\.svg$/);
+  expect(download.suggestedFilename()).toMatch(/sheet-2\.svg$/);
   const stream = await download.createReadStream();
   const chunks: Uint8Array[] = [];
   for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
   const svg = Buffer.concat(chunks).toString('utf8');
-  expect(svg).toContain('width="185mm"');
+  expect(svg).toContain('width="60mm"');
   expect(svg).toContain('id="operation-cut"');
+  expect(svg).toContain('data-part-id="slice-z-2-1"');
+  expect(svg).not.toContain('data-part-id="slice-z-1-1"');
   expect(svg).toContain('data-contour-role="outer"');
   expect(svg).not.toContain('<image');
 });

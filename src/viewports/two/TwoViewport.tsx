@@ -1,123 +1,254 @@
-import type { FabricationPart } from '../../domain/fabrication';
+import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
+import type { FabricationPart, SheetPlacement } from '../../domain/fabrication';
 import type { Point2D } from '../../domain/geometry';
+import { transformPoint, transformedBoundsForPart } from '../../geometry/layout/partPlacement';
 import { copy } from '../../locales/en';
 import { useProjectStore } from '../../state/useProjectStore';
 
-function boundsForPart(part: FabricationPart) {
-  const points = part.paths.flatMap((path) => path.points);
-  return points.reduce(
-    (bounds, point) => ({
-      minX: Math.min(bounds.minX, point.x),
-      minY: Math.min(bounds.minY, point.y),
-      maxX: Math.max(bounds.maxX, point.x),
-      maxY: Math.max(bounds.maxY, point.y),
-    }),
-    { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity },
-  );
+interface DragState {
+  partId: string;
+  pointerId: number;
+  start: Point2D;
+  originX: number;
+  originY: number;
+  x: number;
+  y: number;
 }
 
-function pathData(points: Point2D[], closed: boolean): string {
-  return `${points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ')}${closed ? ' Z' : ''}`;
+function decimal(value: number): string {
+  return String(Math.round(value * 1_000_000) / 1_000_000);
 }
 
-function PartPreview({
+function pathData(points: Point2D[], placement: SheetPlacement, closed: boolean): string {
+  if (points.length === 0) return '';
+  return `${points
+    .map((point, index) => {
+      const transformed = transformPoint(point, placement);
+      return `${index === 0 ? 'M' : 'L'} ${decimal(transformed.x)} ${decimal(transformed.y)}`;
+    })
+    .join(' ')}${closed ? ' Z' : ''}`;
+}
+
+function screenPoint(svg: SVGSVGElement, clientX: number, clientY: number): Point2D | undefined {
+  const matrix = svg.getScreenCTM();
+  if (!matrix) return undefined;
+  const point = svg.createSVGPoint();
+  point.x = clientX;
+  point.y = clientY;
+  const transformed = point.matrixTransform(matrix.inverse());
+  return { x: transformed.x, y: transformed.y };
+}
+
+function PartOnSheet({
   part,
+  placement,
   selected,
+  invalid,
+  strokeByOperation,
+  onPointerDown,
   onSelect,
 }: {
   part: FabricationPart;
+  placement: SheetPlacement;
   selected: boolean;
+  invalid: boolean;
+  strokeByOperation: Map<string, string>;
+  onPointerDown: (event: PointerEvent<SVGGElement>) => void;
   onSelect: () => void;
 }) {
-  const bounds = boundsForPart(part);
-  const padding = Math.max(bounds.maxX - bounds.minX, bounds.maxY - bounds.minY) * 0.08 + 1;
-  const viewBox = `${bounds.minX - padding} ${bounds.minY - padding} ${bounds.maxX - bounds.minX + padding * 2} ${bounds.maxY - bounds.minY + padding * 2}`;
+  const bounds = transformedBoundsForPart(part, placement);
+  const handleKeyDown = (event: KeyboardEvent<SVGGElement>) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    onSelect();
+  };
+
   return (
-    <button
-      type="button"
-      className={`part-preview-card${selected ? ' is-selected' : ''}`}
-      onClick={onSelect}
+    <g
+      className={`sheet-part${selected ? ' is-selected' : ''}${invalid ? ' is-invalid' : ''}`}
+      role="button"
+      tabIndex={0}
+      aria-label={`${part.name} on sheet`}
       aria-pressed={selected}
+      data-part-id={part.id}
+      onPointerDown={onPointerDown}
+      onKeyDown={handleKeyDown}
+      onClick={onSelect}
     >
-      <svg viewBox={viewBox} role="img" aria-label={`${part.name} cut preview`}>
-        <g fill="#f8f5ed" stroke="#d4472b" strokeWidth="0.35" vectorEffect="non-scaling-stroke">
-          {part.paths.map((path) => (
-            <path
-              key={path.id}
-              d={pathData(path.points, path.closed)}
-              fill={path.contourRole === 'hole' ? '#dedbd2' : undefined}
-              fillRule="evenodd"
-            />
-          ))}
-        </g>
-      </svg>
-      <span>
-        <strong>{part.label ?? part.name}</strong>
-        <small>
-          {part.slice ? `${part.slice.axis.toUpperCase()} ${part.slice.positionMm} mm` : part.name}
-        </small>
-      </span>
-    </button>
+      {part.paths.map((path) => (
+        <path
+          key={path.id}
+          d={pathData(path.points, placement, path.closed)}
+          fill={
+            path.contourRole === 'outer'
+              ? '#f8f5ed'
+              : path.contourRole === 'hole'
+                ? '#dedbd2'
+                : 'none'
+          }
+          fillRule="evenodd"
+          stroke={strokeByOperation.get(path.operation) ?? '#222222'}
+          strokeWidth={selected ? 0.65 : 0.35}
+          vectorEffect="non-scaling-stroke"
+        />
+      ))}
+      {part.label && bounds ? (
+        <text
+          x={bounds.minX + 2}
+          y={bounds.minY + 4}
+          fontSize="3"
+          fill="#1f2724"
+          pointerEvents="none"
+        >
+          {part.label}
+        </text>
+      ) : null}
+    </g>
   );
 }
 
 export function TwoViewport() {
-  const sheet = useProjectStore((state) => state.project.sheetLayouts[0]);
-  const parts = useProjectStore((state) => state.project.generatedParts);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [drag, setDrag] = useState<DragState>();
+  const project = useProjectStore((state) => state.project);
+  const activeSheetId = useProjectStore((state) => state.activeSheetId);
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
+  const validationIssues = useProjectStore((state) => state.validationIssues);
   const selectEntity = useProjectStore((state) => state.selectEntity);
-
+  const setActiveSheet = useProjectStore((state) => state.setActiveSheet);
+  const updatePartPlacement = useProjectStore((state) => state.updatePartPlacement);
+  const sheet =
+    project.sheetLayouts.find((candidate) => candidate.id === activeSheetId) ??
+    project.sheetLayouts[0];
   if (!sheet) return null;
-  if (parts.length > 0) {
-    return (
-      <section className="viewport-stage two-stage parts-stage" aria-label={copy.layoutPreview}>
-        <div className="parts-grid">
-          {parts.map((part) => (
-            <PartPreview
-              key={part.id}
-              part={part}
-              selected={selectedEntityId === part.id}
-              onSelect={() => selectEntity(part.id)}
-            />
-          ))}
-        </div>
-      </section>
-    );
-  }
+
+  const partsById = new Map(project.generatedParts.map((part) => [part.id, part]));
+  const invalidIds = new Set(
+    validationIssues
+      .filter((issue) =>
+        ['PART_OUTSIDE_SHEET', 'PART_CROSSES_MARGIN', 'PARTS_OVERLAP'].includes(issue.code),
+      )
+      .flatMap((issue) => issue.affectedEntityIds),
+  );
+  const strokeByOperation = new Map(
+    project.exportSettings.operationStyles.map((style) => [style.operation, style.stroke]),
+  );
+  const placements = sheet.placements.flatMap((placement) => {
+    const part = partsById.get(placement.partId);
+    if (!part) return [];
+    const preview =
+      drag?.partId === placement.partId ? { ...placement, x: drag.x, y: drag.y } : placement;
+    return [{ part, placement: preview }];
+  });
+
+  const beginDrag = (event: PointerEvent<SVGGElement>, placement: SheetPlacement) => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const start = screenPoint(svg, event.clientX, event.clientY);
+    if (!start) return;
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    selectEntity(placement.partId);
+    setDrag({
+      partId: placement.partId,
+      pointerId: event.pointerId,
+      start,
+      originX: placement.x,
+      originY: placement.y,
+      x: placement.x,
+      y: placement.y,
+    });
+  };
+  const continueDrag = (event: PointerEvent<SVGSVGElement>) => {
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    const point = screenPoint(event.currentTarget, event.clientX, event.clientY);
+    if (!point) return;
+    setDrag({
+      ...drag,
+      x: drag.originX + point.x - drag.start.x,
+      y: drag.originY + point.y - drag.start.y,
+    });
+  };
+  const finishDrag = (event: PointerEvent<SVGSVGElement>) => {
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    updatePartPlacement(sheet.id, drag.partId, { x: drag.x, y: drag.y });
+    setDrag(undefined);
+  };
 
   return (
-    <section className="viewport-stage two-stage" aria-label={copy.layoutPreview}>
+    <section
+      className="viewport-stage two-stage sheet-layout-stage"
+      aria-label={copy.layoutPreview}
+    >
+      <div className="viewport-toolbar sheet-tabs" aria-label="Sheets">
+        {project.sheetLayouts.map((candidate, index) => (
+          <button
+            type="button"
+            className={candidate.id === sheet.id ? 'is-selected' : undefined}
+            aria-pressed={candidate.id === sheet.id}
+            onClick={() => setActiveSheet(candidate.id)}
+            key={candidate.id}
+          >
+            Sheet {index + 1}
+          </button>
+        ))}
+      </div>
       <svg
-        className="sheet-preview"
+        ref={svgRef}
+        className="sheet-preview interactive-sheet"
         viewBox={`0 0 ${sheet.widthMm} ${sheet.heightMm}`}
-        role="img"
         aria-label={`${sheet.widthMm} by ${sheet.heightMm} millimetre sheet`}
+        onPointerMove={continueDrag}
+        onPointerUp={finishDrag}
+        onPointerCancel={() => setDrag(undefined)}
       >
         <rect
           x="0.5"
           y="0.5"
-          width={sheet.widthMm - 1}
-          height={sheet.heightMm - 1}
+          width={Math.max(0, sheet.widthMm - 1)}
+          height={Math.max(0, sheet.heightMm - 1)}
           fill="#fffdf8"
           stroke="#315c52"
+          vectorEffect="non-scaling-stroke"
         />
         <rect
           x={sheet.marginMm}
           y={sheet.marginMm}
-          width={sheet.widthMm - sheet.marginMm * 2}
-          height={sheet.heightMm - sheet.marginMm * 2}
+          width={Math.max(0, sheet.widthMm - sheet.marginMm * 2)}
+          height={Math.max(0, sheet.heightMm - sheet.marginMm * 2)}
           fill="none"
           stroke="#b4aea0"
           strokeDasharray="3 2"
+          vectorEffect="non-scaling-stroke"
+          pointerEvents="none"
         />
+        {placements.map(({ part, placement }) => (
+          <PartOnSheet
+            key={part.id}
+            part={part}
+            placement={placement}
+            selected={selectedEntityId === part.id}
+            invalid={invalidIds.has(part.id)}
+            strokeByOperation={strokeByOperation}
+            onPointerDown={(event) => beginDrag(event, placement)}
+            onSelect={() => selectEntity(part.id)}
+          />
+        ))}
       </svg>
-      <div className="empty-state">
-        <span className="empty-state-mark" aria-hidden="true">
-          ⌁
-        </span>
-        <h2>{copy.noPartsTitle}</h2>
-        <p>{copy.noPartsBody}</p>
-      </div>
+      {project.generatedParts.length === 0 ? (
+        <div className="empty-state">
+          <span className="empty-state-mark" aria-hidden="true">
+            ⌁
+          </span>
+          <h2>{copy.noPartsTitle}</h2>
+          <p>{copy.noPartsBody}</p>
+        </div>
+      ) : placements.length === 0 ? (
+        <div className="empty-state">
+          <h2>This sheet is empty</h2>
+          <p>Select an unplaced part or arrange all parts from the layout panel.</p>
+        </div>
+      ) : null}
     </section>
   );
 }

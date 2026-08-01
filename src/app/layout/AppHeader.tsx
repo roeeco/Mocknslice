@@ -1,6 +1,6 @@
 import { useRef, useState, type ChangeEvent } from 'react';
 import { createProjectDownload } from '../../exporters/exportProject';
-import { createSvgDownload } from '../../exporters/exportSvg';
+import { createSheetSvgDownload } from '../../exporters/exportSvg';
 import { parseProjectFile, ProjectImportError } from '../../exporters/importProject';
 import { copy } from '../../locales/en';
 import { useProjectStore } from '../../state/useProjectStore';
@@ -18,12 +18,15 @@ export function AppHeader() {
   const [importError, setImportError] = useState<string>();
   const project = useProjectStore((state) => state.project);
   const autosaveStatus = useProjectStore((state) => state.autosaveStatus);
+  const activeSheetId = useProjectStore((state) => state.activeSheetId);
   const createNewProject = useProjectStore((state) => state.createNewProject);
   const replaceProject = useProjectStore((state) => state.replaceProject);
   const undo = useProjectStore((state) => state.undo);
   const redo = useProjectStore((state) => state.redo);
   const canUndo = useProjectStore((state) => state.past.length > 0);
   const canRedo = useProjectStore((state) => state.future.length > 0);
+  const activeSheet =
+    project.sheetLayouts.find((sheet) => sheet.id === activeSheetId) ?? project.sheetLayouts[0];
 
   const handleImport = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -94,10 +97,12 @@ export function AppHeader() {
         </button>
         <button
           type="button"
-          onClick={() => createSvgDownload(project)}
-          disabled={project.generatedParts.length === 0}
+          onClick={() => activeSheet && createSheetSvgDownload(project, activeSheet.id)}
+          disabled={!activeSheet || activeSheet.placements.length === 0}
           title={
-            project.generatedParts.length === 0 ? 'Generate parts before exporting SVG.' : undefined
+            !activeSheet || activeSheet.placements.length === 0
+              ? 'Place parts on the active sheet before exporting SVG.'
+              : undefined
           }
         >
           {copy.exportSvg}

@@ -16,6 +16,9 @@ export const createHistorySlice: AppSliceCreator<HistorySlice> = (set) => ({
         autosaveStatus: 'pending',
         validationIssues: validationIssuesForProject(previous),
         sliceGenerationStatus: previous.generatedParts.length > 0 ? 'ready' : 'idle',
+        activeSheetId: previous.sheetLayouts.some((sheet) => sheet.id === state.activeSheetId)
+          ? state.activeSheetId
+          : previous.sheetLayouts[0]?.id,
       };
     }),
   redo: () =>
@@ -30,6 +33,9 @@ export const createHistorySlice: AppSliceCreator<HistorySlice> = (set) => ({
         autosaveStatus: 'pending',
         validationIssues: validationIssuesForProject(next),
         sliceGenerationStatus: next.generatedParts.length > 0 ? 'ready' : 'idle',
+        activeSheetId: next.sheetLayouts.some((sheet) => sheet.id === state.activeSheetId)
+          ? state.activeSheetId
+          : next.sheetLayouts[0]?.id,
       };
     }),
 });

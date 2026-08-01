@@ -11,14 +11,18 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
   hasHydrated: false,
   autosaveStatus: 'idle',
   createNewProject: (name) =>
-    set({
-      project: createProject(name),
-      past: [],
-      future: [],
-      autosaveStatus: 'pending',
-      validationIssues: foundationValidationIssues(),
-      sliceGenerationStatus: 'idle',
-      sliceGenerationError: undefined,
+    set(() => {
+      const project = createProject(name);
+      return {
+        project,
+        past: [],
+        future: [],
+        autosaveStatus: 'pending',
+        validationIssues: foundationValidationIssues(),
+        sliceGenerationStatus: 'idle',
+        sliceGenerationError: undefined,
+        activeSheetId: project.sheetLayouts[0]?.id,
+      };
     }),
   hydrateProject: (project) =>
     set((state) => {
@@ -32,6 +36,7 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
         validationIssues: validationIssuesForProject(prepared),
         sliceGenerationStatus: prepared.generatedParts.length > 0 ? 'ready' : 'idle',
         sliceGenerationError: undefined,
+        activeSheetId: prepared.sheetLayouts[0]?.id,
       };
     }),
   renameProject: (name) =>
@@ -53,6 +58,7 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
         activeWorkflowStep: prepared.model.source.kind === 'imported' ? 'inspect' : 'start',
         sliceGenerationStatus: prepared.generatedParts.length > 0 ? 'ready' : 'idle',
         sliceGenerationError: undefined,
+        activeSheetId: prepared.sheetLayouts[0]?.id,
       };
     }),
   setAutosaveStatus: (autosaveStatus) => set({ autosaveStatus }),

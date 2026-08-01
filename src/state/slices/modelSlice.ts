@@ -22,6 +22,7 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
             ...project,
             generatedParts: [],
             generationIssues: [],
+            sheetLayouts: project.sheetLayouts.map((sheet) => ({ ...sheet, placements: [] })),
             model: {
               id,
               name: modelName(fileName),
@@ -47,6 +48,7 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
           id,
         ),
         selectedEntityId: id,
+        activeSheetId: state.project.sheetLayouts[0]?.id,
         viewportMode: 'three',
         activeWorkflowStep: 'inspect',
         sliceGenerationStatus: 'idle',

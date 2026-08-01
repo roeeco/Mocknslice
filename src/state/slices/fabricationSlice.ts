@@ -9,6 +9,7 @@ import type { StackedSliceResult } from '../../geometry/slicing/types';
 import type { SliceAxis } from '../../domain/fabrication';
 import type { ProjectData } from '../../domain/project';
 import type { StackedSliceSettings } from '../../geometry/slicing/types';
+import { arrangePartsInRows } from '../../geometry/layout/arrangeParts';
 
 let activeTask: GeometryTask<StackedSliceResult> | undefined;
 
@@ -92,13 +93,17 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               sliceGenerationError: 'The source or slice settings changed. Generate again.',
             };
           }
-          const changed = recordProjectChange(state, (currentProject) =>
-            touchProject({
+          const changed = recordProjectChange(state, (currentProject) => {
+            const template = currentProject.sheetLayouts[0];
+            return touchProject({
               ...currentProject,
               generatedParts: result.parts,
               generationIssues: result.issues,
-            }),
-          );
+              sheetLayouts: template
+                ? arrangePartsInRows(result.parts, template)
+                : currentProject.sheetLayouts,
+            });
+          });
           const nextProject = changed.project ?? state.project;
           return {
             ...changed,
@@ -106,7 +111,8 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             sliceGenerationError: undefined,
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.parts[0]?.id,
-            activeWorkflowStep: 'inspect',
+            activeSheetId: nextProject.sheetLayouts[0]?.id,
+            activeWorkflowStep: 'arrange',
           };
         });
       })

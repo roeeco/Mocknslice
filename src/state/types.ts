@@ -1,6 +1,6 @@
 import type { StateCreator } from 'zustand';
 import type { ExportSettings } from '../domain/exports';
-import type { FabricationMode } from '../domain/fabrication';
+import type { FabricationMode, SheetLayout } from '../domain/fabrication';
 import type { MaterialProfile } from '../domain/material';
 import type { ModelAxis, StlUnit } from '../domain/model';
 import type { NormalizedMeshResult } from '../geometry/mesh/normalizeMesh';
@@ -46,6 +46,26 @@ export interface FabricationSlice {
   cancelSliceGeneration: () => void;
 }
 
+export interface LayoutSlice {
+  activeSheetId: string | undefined;
+  setActiveSheet: (sheetId: string) => void;
+  arrangeGeneratedParts: () => void;
+  updateSheetSettings: (
+    sheetId: string,
+    settings: Partial<Pick<SheetLayout, 'widthMm' | 'heightMm' | 'marginMm' | 'spacingMm'>>,
+  ) => void;
+  addSheet: () => void;
+  duplicateSheet: (sheetId: string) => void;
+  removeSheet: (sheetId: string) => void;
+  updatePartPlacement: (
+    sheetId: string,
+    partId: string,
+    placement: { x: number; y: number; rotationDeg?: number },
+  ) => void;
+  rotatePartPlacement: (sheetId: string, partId: string, deltaDeg?: number) => void;
+  movePartToSheet: (partId: string, sheetId: string) => void;
+}
+
 export interface ViewportSlice {
   viewportMode: ViewportMode;
   cameraPreset: CameraPreset;
@@ -86,6 +106,7 @@ export interface ValidationSlice {
 export type AppState = ProjectSlice &
   ModelSlice &
   FabricationSlice &
+  LayoutSlice &
   ViewportSlice &
   SelectionSlice &
   MaterialLibrarySlice &

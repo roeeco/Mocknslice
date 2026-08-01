@@ -40,6 +40,14 @@ Triangle intersections within the contour epsilon are welded through neighbourin
 
 Part thickness controls the extruded assembled preview and fabrication metadata. It does not change plane spacing. Thickness greater than spacing is allowed but reported because assembled parts overlap.
 
+## Basic sheet layout
+
+Phase 4 uses deterministic first-fit rows. Parts retain generation order and start unrotated at the safe margin. A row advances by the part's axis-aligned width plus configured spacing; overflow starts a new row, and vertical overflow starts another sheet with stable derived IDs. A part too large for the usable area remains placed and receives a structured boundary or margin warning so the problem stays visible.
+
+Persisted placement means: rotate each part point around `(0, 0)`, then translate by the placement's `x` and `y` values in millimetres. The 2D viewport, bounds checks, overlap checks, labels, project JSON, and sheet SVG all use this same pure transform. Manual dragging previews without mutating project state and records one undoable placement change on release.
+
+Validation uses transformed axis-aligned bounds for sheet boundaries, margins, and pairwise overlap. It also reports invalid sheet dimensions, missing placement references, unplaced parts, and parts placed more than once.
+
 ## Planned shape-aware template fitting
 
 Phase 6 will fit fixed folding-template topologies to an imported model without unfolding its faces. The selected axis determines an orthographic projection using the same axis mapping as slicing. The pure fitting pipeline will:
@@ -66,3 +74,11 @@ Concave silhouettes, projection holes, and arbitrary face unfolding are delibera
 - A plane exactly coplanar with model faces is reported and may require a spacing adjustment.
 - Self-intersecting source contours are not repaired.
 - The assembled preview is visual verification, not a collision or structural simulation.
+
+## Phase 4 limitations
+
+- Initial placement is row-based, not polygon nesting or material optimization.
+- Automatic arrangement does not rotate parts; users control rotation explicitly.
+- Overlap checks use transformed axis-aligned bounds and can conservatively flag irregular contours whose boxes overlap.
+- Configured spacing guides automatic placement but is not yet enforced as a separate manual-placement warning.
+- Sheets share the same fabrication parts; duplicating a sheet copies setup only, not placements.

@@ -9,11 +9,13 @@
 - `npm run test:e2e` — Playwright Chromium smoke tests against the Vite development server.
 - `npm run build` — TypeScript project build and production Vite bundle.
 
-## Coverage through Phase 3
+## Coverage through Phase 4
 
 Tests verify default material profiles and snapshot isolation, versioned project JSON round-trips and rejection paths, IndexedDB save/list/restore/delete behaviour, parameter panel state changes and undo, ASCII and binary STL parsing, cube normalization, unit conversion, degenerate-triangle reporting, open/non-manifold/disconnected topology, scaling, orientation, and model inspection controls.
 
-Phase 3 geometry tests slice a cube on all three axes, trace a faceted cylinder, classify a hollow-prism hole, and report open contours. SVG output is compared byte-for-byte with a checked-in golden file. Playwright exercises the real worker for STL import and cube slice generation, 2D selection, and an SVG download whose units, operation group, contour role, and vector-only content are asserted.
+Phase 3 geometry tests slice a cube on all three axes, trace a faceted cylinder, classify a hollow-prism hole, and report open contours.
+
+Phase 4 tests deterministic row and multi-sheet arrangement, rotate-then-translate placement semantics, boundary, overlap, and unplaced-part warnings, and byte-for-byte sheet SVG output with persisted rotation. Playwright exercises the real worker for cube slice generation, automatic placement, 2D selection, rotation, configurable sheet dimensions, multi-sheet overflow, active-sheet switching, and a sheet-specific vector SVG download.
 
 ## Planned Phase 6 folding coverage
 

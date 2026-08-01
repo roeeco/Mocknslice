@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="50mm" height="40mm" viewBox="0 0 50 40">
+  <metadata>{&quot;application&quot;:&quot;SliceFold&quot;,&quot;projectId&quot;:&quot;project-golden&quot;,&quot;mode&quot;:&quot;stacked-slices&quot;,&quot;units&quot;:&quot;mm&quot;,&quot;sheetId&quot;:&quot;sheet-golden&quot;,&quot;sheetNumber&quot;:1}</metadata>
+  <rect id="sheet-boundary" x="0.05" y="0.05" width="49.9" height="39.9" fill="none" stroke="#777777" stroke-width="0.1"/>
+  <g id="operation-cut" data-operation="cut" fill="none" stroke="#ff0000" stroke-width="0.1">
+    <path id="part-a-cut" data-part-id="part-a" data-contour-role="outer" d="M 20 10 L 20 20 L 10 20 L 10 10 Z"/>
+  </g>
+  <g id="operation-score" data-operation="score" fill="none" stroke="#0000ff" stroke-width="0.1">
+  </g>
+  <g id="operation-mountain-fold" data-operation="mountain-fold" fill="none" stroke="#8b5cf6" stroke-width="0.1">
+  </g>
+  <g id="operation-valley-fold" data-operation="valley-fold" fill="none" stroke="#14b8a6" stroke-width="0.1">
+  </g>
+  <g id="operation-perforate" data-operation="perforate" fill="none" stroke="#f59e0b" stroke-width="0.1">
+  </g>
+  <g id="operation-engrave" data-operation="engrave" fill="none" stroke="#000000" stroke-width="0.1">
+  </g>
+  <g id="operation-guide" data-operation="guide" fill="none" stroke="#6b7280" stroke-width="0.1">
+  </g>
+  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="3">
+    <text id="label-part-a" x="12" y="14">A</text>
+  </g>
+</svg>

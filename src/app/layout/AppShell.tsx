@@ -6,6 +6,7 @@ import { WarningPanel } from '../../components/panels/WarningPanel';
 import { ModelImportPanel } from '../../components/panels/ModelImportPanel';
 import { ModelInspectionPanel } from '../../components/panels/ModelInspectionPanel';
 import { StackedSlicePanel } from '../../components/panels/StackedSlicePanel';
+import { LayoutPanel } from '../../components/panels/LayoutPanel';
 import { AppHeader } from './AppHeader';
 
 export function AppShell({ children }: PropsWithChildren) {
@@ -30,6 +31,7 @@ export function AppShell({ children }: PropsWithChildren) {
       <aside className="right-sidebar">
         <ParameterPanel />
         <StackedSlicePanel />
+        <LayoutPanel />
         <ModelImportPanel />
         <ModelInspectionPanel />
         <WarningPanel />

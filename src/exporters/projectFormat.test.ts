@@ -8,10 +8,38 @@ import { createCubeSoup } from '../test-fixtures/generatedMeshes';
 describe('SliceFold project format', () => {
   it('round-trips a version 1 project without losing fabrication data', () => {
     const project = createProject('Round trip');
+    project.generatedParts = [
+      {
+        id: 'part-a',
+        name: 'Part A',
+        thicknessMm: 1,
+        paths: [
+          {
+            id: 'part-a-cut',
+            operation: 'cut',
+            closed: true,
+            points: [
+              { x: 0, y: 0 },
+              { x: 10, y: 0 },
+              { x: 10, y: 10 },
+            ],
+          },
+        ],
+      },
+    ];
+    project.sheetLayouts[0]!.placements = [
+      { partId: 'part-a', x: 17.5, y: 23.25, rotationDeg: 90 },
+    ];
     const restored = parseProjectFile(serializeProject(project));
 
     expect(restored).toEqual(project);
     expect(restored.materialProfileSnapshot.name).toBe('300 gsm card');
+    expect(restored.sheetLayouts[0]?.placements[0]).toEqual({
+      partId: 'part-a',
+      x: 17.5,
+      y: 23.25,
+      rotationDeg: 90,
+    });
   });
 
   it('rejects unrelated JSON with an understandable error', () => {

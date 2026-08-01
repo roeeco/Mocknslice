@@ -1,6 +1,7 @@
 import type { ProjectData } from '../domain/project';
 import type { ValidationIssue } from '../domain/validation';
 import { createMeshValidationIssues } from '../geometry/mesh/createMeshValidationIssues';
+import { validateSheetLayouts } from '../geometry/layout/validateSheetLayouts';
 
 export function foundationValidationIssues(): ValidationIssue[] {
   return [
@@ -21,7 +22,12 @@ export function validationIssuesForProject(project: ProjectData): ValidationIssu
     return [
       ...createMeshValidationIssues(model.healthReport, model.importSettings, model.id),
       ...(project.generationIssues ?? []),
+      ...validateSheetLayouts(project),
     ];
   }
-  return [...foundationValidationIssues(), ...(project.generationIssues ?? [])];
+  return [
+    ...foundationValidationIssues(),
+    ...(project.generationIssues ?? []),
+    ...validateSheetLayouts(project),
+  ];
 }
