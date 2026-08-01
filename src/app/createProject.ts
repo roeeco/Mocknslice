@@ -1,4 +1,5 @@
 import type { ProjectData } from '../domain/project';
+import { createCubeMesh } from '../geometry/mesh/createPrimitiveMesh';
 import { getDefaultMaterial } from '../materials/defaultMaterials';
 
 const CUBE_SIZE_MM = 40;
@@ -10,6 +11,7 @@ function createId(prefix: string): string {
 export function createProject(name = 'Untitled project'): ProjectData {
   const now = new Date().toISOString();
   const material = getDefaultMaterial('card-300gsm');
+  const primitive = createCubeMesh(CUBE_SIZE_MM);
 
   return {
     metadata: {
@@ -32,14 +34,20 @@ export function createProject(name = 'Untitled project'): ProjectData {
         rotationDeg: [0, 0, 0],
         scale: [1, 1, 1],
       },
+      mesh: primitive.mesh,
+      bounds: primitive.bounds,
+      healthReport: primitive.healthReport,
     },
     fabricationMode: 'stacked-slices',
     materialProfileSnapshot: material,
     modeParameters: {
       sliceAxis: 'z',
       spacingMm: 10,
+      sliceThicknessMm: material.thicknessMm,
+      contourEpsilonMm: 0.001,
     },
     generatedParts: [],
+    generationIssues: [],
     sheetLayouts: [
       {
         id: createId('sheet'),
@@ -65,5 +73,31 @@ export function createProject(name = 'Untitled project'): ProjectData {
       ],
     },
     acknowledgedWarningIds: [],
+  };
+}
+
+export function prepareProjectForUse(project: ProjectData): ProjectData {
+  const primitive =
+    project.model.source.kind === 'built-in' && (!project.model.mesh || !project.model.bounds)
+      ? createCubeMesh(project.model.dimensions.widthMm)
+      : undefined;
+  return {
+    ...project,
+    model: primitive
+      ? {
+          ...project.model,
+          mesh: primitive.mesh,
+          bounds: primitive.bounds,
+          healthReport: primitive.healthReport,
+        }
+      : project.model,
+    modeParameters: {
+      sliceAxis: 'z',
+      spacingMm: 10,
+      sliceThicknessMm: project.materialProfileSnapshot.thicknessMm,
+      contourEpsilonMm: 0.001,
+      ...project.modeParameters,
+    },
+    generationIssues: project.generationIssues ?? [],
   };
 }

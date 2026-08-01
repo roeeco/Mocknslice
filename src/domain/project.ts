@@ -2,6 +2,7 @@ import type { ExportSettings } from './exports';
 import type { FabricationMode, FabricationPart, SheetLayout } from './fabrication';
 import type { MaterialProfile } from './material';
 import type { ModelData } from './model';
+import type { ValidationIssue } from './validation';
 
 export interface ProjectMetadata {
   id: string;
@@ -17,6 +18,7 @@ export interface ProjectData {
   materialProfileSnapshot: MaterialProfile;
   modeParameters: Record<string, number | string | boolean>;
   generatedParts: FabricationPart[];
+  generationIssues?: ValidationIssue[];
   sheetLayouts: SheetLayout[];
   exportSettings: ExportSettings;
   acknowledgedWarningIds: string[];

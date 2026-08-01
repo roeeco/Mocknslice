@@ -1,6 +1,9 @@
 import type { Millimetres, Point2D } from './geometry';
 import type { OperationType } from './operations';
 
+export type SliceAxis = 'x' | 'y' | 'z';
+export type ContourRole = 'outer' | 'hole';
+
 export type FabricationMode =
   'stacked-slices' | 'waffle-slices' | 'fold-template' | 'mesh-unfold' | 'panel-construction';
 
@@ -9,6 +12,7 @@ export interface FabricationPath {
   operation: OperationType;
   closed: boolean;
   points: Point2D[];
+  contourRole?: ContourRole;
 }
 
 export interface FabricationPart {
@@ -18,6 +22,11 @@ export interface FabricationPart {
   paths: FabricationPath[];
   thicknessMm: Millimetres;
   sourceReference?: string;
+  slice?: {
+    axis: SliceAxis;
+    positionMm: Millimetres;
+    planeIndex: number;
+  };
 }
 
 export interface SheetPlacement {
