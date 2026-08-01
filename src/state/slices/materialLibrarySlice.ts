@@ -5,12 +5,27 @@ import { recordProjectChange, touchProject } from '../projectChange';
 export const createMaterialLibrarySlice: AppSliceCreator<MaterialLibrarySlice> = (set) => ({
   materials: DEFAULT_MATERIALS,
   selectMaterial: (id) =>
-    set((state) =>
-      recordProjectChange(state, (project) =>
-        touchProject({
+    set((state) => {
+      const material = getDefaultMaterial(id);
+      const changed = recordProjectChange(state, (project) => {
+        const previous = project.materialProfileSnapshot;
+        const parameters = { ...project.modeParameters };
+        if (parameters.sliceThicknessMm === previous.thicknessMm)
+          parameters.sliceThicknessMm = material.thicknessMm;
+        if (parameters.waffleThicknessMm === previous.thicknessMm)
+          parameters.waffleThicknessMm = material.thicknessMm;
+        if (parameters.waffleClearanceMm === previous.clearanceMm)
+          parameters.waffleClearanceMm = material.clearanceMm;
+        return touchProject({
           ...project,
-          materialProfileSnapshot: getDefaultMaterial(id),
-        }),
-      ),
-    ),
+          modeParameters: parameters,
+          materialProfileSnapshot: material,
+        });
+      });
+      return {
+        ...changed,
+        sliceGenerationStatus:
+          state.project.generatedParts.length > 0 ? 'stale' : state.sliceGenerationStatus,
+      };
+    }),
 });

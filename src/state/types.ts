@@ -43,6 +43,7 @@ export interface FabricationSlice {
   setFabricationMode: (mode: FabricationMode) => void;
   setModeParameter: (name: string, value: number | string | boolean) => void;
   generateSlices: () => void;
+  generateWaffleSlices: () => void;
   cancelSliceGeneration: () => void;
 }
 

@@ -13,6 +13,14 @@ export interface FabricationPath {
   closed: boolean;
   points: Point2D[];
   contourRole?: ContourRole;
+  slot?: {
+    pairedPartId: string;
+    intersectionAxis: SliceAxis;
+    centreMm: Millimetres;
+    widthMm: Millimetres;
+    depthMm: Millimetres;
+    direction: 'start' | 'end';
+  };
 }
 
 export interface FabricationPart {
@@ -26,6 +34,10 @@ export interface FabricationPart {
     axis: SliceAxis;
     positionMm: Millimetres;
     planeIndex: number;
+  };
+  waffle?: {
+    family: 'a' | 'b';
+    slotCount: number;
   };
 }
 

@@ -136,6 +136,7 @@ function isMaterial(value: unknown): boolean {
 
 function isFabricationPath(value: unknown): boolean {
   if (!isRecord(value)) return false;
+  const slot = value.slot;
   return (
     isString(value.id) &&
     isString(value.operation) &&
@@ -147,13 +148,24 @@ function isFabricationPath(value: unknown): boolean {
     ) &&
     (value.contourRole === undefined ||
       value.contourRole === 'outer' ||
-      value.contourRole === 'hole')
+      value.contourRole === 'hole') &&
+    (slot === undefined ||
+      (isRecord(slot) &&
+        isString(slot.pairedPartId) &&
+        (slot.intersectionAxis === 'x' ||
+          slot.intersectionAxis === 'y' ||
+          slot.intersectionAxis === 'z') &&
+        isFiniteNumber(slot.centreMm) &&
+        isFiniteNumber(slot.widthMm) &&
+        isFiniteNumber(slot.depthMm) &&
+        (slot.direction === 'start' || slot.direction === 'end')))
   );
 }
 
 function isFabricationPart(value: unknown): boolean {
   if (!isRecord(value)) return false;
   const slice = value.slice;
+  const waffle = value.waffle;
   return (
     isString(value.id) &&
     isString(value.name) &&
@@ -164,7 +176,12 @@ function isFabricationPart(value: unknown): boolean {
       (isRecord(slice) &&
         (slice.axis === 'x' || slice.axis === 'y' || slice.axis === 'z') &&
         isFiniteNumber(slice.positionMm) &&
-        Number.isInteger(slice.planeIndex)))
+        Number.isInteger(slice.planeIndex))) &&
+    (waffle === undefined ||
+      (isRecord(waffle) &&
+        (waffle.family === 'a' || waffle.family === 'b') &&
+        Number.isInteger(waffle.slotCount) &&
+        (waffle.slotCount as number) >= 0))
   );
 }
 

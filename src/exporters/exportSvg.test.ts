@@ -78,7 +78,27 @@ describe('createSvgDocument', () => {
               { x: -5, y: 5 },
             ],
           },
+          {
+            id: 'part-a-slot-part-b-1',
+            operation: 'cut',
+            closed: false,
+            points: [
+              { x: -1, y: -5 },
+              { x: -1, y: 0 },
+              { x: 1, y: 0 },
+              { x: 1, y: -5 },
+            ],
+            slot: {
+              pairedPartId: 'part-b',
+              intersectionAxis: 'y',
+              centreMm: 0,
+              widthMm: 2,
+              depthMm: 5,
+              direction: 'start',
+            },
+          },
         ],
+        waffle: { family: 'a', slotCount: 1 },
       },
     ];
     expect(createSheetSvgDocument(project, 'sheet-golden')).toBe(sheetGolden);

@@ -24,7 +24,27 @@ describe('SliceFold project format', () => {
               { x: 10, y: 10 },
             ],
           },
+          {
+            id: 'part-a-slot',
+            operation: 'cut',
+            closed: false,
+            points: [
+              { x: 4, y: 0 },
+              { x: 4, y: 5 },
+              { x: 6, y: 5 },
+              { x: 6, y: 0 },
+            ],
+            slot: {
+              pairedPartId: 'part-b',
+              intersectionAxis: 'y',
+              centreMm: 5,
+              widthMm: 2,
+              depthMm: 5,
+              direction: 'start',
+            },
+          },
         ],
+        waffle: { family: 'a', slotCount: 1 },
       },
     ];
     project.sheetLayouts[0]!.placements = [
@@ -40,6 +60,8 @@ describe('SliceFold project format', () => {
       y: 23.25,
       rotationDeg: 90,
     });
+    expect(restored.generatedParts[0]?.waffle).toEqual({ family: 'a', slotCount: 1 });
+    expect(restored.generatedParts[0]?.paths[1]?.slot?.widthMm).toBe(2);
   });
 
   it('rejects unrelated JSON with an understandable error', () => {

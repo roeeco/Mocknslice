@@ -36,3 +36,32 @@ export interface StackedSliceResult {
   issues: ValidationIssue[];
   planePositionsMm: number[];
 }
+
+export type WaffleSlotPattern = 'by-family' | 'alternating';
+
+export interface WaffleSliceSettings {
+  primaryAxis: SliceAxis;
+  secondaryAxis: SliceAxis;
+  primarySpacingMm: number;
+  secondarySpacingMm: number;
+  thicknessMm: number;
+  clearanceMm: number;
+  contourEpsilonMm: number;
+  slotPattern: WaffleSlotPattern;
+  reverseSlots: boolean;
+}
+
+export interface WaffleSliceInput {
+  mesh: SerializableTriangleMesh;
+  bounds: Bounds3D;
+  settings: WaffleSliceSettings;
+  modelId: string;
+}
+
+export interface WaffleSliceResult {
+  parts: FabricationPart[];
+  issues: ValidationIssue[];
+  primaryPlanePositionsMm: number[];
+  secondaryPlanePositionsMm: number[];
+  slotCount: number;
+}

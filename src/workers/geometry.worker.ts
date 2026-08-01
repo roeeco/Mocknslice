@@ -3,6 +3,7 @@
 import { normalizeMesh } from '../geometry/mesh/normalizeMesh';
 import { parseStl } from '../importers/importSTL';
 import { generateStackedSlices } from '../geometry/slicing/generateStackedSlices';
+import { generateWaffleSlices } from '../geometry/slicing/generateWaffleSlices';
 import type { GeometryWorkerRequest, GeometryWorkerResponse } from './protocol';
 
 const context: DedicatedWorkerGlobalScope = self as DedicatedWorkerGlobalScope;
@@ -20,8 +21,17 @@ context.onmessage = (event: MessageEvent<GeometryWorkerRequest>) => {
         result,
       };
       context.postMessage(response);
-    } else {
+    } else if (request.type === 'generate-stacked-slices') {
       const result = generateStackedSlices(request.payload);
+      const response: GeometryWorkerResponse = {
+        id: request.id,
+        type: request.type,
+        ok: true,
+        result,
+      };
+      context.postMessage(response);
+    } else {
+      const result = generateWaffleSlices(request.payload);
       const response: GeometryWorkerResponse = {
         id: request.id,
         type: request.type,

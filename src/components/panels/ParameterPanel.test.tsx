@@ -21,9 +21,12 @@ describe('ParameterPanel', () => {
     await user.selectOptions(screen.getByLabelText('Material profile'), 'plywood-3mm');
     expect(screen.getByText('3 mm plywood')).toBeInTheDocument();
     expect(useProjectStore.getState().project.materialProfileSnapshot.id).toBe('plywood-3mm');
+    expect(useProjectStore.getState().project.modeParameters.waffleThicknessMm).toBe(3);
+    expect(useProjectStore.getState().project.modeParameters.waffleClearanceMm).toBe(0.15);
 
     useProjectStore.getState().undo();
     expect(useProjectStore.getState().project.materialProfileSnapshot.id).toBe('card-300gsm');
+    expect(useProjectStore.getState().project.modeParameters.waffleThicknessMm).toBe(0.35);
   });
 
   it('renames the project with an accessible text field', async () => {
