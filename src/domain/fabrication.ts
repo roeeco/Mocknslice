@@ -55,6 +55,10 @@ export interface FabricationPart {
     templateKind: string;
     panelIds: string[];
   };
+  unfolding?: {
+    islandIndex: number;
+    faceIds: string[];
+  };
 }
 
 export interface SheetPlacement {

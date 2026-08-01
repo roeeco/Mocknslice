@@ -221,6 +221,56 @@ test('imports an STL, fits a folding template, previews its net, and exports ope
   expect(svg).toContain('data-entity-id=');
 });
 
+test('imports a low-poly STL, unfolds it, edits seams, previews folding, and exports the net', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.getByLabel('Choose STL model').setInputFiles({
+    name: 'tetrahedron.stl',
+    mimeType: 'model/stl',
+    buffer: Buffer.from(tetrahedronStl),
+  });
+  await expect(page.getByText('STL imported and inspected.')).toBeVisible();
+
+  await page.getByLabel('Fabrication mode').selectOption('mesh-unfold');
+  await expect(page.getByRole('heading', { name: 'Mesh unfolding' })).toBeVisible();
+  await expect(page.getByText(/does not repair meshes/)).toBeVisible();
+  await page.getByRole('button', { name: 'Generate net' }).click();
+
+  await expect(page.getByText('4 faces · 1 island', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('mesh-unfold-summary')).toContainText('3 folds');
+  await expect(page.getByText('Ghosted source', { exact: true })).toBeVisible();
+  await expect(page.getByText('Fold preview', { exact: true })).toBeVisible();
+  await page.getByLabel('Folding preview').fill('65');
+  await expect(page.getByText('65%')).toBeVisible();
+
+  await page.getByLabel('Seam strategy').selectOption('manual');
+  const firstSeam = page.getByRole('checkbox').first();
+  await firstSeam.check();
+  await expect(page.getByRole('button', { name: 'Regenerate net' })).toBeVisible();
+  await page.getByRole('button', { name: 'Regenerate net' }).click();
+  await expect(page.getByText(/4 faces ·/)).toBeVisible();
+
+  await page.getByRole('button', { name: '2D parts' }).click();
+  await expect(page.getByRole('button', { name: /Unfolded net 1 on sheet/ })).toBeVisible();
+  await expect(page.locator('path[data-panel-id^="unfold-face-"]')).not.toHaveCount(0);
+  await expect(page.locator('path[data-tab-id^="unfold-tab-"]')).not.toHaveCount(0);
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export sheet SVG' }).click();
+  const download = await downloadPromise;
+  const stream = await download.createReadStream();
+  const chunks: Uint8Array[] = [];
+  for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
+  const svg = Buffer.concat(chunks).toString('utf8');
+  expect(svg).toContain('&quot;mode&quot;:&quot;mesh-unfold&quot;');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:4');
+  expect(svg).toContain('data-panel-id="unfold-face-');
+  expect(svg).toContain('data-edge-id="unfold-edge-');
+  expect(svg).toContain('data-tab-id="unfold-tab-');
+  expect(svg).toContain('>T1</text>');
+});
+
 test('prepares kerf, perforations, labels, registration marks, styles, and PDF output', async ({
   page,
 }) => {
@@ -258,7 +308,7 @@ test('prepares kerf, perforations, labels, registration marks, styles, and PDF o
   const svgChunks: Uint8Array[] = [];
   for await (const chunk of svgStream as AsyncIterable<Uint8Array>) svgChunks.push(chunk);
   const svg = Buffer.concat(svgChunks).toString('utf8');
-  expect(svg).toContain('&quot;projectFormatVersion&quot;:3');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:4');
   expect(svg).toContain('&quot;kerfMm&quot;:0.1');
   expect(svg).toContain('id="operation-perforate"');
   expect(svg).toContain('data-registration-mark="true"');

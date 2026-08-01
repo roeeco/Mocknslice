@@ -5,6 +5,7 @@ import sheetGolden from '../test-fixtures/golden/sheet-layout.svg?raw';
 import { createSheetSvgDocument, createSvgDocument } from './exportSvg';
 import { generateFoldTemplate } from '../geometry/folding/generateFoldTemplate';
 import { arrangePartsInRows } from '../geometry/layout/arrangeParts';
+import { generateMeshUnfold } from '../geometry/unfolding/generateMeshUnfold';
 
 describe('createSvgDocument', () => {
   it('matches the deterministic millimetre SVG golden file', () => {
@@ -136,6 +137,39 @@ describe('createSvgDocument', () => {
     expect(svg).toContain('data-edge-id=');
     expect(svg).toContain('data-tab-id=');
     expect(svg).toContain('data-entity-id=');
+  });
+
+  it('preserves unfolded cuts, fold directions, tabs, triangle labels, and version metadata', () => {
+    const project = createProject('Unfold layers');
+    if (!project.model.mesh) throw new Error('Fixture model is incomplete.');
+    const result = generateMeshUnfold({
+      mesh: project.model.mesh,
+      modelId: project.model.id,
+      materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
+      settings: {
+        strategy: 'automatic',
+        rootFaceIndex: 0,
+        manualSeamKeys: [],
+        tabDepthMm: 6,
+        maximumFaceCount: 200,
+        searchAttempts: 18,
+      },
+    });
+    project.fabricationMode = 'mesh-unfold';
+    project.generatedParts = result.parts;
+    project.unfoldingResult = result;
+    project.sheetLayouts = arrangePartsInRows(result.parts, project.sheetLayouts[0]!);
+
+    const svg = createSheetSvgDocument(project, project.sheetLayouts[0]!.id);
+    expect(svg).toContain('&quot;projectFormatVersion&quot;:4');
+    expect(svg).toContain('&quot;mode&quot;:&quot;mesh-unfold&quot;');
+    expect(svg).toContain('id="operation-cut"');
+    expect(svg).toMatch(/id="operation-(mountain|valley)-fold"/);
+    expect(svg).toContain('data-panel-id="unfold-face-');
+    expect(svg).toContain('data-edge-id="unfold-edge-');
+    expect(svg).toContain('data-tab-id="unfold-tab-');
+    expect(svg).toContain('>T1</text>');
+    expect(svg).toContain('>S1</text>');
   });
 
   it('exports kerf, perforation, registration, label-size, and style settings visibly', () => {

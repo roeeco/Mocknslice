@@ -45,6 +45,7 @@ export interface FabricationSlice {
   generateSlices: () => void;
   generateWaffleSlices: () => void;
   generateFoldTemplate: () => void;
+  generateMeshUnfold: () => void;
   cancelSliceGeneration: () => void;
 }
 
@@ -73,10 +74,12 @@ export interface ViewportSlice {
   cameraPreset: CameraPreset;
   cameraResetToken: number;
   activeWorkflowStep: WorkflowStep;
+  foldPreviewProgress: number;
   setViewportMode: (mode: ViewportMode) => void;
   setCameraPreset: (preset: CameraPreset) => void;
   fitCamera: () => void;
   setActiveWorkflowStep: (step: WorkflowStep) => void;
+  setFoldPreviewProgress: (progress: number) => void;
 }
 
 export interface SelectionSlice {

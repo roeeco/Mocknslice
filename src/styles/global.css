@@ -397,6 +397,9 @@ h2 {
 .fold-swatch {
   background: #d85c2f;
 }
+.unfold-swatch {
+  background: #3f7f70;
+}
 .legend-line {
   width: 12px;
   border-top: 1px solid #777;
@@ -719,6 +722,76 @@ h2 {
 
 .fold-intro {
   margin-top: 0.55rem;
+}
+
+.unfold-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+  margin-top: 0.8rem;
+}
+
+.unfold-summary span {
+  padding: 0.4rem 0.25rem;
+  border: 1px solid var(--line);
+  background: #fffdf8;
+  text-align: center;
+  font-size: 0.66rem;
+}
+
+.unfold-summary .summary-warning {
+  border-color: #d97706;
+  color: #92400e;
+}
+
+.unfold-progress {
+  margin-top: 0.8rem;
+}
+
+.unfold-progress input[type='range'] {
+  width: 100%;
+}
+
+.unfold-seams {
+  margin-top: 0.8rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.65rem;
+}
+
+.unfold-seams summary {
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.unfold-edge-list {
+  max-height: 220px;
+  margin-top: 0.55rem;
+  overflow: auto;
+  border: 1px solid var(--line);
+  background: #fffdf8;
+}
+
+.unfold-edge-row {
+  padding: 0.42rem 0.5rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.66rem;
+}
+
+.unfold-edge-row:last-child {
+  border-bottom: 0;
+}
+
+.unfold-edge-row span {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.unfold-edge-row small {
+  color: var(--muted);
+  text-transform: capitalize;
 }
 
 .profile-preview {

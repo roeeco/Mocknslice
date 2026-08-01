@@ -3,12 +3,14 @@ import { recordProjectChange, touchProject } from '../projectChange';
 import { validationIssuesForProject } from '../../validation/projectValidation';
 import {
   generateFoldTemplateInWorker,
+  generateMeshUnfoldInWorker,
   generateStackedSlicesInWorker,
   generateWaffleSlicesInWorker,
   type GeometryTask,
 } from '../../workers/geometryWorkerClient';
 import type { SliceAxis } from '../../domain/fabrication';
 import type { TemplateFitSettings, TemplateKind } from '../../domain/folding';
+import type { MeshUnfoldSettings, MeshUnfoldStrategy } from '../../domain/unfolding';
 import type { ProjectData } from '../../domain/project';
 import type {
   StackedSliceSettings,
@@ -132,6 +134,45 @@ function foldSettingsMatch(a: TemplateFitSettings, b: TemplateFitSettings): bool
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
+function positiveInteger(value: unknown, fallback: number): number {
+  return typeof value === 'number' && Number.isFinite(value) && value >= 1
+    ? Math.round(value)
+    : fallback;
+}
+
+function unfoldSettingsForProject(project: ProjectData): MeshUnfoldSettings {
+  const rawStrategy = project.modeParameters.meshUnfoldStrategy;
+  const strategy: MeshUnfoldStrategy = rawStrategy === 'manual' ? 'manual' : 'automatic';
+  const rawSeams = project.modeParameters.meshUnfoldSeams;
+  const manualSeamKeys =
+    typeof rawSeams === 'string'
+      ? [
+          ...new Set(
+            rawSeams
+              .split(',')
+              .map((key) => key.trim())
+              .filter(Boolean),
+          ),
+        ].sort()
+      : [];
+  const rawRoot = project.modeParameters.meshUnfoldRootFace;
+  return {
+    strategy,
+    rootFaceIndex:
+      typeof rawRoot === 'number' && Number.isFinite(rawRoot)
+        ? Math.max(0, Math.round(rawRoot))
+        : 0,
+    manualSeamKeys,
+    tabDepthMm: positiveNumber(project.modeParameters.meshUnfoldTabDepthMm, 6),
+    maximumFaceCount: positiveInteger(project.modeParameters.meshUnfoldMaximumFaces, 200),
+    searchAttempts: positiveInteger(project.modeParameters.meshUnfoldSearchAttempts, 18),
+  };
+}
+
+function unfoldSettingsMatch(first: MeshUnfoldSettings, second: MeshUnfoldSettings): boolean {
+  return JSON.stringify(first) === JSON.stringify(second);
+}
+
 export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, get) => ({
   sliceGenerationStatus: 'idle',
   sliceGenerationError: undefined,
@@ -194,6 +235,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               generatedParts: result.parts,
               generationIssues: result.issues,
               foldingResult: undefined,
+              unfoldingResult: undefined,
               sheetLayouts: template
                 ? arrangePartsInRows(result.parts, template)
                 : currentProject.sheetLayouts,
@@ -270,6 +312,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               generatedParts: result.parts,
               generationIssues: result.issues,
               foldingResult: undefined,
+              unfoldingResult: undefined,
               sheetLayouts: template
                 ? arrangePartsInRows(result.parts, template)
                 : currentProject.sheetLayouts,
@@ -341,6 +384,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               generatedParts: result.parts,
               generationIssues: result.issues,
               foldingResult: result,
+              unfoldingResult: undefined,
               sheetLayouts: template
                 ? arrangePartsInRows(result.parts, template)
                 : currentProject.sheetLayouts,
@@ -364,6 +408,81 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
           sliceGenerationStatus: 'error',
           sliceGenerationError:
             error instanceof Error ? error.message : 'Template generation failed.',
+        });
+      })
+      .finally(() => {
+        if (activeTask === task) activeTask = undefined;
+      });
+  },
+  generateMeshUnfold: () => {
+    const { project } = get();
+    if (!project.model.mesh) {
+      set({
+        sliceGenerationStatus: 'error',
+        sliceGenerationError: 'This model has no mesh to unfold.',
+      });
+      return;
+    }
+    activeTask?.cancel();
+    const settings = unfoldSettingsForProject(project);
+    const sourceMesh = project.model.mesh;
+    const task = generateMeshUnfoldInWorker({
+      mesh: sourceMesh,
+      modelId: project.model.id,
+      materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
+      settings,
+    });
+    activeTask = task;
+    set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
+    void task.promise
+      .then((result) => {
+        set((state) => {
+          if (
+            state.project.model.id !== project.model.id ||
+            state.project.model.mesh !== sourceMesh ||
+            state.project.fabricationMode !== 'mesh-unfold' ||
+            !unfoldSettingsMatch(unfoldSettingsForProject(state.project), settings)
+          ) {
+            return {
+              sliceGenerationStatus: 'stale',
+              sliceGenerationError: 'The source or unfolding settings changed. Generate again.',
+            };
+          }
+          const changed = recordProjectChange(state, (currentProject) => {
+            const template = currentProject.sheetLayouts[0];
+            return touchProject({
+              ...currentProject,
+              generatedParts: result.parts,
+              generationIssues: result.issues,
+              foldingResult: undefined,
+              unfoldingResult: result,
+              sheetLayouts: template
+                ? arrangePartsInRows(result.parts, template)
+                : currentProject.sheetLayouts,
+            });
+          });
+          const nextProject = changed.project ?? state.project;
+          return {
+            ...changed,
+            sliceGenerationStatus: result.parts.length > 0 ? 'ready' : 'error',
+            sliceGenerationError:
+              result.parts.length > 0
+                ? undefined
+                : (result.issues.find((issue) => issue.severity === 'error')?.message ??
+                  'Mesh unfolding failed.'),
+            validationIssues: validationIssuesForProject(nextProject),
+            selectedEntityId: result.faces[0]?.id ?? result.parts[0]?.id,
+            activeSheetId: nextProject.sheetLayouts[0]?.id,
+            activeWorkflowStep: result.parts.length > 0 ? 'arrange' : state.activeWorkflowStep,
+            foldPreviewProgress: 0,
+          };
+        });
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+        set({
+          sliceGenerationStatus: 'error',
+          sliceGenerationError: error instanceof Error ? error.message : 'Mesh unfolding failed.',
         });
       })
       .finally(() => {

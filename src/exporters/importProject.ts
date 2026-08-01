@@ -56,6 +56,10 @@ function isPoint2D(value: unknown): boolean {
   return isRecord(value) && isFiniteNumber(value.x) && isFiniteNumber(value.y);
 }
 
+function isVector3(value: unknown): boolean {
+  return Array.isArray(value) && value.length === 3 && value.every(isFiniteNumber);
+}
+
 function isModel(value: unknown): boolean {
   if (!isRecord(value) || !isString(value.id) || !isString(value.name)) return false;
   const source = value.source;
@@ -182,6 +186,7 @@ function isFabricationPart(value: unknown): boolean {
   const slice = value.slice;
   const waffle = value.waffle;
   const folding = value.folding;
+  const unfolding = value.unfolding;
   return (
     isString(value.id) &&
     isString(value.name) &&
@@ -210,7 +215,29 @@ function isFabricationPart(value: unknown): boolean {
         Number.isInteger(waffle.slotCount) &&
         (waffle.slotCount as number) >= 0)) &&
     (folding === undefined ||
-      (isRecord(folding) && isString(folding.templateKind) && isStringArray(folding.panelIds)))
+      (isRecord(folding) && isString(folding.templateKind) && isStringArray(folding.panelIds))) &&
+    (unfolding === undefined ||
+      (isRecord(unfolding) &&
+        Number.isInteger(unfolding.islandIndex) &&
+        isStringArray(unfolding.faceIds)))
+  );
+}
+
+function isFoldTab(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    isString(value.id) &&
+    isString(value.partId) &&
+    isString(value.edgeId) &&
+    isString(value.ownerPanelId) &&
+    value.style === 'glue' &&
+    isFiniteNumber(value.depthMm) &&
+    isFiniteNumber(value.shoulderAngleDeg) &&
+    typeof value.enabled === 'boolean' &&
+    isPoint2D(value.baseStart) &&
+    isPoint2D(value.baseEnd) &&
+    Array.isArray(value.outline) &&
+    value.outline.every(isPoint2D)
   );
 }
 
@@ -288,22 +315,7 @@ function isTemplateGenerationResult(value: unknown): boolean {
         isPoint2D(edge.end),
     ) &&
     Array.isArray(value.tabs) &&
-    value.tabs.every(
-      (tab) =>
-        isRecord(tab) &&
-        isString(tab.id) &&
-        isString(tab.partId) &&
-        isString(tab.edgeId) &&
-        isString(tab.ownerPanelId) &&
-        tab.style === 'glue' &&
-        isFiniteNumber(tab.depthMm) &&
-        isFiniteNumber(tab.shoulderAngleDeg) &&
-        typeof tab.enabled === 'boolean' &&
-        isPoint2D(tab.baseStart) &&
-        isPoint2D(tab.baseEnd) &&
-        Array.isArray(tab.outline) &&
-        tab.outline.every(isPoint2D),
-    ) &&
+    value.tabs.every(isFoldTab) &&
     Array.isArray(value.parts) &&
     value.parts.every(isFabricationPart) &&
     Array.isArray(value.issues) &&
@@ -321,6 +333,102 @@ function isTemplateGenerationResult(value: unknown): boolean {
           (point) => Array.isArray(point) && point.length === 3 && point.every(isFiniteNumber),
         ),
     ) &&
+    isString(value.algorithmVersion) &&
+    isString(value.inputHash)
+  );
+}
+
+function isMeshUnfoldSettings(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    (value.strategy === 'automatic' || value.strategy === 'manual') &&
+    Number.isInteger(value.rootFaceIndex) &&
+    isStringArray(value.manualSeamKeys) &&
+    isFiniteNumber(value.tabDepthMm) &&
+    Number.isInteger(value.maximumFaceCount) &&
+    Number.isInteger(value.searchAttempts)
+  );
+}
+
+function isMeshUnfoldResult(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    isMeshUnfoldSettings(value.settings) &&
+    Array.isArray(value.faces) &&
+    value.faces.every(
+      (face) =>
+        isRecord(face) &&
+        isString(face.id) &&
+        isString(face.partId) &&
+        Number.isInteger(face.islandIndex) &&
+        Number.isInteger(face.faceIndex) &&
+        Array.isArray(face.sourceVertexIndices) &&
+        face.sourceVertexIndices.length === 3 &&
+        face.sourceVertexIndices.every(Number.isInteger) &&
+        Array.isArray(face.points2D) &&
+        face.points2D.length === 3 &&
+        face.points2D.every(isPoint2D) &&
+        Array.isArray(face.flatVerticesMm) &&
+        face.flatVerticesMm.length === 3 &&
+        face.flatVerticesMm.every(isVector3) &&
+        Array.isArray(face.sourceVerticesMm) &&
+        face.sourceVerticesMm.length === 3 &&
+        face.sourceVerticesMm.every(isVector3),
+    ) &&
+    Array.isArray(value.edges) &&
+    value.edges.every(
+      (edge) =>
+        isRecord(edge) &&
+        isString(edge.id) &&
+        isString(edge.key) &&
+        Number.isInteger(edge.vertexA) &&
+        Number.isInteger(edge.vertexB) &&
+        Number.isInteger(edge.faceAIndex) &&
+        (edge.faceBIndex === undefined || Number.isInteger(edge.faceBIndex)) &&
+        (edge.disposition === 'boundary' ||
+          edge.disposition === 'hinge' ||
+          edge.disposition === 'seam' ||
+          edge.disposition === 'auto-seam') &&
+        (edge.foldDirection === undefined ||
+          edge.foldDirection === 'mountain' ||
+          edge.foldDirection === 'valley') &&
+        (edge.dihedralDeg === undefined || isFiniteNumber(edge.dihedralDeg)) &&
+        (edge.pairLabel === undefined || isString(edge.pairLabel)),
+    ) &&
+    Array.isArray(value.tabs) &&
+    value.tabs.every(isFoldTab) &&
+    Array.isArray(value.hinges) &&
+    value.hinges.every(
+      (hinge) =>
+        isRecord(hinge) &&
+        isString(hinge.id) &&
+        isString(hinge.parentFaceId) &&
+        isString(hinge.childFaceId) &&
+        Number.isInteger(hinge.vertexA) &&
+        Number.isInteger(hinge.vertexB) &&
+        isFiniteNumber(hinge.foldAngleDeg),
+    ) &&
+    Array.isArray(value.islands) &&
+    value.islands.every(
+      (island) =>
+        isRecord(island) &&
+        isString(island.id) &&
+        Number.isInteger(island.index) &&
+        isString(island.partId) &&
+        isStringArray(island.faceIds),
+    ) &&
+    Array.isArray(value.overlapPairs) &&
+    value.overlapPairs.every(
+      (overlap) =>
+        isRecord(overlap) &&
+        isString(overlap.faceAId) &&
+        isString(overlap.faceBId) &&
+        Number.isInteger(overlap.islandIndex),
+    ) &&
+    Array.isArray(value.parts) &&
+    value.parts.every(isFabricationPart) &&
+    Array.isArray(value.issues) &&
+    value.issues.every(isValidationIssue) &&
     isString(value.algorithmVersion) &&
     isString(value.inputHash)
   );
@@ -434,6 +542,7 @@ function isProjectData(value: unknown): value is ProjectData {
     (value.generationIssues === undefined ||
       (Array.isArray(value.generationIssues) && value.generationIssues.every(isValidationIssue))) &&
     (value.foldingResult === undefined || isTemplateGenerationResult(value.foldingResult)) &&
+    (value.unfoldingResult === undefined || isMeshUnfoldResult(value.unfoldingResult)) &&
     Array.isArray(value.sheetLayouts) &&
     value.sheetLayouts.every(isSheetLayout) &&
     isExportSettings(value.exportSettings) &&
@@ -446,7 +555,7 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
     throw new ProjectImportError('This file is not a SliceFold project.');
   }
 
-  if (value.version !== 1 && value.version !== 2 && value.version !== 3) {
+  if (value.version !== 1 && value.version !== 2 && value.version !== 3 && value.version !== 4) {
     throw new ProjectImportError(
       `Project version ${String(value.version)} is not supported by this build.`,
     );
@@ -456,7 +565,10 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
     throw new ProjectImportError('The project file is incomplete or damaged.');
   }
 
-  if (value.version === 3 && !isCurrentExportSettings(value.project.exportSettings)) {
+  if (
+    (value.version === 3 || value.version === 4) &&
+    !isCurrentExportSettings(value.project.exportSettings)
+  ) {
     throw new ProjectImportError('The project file is incomplete or damaged.');
   }
 
@@ -476,7 +588,7 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
 
   return {
     format: 'slicefold-project',
-    version: 3,
+    version: 4,
     project,
   };
 }

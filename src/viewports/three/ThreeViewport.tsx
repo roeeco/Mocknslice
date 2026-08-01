@@ -69,6 +69,15 @@ export function ThreeViewport() {
               <i className="legend-swatch fold-swatch" /> Assembled template
             </span>
           </>
+        ) : fabricationMode === 'mesh-unfold' ? (
+          <>
+            <span>
+              <i className="legend-swatch model-swatch" /> Ghosted source
+            </span>
+            <span>
+              <i className="legend-swatch unfold-swatch" /> Fold preview
+            </span>
+          </>
         ) : (
           <span>
             <i className="legend-swatch model-swatch" /> Model

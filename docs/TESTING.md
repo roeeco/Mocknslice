@@ -9,7 +9,7 @@
 - `npm run test:e2e` — Playwright Chromium smoke tests against the Vite development server.
 - `npm run build` — TypeScript project build and production Vite bundle.
 
-## Coverage through Phase 7
+## Coverage through Phase 8
 
 Tests verify default material profiles and snapshot isolation, versioned project JSON round-trips and rejection paths, IndexedDB save/list/restore/delete behaviour, parameter panel state changes and undo, ASCII and binary STL parsing, cube normalization, unit conversion, degenerate-triangle reporting, open/non-manifold/disconnected topology, scaling, orientation, and model inspection controls.
 
@@ -32,9 +32,18 @@ Phase 5 geometry tests cover X/Y, X/Z, and Y/Z cube families, deterministic comp
 - Pure geometry tests verify half-kerf direction for outer and hole contours, source immutability, degenerate rejection, open-path notices, score conversion, deterministic perforation dashes, invalid pattern errors, material estimates, cut length, and registration marks.
 - SVG tests verify prepared coordinates, editable operation styles, printable-label size, registration marks, preparation metadata, and stable operation groups.
 - PDF tests verify deterministic bytes, physical page sizes, multiple page objects, vector content streams, labels, document metadata, and an explicit no-placement error.
-- Project migration tests verify version 2 output settings acquire version 3 defaults while new exports declare version 3.
+- Project migration tests verify version 2 output settings acquire version 3 defaults while new exports declare version 4.
 - Component tests cover every output setting category and accessible operation colour/width labels.
 - Playwright generates a folding net, previews material kerf and perforations, edits cut styling, shows registration marks, and inspects both downloaded SVG and PDF files.
+
+## Phase 8 unfolding coverage
+
+- Topology fixtures verify stable cube adjacency plus open and non-manifold rejection.
+- Pure geometry tests cover deterministic cube and asymmetric tetrahedron nets, manual all-seam islands, explicit face limits, stable hashes, paired labels, tab counts, and preservation of every source triangle edge length.
+- Kinematic tests exercise flat, half-folded, and folded states, asserting rigid triangle dimensions and coincident hinge endpoints at every progress value.
+- Project-format tests round-trip the complete serializable result through version 4. SVG tests verify cut/fold groups, panel/edge/tab references, triangle and seam labels, and version metadata.
+- Component tests cover bounded settings, manual seam editing, stale status, result summaries, and preview progress.
+- Playwright imports a real tetrahedron through the worker, generates an automatic net, edits a manual seam, regenerates, moves between 3D and 2D, and inspects the downloaded layered SVG.
 
 ## Known Phase 1 baselines
 

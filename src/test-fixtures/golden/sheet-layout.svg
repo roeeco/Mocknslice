@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="50mm" height="40mm" viewBox="0 0 50 40">
-  <metadata>{&quot;application&quot;:&quot;SliceFold&quot;,&quot;projectFormatVersion&quot;:3,&quot;projectId&quot;:&quot;project-golden&quot;,&quot;mode&quot;:&quot;stacked-slices&quot;,&quot;units&quot;:&quot;mm&quot;,&quot;sheetId&quot;:&quot;sheet-golden&quot;,&quot;sheetNumber&quot;:1,&quot;kerfMm&quot;:0,&quot;foldLineOutput&quot;:&quot;preserve&quot;}</metadata>
+  <metadata>{&quot;application&quot;:&quot;SliceFold&quot;,&quot;projectFormatVersion&quot;:4,&quot;projectId&quot;:&quot;project-golden&quot;,&quot;mode&quot;:&quot;stacked-slices&quot;,&quot;units&quot;:&quot;mm&quot;,&quot;sheetId&quot;:&quot;sheet-golden&quot;,&quot;sheetNumber&quot;:1,&quot;kerfMm&quot;:0,&quot;foldLineOutput&quot;:&quot;preserve&quot;}</metadata>
   <rect id="sheet-boundary" x="0.05" y="0.05" width="49.9" height="39.9" fill="none" stroke="#777777" stroke-width="0.1"/>
   <g id="operation-cut" data-operation="cut" fill="none" stroke="#ff0000" stroke-width="0.1">
     <path id="part-a-cut" data-part-id="part-a" data-contour-role="outer" d="M 20 10 L 20 20 L 10 20 L 10 10 Z"/>

@@ -5,6 +5,7 @@ import { parseProjectFile, ProjectImportError } from './importProject';
 import { normalizeMesh } from '../geometry/mesh/normalizeMesh';
 import { createCubeSoup } from '../test-fixtures/generatedMeshes';
 import { generateFoldTemplate } from '../geometry/folding/generateFoldTemplate';
+import { generateMeshUnfold } from '../geometry/unfolding/generateMeshUnfold';
 
 describe('SliceFold project format', () => {
   it('round-trips the current version without losing fabrication data', () => {
@@ -65,12 +66,12 @@ describe('SliceFold project format', () => {
     expect(restored.generatedParts[0]?.paths[1]?.slot?.widthMm).toBe(2);
   });
 
-  it('migrates a valid version 1 project through the version 3 reader', () => {
+  it('migrates a valid version 1 project through the current reader', () => {
     const project = createProject('Legacy');
     const legacy = JSON.stringify({ format: 'slicefold-project', version: 1, project });
 
     expect(parseProjectFile(legacy)).toEqual(project);
-    expect(JSON.parse(serializeProject(project))).toMatchObject({ version: 3 });
+    expect(JSON.parse(serializeProject(project))).toMatchObject({ version: 4 });
   });
 
   it('adds Phase 7 output defaults while migrating a version 2 project', () => {
@@ -123,6 +124,33 @@ describe('SliceFold project format', () => {
       result.panels
         .filter((panel) => panel.partId === result.parts[0]?.id)
         .map((panel) => panel.id),
+    );
+  });
+
+  it('round-trips a serializable mesh-unfold result with stable face references', () => {
+    const project = createProject('Unfolded');
+    if (!project.model.mesh) throw new Error('Fixture model is incomplete.');
+    const result = generateMeshUnfold({
+      mesh: project.model.mesh,
+      modelId: project.model.id,
+      materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
+      settings: {
+        strategy: 'automatic',
+        rootFaceIndex: 0,
+        manualSeamKeys: [],
+        tabDepthMm: 6,
+        maximumFaceCount: 200,
+        searchAttempts: 18,
+      },
+    });
+    project.fabricationMode = 'mesh-unfold';
+    project.unfoldingResult = result;
+    project.generatedParts = result.parts;
+
+    const restored = parseProjectFile(serializeProject(project));
+    expect(restored.unfoldingResult).toEqual(result);
+    expect(restored.generatedParts[0]?.unfolding?.faceIds).toEqual(
+      result.faces.filter((face) => face.partId === result.parts[0]?.id).map((face) => face.id),
     );
   });
 

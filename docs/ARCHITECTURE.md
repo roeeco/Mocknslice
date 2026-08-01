@@ -4,7 +4,7 @@
 
 ### Domain
 
-`src/domain/` contains serializable TypeScript types for projects, models, materials, fabrication parts, sheet layouts, operations, exports, validation, projected profiles, fold panels, fold edges, tabs, and assembled-preview panel data. The domain imports neither React nor Three.js. Fabrication dimensions have `Mm` names or use the `Millimetres` alias.
+`src/domain/` contains serializable TypeScript types for projects, models, materials, fabrication parts, sheet layouts, operations, exports, validation, projected profiles, fold panels, fold edges, tabs, mesh-unfold faces, seams, hinges, islands, overlaps, and assembled-preview data. The domain imports neither React nor Three.js. Fabrication dimensions have `Mm` names or use the `Millimetres` alias.
 
 ### Geometry engine
 
@@ -12,7 +12,9 @@
 
 Phase 6 shape fitting implements deterministic axis projection, convex hull, convex offset, visible enclosure-preserving simplification, and fixed-topology template generators. These functions return serializable source/fitted profiles, panels, fold edges, tabs, fabrication parts, assembled panel data, and structured issues. The worker orchestrates fitting and generation with cancellation, input hashes, and stale-result rejection.
 
-STL parsing/normalization, stacked-slice generation, two-family waffle generation, and folding-template generation run as cancellable Web Worker requests. The worker returns plain serializable geometry and validation data; it does not return Three.js objects.
+Phase 8 topology and unfolding remain pure geometry. The engine builds indexed triangle adjacency, rejects unsupported topology, derives a deterministic acyclic hinge forest, flattens rigid triangles, scores face overlaps, adds paired seams and tabs, and returns a stable hash. The fold-preview helper derives animated vertices without mutating the stored result.
+
+STL parsing/normalization, stacked-slice generation, two-family waffle generation, folding-template generation, and low-poly mesh unfolding run as cancellable Web Worker requests. The worker returns plain serializable geometry and validation data; it does not return Three.js objects.
 
 ### Application state
 
@@ -26,11 +28,11 @@ STL parsing/normalization, stacked-slice generation, two-family waffle generatio
 
 `src/persistence/` defines a repository interface and IndexedDB implementation. `src/exporters/` owns versioned project serialization, validation, and migration entry points. The browser stores named project data and the last autosave pointer in separate object stores.
 
-Phase 7 derives prepared parts at export/preview time from generated parts plus serializable output settings. Kerf offsets and fold-line conversion never replace generated source geometry. The 2D viewport, SVG exporter, and PDF exporter call the same pure preparation function. PDF objects and content streams are emitted directly as deterministic vector data; no canvas capture or raster content is used.
+Phase 7 derives prepared parts at export/preview time from generated parts plus serializable output settings. Kerf offsets and fold-line conversion never replace generated source geometry. The 2D viewport, SVG exporter, and PDF exporter call the same pure preparation function. PDF objects and content streams are emitted directly as deterministic vector data; no canvas capture or raster content is used. Project version 4 adds the optional Phase 8 unfolding result while versions 1–3 migrate through the same validation boundary.
 
 ## Data flow
 
-User input updates a focused Zustand action. Meaningful project actions record a previous project snapshot, update the serializable project, and schedule repository autosave. Parameter, material, mode, or model changes preserve generated geometry but mark it stale. Stacked, waffle, and folding generation create a deterministic initial layout from the first sheet's settings. Presentation selectors reconstruct transformed geometry from persisted placements and assembled fold panels. Project JSON export serializes the same project data; import validates and replaces it through history. Fabrication SVG exports the active sheet and PDF exports all used sheets using those same numeric transforms and prepared paths.
+User input updates a focused Zustand action. Meaningful project actions record a previous project snapshot, update the serializable project, and schedule repository autosave. Parameter, material, mode, or model changes preserve generated geometry but mark it stale. Stacked, waffle, template, and mesh-unfold generation create a deterministic initial layout from the first sheet's settings. Presentation selectors reconstruct transformed geometry from persisted placements, assembled panels, or unfolded triangle hinges. Project JSON export serializes the same project data; import validates and replaces it through history. Fabrication SVG exports the active sheet and PDF exports all used sheets using those same numeric transforms and prepared paths.
 
 ## Dependency rules
 

@@ -88,7 +88,7 @@ Open boxes, lidded boxes, and trays use fitted profile extents. Sleeves use the 
 - The assembled preview displays the final panel positions; it is not a folding animation, collision solver, or structural simulation.
 - Glue-tab and panel-overlap checks are geometric and do not model material grain, bend allowance, glue access, or assembly order.
 - Profile simplification is enclosure-preserving and deterministic, but it is not a user-editable curve or seam workflow.
-- Arbitrary face unfolding, textures, PDO import, and editable mesh seams remain deferred research.
+- General-purpose organic unfolding, textures, PDO import, and arbitrary panel editing remain deferred beyond the bounded Phase 8 triangle workflow.
 
 ## Phase 3 limitations
 
@@ -132,6 +132,30 @@ Phase 7 keeps generated geometry canonical and creates a prepared derivative for
 The built-in offset is intended for simple polygon contours and avoids a new polygon-boolean dependency. It does not silently trim self-intersections or join independent open cut segments into a closed boundary.
 
 Material usage sums exact outer-minus-hole area for closed contours. Folding nets use the sum of serializable panel and enabled-tab areas. Other open-path-only parts fall back to their planar bounding footprint. Waste and utilization compare that estimate with every sheet containing placements; cut length is calculated from prepared cut paths.
+
+## Bounded low-poly mesh unfolding
+
+Phase 8 operates on the normalized indexed triangle mesh and intentionally fails closed when topology is outside its supported domain.
+
+1. Build stable undirected edge keys and record the oriented use from every incident triangle.
+2. Reject empty, over-limit, open, non-manifold, or inconsistently oriented meshes.
+3. Treat user-selected manual edges as forbidden hinges, or search a deterministic set of roots and edge orderings automatically.
+4. Build an acyclic spanning forest. Shared edges excluded from the forest become explicit seams; manual mode distinguishes required cycle cuts from user constraints.
+5. Flatten each root triangle from exact source lengths, then place each child triangle on the opposite side of its parent hinge. Separate trees become stable horizontal islands.
+6. Detect positive-area triangle overlaps, score candidates by overlap count, island count, then bounding area, and retain the best attempted tree.
+7. Emit one glue tab per paired seam, stable triangle/seam labels, explicit mountain/valley folds, assembled hinge data, source and flat triangle coordinates, and structured issues.
+8. Derive 3D preview positions by applying rigid Rodrigues rotations to every hinge subtree. Preview progress is transient viewport state; the generated geometry remains canonical.
+
+Automatic search is deterministic optimization, not a global optimum guarantee. Manual seams are constraints rather than arbitrary mesh surgery: extra cycle-breaking seams are still required. Face and tab overlaps are warnings and stay visible in the 2D sheet/export data. See [Low-poly unfolding plan](UNFOLDING_PLAN.md) and [ADR 0011](adr/0011-deterministic-low-poly-unfolding.md).
+
+## Phase 8 limitations
+
+- Input must be a closed, edge-manifold, consistently oriented triangular mesh within the explicit face limit (default 200).
+- The engine does not triangulate, decimate, repair, remesh, merge coplanar faces, preserve textures, or import PDO data.
+- Automatic seam-tree attempts are bounded and may leave overlaps. The engine reports them instead of silently moving faces or splitting more islands.
+- Glue tabs use a deterministic shouldered shape and may require depth or seam changes when overlap warnings occur.
+- The fold slider is rigid kinematic preview only. It does not simulate thickness, bend allowance, collision, glue order, material grain, or structural behaviour.
+- Disconnected closed shells produce multiple labelled islands. Paired labels guide assembly but do not establish a physical assembly sequence.
 
 ## Phase 7 limitations
 

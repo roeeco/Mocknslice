@@ -333,6 +333,15 @@ function partAreaMm2(project: ProjectData, part: FabricationPart): number {
       .reduce((sum, tab) => sum + Math.abs(polygonArea(tab.outline)), 0);
     if (panels + tabs > 0) return panels + tabs;
   }
+  if (part.unfolding && project.unfoldingResult) {
+    const faces = project.unfoldingResult.faces
+      .filter((face) => face.partId === part.id)
+      .reduce((sum, face) => sum + Math.abs(polygonArea(face.points2D)), 0);
+    const tabs = project.unfoldingResult.tabs
+      .filter((tab) => tab.partId === part.id && tab.enabled)
+      .reduce((sum, tab) => sum + Math.abs(polygonArea(tab.outline)), 0);
+    if (faces + tabs > 0) return faces + tabs;
+  }
   const points = part.paths.flatMap((path) => path.points);
   if (points.length === 0) return 0;
   const xs = points.map((point) => point.x);

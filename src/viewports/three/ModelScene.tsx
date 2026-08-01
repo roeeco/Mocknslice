@@ -7,6 +7,7 @@ import { useProjectStore } from '../../state/useProjectStore';
 import type { CameraPreset } from '../../state/types';
 import { FabricationParts } from './FabricationParts';
 import { FoldingAssembly } from './FoldingAssembly';
+import { MeshUnfoldAssembly } from './MeshUnfoldAssembly';
 
 const cameraDirections: Record<CameraPreset, [number, number, number]> = {
   isometric: [1, 0.82, 1],
@@ -20,12 +21,24 @@ function CameraRig() {
   const preset = useProjectStore((state) => state.cameraPreset);
   const resetToken = useProjectStore((state) => state.cameraResetToken);
   const dimensions = useProjectStore((state) => state.project.model.dimensions);
+  const unfoldingResult = useProjectStore((state) => state.project.unfoldingResult);
 
   useEffect(() => {
+    const unfoldedPoints = unfoldingResult?.faces.flatMap((face) => face.points2D) ?? [];
+    const unfoldedWidth = unfoldedPoints.length
+      ? Math.max(...unfoldedPoints.map((point) => point.x)) -
+        Math.min(...unfoldedPoints.map((point) => point.x))
+      : 0;
+    const unfoldedHeight = unfoldedPoints.length
+      ? Math.max(...unfoldedPoints.map((point) => point.y)) -
+        Math.min(...unfoldedPoints.map((point) => point.y))
+      : 0;
     const largestDimension = Math.max(
       dimensions.widthMm,
       dimensions.heightMm,
       dimensions.depthMm,
+      unfoldedWidth,
+      unfoldedHeight,
       10,
     );
     const distance = largestDimension * 2.45;
@@ -37,7 +50,7 @@ function CameraRig() {
     camera.far = Math.max(1000, largestDimension * 20);
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
-  }, [camera, dimensions, preset, resetToken]);
+  }, [camera, dimensions, preset, resetToken, unfoldingResult]);
 
   return null;
 }
@@ -101,6 +114,7 @@ export function ModelScene() {
       </mesh>
       <FabricationParts />
       <FoldingAssembly />
+      <MeshUnfoldAssembly />
       <Grid
         args={[largestDimension * 6, largestDimension * 6]}
         position={[0, -heightMm / 2, 0]}

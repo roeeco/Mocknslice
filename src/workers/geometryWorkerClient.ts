@@ -9,6 +9,8 @@ import type {
 import type { GeometryWorkerRequest, GeometryWorkerResponse } from './protocol';
 import type { TemplateGenerationResult } from '../domain/folding';
 import type { FoldTemplateInput } from '../geometry/folding/generateFoldTemplate';
+import type { MeshUnfoldResult } from '../domain/unfolding';
+import type { MeshUnfoldInput } from '../geometry/unfolding/generateMeshUnfold';
 
 export interface GeometryTask<T> {
   promise: Promise<T>;
@@ -189,6 +191,48 @@ export function generateFoldTemplateInWorker(
       settled = true;
       worker.terminate();
       rejectTask?.(new DOMException('Template generation was cancelled.', 'AbortError'));
+    },
+  };
+}
+
+export function generateMeshUnfoldInWorker(input: MeshUnfoldInput): GeometryTask<MeshUnfoldResult> {
+  const worker = new Worker(new URL('./geometry.worker.ts', import.meta.url), { type: 'module' });
+  const id = crypto.randomUUID();
+  let settled = false;
+  let rejectTask: ((reason?: unknown) => void) | undefined;
+
+  const promise = new Promise<MeshUnfoldResult>((resolve, reject) => {
+    rejectTask = reject;
+    worker.onmessage = (event: MessageEvent<GeometryWorkerResponse>) => {
+      if (event.data.id !== id || settled) return;
+      settled = true;
+      worker.terminate();
+      if (event.data.ok && event.data.type === 'generate-mesh-unfold') resolve(event.data.result);
+      else if (event.data.ok) reject(new Error('The geometry worker returned the wrong result.'));
+      else reject(new Error(event.data.error));
+    };
+    worker.onerror = () => {
+      if (settled) return;
+      settled = true;
+      worker.terminate();
+      reject(new Error('The geometry worker stopped unexpectedly.'));
+    };
+  });
+
+  const request: GeometryWorkerRequest = {
+    id,
+    type: 'generate-mesh-unfold',
+    payload: input,
+  };
+  worker.postMessage(request);
+
+  return {
+    promise,
+    cancel: () => {
+      if (settled) return;
+      settled = true;
+      worker.terminate();
+      rejectTask?.(new DOMException('Mesh unfolding was cancelled.', 'AbortError'));
     },
   };
 }
