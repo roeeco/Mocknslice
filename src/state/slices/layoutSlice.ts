@@ -158,6 +158,7 @@ export const createLayoutSlice: AppSliceCreator<LayoutSlice> = (set) => ({
         ),
         activeSheetId: sheetId,
         selectedEntityId: partId,
+        selectedPartId: partId,
       };
     }),
 });

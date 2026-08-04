@@ -1,7 +1,9 @@
 import type { ChangeEvent } from 'react';
 import type { MeshUnfoldStrategy } from '../../domain/unfolding';
 import { useProjectStore } from '../../state/useProjectStore';
-import { t } from '../../locales';
+import { copy, t } from '../../locales';
+import { AdvancedSettingsSection } from './AdvancedSettingsSection';
+import { RuntimeFailureMessage } from '../RuntimeFailureMessage';
 
 function numericChange(
   setModeParameter: (name: string, value: number | string | boolean) => void,
@@ -20,6 +22,7 @@ export function MeshUnfoldPanel({
   hideGenerationAction = false,
 }: { hideGenerationAction?: boolean } = {}) {
   const project = useProjectStore((state) => state.project);
+  const experienceMode = useProjectStore((state) => state.experienceMode);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
   const progress = useProjectStore((state) => state.foldPreviewProgress);
@@ -53,81 +56,92 @@ export function MeshUnfoldPanel({
       aria-labelledby="unfold-heading"
     >
       <div className="panel-heading-row">
-        <p className="eyebrow">Phase 8 · low-poly</p>
-        <span className={`generation-status status-${status}`}>{status}</span>
+        <p className="eyebrow">{t('Fabrication')}</p>
+        <span className={`generation-status status-${status}`}>
+          {copy.generationStatus[status]}
+        </span>
       </div>
       <h2 id="unfold-heading">{t('Mesh unfolding')}</h2>
       <p className="field-help fold-intro">
-        Flatten a closed, consistently oriented triangular mesh into editable seam islands. This
-        bounded release does not repair meshes or guarantee an overlap-free net.
+        {t(
+          'Flatten a closed, consistently oriented triangular mesh into editable seam islands. This bounded release does not repair meshes or guarantee an overlap-free net.',
+        )}
       </p>
-      <fieldset disabled={status === 'processing'}>
-        <div className="field-stack">
-          <label htmlFor="mesh-unfold-strategy">{t('Seam strategy')}</label>
-          <select
-            id="mesh-unfold-strategy"
-            value={strategy}
-            onChange={(event) => setModeParameter('meshUnfoldStrategy', event.target.value)}
-          >
-            <option value="automatic">{t('Automatic tree search')}</option>
-            <option value="manual">{t('Manual seam constraints')}</option>
-          </select>
-          <p className="field-help">
-            Manual seams are forced cuts; extra cuts are added when needed to remove fold cycles.
-          </p>
-        </div>
-        <div className="slice-number-grid">
-          <div className="field-stack">
-            <label htmlFor="mesh-unfold-root">{t('Root triangle')}</label>
-            <input
-              id="mesh-unfold-root"
-              type="number"
-              min={0}
-              step={1}
-              value={Number(parameters.meshUnfoldRootFace ?? 0)}
-              onChange={numericChange(setModeParameter, 'meshUnfoldRootFace', 0, true)}
-            />
-          </div>
-          <div className="field-stack">
-            <label htmlFor="mesh-unfold-tab-depth">{t('Tab depth (mm)')}</label>
-            <input
-              id="mesh-unfold-tab-depth"
-              type="number"
-              min={0.1}
-              step={0.5}
-              value={Number(parameters.meshUnfoldTabDepthMm ?? 6)}
-              onChange={numericChange(setModeParameter, 'meshUnfoldTabDepthMm', 0.1)}
-            />
-          </div>
-        </div>
-        <div className="slice-number-grid">
-          <div className="field-stack">
-            <label htmlFor="mesh-unfold-face-limit">{t('Face limit')}</label>
-            <input
-              id="mesh-unfold-face-limit"
-              type="number"
-              min={1}
-              max={1000}
-              step={1}
-              value={Number(parameters.meshUnfoldMaximumFaces ?? 200)}
-              onChange={numericChange(setModeParameter, 'meshUnfoldMaximumFaces', 1, true)}
-            />
-          </div>
-          <div className="field-stack">
-            <label htmlFor="mesh-unfold-attempts">{t('Search attempts')}</label>
-            <input
-              id="mesh-unfold-attempts"
-              type="number"
-              min={1}
-              max={1200}
-              step={1}
-              disabled={strategy === 'manual'}
-              value={Number(parameters.meshUnfoldSearchAttempts ?? 18)}
-              onChange={numericChange(setModeParameter, 'meshUnfoldSearchAttempts', 1, true)}
-            />
-          </div>
-        </div>
-      </fieldset>
+      {experienceMode === 'advanced' ? (
+        <AdvancedSettingsSection>
+          <fieldset disabled={status === 'processing'}>
+            <div className="field-stack">
+              <label htmlFor="mesh-unfold-strategy">{t('Seam strategy')}</label>
+              <select
+                id="mesh-unfold-strategy"
+                value={strategy}
+                onChange={(event) => setModeParameter('meshUnfoldStrategy', event.target.value)}
+              >
+                <option value="automatic">{t('Automatic tree search')}</option>
+                <option value="manual">{t('Manual seam constraints')}</option>
+              </select>
+              <p className="field-help">
+                {t(
+                  'Manual seams are forced cuts; extra cuts are added when needed to remove fold cycles.',
+                )}
+              </p>
+            </div>
+            <div className="slice-number-grid">
+              <div className="field-stack">
+                <label htmlFor="mesh-unfold-root">{t('Root triangle')}</label>
+                <input
+                  id="mesh-unfold-root"
+                  type="number"
+                  min={0}
+                  step={1}
+                  value={Number(parameters.meshUnfoldRootFace ?? 0)}
+                  onChange={numericChange(setModeParameter, 'meshUnfoldRootFace', 0, true)}
+                />
+              </div>
+              <div className="field-stack">
+                <label htmlFor="mesh-unfold-tab-depth">{t('Tab depth (mm)')}</label>
+                <input
+                  id="mesh-unfold-tab-depth"
+                  type="number"
+                  min={0.1}
+                  step={0.5}
+                  value={Number(parameters.meshUnfoldTabDepthMm ?? 6)}
+                  onChange={numericChange(setModeParameter, 'meshUnfoldTabDepthMm', 0.1)}
+                />
+              </div>
+            </div>
+            <div className="slice-number-grid">
+              <div className="field-stack">
+                <label htmlFor="mesh-unfold-face-limit">{t('Face limit')}</label>
+                <input
+                  id="mesh-unfold-face-limit"
+                  type="number"
+                  min={1}
+                  max={1000}
+                  step={1}
+                  value={Number(parameters.meshUnfoldMaximumFaces ?? 200)}
+                  onChange={numericChange(setModeParameter, 'meshUnfoldMaximumFaces', 1, true)}
+                />
+              </div>
+              <div className="field-stack">
+                <label htmlFor="mesh-unfold-attempts">{t('Search attempts')}</label>
+                <input
+                  id="mesh-unfold-attempts"
+                  type="number"
+                  min={1}
+                  max={1200}
+                  step={1}
+                  disabled={strategy === 'manual'}
+                  value={Number(parameters.meshUnfoldSearchAttempts ?? 18)}
+                  onChange={numericChange(setModeParameter, 'meshUnfoldSearchAttempts', 1, true)}
+                />
+              </div>
+            </div>
+          </fieldset>
+        </AdvancedSettingsSection>
+      ) : (
+        <p className="standard-setting-summary">{t('Automatic unfolding')}</p>
+      )}
       {!hideGenerationAction ? (
         <div className="generation-actions">
           {status === 'processing' ? (
@@ -150,7 +164,7 @@ export function MeshUnfoldPanel({
       ) : null}
       {error ? (
         <p className="inline-error" role="alert">
-          {error}
+          <RuntimeFailureMessage failure={error} />
         </p>
       ) : null}
       {!hideGenerationAction && result?.parts.length ? (
@@ -177,25 +191,29 @@ export function MeshUnfoldPanel({
             />
             <p className="field-help">{t('Flat net → reconstructed fold tree')}</p>
           </div>
-          <details className="unfold-seams" open={strategy === 'manual'}>
-            <summary>Mesh edges and manual seams ({sharedEdges.length})</summary>
-            <div className="unfold-edge-list">
-              {sharedEdges.map((edge) => (
-                <label key={edge.id} className="checkbox-field unfold-edge-row">
-                  <input
-                    type="checkbox"
-                    disabled={strategy !== 'manual' || status === 'processing'}
-                    checked={seamKeys.has(edge.key)}
-                    onChange={(event) => toggleSeam(edge.key, event.target.checked)}
-                  />
-                  <span>
-                    {edge.key} · T{edge.faceAIndex + 1}/T{(edge.faceBIndex ?? 0) + 1}
-                    <small>{edge.disposition.replace('-', ' ')}</small>
-                  </span>
-                </label>
-              ))}
-            </div>
-          </details>
+          {experienceMode === 'advanced' ? (
+            <section className="unfold-seams" aria-labelledby="manual-seams-heading">
+              <h3 id="manual-seams-heading">
+                {t('Mesh edges and manual seams')} ({sharedEdges.length})
+              </h3>
+              <div className="unfold-edge-list">
+                {sharedEdges.map((edge) => (
+                  <label key={edge.id} className="checkbox-field unfold-edge-row">
+                    <input
+                      type="checkbox"
+                      disabled={strategy !== 'manual' || status === 'processing'}
+                      checked={seamKeys.has(edge.key)}
+                      onChange={(event) => toggleSeam(edge.key, event.target.checked)}
+                    />
+                    <span>
+                      {edge.key} · T{edge.faceAIndex + 1}/T{(edge.faceBIndex ?? 0) + 1}
+                      <small>{edge.disposition.replace('-', ' ')}</small>
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </section>
+          ) : null}
         </>
       ) : null}
     </section>

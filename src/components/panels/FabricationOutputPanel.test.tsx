@@ -45,6 +45,7 @@ describe('FabricationOutputPanel', () => {
       activeSheetId: project.sheetLayouts[0]!.id,
       past: [],
       future: [],
+      experienceMode: 'advanced',
     });
   });
 
@@ -73,10 +74,9 @@ describe('FabricationOutputPanel', () => {
     expect(screen.getByText('41 mm', { exact: true })).toBeVisible();
   });
 
-  it('edits operation colours and widths with accessible labels', async () => {
-    const user = userEvent.setup();
+  it('edits operation colours and widths with accessible labels', () => {
     render(<FabricationOutputPanel />);
-    await user.click(screen.getByText('Operation styles'));
+    expect(screen.getByText('Operation styles')).toBeVisible();
     fireEvent.change(screen.getByLabelText('Cut colour'), { target: { value: '#00aa11' } });
     fireEvent.change(screen.getByLabelText('Cut width'), { target: { value: '0.2' } });
 

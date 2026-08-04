@@ -2,12 +2,14 @@ import type { FabricationPart } from '../../domain/fabrication';
 import type {
   FoldClosureMethod,
   FoldEdgeDefinition,
+  FoldConnection,
   FoldPanel,
   FoldTab,
   TemplateKind,
 } from '../../domain/folding';
 import type { Point2D } from '../../domain/geometry';
 import type { ValidationIssue } from '../../domain/validation';
+import { validateFoldConnections } from './validateFoldConnections';
 
 export interface HingeSpec {
   id: string;
@@ -132,6 +134,10 @@ function overlapAreaPossible(first: readonly Point2D[], second: readonly Point2D
   });
 }
 
+function closureForTab(tab: FoldTab): FoldConnection['closure'] {
+  return tab.style === 'press-fit' ? 'press-fit' : 'glue-tab';
+}
+
 export function buildFoldNet(input: {
   partId: string;
   name: string;
@@ -143,6 +149,7 @@ export function buildFoldNet(input: {
 }): {
   part: FabricationPart;
   edges: FoldEdgeDefinition[];
+  connections: FoldConnection[];
   tabs: FoldTab[];
   issues: ValidationIssue[];
 } {
@@ -336,6 +343,45 @@ export function buildFoldNet(input: {
     operation: 'engrave' as const,
     entityId: panel.id,
   }));
+  const connections: FoldConnection[] = [
+    ...hinges
+      .filter((hinge): hinge is HingeSpec & { panelBId: string } => Boolean(hinge.panelBId))
+      .map((hinge) => ({
+        id: `${hinge.id}-connection`,
+        panelAId: hinge.panelAId,
+        panelBId: hinge.panelBId,
+        edgeA: { start: roundedPoint(hinge.start), end: roundedPoint(hinge.end) },
+        edgeB: { start: roundedPoint(hinge.start), end: roundedPoint(hinge.end) },
+        disposition: 'hinge' as const,
+        closure: 'none' as const,
+        required: false,
+        tabIds: [],
+      })),
+    ...foldTabs.flatMap((tab) =>
+      tab.receiverPanelId
+        ? [
+            {
+              id: `${tab.id}-connection`,
+              panelAId: tab.ownerPanelId,
+              panelBId: tab.receiverPanelId,
+              edgeA: { start: tab.baseStart, end: tab.baseEnd },
+              edgeB: (() => {
+                const source = tabs.find((candidate) => candidate.id === tab.id);
+                return {
+                  start: source?.receiverStart ?? tab.slotStart ?? tab.baseStart,
+                  end: source?.receiverEnd ?? tab.slotEnd ?? tab.baseEnd,
+                };
+              })(),
+              disposition: 'seam' as const,
+              closure: closureForTab(tab),
+              required: true,
+              tabIds: [tab.id],
+            },
+          ]
+        : [],
+    ),
+  ];
+  issues.push(...validateFoldConnections(panels, connections, foldTabs));
   return {
     part: {
       id: partId,
@@ -347,6 +393,7 @@ export function buildFoldNet(input: {
       folding: { templateKind, panelIds: panels.map((panel) => panel.id) },
     },
     edges,
+    connections,
     tabs: foldTabs,
     issues,
   };

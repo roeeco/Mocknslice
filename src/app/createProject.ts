@@ -84,6 +84,8 @@ export function createProject(name = 'Untitled project'): ProjectData {
       panelFingerWidthMm: 10,
       panelClearanceMm: material.clearanceMm,
       panelIncludeLid: false,
+      panelWidthDividerCount: 0,
+      panelDepthDividerCount: 0,
       panelDividerCount: 0,
       panelDividerAxis: 'width',
     },
@@ -128,6 +130,67 @@ export function prepareProjectForUse(project: ProjectData): ProjectData {
     project.model.source.kind === 'built-in' && (!project.model.mesh || !project.model.bounds)
       ? createCubeMesh(project.model.dimensions.widthMm)
       : undefined;
+  const modeParameters: ProjectData['modeParameters'] = {
+    sliceAxis: 'z',
+    spacingMm: 10,
+    sliceThicknessMm: project.materialProfileSnapshot.thicknessMm,
+    contourEpsilonMm: 0.001,
+    wafflePrimaryAxis: 'x',
+    waffleSecondaryAxis: 'y',
+    wafflePrimarySpacingMm: 20,
+    waffleSecondarySpacingMm: 20,
+    waffleThicknessMm: project.materialProfileSnapshot.thicknessMm,
+    waffleClearanceMm: project.materialProfileSnapshot.clearanceMm,
+    waffleSlotPattern: 'alternating',
+    waffleReverseSlots: false,
+    foldTemplateKind: 'open-box',
+    workflowSourceMode: 'import',
+    foldFitAxis: 'z',
+    foldClearanceMm: project.materialProfileSnapshot.clearanceMm,
+    foldProfileToleranceMm: 1,
+    foldSizeMode: 'auto-fit',
+    foldWallHeightMm: project.model.dimensions.depthMm,
+    foldTabDepthMm: 8,
+    foldLidDepthMm: 15,
+    foldLidClearanceMm: 0.5,
+    foldGussetDepthMm: project.model.dimensions.depthMm,
+    foldClosureFlapMm: 12,
+    foldPrismSides: 6,
+    foldPrismRotationDeg: 0,
+    foldTopScale: 0,
+    foldSeamTabMm: 8,
+    foldClosureMethod: 'glue',
+    foldSlotClearanceMm: project.materialProfileSnapshot.clearanceMm,
+    meshUnfoldStrategy: 'automatic',
+    meshUnfoldRootFace: 0,
+    meshUnfoldSeams: '',
+    meshUnfoldTabDepthMm: 6,
+    meshUnfoldMaximumFaces: 200,
+    meshUnfoldSearchAttempts: 18,
+    panelInnerWidthMm: 80,
+    panelInnerDepthMm: 60,
+    panelInnerHeightMm: 50,
+    panelJointKind: 'finger',
+    panelFingerWidthMm: 10,
+    panelClearanceMm: project.materialProfileSnapshot.clearanceMm,
+    panelIncludeLid: false,
+    panelDividerCount: 0,
+    panelDividerAxis: 'width',
+    ...project.modeParameters,
+  };
+  if (
+    project.modeParameters.panelWidthDividerCount === undefined &&
+    project.modeParameters.panelDepthDividerCount === undefined
+  ) {
+    const legacyCount = Number(project.modeParameters.panelDividerCount ?? 0);
+    if (project.modeParameters.panelDividerAxis === 'depth') {
+      modeParameters.panelWidthDividerCount = 0;
+      modeParameters.panelDepthDividerCount = legacyCount;
+    } else {
+      modeParameters.panelWidthDividerCount = legacyCount;
+      modeParameters.panelDepthDividerCount = 0;
+    }
+  }
   return {
     ...project,
     model: primitive
@@ -138,54 +201,7 @@ export function prepareProjectForUse(project: ProjectData): ProjectData {
           healthReport: primitive.healthReport,
         }
       : project.model,
-    modeParameters: {
-      sliceAxis: 'z',
-      spacingMm: 10,
-      sliceThicknessMm: project.materialProfileSnapshot.thicknessMm,
-      contourEpsilonMm: 0.001,
-      wafflePrimaryAxis: 'x',
-      waffleSecondaryAxis: 'y',
-      wafflePrimarySpacingMm: 20,
-      waffleSecondarySpacingMm: 20,
-      waffleThicknessMm: project.materialProfileSnapshot.thicknessMm,
-      waffleClearanceMm: project.materialProfileSnapshot.clearanceMm,
-      waffleSlotPattern: 'alternating',
-      waffleReverseSlots: false,
-      foldTemplateKind: 'open-box',
-      workflowSourceMode: 'import',
-      foldFitAxis: 'z',
-      foldClearanceMm: project.materialProfileSnapshot.clearanceMm,
-      foldProfileToleranceMm: 1,
-      foldSizeMode: 'auto-fit',
-      foldWallHeightMm: project.model.dimensions.depthMm,
-      foldTabDepthMm: 8,
-      foldLidDepthMm: 15,
-      foldLidClearanceMm: 0.5,
-      foldGussetDepthMm: project.model.dimensions.depthMm,
-      foldClosureFlapMm: 12,
-      foldPrismSides: 6,
-      foldPrismRotationDeg: 0,
-      foldTopScale: 0,
-      foldSeamTabMm: 8,
-      foldClosureMethod: 'glue',
-      foldSlotClearanceMm: project.materialProfileSnapshot.clearanceMm,
-      meshUnfoldStrategy: 'automatic',
-      meshUnfoldRootFace: 0,
-      meshUnfoldSeams: '',
-      meshUnfoldTabDepthMm: 6,
-      meshUnfoldMaximumFaces: 200,
-      meshUnfoldSearchAttempts: 18,
-      panelInnerWidthMm: 80,
-      panelInnerDepthMm: 60,
-      panelInnerHeightMm: 50,
-      panelJointKind: 'finger',
-      panelFingerWidthMm: 10,
-      panelClearanceMm: project.materialProfileSnapshot.clearanceMm,
-      panelIncludeLid: false,
-      panelDividerCount: 0,
-      panelDividerAxis: 'width',
-      ...project.modeParameters,
-    },
+    modeParameters,
     generationIssues: project.generationIssues ?? [],
     exportSettings: {
       ...project.exportSettings,

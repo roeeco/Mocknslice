@@ -459,7 +459,8 @@ function isPanelRole(value: unknown): boolean {
 }
 const panelEdges = new Set(['bottom', 'right', 'top', 'left']);
 const panelJointLocations = new Set([...panelEdges, 'face']);
-const panelJointKinds = new Set(['butt', 'finger', 'tab-slot']);
+const panelBoundaryJointKinds = new Set(['butt', 'finger', 'tab-slot']);
+const panelJointKinds = new Set([...panelBoundaryJointKinds, 'half-lap']);
 
 function isPanelConstructionResult(value: unknown): boolean {
   if (!isRecord(value)) return false;
@@ -472,7 +473,7 @@ function isPanelConstructionResult(value: unknown): boolean {
     isFiniteNumber(settings.innerDepthMm) &&
     isFiniteNumber(settings.innerHeightMm) &&
     isString(settings.jointKind) &&
-    panelJointKinds.has(settings.jointKind) &&
+    panelBoundaryJointKinds.has(settings.jointKind) &&
     isFiniteNumber(settings.fingerWidthMm) &&
     isFiniteNumber(settings.clearanceMm) &&
     typeof settings.includeLid === 'boolean' &&
@@ -480,6 +481,8 @@ function isPanelConstructionResult(value: unknown): boolean {
     (settings.dividerAxis === undefined ||
       settings.dividerAxis === 'width' ||
       settings.dividerAxis === 'depth') &&
+    (settings.widthDividerCount === undefined || Number.isInteger(settings.widthDividerCount)) &&
+    (settings.depthDividerCount === undefined || Number.isInteger(settings.depthDividerCount)) &&
     isRecord(material) &&
     isString(material.id) &&
     isString(material.category) &&
@@ -520,6 +523,7 @@ function isPanelConstructionResult(value: unknown): boolean {
         isFiniteNumber(joint.clearanceMm) &&
         isString(joint.pairLabel) &&
         (joint.tabOwnerPanelId === undefined || isString(joint.tabOwnerPanelId)) &&
+        (joint.receiverCentreAMm === undefined || isPoint2D(joint.receiverCentreAMm)) &&
         (joint.receiverCentreMm === undefined || isPoint2D(joint.receiverCentreMm)),
     ) &&
     Array.isArray(value.parts) &&
@@ -664,16 +668,22 @@ function isProjectData(value: unknown): value is ProjectData {
 }
 
 function migrateProjectFile(value: unknown): SliceFoldProjectFile {
-  if (!isRecord(value) || value.format !== 'slicefold-project') {
-    throw new ProjectImportError('This file is not a SliceFold project.');
+  if (
+    !isRecord(value) ||
+    (value.format !== 'slicefold-project' && value.format !== 'mocknslice-project')
+  ) {
+    throw new ProjectImportError('This file is not a MocknSlice project.');
   }
 
+  const legacy = value.format === 'slicefold-project';
   if (
-    value.version !== 1 &&
-    value.version !== 2 &&
-    value.version !== 3 &&
-    value.version !== 4 &&
-    value.version !== 5
+    (legacy &&
+      value.version !== 1 &&
+      value.version !== 2 &&
+      value.version !== 3 &&
+      value.version !== 4 &&
+      value.version !== 5) ||
+    (!legacy && value.version !== 6)
   ) {
     throw new ProjectImportError(
       `Project version ${String(value.version)} is not supported by this build.`,
@@ -685,7 +695,7 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
   }
 
   if (
-    (value.version === 3 || value.version === 4 || value.version === 5) &&
+    (value.version === 3 || value.version === 4 || value.version === 5 || value.version === 6) &&
     !isCurrentExportSettings(value.project.exportSettings)
   ) {
     throw new ProjectImportError('The project file is incomplete or damaged.');
@@ -706,8 +716,8 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
   };
 
   return {
-    format: 'slicefold-project',
-    version: 5,
+    format: 'mocknslice-project',
+    version: 6,
     project,
   };
 }

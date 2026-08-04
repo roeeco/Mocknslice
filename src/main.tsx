@@ -6,7 +6,7 @@ import './styles/global.css';
 const root = document.getElementById('root');
 
 if (!root) {
-  throw new Error('SliceFold could not find its application root.');
+  throw new Error('MocknSlice could not find its application root.');
 }
 
 createRoot(root).render(

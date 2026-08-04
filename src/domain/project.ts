@@ -6,6 +6,7 @@ import type { ValidationIssue } from './validation';
 import type { TemplateGenerationResult } from './folding';
 import type { MeshUnfoldResult } from './unfolding';
 import type { PanelConstructionResult } from './panelConstruction';
+import type { GenerationRecord } from './generation';
 
 export interface ProjectMetadata {
   id: string;
@@ -21,6 +22,7 @@ export interface ProjectData {
   materialProfileSnapshot: MaterialProfile;
   modeParameters: Record<string, number | string | boolean>;
   generatedParts: FabricationPart[];
+  generationRecord?: GenerationRecord;
   generationIssues?: ValidationIssue[];
   foldingResult?: TemplateGenerationResult | undefined;
   unfoldingResult?: MeshUnfoldResult | undefined;
@@ -60,9 +62,16 @@ export interface SliceFoldProjectFileV5 {
   project: ProjectData;
 }
 
+export interface MocknSliceProjectFileV6 {
+  format: 'mocknslice-project';
+  version: 6;
+  project: ProjectData;
+}
+
 export type SliceFoldProjectFile =
   | SliceFoldProjectFileV1
   | SliceFoldProjectFileV2
   | SliceFoldProjectFileV3
   | SliceFoldProjectFileV4
-  | SliceFoldProjectFileV5;
+  | SliceFoldProjectFileV5
+  | MocknSliceProjectFileV6;

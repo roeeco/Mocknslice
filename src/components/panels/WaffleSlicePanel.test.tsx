@@ -15,6 +15,7 @@ describe('WaffleSlicePanel', () => {
       future: [],
       sliceGenerationStatus: 'idle',
       sliceGenerationError: undefined,
+      experienceMode: 'advanced',
     });
   });
 

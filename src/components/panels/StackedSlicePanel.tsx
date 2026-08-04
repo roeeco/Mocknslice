@@ -2,6 +2,8 @@ import type { ChangeEvent } from 'react';
 import type { SliceAxis } from '../../domain/fabrication';
 import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
+import { AdvancedSettingsSection } from './AdvancedSettingsSection';
+import { RuntimeFailureMessage } from '../RuntimeFailureMessage';
 
 const axes: SliceAxis[] = ['x', 'y', 'z'];
 
@@ -9,6 +11,7 @@ export function StackedSlicePanel({
   hideGenerationAction = false,
 }: { hideGenerationAction?: boolean } = {}) {
   const project = useProjectStore((state) => state.project);
+  const experienceMode = useProjectStore((state) => state.experienceMode);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
   const setModeParameter = useProjectStore((state) => state.setModeParameter);
@@ -31,7 +34,9 @@ export function StackedSlicePanel({
     <section className="panel-section slice-panel" aria-labelledby="slice-heading">
       <div className="panel-heading-row">
         <p className="eyebrow">{t('Fabrication')}</p>
-        <span className={`generation-status status-${status}`}>{status}</span>
+        <span className={`generation-status status-${status}`}>
+          {copy.generationStatus[status]}
+        </span>
       </div>
       <h2 id="slice-heading">{copy.stackedSlices}</h2>
       <fieldset disabled={disabled || status === 'processing'}>
@@ -49,7 +54,7 @@ export function StackedSlicePanel({
             ))}
           </select>
         </div>
-        <div className="slice-number-grid">
+        <div className="field-stack">
           <div className="field-stack">
             <label htmlFor="slice-spacing">{copy.sliceSpacing}</label>
             <div className="unit-input">
@@ -64,21 +69,41 @@ export function StackedSlicePanel({
               <span>mm</span>
             </div>
           </div>
-          <div className="field-stack">
-            <label htmlFor="slice-thickness">{copy.partThickness}</label>
-            <div className="unit-input">
-              <input
-                id="slice-thickness"
-                type="number"
-                min="0.05"
-                step="0.1"
-                value={thickness}
-                onChange={updateNumber('sliceThicknessMm')}
-              />
-              <span>mm</span>
-            </div>
-          </div>
         </div>
+        {experienceMode === 'advanced' ? (
+          <AdvancedSettingsSection>
+            <div className="slice-number-grid">
+              <div className="field-stack">
+                <label htmlFor="slice-thickness">{copy.partThickness}</label>
+                <div className="unit-input">
+                  <input
+                    id="slice-thickness"
+                    type="number"
+                    min="0.05"
+                    step="0.1"
+                    value={thickness}
+                    onChange={updateNumber('sliceThicknessMm')}
+                  />
+                  <span>mm</span>
+                </div>
+              </div>
+              <div className="field-stack">
+                <label htmlFor="slice-contour-tolerance">{t('Contour tolerance')}</label>
+                <div className="unit-input">
+                  <input
+                    id="slice-contour-tolerance"
+                    type="number"
+                    min="0.0001"
+                    step="0.001"
+                    value={Number(project.modeParameters.contourEpsilonMm ?? 0.001)}
+                    onChange={updateNumber('contourEpsilonMm')}
+                  />
+                  <span>mm</span>
+                </div>
+              </div>
+            </div>
+          </AdvancedSettingsSection>
+        ) : null}
       </fieldset>
       {!hideGenerationAction ? (
         <div className="generation-actions">
@@ -105,7 +130,7 @@ export function StackedSlicePanel({
       ) : null}
       {error ? (
         <p className="inline-error" role="alert">
-          {error}
+          <RuntimeFailureMessage failure={error} />
         </p>
       ) : null}
     </section>

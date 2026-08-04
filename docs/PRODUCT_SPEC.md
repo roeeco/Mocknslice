@@ -1,6 +1,6 @@
-# SliceFold product specification
+# MocknSlice product specification
 
-SliceFold is a browser-based, local-first fabrication design tool for makers and students. It turns built-in primitives, imported models, and parametric templates into material-aware cutting and folding plans without requiring a login or server.
+MocknSlice is a browser-based, local-first fabrication design tool for makers and students. It turns built-in primitives, imported models, and parametric templates into material-aware cutting and folding plans without requiring a login or server.
 
 ## Product principles
 
@@ -13,9 +13,11 @@ SliceFold is a browser-based, local-first fabrication design tool for makers and
 
 ## Primary workflow
 
-Users advance linearly through Start, Choose mode, Import or create, Configure, Inspect, Arrange, and Export. Completed steps remain directly revisitable; blocking errors stop advancement while warnings remain passable.
+Users choose a local Simple or Advanced experience above the workflow rail. Simple defaults to Start, Choose mode, Import or create, Configure, and Export; panel construction omits Import or create. A blocking generation error inserts Inspect, while warnings remain accessible from the workspace issue drawer. Advanced adds the persistent Inspect and Arrange steps. Step numbers are derived from the visible workflow rather than fixed phases.
 
-The workspace reserves its left half for a progress rail plus one contextual step panel with sticky Previous/Next actions. The persistent synchronized 3D or 2D viewport occupies the right half. In narrow embedded panes the progress rail becomes horizontal, but the wizard and preview remain side by side.
+Configure has separate Generate/Regenerate and Next actions. Generation refreshes both previews without navigating or changing the selected viewport. Simple output derives a deterministic one-sheet layout using 0°/90° candidates, 3 mm spacing, and a 5 mm outer margin. Advanced continues to use editable persisted sheet layouts, and switching modes never replaces those manual placements.
+
+The workspace reserves its left side for a progress rail and its right side for one contextual step panel with sticky generation/navigation actions. The persistent synchronized 3D or 2D viewport occupies the centre. In narrow embedded panes the progress rail becomes horizontal, but the wizard and preview remain side by side.
 
 Folding templates and low-poly mesh unfolding share one mode family. Importing an STL opens mesh unfolding; choosing Create from template opens seven standalone parametric forms sized directly by width, length, and height. Other model-based manufacturing modes require an imported STL. See [Parametric folding plan](FOLDING_PLAN.md).
 
@@ -39,7 +41,7 @@ Phase 7 adds a non-destructive fabrication-output preparation layer. Users choos
 
 Phase 8 adds a deliberately bounded low-poly unfolding workflow for closed, manifold, consistently oriented triangular meshes. Users choose deterministic automatic seam-tree search or mark manual seam constraints, generate one or more labelled islands, inspect reported face and glue-tab overlaps, animate the fold tree in 3D, arrange nets, and export cuts, mountain/valley folds, scores, tabs, and paired labels. Project version 4 persists source references, settings, topology, flat/source triangle coordinates, hinges, islands, issues, and hashes. See [Low-poly unfolding plan](UNFOLDING_PLAN.md).
 
-Phase 9 begins the advanced-feature roadmap with parametric panel construction. Users enter inside enclosure dimensions, select butt, complementary finger, or tab-and-slot joints, optionally add a lid and internal dividers, and generate material-thickness-aware panels. Dividers use bottom tabs plus finger-jointed sides with matching wall slots. The assembled 3D preview extrudes the same stepped outlines and slot holes used by the 2D sheet and exports at the selected material thickness. Project version 5 persists the complete construction result. See [Panel construction plan](PANEL_CONSTRUCTION_PLAN.md).
+Phase 9 begins the advanced-feature roadmap with parametric panel construction. Users enter inside enclosure dimensions, select butt, complementary finger, or tab-and-slot joints, optionally add a lid and independent width/depth divider families, and generate material-thickness-aware panels. Dividers use bottom tabs plus finger-jointed sides with matching wall slots; crossing families use complementary half-lap notches. The assembled 3D preview extrudes the same stepped outlines and slot holes used by the 2D sheet and exports at the selected material thickness. Project version 5 persists the complete construction result. See [Panel construction plan](PANEL_CONSTRUCTION_PLAN.md).
 
 ## Roadmap
 

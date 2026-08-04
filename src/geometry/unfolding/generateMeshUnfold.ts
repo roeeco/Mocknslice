@@ -1,5 +1,5 @@
 import type { FabricationLabel, FabricationPart, FabricationPath } from '../../domain/fabrication';
-import type { FoldTab } from '../../domain/folding';
+import type { FoldConnection, FoldTab } from '../../domain/folding';
 import type { Point2D, SerializableTriangleMesh, Vector3Mm } from '../../domain/geometry';
 import type {
   MeshUnfoldEdge,
@@ -445,6 +445,7 @@ function emptyResult(input: MeshUnfoldInput, issues: ValidationIssue[]): MeshUnf
     settings: input.settings,
     faces: [],
     edges: [],
+    connections: [],
     tabs: [],
     hinges: [],
     islands: [],
@@ -709,6 +710,13 @@ export function generateMeshUnfold(input: MeshUnfoldInput): MeshUnfoldResult {
             baseStart: start,
             baseEnd: end,
             outline,
+            ...(faces.find((candidate) => candidate.faceIndex === edge.faceBIndex)?.id
+              ? {
+                  receiverPanelId: faces.find(
+                    (candidate) => candidate.faceIndex === edge.faceBIndex,
+                  )!.id,
+                }
+              : {}),
           });
           paths.push(
             {
@@ -827,10 +835,44 @@ export function generateMeshUnfold(input: MeshUnfoldInput): MeshUnfoldResult {
       suggestedAction: 'Use paired seam labels to assemble the islands.',
     });
   }
+  const faceByIndex = new Map(faces.map((face) => [face.faceIndex, face]));
+  const connections: FoldConnection[] = edges.flatMap((edge) => {
+    if (edge.faceBIndex === undefined) return [];
+    const a = faceByIndex.get(edge.faceAIndex);
+    const b = faceByIndex.get(edge.faceBIndex);
+    if (!a || !b) return [];
+    const segmentFor = (face: MeshUnfoldFace) => {
+      const startIndex = face.sourceVertexIndices.indexOf(edge.vertexA);
+      const endIndex = face.sourceVertexIndices.indexOf(edge.vertexB);
+      return { start: face.points2D[startIndex]!, end: face.points2D[endIndex]! };
+    };
+    const tab = tabs.find((candidate) => candidate.edgeId === edge.id && candidate.enabled);
+    return [
+      {
+        id: `${edge.id}-connection`,
+        panelAId: a.id,
+        panelBId: b.id,
+        edgeA: segmentFor(a),
+        edgeB: segmentFor(b),
+        disposition: edge.disposition === 'hinge' ? 'hinge' : 'seam',
+        closure:
+          edge.disposition === 'hinge'
+            ? 'none'
+            : tab?.style === 'press-fit'
+              ? 'press-fit'
+              : tab
+                ? 'glue-tab'
+                : 'none',
+        required: edge.disposition !== 'hinge',
+        tabIds: tab ? [tab.id] : [],
+      },
+    ];
+  });
   return {
     settings: input.settings,
     faces,
     edges,
+    connections,
     tabs,
     hinges,
     islands,

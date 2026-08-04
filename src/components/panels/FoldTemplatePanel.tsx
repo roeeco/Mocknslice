@@ -3,6 +3,8 @@ import { TEMPLATE_KINDS, type ProjectedProfile, type TemplateKind } from '../../
 import type { Point2D } from '../../domain/geometry';
 import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
+import { AdvancedSettingsSection } from './AdvancedSettingsSection';
+import { RuntimeFailureMessage } from '../RuntimeFailureMessage';
 
 const templateDescriptions: Record<TemplateKind, string> = {
   'open-box': 'A fitted rectangular base with four walls.',
@@ -109,6 +111,7 @@ export function FoldTemplatePanel({
   hideGenerationAction = false,
 }: { hideGenerationAction?: boolean } = {}) {
   const project = useProjectStore((state) => state.project);
+  const experienceMode = useProjectStore((state) => state.experienceMode);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
   const setModeParameter = useProjectStore((state) => state.setModeParameter);
@@ -149,11 +152,13 @@ export function FoldTemplatePanel({
     >
       <div className="panel-heading-row">
         <p className="eyebrow">{t('Fabrication')}</p>
-        <span className={`generation-status status-${status}`}>{status}</span>
+        <span className={`generation-status status-${status}`}>
+          {copy.generationStatus[status]}
+        </span>
       </div>
       <h2 id="fold-template-heading">{copy.foldingTemplate}</h2>
       <p className="field-help fold-intro">
-        Create a parametric folding form directly from its finished dimensions.
+        {t('Create a parametric folding form directly from its finished dimensions.')}
       </p>
       <fieldset disabled={status === 'processing'}>
         <div className="field-stack">
@@ -169,7 +174,7 @@ export function FoldTemplatePanel({
               </option>
             ))}
           </select>
-          <p className="field-help">{templateDescriptions[kind]}</p>
+          <p className="field-help">{t(templateDescriptions[kind])}</p>
         </div>
         <div className="template-dimension-grid">
           <NumberField
@@ -191,92 +196,17 @@ export function FoldTemplatePanel({
             onChange={updateNumber('foldHeightMm')}
           />
         </div>
-        <div className="slice-number-grid">
-          <div className="field-stack">
-            <label htmlFor="fold-closure-method">{t('Connection method')}</label>
-            <select
-              id="fold-closure-method"
-              value={closureMethod}
-              onChange={(event) => setModeParameter('foldClosureMethod', event.target.value)}
-            >
-              <option value="glue">{t('Glue tabs')}</option>
-              <option value="press-fit">{t('Press-fit lips and slits')}</option>
-            </select>
-          </div>
-          {closureMethod === 'press-fit' ? (
-            <NumberField
-              name="foldSlotClearanceMm"
-              label={t('Slit clearance')}
-              value={Number(
-                parameters.foldSlotClearanceMm ?? project.materialProfileSnapshot.clearanceMm,
-              )}
-              min={0}
-              step={0.05}
-              onChange={updateNumber('foldSlotClearanceMm', true)}
-            />
-          ) : null}
-        </div>
-        {boxLike ? (
-          <div className="field-stack">
-            <NumberField
-              name="foldTabDepthMm"
-              label={closureMethod === 'press-fit' ? 'Press-fit lip depth' : 'Glue tab depth'}
-              value={Number(parameters.foldTabDepthMm ?? 8)}
-              onChange={updateNumber('foldTabDepthMm')}
-            />
-          </div>
-        ) : null}
-        {kind === 'box-with-lid' ? (
-          <div className="slice-number-grid">
-            <NumberField
-              name="foldLidDepthMm"
-              label="Lid wall depth"
-              value={Number(parameters.foldLidDepthMm ?? 15)}
-              onChange={updateNumber('foldLidDepthMm')}
-            />
-            <NumberField
-              name="foldLidClearanceMm"
-              label="Lid clearance"
-              value={Number(parameters.foldLidClearanceMm ?? 0.5)}
-              min={0}
-              step={0.1}
-              onChange={updateNumber('foldLidClearanceMm', true)}
-            />
-          </div>
-        ) : null}
-        {kind === 'envelope' ? (
-          <div className="slice-number-grid">
-            <NumberField
-              name="foldClosureFlapMm"
-              label="Closure flap"
-              value={Number(parameters.foldClosureFlapMm ?? 12)}
-              min={0}
-              onChange={updateNumber('foldClosureFlapMm', true)}
-            />
-          </div>
-        ) : null}
         {kind === 'regular-prism' ? (
-          <div className="slice-number-grid">
-            <NumberField
-              name="foldPrismSides"
-              label="Polygon sides"
-              value={Number(parameters.foldPrismSides ?? 6)}
-              min={3}
-              max={12}
-              step={1}
-              unit="sides"
-              onChange={updateRange('foldPrismSides', 3, 12)}
-            />
-            <NumberField
-              name="foldPrismRotationDeg"
-              label="Profile rotation"
-              value={Number(parameters.foldPrismRotationDeg ?? 0)}
-              min={-180}
-              step={5}
-              unit="°"
-              onChange={updateFiniteNumber('foldPrismRotationDeg')}
-            />
-          </div>
+          <NumberField
+            name="foldPrismSides"
+            label="Polygon sides"
+            value={Number(parameters.foldPrismSides ?? 6)}
+            min={3}
+            max={12}
+            step={1}
+            unit={t('sides')}
+            onChange={updateRange('foldPrismSides', 3, 12)}
+          />
         ) : null}
         {kind === 'pyramid-frustum' ? (
           <NumberField
@@ -290,13 +220,108 @@ export function FoldTemplatePanel({
             onChange={updateRange('foldTopScale', 0, 1)}
           />
         ) : null}
-        {['sleeve', 'envelope', 'regular-prism', 'pyramid-frustum'].includes(kind) ? (
-          <NumberField
-            name="foldSeamTabMm"
-            label={closureMethod === 'press-fit' ? 'Press-fit lip depth' : 'Seam tab depth'}
-            value={Number(parameters.foldSeamTabMm ?? 8)}
-            onChange={updateNumber('foldSeamTabMm')}
-          />
+        {experienceMode === 'advanced' ? (
+          <AdvancedSettingsSection>
+            <div className="slice-number-grid">
+              <div className="field-stack">
+                <label htmlFor="fold-closure-method">{t('Connection method')}</label>
+                <select
+                  id="fold-closure-method"
+                  value={closureMethod}
+                  onChange={(event) => setModeParameter('foldClosureMethod', event.target.value)}
+                >
+                  <option value="glue">{t('Glue tabs')}</option>
+                  <option value="press-fit">{t('Press-fit lips and slits')}</option>
+                </select>
+              </div>
+              {closureMethod === 'press-fit' ? (
+                <NumberField
+                  name="foldSlotClearanceMm"
+                  label={t('Slit clearance')}
+                  value={Number(
+                    parameters.foldSlotClearanceMm ?? project.materialProfileSnapshot.clearanceMm,
+                  )}
+                  min={0}
+                  step={0.05}
+                  onChange={updateNumber('foldSlotClearanceMm', true)}
+                />
+              ) : null}
+            </div>
+            {boxLike ? (
+              <NumberField
+                name="foldTabDepthMm"
+                label={closureMethod === 'press-fit' ? 'Press-fit lip depth' : 'Glue tab depth'}
+                value={Number(parameters.foldTabDepthMm ?? 8)}
+                onChange={updateNumber('foldTabDepthMm')}
+              />
+            ) : null}
+            {kind === 'box-with-lid' ? (
+              <div className="slice-number-grid">
+                <NumberField
+                  name="foldLidDepthMm"
+                  label="Lid wall depth"
+                  value={Number(parameters.foldLidDepthMm ?? 15)}
+                  onChange={updateNumber('foldLidDepthMm')}
+                />
+                <NumberField
+                  name="foldLidClearanceMm"
+                  label="Lid clearance"
+                  value={Number(parameters.foldLidClearanceMm ?? 0.5)}
+                  min={0}
+                  step={0.1}
+                  onChange={updateNumber('foldLidClearanceMm', true)}
+                />
+              </div>
+            ) : null}
+            {kind === 'envelope' ? (
+              <NumberField
+                name="foldClosureFlapMm"
+                label="Closure flap"
+                value={Number(parameters.foldClosureFlapMm ?? 12)}
+                min={0}
+                onChange={updateNumber('foldClosureFlapMm', true)}
+              />
+            ) : null}
+            {kind === 'regular-prism' ? (
+              <NumberField
+                name="foldPrismRotationDeg"
+                label="Profile rotation"
+                value={Number(parameters.foldPrismRotationDeg ?? 0)}
+                min={-180}
+                step={5}
+                unit="°"
+                onChange={updateFiniteNumber('foldPrismRotationDeg')}
+              />
+            ) : null}
+            {['sleeve', 'envelope', 'regular-prism', 'pyramid-frustum'].includes(kind) ? (
+              <NumberField
+                name="foldSeamTabMm"
+                label={closureMethod === 'press-fit' ? 'Press-fit lip depth' : 'Seam tab depth'}
+                value={Number(parameters.foldSeamTabMm ?? 8)}
+                onChange={updateNumber('foldSeamTabMm')}
+              />
+            ) : null}
+            <div className="slice-number-grid">
+              <NumberField
+                name="foldClearanceMm"
+                label="Fit clearance"
+                value={Number(
+                  parameters.foldClearanceMm ?? project.materialProfileSnapshot.clearanceMm,
+                )}
+                min={0}
+                step={0.1}
+                onChange={updateNumber('foldClearanceMm', true)}
+              />
+              <NumberField
+                name="foldProfileToleranceMm"
+                label="Profile tolerance"
+                value={Number(parameters.foldProfileToleranceMm ?? 1)}
+                min={0.01}
+                step={0.1}
+                onChange={updateNumber('foldProfileToleranceMm')}
+              />
+            </div>
+          </AdvancedSettingsSection>
         ) : null}
       </fieldset>
       {!hideGenerationAction ? (
@@ -321,7 +346,7 @@ export function FoldTemplatePanel({
       ) : null}
       {error ? (
         <p className="inline-error" role="alert">
-          {error}
+          <RuntimeFailureMessage failure={error} />
         </p>
       ) : null}
       {!hideGenerationAction &&

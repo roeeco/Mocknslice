@@ -2,6 +2,7 @@ import { createMeshValidationIssues } from '../../geometry/mesh/createMeshValida
 import { rotateModelMesh90, scaleModelMeshToDimension } from '../../geometry/mesh/transformMesh';
 import { recordProjectChange, touchProject } from '../projectChange';
 import type { AppSliceCreator, ModelSlice } from '../types';
+import { runtimeFailure } from '../../domain/runtimeFailure';
 
 function modelName(fileName: string): string {
   return fileName.replace(/\.stl$/i, '') || 'Imported STL';
@@ -51,6 +52,7 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
           id,
         ),
         selectedEntityId: id,
+        selectedPartId: id,
         activeSheetId: state.project.sheetLayouts[0]?.id,
         viewportMode: 'three',
         activeWorkflowStep: 'import',
@@ -62,7 +64,7 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
     }),
   failModelImport: (modelImportError) => set({ modelImportStatus: 'error', modelImportError }),
   cancelModelImport: () =>
-    set({ modelImportStatus: 'cancelled', modelImportError: 'STL import was cancelled.' }),
+    set({ modelImportStatus: 'cancelled', modelImportError: runtimeFailure('IMPORT_CANCELLED') }),
   rotateModel90: (axis) =>
     set((state) => ({
       ...recordProjectChange(state, (project) =>

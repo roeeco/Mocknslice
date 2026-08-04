@@ -13,7 +13,7 @@ import type {
 } from '../../domain/panelConstruction';
 import type { ValidationIssue } from '../../domain/validation';
 
-export const PANEL_CONSTRUCTION_ALGORITHM_VERSION = 'rectangular-joints-v3';
+export const PANEL_CONSTRUCTION_ALGORITHM_VERSION = 'rectangular-joints-v4';
 
 export interface PanelConstructionInput {
   modelId: string;
@@ -26,7 +26,10 @@ interface PanelSpec {
   name: string;
   widthMm: number;
   heightMm: number;
+  dividerAxis?: 'width' | 'depth';
   dividerPositionMm?: number;
+  crossingSlotCentresMm?: number[];
+  tabCentresMm?: number[];
 }
 
 interface JointSpec {
@@ -64,12 +67,20 @@ function roundedPoint(point: Point2D): Point2D {
   return { x: rounded(point.x), y: rounded(point.y) };
 }
 
-function dividerCountFor(settings: PanelConstructionSettings): number {
-  return settings.dividerCount ?? 0;
-}
-
-function dividerAxisFor(settings: PanelConstructionSettings): 'width' | 'depth' {
-  return settings.dividerAxis === 'depth' ? 'depth' : 'width';
+function dividerCountsFor(settings: PanelConstructionSettings): {
+  width: number;
+  depth: number;
+} {
+  if (settings.widthDividerCount !== undefined || settings.depthDividerCount !== undefined) {
+    return {
+      width: settings.widthDividerCount ?? 0,
+      depth: settings.depthDividerCount ?? 0,
+    };
+  }
+  const legacyCount = settings.dividerCount ?? 0;
+  return settings.dividerAxis === 'depth'
+    ? { width: 0, depth: legacyCount }
+    : { width: legacyCount, depth: 0 };
 }
 
 function fnv1a(values: readonly (string | number | boolean)[]): string {
@@ -97,8 +108,8 @@ export function deterministicPanelConstructionHash(input: PanelConstructionInput
     input.settings.fingerWidthMm,
     input.settings.clearanceMm,
     input.settings.includeLid,
-    dividerCountFor(input.settings),
-    dividerAxisFor(input.settings),
+    dividerCountsFor(input.settings).width,
+    dividerCountsFor(input.settings).depth,
   ]);
 }
 
@@ -201,6 +212,52 @@ function dividerTabWidth(widthMm: number, thicknessMm: number): number {
   return Math.min(widthMm / 5, Math.max(thicknessMm * 4, 6));
 }
 
+interface HorizontalEdgeFeature {
+  centreMm: number;
+  widthMm: number;
+  depthMm: number;
+}
+
+function appendHorizontalFeatures(
+  points: Point2D[],
+  startX: number,
+  endX: number,
+  y: number,
+  features: readonly HorizontalEdgeFeature[],
+): void {
+  const direction = endX >= startX ? 1 : -1;
+  const ordered = [...features].sort((a, b) => direction * (a.centreMm - b.centreMm));
+  pushUnique(points, { x: startX, y });
+  for (const feature of ordered) {
+    const near = feature.centreMm - (direction * feature.widthMm) / 2;
+    const far = feature.centreMm + (direction * feature.widthMm) / 2;
+    pushUnique(points, { x: near, y });
+    pushUnique(points, { x: near, y: y + feature.depthMm });
+    pushUnique(points, { x: far, y: y + feature.depthMm });
+    pushUnique(points, { x: far, y });
+  }
+  pushUnique(points, { x: endX, y });
+}
+
+function dividerTabCentres(
+  widthMm: number,
+  tabWidthMm: number,
+  crossingCentresMm: readonly number[],
+  crossingWidthMm: number,
+): number[] {
+  const candidates = [0.25, 0.32, 0.18, 0.38, 0.12];
+  for (const fraction of candidates) {
+    const centres = [-widthMm * fraction, widthMm * fraction];
+    const clear = centres.every((centre) =>
+      crossingCentresMm.every(
+        (crossing) => Math.abs(centre - crossing) > (tabWidthMm + crossingWidthMm) / 2 + 0.25,
+      ),
+    );
+    if (clear) return centres;
+  }
+  return [-widthMm * 0.4, widthMm * 0.4];
+}
+
 function appendFingerEdge(
   points: Point2D[],
   start: Point2D,
@@ -230,6 +287,7 @@ function appendFingerEdge(
 function dividerOutline(
   spec: PanelSpec,
   thicknessMm: number,
+  clearanceMm: number,
   fingerSegmentCount: number,
 ): Point2D[] {
   const left = -spec.widthMm / 2;
@@ -237,21 +295,26 @@ function dividerOutline(
   const bottom = -spec.heightMm / 2;
   const top = spec.heightMm / 2;
   const tabWidth = dividerTabWidth(spec.widthMm, thicknessMm);
-  const halfTab = tabWidth / 2;
   const tabDepth = thicknessMm;
-  const centres = [-spec.widthMm / 4, spec.widthMm / 4];
-  const points: Point2D[] = [
-    { x: left, y: bottom },
-    { x: centres[0]! - halfTab, y: bottom },
-    { x: centres[0]! - halfTab, y: bottom - tabDepth },
-    { x: centres[0]! + halfTab, y: bottom - tabDepth },
-    { x: centres[0]! + halfTab, y: bottom },
-    { x: centres[1]! - halfTab, y: bottom },
-    { x: centres[1]! - halfTab, y: bottom - tabDepth },
-    { x: centres[1]! + halfTab, y: bottom - tabDepth },
-    { x: centres[1]! + halfTab, y: bottom },
-    { x: right, y: bottom },
-  ].map(roundedPoint);
+  const crossingWidth = thicknessMm + clearanceMm;
+  const crossings = spec.crossingSlotCentresMm ?? [];
+  const tabCentres = spec.tabCentresMm ?? [-spec.widthMm / 4, spec.widthMm / 4];
+  const bottomFeatures: HorizontalEdgeFeature[] = tabCentres.map((centreMm) => ({
+    centreMm,
+    widthMm: tabWidth,
+    depthMm: -tabDepth,
+  }));
+  if (spec.dividerAxis === 'depth') {
+    bottomFeatures.push(
+      ...crossings.map((centreMm) => ({
+        centreMm,
+        widthMm: crossingWidth,
+        depthMm: spec.heightMm / 2,
+      })),
+    );
+  }
+  const points: Point2D[] = [];
+  appendHorizontalFeatures(points, left, right, bottom, bottomFeatures);
   appendFingerEdge(
     points,
     { x: right, y: bottom },
@@ -260,7 +323,21 @@ function dividerOutline(
     fingerSegmentCount,
     thicknessMm,
   );
-  pushUnique(points, { x: left, y: top });
+  if (spec.dividerAxis === 'width') {
+    appendHorizontalFeatures(
+      points,
+      right,
+      left,
+      top,
+      crossings.map((centreMm) => ({
+        centreMm,
+        widthMm: crossingWidth,
+        depthMm: -spec.heightMm / 2,
+      })),
+    );
+  } else {
+    pushUnique(points, { x: left, y: top });
+  }
   appendFingerEdge(
     points,
     { x: left, y: top },
@@ -283,14 +360,14 @@ function dividerBaseSlots(
     const tabWidth = dividerTabWidth(spec.widthMm, material.thicknessMm);
     const slotLength = tabWidth + settings.clearanceMm;
     const slotWidth = material.thicknessMm + settings.clearanceMm;
-    const centres = [-spec.widthMm / 4, spec.widthMm / 4];
+    const centres = spec.tabCentresMm ?? [-spec.widthMm / 4, spec.widthMm / 4];
     centres.forEach((alongPosition, index) => {
       const centre =
-        dividerAxisFor(settings) === 'width'
+        spec.dividerAxis === 'width'
           ? { x: alongPosition, y: position }
           : { x: position, y: alongPosition };
-      const halfX = (dividerAxisFor(settings) === 'width' ? slotLength : slotWidth) / 2;
-      const halfY = (dividerAxisFor(settings) === 'width' ? slotWidth : slotLength) / 2;
+      const halfX = (spec.dividerAxis === 'width' ? slotLength : slotWidth) / 2;
+      const halfY = (spec.dividerAxis === 'width' ? slotWidth : slotLength) / 2;
       paths.push({
         id: `${spec.role}-base-slot-${index + 1}`,
         operation: 'cut',
@@ -361,7 +438,10 @@ function slotPaths(
   return paths;
 }
 
-function panelSpecs(settings: PanelConstructionSettings): PanelSpec[] {
+function panelSpecs(
+  settings: PanelConstructionSettings,
+  material: PanelConstructionMaterial,
+): PanelSpec[] {
   const specs: PanelSpec[] = [
     {
       role: 'base',
@@ -402,18 +482,49 @@ function panelSpecs(settings: PanelConstructionSettings): PanelSpec[] {
       heightMm: settings.innerDepthMm,
     });
   }
-  const dividerCount = dividerCountFor(settings);
-  const dividerSpanMm =
-    dividerAxisFor(settings) === 'width' ? settings.innerWidthMm : settings.innerDepthMm;
-  const positionSpanMm =
-    dividerAxisFor(settings) === 'width' ? settings.innerDepthMm : settings.innerWidthMm;
-  for (let index = 0; index < dividerCount; index += 1) {
+  const counts = dividerCountsFor(settings);
+  const widthPositions = Array.from(
+    { length: counts.width },
+    (_, index) =>
+      -settings.innerDepthMm / 2 + (settings.innerDepthMm * (index + 1)) / (counts.width + 1),
+  );
+  const depthPositions = Array.from(
+    { length: counts.depth },
+    (_, index) =>
+      -settings.innerWidthMm / 2 + (settings.innerWidthMm * (index + 1)) / (counts.depth + 1),
+  );
+  let dividerIndex = 0;
+  for (const position of widthPositions) {
+    dividerIndex += 1;
     specs.push({
-      role: `divider-${index + 1}`,
-      name: `Divider ${index + 1}`,
-      widthMm: dividerSpanMm,
+      role: `divider-${dividerIndex}`,
+      name: `Width divider ${dividerIndex}`,
+      widthMm: settings.innerWidthMm,
       heightMm: settings.innerHeightMm,
-      dividerPositionMm: -positionSpanMm / 2 + (positionSpanMm * (index + 1)) / (dividerCount + 1),
+      dividerAxis: 'width',
+      dividerPositionMm: position,
+      crossingSlotCentresMm: depthPositions,
+      tabCentresMm: [-settings.innerWidthMm / 4, settings.innerWidthMm / 4],
+    });
+  }
+  for (const position of depthPositions) {
+    dividerIndex += 1;
+    const tabWidth = dividerTabWidth(settings.innerDepthMm, material.thicknessMm);
+    const crossingWidth = material.thicknessMm + settings.clearanceMm;
+    specs.push({
+      role: `divider-${dividerIndex}`,
+      name: `Depth divider ${dividerIndex - counts.width}`,
+      widthMm: settings.innerDepthMm,
+      heightMm: settings.innerHeightMm,
+      dividerAxis: 'depth',
+      dividerPositionMm: position,
+      crossingSlotCentresMm: widthPositions,
+      tabCentresMm: dividerTabCentres(
+        settings.innerDepthMm,
+        tabWidth,
+        widthPositions,
+        crossingWidth,
+      ),
     });
   }
   return specs;
@@ -517,10 +628,10 @@ function dividerSideJointSpecs(
   settings: PanelConstructionSettings,
   specs: readonly PanelSpec[],
 ): DividerSideJointSpec[] {
-  const axis = dividerAxisFor(settings);
   const result: DividerSideJointSpec[] = [];
   for (const spec of specs) {
     if (!isDividerRole(spec.role)) continue;
+    const axis = spec.dividerAxis ?? 'width';
     const position = spec.dividerPositionMm ?? 0;
     result.push(
       axis === 'width'
@@ -556,6 +667,46 @@ function dividerSideJointSpecs(
     );
   }
   return result;
+}
+
+function crossingDividerJoints(
+  specs: readonly PanelSpec[],
+  firstJointNumber: number,
+  settings: PanelConstructionSettings,
+): PanelConstructionJoint[] {
+  const widthDividers = specs.filter(
+    (spec) => isDividerRole(spec.role) && spec.dividerAxis === 'width',
+  );
+  const depthDividers = specs.filter(
+    (spec) => isDividerRole(spec.role) && spec.dividerAxis === 'depth',
+  );
+  let index = 0;
+  return widthDividers.flatMap((widthDivider) =>
+    depthDividers.map((depthDivider) => {
+      index += 1;
+      const number = firstJointNumber + index;
+      return {
+        id: `construction-joint-${number}`,
+        kind: 'half-lap',
+        panelAId: `construction-panel-${widthDivider.role}`,
+        panelBId: `construction-panel-${depthDivider.role}`,
+        edgeA: 'face',
+        edgeB: 'face',
+        sharedLengthMm: rounded(settings.innerHeightMm / 2),
+        fingerCount: 0,
+        clearanceMm: rounded(settings.clearanceMm),
+        pairLabel: `J${number}`,
+        receiverCentreAMm: roundedPoint({
+          x: depthDivider.dividerPositionMm ?? 0,
+          y: 0,
+        }),
+        receiverCentreMm: roundedPoint({
+          x: widthDivider.dividerPositionMm ?? 0,
+          y: 0,
+        }),
+      };
+    }),
+  );
 }
 
 function dividerReceiverSlotPaths(
@@ -616,8 +767,9 @@ function assembledPanels(
     if (role === 'left') return [-halfWidth, point.y + height / 2, -point.x];
     if (role === 'right') return [halfWidth, point.y + height / 2, point.x];
     if (role === 'lid') return [point.x, height, -point.y];
-    const position = specsByRole.get(role)?.dividerPositionMm ?? 0;
-    return dividerAxisFor(settings) === 'width'
+    const spec = specsByRole.get(role);
+    const position = spec?.dividerPositionMm ?? 0;
+    return spec?.dividerAxis === 'width'
       ? [point.x, point.y + height / 2, position]
       : [position, point.y + height / 2, point.x];
   };
@@ -639,6 +791,7 @@ function assembledPanels(
 
 function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
   const { settings, material } = input;
+  const dividerCounts = dividerCountsFor(settings);
   const dimensions = [settings.innerWidthMm, settings.innerDepthMm, settings.innerHeightMm];
   if (
     dimensions.some((value) => !Number.isFinite(value) || value <= 0) ||
@@ -648,9 +801,12 @@ function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
     settings.clearanceMm < 0 ||
     !Number.isFinite(material.thicknessMm) ||
     material.thicknessMm <= 0 ||
-    !Number.isInteger(dividerCountFor(settings)) ||
-    dividerCountFor(settings) < 0 ||
-    dividerCountFor(settings) > 6
+    !Number.isInteger(dividerCounts.width) ||
+    !Number.isInteger(dividerCounts.depth) ||
+    dividerCounts.width < 0 ||
+    dividerCounts.width > 6 ||
+    dividerCounts.depth < 0 ||
+    dividerCounts.depth > 6
   ) {
     return [
       {
@@ -665,11 +821,14 @@ function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
     ];
   }
   const issues: ValidationIssue[] = [];
-  const dividerCount = dividerCountFor(settings);
+  const dividerCount = dividerCounts.width + dividerCounts.depth;
   const usesFingers = settings.jointKind !== 'butt' || dividerCount > 0;
-  const dividedSpan =
-    dividerAxisFor(settings) === 'width' ? settings.innerDepthMm : settings.innerWidthMm;
-  if (dividerCount > 0 && dividedSpan / (dividerCount + 1) < material.thicknessMm * 4) {
+  const widthSpacing = settings.innerDepthMm / (dividerCounts.width + 1);
+  const depthSpacing = settings.innerWidthMm / (dividerCounts.depth + 1);
+  if (
+    (dividerCounts.width > 0 && widthSpacing < material.thicknessMm * 4) ||
+    (dividerCounts.depth > 0 && depthSpacing < material.thicknessMm * 4)
+  ) {
     issues.push({
       id: `panel-divider-spacing-${input.modelId}`,
       severity: 'error',
@@ -801,7 +960,7 @@ function emptyResult(
 export function generatePanelConstruction(input: PanelConstructionInput): PanelConstructionResult {
   const issues = inputIssues(input);
   if (issues.some((issue) => issue.severity === 'error')) return emptyResult(input, issues);
-  const specs = panelSpecs(input.settings);
+  const specs = panelSpecs(input.settings, input.material);
   const specsByRole = new Map(specs.map((spec) => [spec.role, spec]));
   const treatmentsByRole = new Map<PanelRole, Map<PanelEdgeName, EdgeTreatment>>(
     specs.map((spec) => [spec.role, new Map()]),
@@ -868,7 +1027,12 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
       receiverCentreMm: roundedPoint(spec.receiverCentreMm),
     }),
   );
-  const joints = [...enclosureJoints, ...dividerJoints];
+  const crossingJoints = crossingDividerJoints(
+    specs,
+    enclosureJoints.length + dividerJoints.length,
+    input.settings,
+  );
+  const joints = [...enclosureJoints, ...dividerJoints, ...crossingJoints];
   const panels: PanelConstructionPanel[] = specs.map((spec) => {
     const roleJoints = joints.filter(
       (joint) =>
@@ -889,7 +1053,12 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
       widthMm: rounded(spec.widthMm),
       heightMm: rounded(spec.heightMm),
       outline: isDividerRole(spec.role)
-        ? dividerOutline(spec, input.material.thicknessMm, dividerFingerCount)
+        ? dividerOutline(
+            spec,
+            input.material.thicknessMm,
+            input.settings.clearanceMm,
+            dividerFingerCount,
+          )
         : panelOutline(spec, treatmentsByRole.get(spec.role)!),
       edgeJointIds,
     };
@@ -913,7 +1082,9 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
       const location = joint.panelAId === panel.id ? joint.edgeA : joint.edgeB;
       const position =
         location === 'face'
-          ? (joint.receiverCentreMm ?? { x: 0, y: 0 })
+          ? ((joint.panelAId === panel.id
+              ? (joint.receiverCentreAMm ?? joint.receiverCentreMm)
+              : joint.receiverCentreMm) ?? { x: 0, y: 0 })
           : (() => {
               const geometry = edgeGeometry(location, spec.widthMm, spec.heightMm);
               const midpoint = pointAlong(geometry.start, geometry.end, 0.5);

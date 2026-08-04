@@ -3,6 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { BufferGeometry, Float32BufferAttribute } from 'three';
 import type { MeshUnfoldFace } from '../../domain/unfolding';
 import type { Vector3Mm } from '../../domain/geometry';
+import { assemblySelectionPanelIds } from '../../domain/assembly';
 import {
   unfoldedFaceVerticesAtProgress,
   type UnfoldedFaceVertices,
@@ -21,6 +22,8 @@ function UnfoldFaceMesh({
   positions: [Vector3Mm, Vector3Mm, Vector3Mm];
 }) {
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
+  const project = useProjectStore((state) => state.project);
+  const relatedPanelIds = assemblySelectionPanelIds(project, selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
   const geometry = useMemo(() => {
     const geometry = new BufferGeometry();
@@ -37,7 +40,7 @@ function UnfoldFaceMesh({
   }, [centre, positions]);
   useEffect(() => () => geometry?.dispose(), [geometry]);
   if (!geometry) return null;
-  const selected = selectedEntityId === face.id;
+  const selected = selectedEntityId === face.id || relatedPanelIds.has(face.id);
   return (
     <mesh
       geometry={geometry}
@@ -45,7 +48,7 @@ function UnfoldFaceMesh({
       receiveShadow
       onClick={(event) => {
         event.stopPropagation();
-        selectEntity(face.id);
+        selectEntity(face.id, face.partId);
       }}
     >
       <meshStandardMaterial

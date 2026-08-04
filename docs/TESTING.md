@@ -1,4 +1,4 @@
-# Testing SliceFold
+# Testing MocknSlice
 
 ## Commands
 
@@ -13,7 +13,9 @@
 
 Tests verify default material profiles and snapshot isolation, versioned project JSON round-trips and rejection paths, IndexedDB save/list/restore/delete behaviour, parameter panel state changes and undo, ASCII and binary STL parsing, cube normalization, unit conversion, degenerate-triangle reporting, open/non-manifold/disconnected topology, scaling, orientation, and model inspection controls.
 
-Wizard component tests verify contextual mounting, linear advancement, completed-step revisiting, and blocking validation. Browser coverage asserts the live 3D canvas does not enter a React external-store update loop, exercises generated previews, and checks that compact controls precede the preview at the 720 px breakpoint.
+Wizard tests cover the complete Simple/Advanced workflow matrix, dynamic numbering, panel-construction source skipping, blocking-error Inspect insertion, mode-switch remapping, generation gates, and preservation of hidden Advanced values and placements. Browser coverage asserts generation stays on Configure, previews can be regenerated without navigation, Simple reaches tight Output directly, the warning badge opens an accessible issue drawer, and Advanced retains the full Inspect/Arrange workflow.
+
+Tight-layout fixtures verify deterministic 0°/90° placement, 3 mm separation, exact 5 mm wrapping bounds, and source/manual-layout immutability. SVG and PDF tests pass explicit Simple layouts to verify tight physical dimensions while retaining Advanced sheet dimensions. Localization coverage verifies every emitted validation/runtime code has English and Hebrew catalogue entries and that Hebrew never exposes raw exception text.
 
 Phase 3 geometry tests slice a cube on all three axes, trace a faceted cylinder, classify a hollow-prism hole, and report open contours.
 
@@ -50,8 +52,8 @@ Phase 5 geometry tests cover X/Y, X/Z, and Y/Z cube families, deterministic comp
 
 ## Phase 9 panel-construction coverage
 
-- Pure geometry tests cover deterministic butt, complementary finger, and tab-slot output; stable joint labels; odd matched segment counts; exact assembled outlines and holes; internal divider bottom tabs, side fingers, and receiver slots on both axes; optional lid topology; material warnings; and blocking dimension validation.
-- Component tests cover inside dimensions, joint family, target pitch, slot clearance, lid and divider selection, and generated panel/joint/slot summaries.
+- Pure geometry tests cover deterministic butt, complementary finger, and tab-slot output; stable joint labels; odd matched segment counts; exact assembled outlines and holes; internal divider bottom tabs, side fingers, receiver slots on both axes, simultaneous divider grids with complementary half-laps; optional lid topology; material warnings; and blocking dimension validation.
+- Component tests cover inside dimensions, joint family, target pitch, slot clearance, lid and independent width/depth divider selection, and generated panel/joint/slot summaries.
 - Project and SVG tests round-trip the version 5 construction result and verify panel, joint, hole, and label metadata.
 - Playwright selects plywood, generates a divided tab-slot kit through the real worker, checks the assembled 3D legend and flat panel/slot paths, and inspects divider geometry in the downloaded layered SVG.
 

@@ -1,10 +1,11 @@
-import type { ProjectData, SliceFoldProjectFileV5 } from '../domain/project';
+import { BRAND } from '../config/brand';
+import type { MocknSliceProjectFileV6, ProjectData } from '../domain/project';
 
-export const CURRENT_PROJECT_FILE_VERSION = 5 as const;
+export const CURRENT_PROJECT_FILE_VERSION = 6 as const;
 
 export function serializeProject(project: ProjectData): string {
-  const file: SliceFoldProjectFileV5 = {
-    format: 'slicefold-project',
+  const file: MocknSliceProjectFileV6 = {
+    format: 'mocknslice-project',
     version: CURRENT_PROJECT_FILE_VERSION,
     project,
   };
@@ -23,7 +24,7 @@ export function createProjectDownload(project: ProjectData): void {
     .replace(/(^-|-$)/g, '');
 
   anchor.href = url;
-  anchor.download = `${safeName || 'slicefold-project'}.slicefold.json`;
+  anchor.download = `${safeName || 'mocknslice-project'}${BRAND.projectExtension}`;
   anchor.click();
   URL.revokeObjectURL(url);
 }

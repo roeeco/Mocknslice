@@ -1,10 +1,10 @@
-# SliceFold project file format
+# MocknSlice project file format
 
-Project exports use formatted JSON with the suffix `.slicefold.json`.
+Project exports use formatted JSON with the suffix `.mocknslice.json`. Legacy `.slicefold.json` files remain import-compatible.
 
 ```json
 {
-  "format": "slicefold-project",
+  "format": "mocknslice-project",
   "version": 5,
   "project": {}
 }
@@ -20,11 +20,13 @@ The importer parses untrusted JSON as `unknown`, verifies the format and support
 
 Large embedded source models remain allowed by the domain. Phase 2 stores normalized geometry and the source filename rather than embedding the original STL bytes. IndexedDB persists the same project payload and a separate last-autosave project ID.
 
-Older version 1 built-in-cube projects are enriched in memory with deterministic primitive mesh data and current parameter defaults. Versions 1–4 remain import-compatible but new exports always use version 5.
+The Simple/Advanced experience preference is intentionally not serialized in project files. Simple tight output placements are ephemeral derived data; only Advanced manual `sheetLayouts` remain in `ProjectData`. Validation issues may include optional serializable `messageArgs` for localized interpolation; the existing English `message` fallback remains supported, so this additive field does not require a format bump.
+
+Older version 1 built-in-cube projects are enriched in memory with deterministic primitive mesh data and current parameter defaults. SliceFold versions 1–5 remain import-compatible but new exports always use MocknSlice version 6. Legacy generated geometry remains inspectable and is marked unverified until it can be regenerated with a provenance record.
 
 ## Fabrication SVG
 
-Phase 4 exports one selected sheet as a standalone, vector-only SVG with the configured millimetre `width` and `height`, a matching `viewBox`, project and sheet metadata, a group for every supported operation, stable path IDs, part IDs, contour roles, configured operation strokes, and optional engraved labels and boundary. Every path contains transformed numeric coordinates rather than an opaque SVG transform. The file name includes the sheet number. Complex nesting is not implied.
+SVG export receives an explicit effective layout. Advanced exports one selected persisted sheet at its configured physical dimensions. Simple exports its derived single-sheet canvas whose width, height, and `viewBox` wrap the packed parts with a 5 mm margin. Both forms include project and sheet metadata, a group for every supported operation, stable path IDs, part IDs, contour roles, configured operation strokes, and optional engraved labels and boundary. Every path contains transformed numeric coordinates rather than an opaque SVG transform. Complex polygon nesting is not implied.
 
 Waffle slot paths are emitted in the cut operation group without a closing `Z`. Their endpoints coincide with the outer contour, so the outer cut plus the three-sided slot path encloses removable slot waste without requiring SVG transforms or a polygon-boolean dependency.
 

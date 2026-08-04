@@ -2,6 +2,7 @@ import type { FabricationPart, SliceAxis } from '../../domain/fabrication';
 import type {
   AssembledFoldPanel,
   FoldEdgeDefinition,
+  FoldConnection,
   FoldPanel,
   FoldTab,
   ProjectedProfile,
@@ -34,6 +35,7 @@ export interface FoldTemplateInput {
 interface BuiltTemplate {
   panels: FoldPanel[];
   edges: FoldEdgeDefinition[];
+  connections: FoldConnection[];
   tabs: FoldTab[];
   parts: FabricationPart[];
   assembled: AssembledFoldPanel[];
@@ -176,6 +178,7 @@ function mergeBuilt(...templates: BuiltTemplate[]): BuiltTemplate {
   return {
     panels: templates.flatMap((template) => template.panels),
     edges: templates.flatMap((template) => template.edges),
+    connections: templates.flatMap((template) => template.connections),
     tabs: templates.flatMap((template) => template.tabs),
     parts: templates.flatMap((template) => template.parts),
     assembled: templates.flatMap((template) => template.assembled),
@@ -417,6 +420,7 @@ function openBoxNet(input: {
   return {
     panels,
     edges: net.edges,
+    connections: net.connections,
     tabs: net.tabs,
     parts: [net.part],
     assembled,
@@ -590,6 +594,7 @@ function bandNet(input: {
   return {
     panels,
     edges: net.edges,
+    connections: net.connections,
     tabs: net.tabs,
     parts: [net.part],
     assembled,
@@ -765,6 +770,7 @@ function pyramidNet(input: FoldTemplateInput, profile: ProjectedProfile): BuiltT
   const built: BuiltTemplate = {
     panels,
     edges: main.edges,
+    connections: main.connections,
     tabs: main.tabs,
     parts: [main.part],
     assembled,
@@ -835,6 +841,7 @@ function pyramidNet(input: FoldTemplateInput, profile: ProjectedProfile): BuiltT
   return mergeBuilt(mainWithCapSlots, {
     panels: [capPanel],
     edges: cap.edges,
+    connections: cap.connections,
     tabs: cap.tabs,
     parts: [cap.part],
     assembled: [
@@ -871,6 +878,7 @@ function incompatibleResult(
     },
     panels: [],
     edges: [],
+    connections: [],
     tabs: [],
     parts: [],
     issues,
@@ -1138,6 +1146,7 @@ export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerati
     profile,
     panels: built.panels,
     edges: built.edges,
+    connections: built.connections,
     tabs: built.tabs,
     parts: built.parts,
     issues,

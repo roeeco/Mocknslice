@@ -8,9 +8,11 @@ import type { NormalizedMeshResult } from '../geometry/mesh/normalizeMesh';
 import type { ProjectData } from '../domain/project';
 import type { ValidationIssue } from '../domain/validation';
 import type { Locale } from '../locales';
+import type { RuntimeFailure } from '../domain/runtimeFailure';
 
 export type AutosaveStatus = 'idle' | 'pending' | 'saving' | 'saved' | 'error';
 export type ViewportMode = 'three' | 'two';
+export type ExperienceMode = 'standard' | 'advanced';
 export type CameraPreset = 'isometric' | 'front' | 'side' | 'top';
 export type WorkflowStep =
   'start' | 'mode' | 'import' | 'configure' | 'inspect' | 'arrange' | 'export';
@@ -29,11 +31,11 @@ export interface ProjectSlice {
 export interface ModelSlice {
   assumedStlUnit: StlUnit;
   modelImportStatus: 'idle' | 'processing' | 'ready' | 'error' | 'cancelled';
-  modelImportError: string | undefined;
+  modelImportError: RuntimeFailure | undefined;
   setAssumedStlUnit: (unit: StlUnit) => void;
   startModelImport: () => void;
   completeModelImport: (fileName: string, result: NormalizedMeshResult) => void;
-  failModelImport: (message: string) => void;
+  failModelImport: (failure: RuntimeFailure) => void;
   cancelModelImport: () => void;
   rotateModel90: (axis: ModelAxis) => void;
   scaleModelToDimension: (axis: ModelAxis, targetMm: number) => void;
@@ -42,7 +44,7 @@ export interface ModelSlice {
 
 export interface FabricationSlice {
   sliceGenerationStatus: 'idle' | 'processing' | 'ready' | 'error' | 'cancelled' | 'stale';
-  sliceGenerationError: string | undefined;
+  sliceGenerationError: RuntimeFailure | undefined;
   setFabricationMode: (mode: FabricationMode) => void;
   setWorkflowSourceMode: (mode: 'import' | 'template') => void;
   selectTemplateSource: (kind: TemplateKind) => void;
@@ -77,6 +79,7 @@ export interface LayoutSlice {
 
 export interface ViewportSlice {
   locale: Locale;
+  experienceMode: ExperienceMode;
   viewportMode: ViewportMode;
   cameraPreset: CameraPreset;
   cameraResetToken: number;
@@ -85,6 +88,7 @@ export interface ViewportSlice {
   foldPreviewProgress: number;
   setViewportMode: (mode: ViewportMode) => void;
   setLocale: (locale: Locale) => void;
+  setExperienceMode: (mode: ExperienceMode) => void;
   setCameraPreset: (preset: CameraPreset) => void;
   fitCamera: () => void;
   setActiveWorkflowStep: (step: WorkflowStep) => void;
@@ -94,8 +98,9 @@ export interface ViewportSlice {
 }
 
 export interface SelectionSlice {
+  selectedPartId: string | undefined;
   selectedEntityId: string | undefined;
-  selectEntity: (id?: string) => void;
+  selectEntity: (id?: string, ownerPartId?: string) => void;
 }
 
 export interface MaterialLibrarySlice {

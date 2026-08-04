@@ -6,6 +6,7 @@ import {
   validationIssuesForProject,
 } from '../../validation/projectValidation';
 import { inferredWorkflowProgress } from '../workflow';
+import { deriveGenerationState } from '../../domain/generation';
 
 export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
   project: createProject(),
@@ -31,7 +32,7 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
     set((state) => {
       const prepared = prepareProjectForUse(project ?? state.project);
       const progress = project
-        ? inferredWorkflowProgress(prepared)
+        ? inferredWorkflowProgress(prepared, state.experienceMode)
         : { activeStep: state.activeWorkflowStep, completedSteps: state.completedWorkflowSteps };
       return {
         project: prepared,
@@ -40,7 +41,12 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
         future: [],
         autosaveStatus: project ? 'saved' : 'pending',
         validationIssues: validationIssuesForProject(prepared),
-        sliceGenerationStatus: prepared.generatedParts.length > 0 ? 'ready' : 'idle',
+        sliceGenerationStatus:
+          deriveGenerationState(prepared) === 'ready'
+            ? 'ready'
+            : deriveGenerationState(prepared) === 'stale'
+              ? 'stale'
+              : 'idle',
         sliceGenerationError: undefined,
         activeSheetId: prepared.sheetLayouts[0]?.id,
         activeWorkflowStep: progress.activeStep,
@@ -60,14 +66,19 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
   replaceProject: (project) =>
     set((state) => {
       const prepared = prepareProjectForUse(project);
-      const progress = inferredWorkflowProgress(prepared);
+      const progress = inferredWorkflowProgress(prepared, state.experienceMode);
       return {
         ...recordProjectChange(state, () => touchProject(prepared)),
         hasHydrated: true,
         validationIssues: validationIssuesForProject(prepared),
         activeWorkflowStep: progress.activeStep,
         completedWorkflowSteps: progress.completedSteps,
-        sliceGenerationStatus: prepared.generatedParts.length > 0 ? 'ready' : 'idle',
+        sliceGenerationStatus:
+          deriveGenerationState(prepared) === 'ready'
+            ? 'ready'
+            : deriveGenerationState(prepared) === 'stale'
+              ? 'stale'
+              : 'idle',
         sliceGenerationError: undefined,
         activeSheetId: prepared.sheetLayouts[0]?.id,
       };

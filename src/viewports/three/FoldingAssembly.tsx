@@ -1,12 +1,21 @@
 import { useEffect, useMemo } from 'react';
 import { BufferGeometry, DoubleSide, Float32BufferAttribute } from 'three';
 import type { AssembledFoldPanel } from '../../domain/folding';
+import { assemblySelectionPanelIds } from '../../domain/assembly';
 import { useProjectStore } from '../../state/useProjectStore';
 
 const panelColors = ['#d85c2f', '#4f897b', '#e0a83e', '#607a9b', '#a45d78', '#73834d'];
 const EMPTY_PANELS: readonly AssembledFoldPanel[] = [];
 
-function PanelMesh({ panel, index }: { panel: AssembledFoldPanel; index: number }) {
+function PanelMesh({
+  panel,
+  index,
+  relatedPanelIds,
+}: {
+  panel: AssembledFoldPanel;
+  index: number;
+  relatedPanelIds: ReadonlySet<string>;
+}) {
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
   const geometry = useMemo(() => {
@@ -34,12 +43,12 @@ function PanelMesh({ panel, index }: { panel: AssembledFoldPanel; index: number 
       receiveShadow
       onClick={(event) => {
         event.stopPropagation();
-        selectEntity(panel.id);
+        selectEntity(panel.id, panel.partId);
       }}
     >
       <meshStandardMaterial
         color={
-          selectedEntityId === panel.id
+          selectedEntityId === panel.id || relatedPanelIds.has(panel.id)
             ? '#f59e0b'
             : (panelColors[index % panelColors.length] ?? '#d85c2f')
         }
@@ -56,10 +65,13 @@ function PanelMesh({ panel, index }: { panel: AssembledFoldPanel; index: number 
 export function FoldingAssembly() {
   const result = useProjectStore((state) => state.project.foldingResult);
   const panels = result?.assembledPreview.panels ?? EMPTY_PANELS;
+  const project = useProjectStore((state) => state.project);
+  const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
+  const relatedPanelIds = assemblySelectionPanelIds(project, selectedEntityId);
   return (
     <>
       {panels.map((panel, index) => (
-        <PanelMesh key={panel.id} panel={panel} index={index} />
+        <PanelMesh key={panel.id} panel={panel} index={index} relatedPanelIds={relatedPanelIds} />
       ))}
     </>
   );

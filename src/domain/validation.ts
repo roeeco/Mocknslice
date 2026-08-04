@@ -5,6 +5,7 @@ export interface ValidationIssue {
   severity: ValidationSeverity;
   code: string;
   message: string;
+  messageArgs?: Record<string, string | number>;
   affectedEntityIds: string[];
   suggestedAction?: string;
 }

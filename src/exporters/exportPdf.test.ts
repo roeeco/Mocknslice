@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createProject } from '../app/createProject';
 import { createAssemblyPdf } from './exportPdf';
+import { deriveTightOutputLayout } from '../geometry/layout/deriveTightOutputLayout';
 
 function pdfProject() {
   const project = createProject('Assembly guide');
@@ -73,12 +74,24 @@ describe('createAssemblyPdf', () => {
     expect(source).toContain('/MediaBox [0 0 340.157 255.118]');
     expect(source).toContain('(A1) Tj');
     expect(source).toContain('(Assembly guide - sheet 1 of 2) Tj');
-    expect(source).toContain('/Producer (SliceFold fabrication output)');
+    expect(source).toContain('/Producer (MocknSlice fabrication output)');
     expect(source.endsWith('%%EOF\n')).toBe(true);
   });
 
   it('requires at least one placed part', () => {
     const project = createProject();
     expect(() => createAssemblyPdf(project)).toThrow('Place at least one part');
+  });
+
+  it('uses explicit Standard canvas dimensions without replacing Advanced sheets', () => {
+    const project = pdfProject();
+    const saved = structuredClone(project.sheetLayouts);
+    const tight = deriveTightOutputLayout(project.generatedParts);
+    const source = new TextDecoder().decode(createAssemblyPdf(project, [tight]));
+    const points = (value: number) => Math.round(value * (72 / 25.4) * 1000) / 1000;
+
+    expect(source).toContain(`/MediaBox [0 0 ${points(tight.widthMm)} ${points(tight.heightMm)}]`);
+    expect(source).toContain('/Count 1');
+    expect(project.sheetLayouts).toEqual(saved);
   });
 });

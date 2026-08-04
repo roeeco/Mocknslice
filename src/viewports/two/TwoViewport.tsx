@@ -9,7 +9,9 @@ import {
 import type { FabricationPart, SheetPlacement } from '../../domain/fabrication';
 import type { Point2D } from '../../domain/geometry';
 import type { OperationStyle } from '../../domain/operations';
+import { assemblySelectionPanelIds } from '../../domain/assembly';
 import { transformPoint, transformedBoundsForPart } from '../../geometry/layout/partPlacement';
+import { deriveTightOutputLayout } from '../../geometry/layout/deriveTightOutputLayout';
 import {
   createRegistrationMarkPaths,
   prepareFabricationOutput,
@@ -86,6 +88,7 @@ function PartOnSheet({
   placement,
   selected,
   selectedEntityId,
+  relatedPanelIds,
   invalid,
   styleByOperation,
   labelFontSizeMm,
@@ -104,7 +107,8 @@ function PartOnSheet({
   includeLabels: boolean;
   onPointerDown: (event: PointerEvent<SVGGElement>) => void;
   onSelect: () => void;
-  onSelectEntity: (id: string) => void;
+  relatedPanelIds: ReadonlySet<string>;
+  onSelectEntity: (id: string, ownerPartId?: string) => void;
 }) {
   const bounds = transformedBoundsForPart(part, placement);
   const handleKeyDown = (event: KeyboardEvent<SVGGElement>) => {
@@ -128,22 +132,25 @@ function PartOnSheet({
       {part.paths.map((path) => {
         const entityId = path.tabId ?? path.edgeId ?? path.panelId;
         const entitySelected = [path.tabId, path.edgeId, path.panelId].includes(selectedEntityId);
+        const receiverSelected = path.panelId ? relatedPanelIds.has(path.panelId) : false;
         const style = styleByOperation.get(path.operation);
         return (
           <path
             key={path.id}
             d={pathData(path.points, placement, path.closed)}
             fill={
-              path.contourRole === 'outer'
-                ? '#f8f5ed'
-                : path.contourRole === 'hole'
-                  ? '#dedbd2'
-                  : 'none'
+              path.tabId
+                ? 'url(#tab-hatch)'
+                : path.contourRole === 'outer'
+                  ? '#f8f5ed'
+                  : path.contourRole === 'hole'
+                    ? '#dedbd2'
+                    : 'none'
             }
             fillRule="evenodd"
             stroke={style?.stroke ?? '#222222'}
             strokeWidth={
-              selected || entitySelected
+              selected || entitySelected || receiverSelected
                 ? Math.max(0.65, style?.strokeWidthMm ?? 0.35)
                 : (style?.strokeWidthMm ?? 0.35)
             }
@@ -158,7 +165,7 @@ function PartOnSheet({
               entityId
                 ? (event) => {
                     event.stopPropagation();
-                    onSelectEntity(entityId);
+                    onSelectEntity(entityId, part.id);
                   }
                 : undefined
             }
@@ -214,16 +221,24 @@ export function TwoViewport() {
   const [pan, setPan] = useState<PanState>();
   const [storedView, setStoredView] = useState<ViewState>();
   const project = useProjectStore((state) => state.project);
+  const experienceMode = useProjectStore((state) => state.experienceMode);
   const activeSheetId = useProjectStore((state) => state.activeSheetId);
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const validationIssues = useProjectStore((state) => state.validationIssues);
   const selectEntity = useProjectStore((state) => state.selectEntity);
+  const selectedPartId = useProjectStore((state) => state.selectedPartId);
   const setActiveSheet = useProjectStore((state) => state.setActiveSheet);
   const updatePartPlacement = useProjectStore((state) => state.updatePartPlacement);
   const preparedParts = useMemo(() => prepareFabricationOutput(project).parts, [project]);
-  const sheet =
-    project.sheetLayouts.find((candidate) => candidate.id === activeSheetId) ??
-    project.sheetLayouts[0];
+  const layouts = useMemo(
+    () =>
+      experienceMode === 'standard'
+        ? [deriveTightOutputLayout(preparedParts)]
+        : project.sheetLayouts,
+    [experienceMode, preparedParts, project.sheetLayouts],
+  );
+  const relatedPanelIds = assemblySelectionPanelIds(project, selectedEntityId);
+  const sheet = layouts.find((candidate) => candidate.id === activeSheetId) ?? layouts[0];
 
   if (!sheet) return null;
 
@@ -244,11 +259,13 @@ export function TwoViewport() {
 
   const partsById = new Map(preparedParts.map((part) => [part.id, part]));
   const invalidIds = new Set(
-    validationIssues
-      .filter((issue) =>
-        ['PART_OUTSIDE_SHEET', 'PART_CROSSES_MARGIN', 'PARTS_OVERLAP'].includes(issue.code),
-      )
-      .flatMap((issue) => issue.affectedEntityIds),
+    experienceMode === 'standard'
+      ? []
+      : validationIssues
+          .filter((issue) =>
+            ['PART_OUTSIDE_SHEET', 'PART_CROSSES_MARGIN', 'PARTS_OVERLAP'].includes(issue.code),
+          )
+          .flatMap((issue) => issue.affectedEntityIds),
   );
   const styleByOperation = new Map(
     project.exportSettings.operationStyles.map((style) => [style.operation, style]),
@@ -262,7 +279,7 @@ export function TwoViewport() {
   });
 
   const beginDrag = (event: PointerEvent<SVGGElement>, placement: SheetPlacement) => {
-    if (event.button !== 0) return;
+    if (experienceMode === 'standard' || event.button !== 0) return;
     const svg = svgRef.current;
     if (!svg) return;
     const start = screenPoint(svg, event.clientX, event.clientY);
@@ -270,7 +287,7 @@ export function TwoViewport() {
     event.preventDefault();
     event.stopPropagation();
     event.currentTarget.setPointerCapture(event.pointerId);
-    selectEntity(placement.partId);
+    selectEntity(placement.partId, placement.partId);
     setDrag({
       partId: placement.partId,
       pointerId: event.pointerId,
@@ -348,7 +365,7 @@ export function TwoViewport() {
       });
       return;
     }
-    if (drag && event.pointerId === drag.pointerId) {
+    if (experienceMode === 'advanced' && drag && event.pointerId === drag.pointerId) {
       const point = screenPoint(event.currentTarget, event.clientX, event.clientY);
       if (!point) return;
       setDrag({
@@ -365,7 +382,7 @@ export function TwoViewport() {
       setPan(undefined);
       return;
     }
-    if (drag && event.pointerId === drag.pointerId) {
+    if (experienceMode === 'advanced' && drag && event.pointerId === drag.pointerId) {
       updatePartPlacement(sheet.id, drag.partId, { x: drag.x, y: drag.y });
       setDrag(undefined);
     }
@@ -377,12 +394,12 @@ export function TwoViewport() {
       aria-label={copy.layoutPreview}
     >
       <div className="viewport-toolbar sheet-tabs" aria-label={t('Sheets')}>
-        {project.sheetLayouts.map((candidate, index) => (
+        {layouts.map((candidate, index) => (
           <button
             type="button"
             className={candidate.id === sheet.id ? 'is-selected' : undefined}
             aria-pressed={candidate.id === sheet.id}
-            onClick={() => setActiveSheet(candidate.id)}
+            onClick={() => experienceMode === 'advanced' && setActiveSheet(candidate.id)}
             key={candidate.id}
           >
             Sheet {index + 1}
@@ -431,6 +448,26 @@ export function TwoViewport() {
           setPan(undefined);
         }}
       >
+        <defs>
+          <pattern
+            id="tab-hatch"
+            width="3"
+            height="3"
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(35)"
+          >
+            <rect width="3" height="3" fill="#d85c2f" fillOpacity="0.13" />
+            <line
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="3"
+              stroke="#d85c2f"
+              strokeOpacity="0.55"
+              strokeWidth="0.45"
+            />
+          </pattern>
+        </defs>
         <rect
           x="0.5"
           y="0.5"
@@ -474,14 +511,15 @@ export function TwoViewport() {
             key={part.id}
             part={part}
             placement={placement}
-            selected={selectedEntityId === part.id}
+            selected={selectedPartId === part.id}
             selectedEntityId={selectedEntityId}
+            relatedPanelIds={relatedPanelIds}
             invalid={invalidIds.has(part.id)}
             styleByOperation={styleByOperation}
             labelFontSizeMm={project.exportSettings.labelFontSizeMm}
             includeLabels={project.exportSettings.includeLabels}
             onPointerDown={(event) => beginDrag(event, placement)}
-            onSelect={() => selectEntity(part.id)}
+            onSelect={() => selectEntity(part.id, part.id)}
             onSelectEntity={selectEntity}
           />
         ))}

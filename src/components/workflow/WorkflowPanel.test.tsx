@@ -16,6 +16,7 @@ describe('wizard workflow', () => {
       sliceGenerationError: undefined,
       past: [],
       future: [],
+      experienceMode: 'standard',
     });
     useProjectStore.getState().setLocale('en');
   });
@@ -106,7 +107,7 @@ describe('wizard workflow', () => {
 
   it('applies standard sheet size presets in the arrange step', async () => {
     const user = userEvent.setup();
-    useProjectStore.setState({ activeWorkflowStep: 'arrange' });
+    useProjectStore.setState({ activeWorkflowStep: 'arrange', experienceMode: 'advanced' });
     render(<WorkflowPanel />);
 
     await user.click(screen.getByRole('button', { name: /A3/ }));
@@ -120,6 +121,25 @@ describe('wizard workflow', () => {
       widthMm: 500,
       heightMm: 700,
     });
+  });
+
+  it('numbers the currently visible workflow instead of using fixed phase numbers', () => {
+    useProjectStore.setState((state) => ({
+      project: { ...state.project, fabricationMode: 'panel-construction' },
+      activeWorkflowStep: 'configure',
+      experienceMode: 'standard',
+    }));
+    const view = render(<WorkflowPanel />);
+    expect(screen.getByText('Step 3 / 4')).toBeVisible();
+    view.unmount();
+
+    useProjectStore.setState((state) => ({
+      project: { ...state.project, fabricationMode: 'stacked-slices' },
+      activeWorkflowStep: 'configure',
+      experienceMode: 'advanced',
+    }));
+    render(<WorkflowPanel />);
+    expect(screen.getByText('Step 4 / 7')).toBeVisible();
   });
 
   it('stores editable custom material values in the project snapshot', async () => {

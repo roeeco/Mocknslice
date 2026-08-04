@@ -5,6 +5,7 @@ import { normalizeStlInWorker } from '../../workers/geometryWorkerClient';
 import type { NormalizedMeshResult } from '../../geometry/mesh/normalizeMesh';
 import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
+import { runtimeFailure, runtimeFailureMessage } from '../../domain/runtimeFailure';
 
 const units: { value: StlUnit; label: string }[] = [
   { value: 'millimetres', label: 'Millimetres (mm)' },
@@ -19,6 +20,7 @@ export function ModelImportPanel() {
   const cancelledRef = useRef(false);
   const assumedStlUnit = useProjectStore((state) => state.assumedStlUnit);
   const status = useProjectStore((state) => state.modelImportStatus);
+  const locale = useProjectStore((state) => state.locale);
   const error = useProjectStore((state) => state.modelImportError);
   const setAssumedStlUnit = useProjectStore((state) => state.setAssumedStlUnit);
   const startModelImport = useProjectStore((state) => state.startModelImport);
@@ -38,7 +40,7 @@ export function ModelImportPanel() {
     event.target.value = '';
     if (!file) return;
     if (!file.name.toLowerCase().endsWith('.stl')) {
-      failModelImport('Choose an STL file with the .stl extension.');
+      failModelImport(runtimeFailure('IMPORT_FILE_TYPE_INVALID'));
       return;
     }
 
@@ -56,7 +58,10 @@ export function ModelImportPanel() {
       taskRef.current = undefined;
       if (caught instanceof DOMException && caught.name === 'AbortError') return;
       failModelImport(
-        caught instanceof Error ? caught.message : 'The STL file could not be imported.',
+        runtimeFailure(
+          'IMPORT_FAILED',
+          caught instanceof Error ? caught.message : 'The STL file could not be imported.',
+        ),
       );
     }
   };
@@ -82,12 +87,14 @@ export function ModelImportPanel() {
         >
           {units.map((unit) => (
             <option key={unit.value} value={unit.value}>
-              {unit.label}
+              {t(unit.label)}
             </option>
           ))}
         </select>
         <p className="field-help">
-          STL files do not store reliable units. SliceFold records this choice and converts to mm.
+          {t(
+            'STL files do not store reliable units. MocknSlice records this choice and converts to mm.',
+          )}
         </p>
       </div>
       <div className="import-actions">
@@ -97,11 +104,11 @@ export function ModelImportPanel() {
           onClick={() => inputRef.current?.click()}
           disabled={status === 'processing'}
         >
-          Choose STL file
+          {t('Choose STL file')}
         </button>
         {status === 'processing' ? (
           <button type="button" onClick={cancel}>
-            Cancel
+            {t('Cancel')}
           </button>
         ) : null}
       </div>
@@ -116,12 +123,14 @@ export function ModelImportPanel() {
       <div className={`import-status import-status-${status}`} aria-live="polite">
         {status === 'processing' ? (
           <>
-            <i aria-hidden="true" /> Reading and inspecting geometry…
+            <i aria-hidden="true" /> {t('Reading and inspecting geometry…')}
           </>
         ) : null}
-        {status === 'ready' ? 'STL imported and inspected.' : null}
-        {status === 'cancelled' ? 'Import cancelled.' : null}
-        {status === 'error' && error ? <span role="alert">{error}</span> : null}
+        {status === 'ready' ? t('STL imported and inspected.') : null}
+        {status === 'cancelled' ? t('Import cancelled.') : null}
+        {status === 'error' && error ? (
+          <span role="alert">{runtimeFailureMessage(error, locale)}</span>
+        ) : null}
       </div>
     </section>
   );

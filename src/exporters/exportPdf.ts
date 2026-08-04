@@ -1,4 +1,4 @@
-import type { FabricationPart, SheetPlacement } from '../domain/fabrication';
+import type { FabricationPart, SheetLayout, SheetPlacement } from '../domain/fabrication';
 import type { Point2D } from '../domain/geometry';
 import type { OperationType } from '../domain/operations';
 import type { ProjectData } from '../domain/project';
@@ -7,6 +7,7 @@ import {
   createRegistrationMarkPaths,
   prepareFabricationOutput,
 } from '../geometry/output/prepareFabricationOutput';
+import { BRAND } from '../config/brand';
 
 const MM_TO_POINTS = 72 / 25.4;
 const operationOrder: OperationType[] = [
@@ -71,10 +72,11 @@ function textCommand(text: string, point: Point2D, heightMm: number, fontSizeMm:
 
 function pageContent(
   project: ProjectData,
+  sheet: SheetLayout,
   sheetIndex: number,
+  sheetCount: number,
   partsById: Map<string, FabricationPart>,
 ): string {
-  const sheet = project.sheetLayouts[sheetIndex]!;
   const lines = ['q', '1 J 1 j'];
   const presentOperations = new Set<OperationType>();
   for (const placement of sheet.placements) {
@@ -151,7 +153,7 @@ function pageContent(
   lines.push(
     '0 0 0 rg',
     textCommand(
-      `${project.metadata.name} - sheet ${sheetIndex + 1} of ${project.sheetLayouts.length}`,
+      `${project.metadata.name} - sheet ${sheetIndex + 1} of ${sheetCount}`,
       { x: Math.max(2, sheet.marginMm), y: Math.max(3, sheet.marginMm * 0.65) },
       sheet.heightMm,
       2.5,
@@ -167,29 +169,28 @@ function pageContent(
   return `${lines.join('\n')}\n`;
 }
 
-export function createAssemblyPdf(project: ProjectData): Uint8Array {
-  const sheets = project.sheetLayouts.filter((sheet) => sheet.placements.length > 0);
+export function createAssemblyPdf(
+  project: ProjectData,
+  layouts: readonly SheetLayout[] = project.sheetLayouts,
+): Uint8Array {
+  const sheets = layouts.filter((sheet) => sheet.placements.length > 0);
   if (sheets.length === 0) throw new Error('Place at least one part before exporting a PDF.');
   const prepared = prepareFabricationOutput(project);
   const blockingIssue = prepared.issues.find((issue) => issue.severity === 'error');
   if (blockingIssue) throw new Error(blockingIssue.message);
   const partsById = new Map(prepared.parts.map((part) => [part.id, part]));
-  const pageIndexes = project.sheetLayouts
-    .map((sheet, index) => ({ sheet, index }))
-    .filter(({ sheet }) => sheet.placements.length > 0)
-    .map(({ index }) => index);
+  const pageLayouts = layouts.filter((sheet) => sheet.placements.length > 0);
   const fontObject = 3;
-  const infoObject = 4 + pageIndexes.length * 2;
+  const infoObject = 4 + pageLayouts.length * 2;
   const objects = new Map<number, string>();
   objects.set(1, '<< /Type /Catalog /Pages 2 0 R >>');
-  const pageReferences = pageIndexes.map((_, index) => `${4 + index * 2} 0 R`).join(' ');
-  objects.set(2, `<< /Type /Pages /Kids [${pageReferences}] /Count ${pageIndexes.length} >>`);
+  const pageReferences = pageLayouts.map((_, index) => `${4 + index * 2} 0 R`).join(' ');
+  objects.set(2, `<< /Type /Pages /Kids [${pageReferences}] /Count ${pageLayouts.length} >>`);
   objects.set(fontObject, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
-  pageIndexes.forEach((sheetIndex, outputIndex) => {
-    const sheet = project.sheetLayouts[sheetIndex]!;
+  pageLayouts.forEach((sheet, outputIndex) => {
     const pageObject = 4 + outputIndex * 2;
     const contentObject = pageObject + 1;
-    const content = pageContent(project, sheetIndex, partsById);
+    const content = pageContent(project, sheet, outputIndex, pageLayouts.length, partsById);
     objects.set(
       pageObject,
       `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pdfNumber(sheet.widthMm * MM_TO_POINTS)} ${pdfNumber(sheet.heightMm * MM_TO_POINTS)}] /Resources << /Font << /F1 ${fontObject} 0 R >> >> /Contents ${contentObject} 0 R >>`,
@@ -201,11 +202,11 @@ export function createAssemblyPdf(project: ProjectData): Uint8Array {
   });
   objects.set(
     infoObject,
-    `<< /Title (${pdfText(project.metadata.name)}) /Creator (SliceFold) /Producer (SliceFold fabrication output) >>`,
+    `<< /Title (${pdfText(project.metadata.name)}) /Creator (${BRAND.pdfCreator}) /Producer (${BRAND.pdfCreator} fabrication output) >>`,
   );
 
   const encoder = new TextEncoder();
-  let document = '%PDF-1.4\n% SliceFold vector assembly sheets\n';
+  let document = `%PDF-1.4\n% ${BRAND.name} vector assembly sheets\n`;
   const offsets: number[] = [0];
   for (let object = 1; object <= infoObject; object += 1) {
     offsets[object] = encoder.encode(document).length;
@@ -220,8 +221,11 @@ export function createAssemblyPdf(project: ProjectData): Uint8Array {
   return encoder.encode(document);
 }
 
-export function createAssemblyPdfDownload(project: ProjectData): void {
-  const bytes = createAssemblyPdf(project);
+export function createAssemblyPdfDownload(
+  project: ProjectData,
+  layouts: readonly SheetLayout[] = project.sheetLayouts,
+): void {
+  const bytes = createAssemblyPdf(project, layouts);
   const buffer = new ArrayBuffer(bytes.byteLength);
   new Uint8Array(buffer).set(bytes);
   const blob = new Blob([buffer], { type: 'application/pdf' });
@@ -233,7 +237,7 @@ export function createAssemblyPdfDownload(project: ProjectData): void {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
   anchor.href = url;
-  anchor.download = `${safeName || 'slicefold'}-assembly.pdf`;
+  anchor.download = `${safeName || 'mocknslice'}-assembly.pdf`;
   anchor.click();
   URL.revokeObjectURL(url);
 }

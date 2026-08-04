@@ -16,6 +16,7 @@ describe('FoldTemplatePanel', () => {
       future: [],
       sliceGenerationStatus: 'idle',
       sliceGenerationError: undefined,
+      experienceMode: 'advanced',
     });
     useProjectStore.getState().setLocale('en');
   });
@@ -31,25 +32,35 @@ describe('FoldTemplatePanel', () => {
     useProjectStore.getState().setLocale('en');
   });
 
-  it('stores standalone dimensions, template family, closure, and family controls', async () => {
+  it('stores standalone dimensions, template family, and family controls', async () => {
     const user = userEvent.setup();
     render(<FoldTemplatePanel />);
 
     await user.selectOptions(screen.getByLabelText('Template family'), 'regular-prism');
     fireEvent.change(screen.getByLabelText('Width (X)'), { target: { value: '120' } });
-    await user.selectOptions(screen.getByLabelText('Connection method'), 'press-fit');
-    fireEvent.change(screen.getByLabelText('Slit clearance'), { target: { value: '0.35' } });
     fireEvent.change(screen.getByLabelText('Polygon sides'), { target: { value: '8' } });
 
     expect(useProjectStore.getState().project.modeParameters).toMatchObject({
       foldTemplateKind: 'regular-prism',
       foldWidthMm: 120,
-      foldClosureMethod: 'press-fit',
-      foldSlotClearanceMm: 0.35,
       foldPrismSides: 8,
     });
     expect(screen.queryByLabelText('Fitting axis')).toBeNull();
     expect(screen.getByText(/chosen extrusion length/)).toBeVisible();
+  });
+
+  it('keeps press-fit generation controls connected in Advanced mode', async () => {
+    const user = userEvent.setup();
+    render(<FoldTemplatePanel />);
+
+    await user.selectOptions(screen.getByLabelText('Connection method'), 'press-fit');
+    expect(screen.getByLabelText('Press-fit lip depth')).toBeVisible();
+    fireEvent.change(screen.getByLabelText('Slit clearance'), { target: { value: '0.3' } });
+
+    expect(useProjectStore.getState().project.modeParameters).toMatchObject({
+      foldClosureMethod: 'press-fit',
+      foldSlotClearanceMm: 0.3,
+    });
   });
 
   it('shows source and fitted profiles after generation', () => {

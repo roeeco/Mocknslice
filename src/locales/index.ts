@@ -96,6 +96,73 @@ const hebrewPhrases: Record<string, string> = {
   'Part area': 'שטח חלקים',
   'Estimated waste': 'פחת משוער',
   'Cut length': 'אורך חיתוך',
+  Output: 'פלט',
+  'Material profile': 'פרופיל חומר',
+  'Applied kerf': 'רוחב חיתוך מיושם',
+  colour: 'צבע',
+  width: 'רוחב',
+  Cut: 'חיתוך',
+  Score: 'חריצה',
+  'Mountain fold': 'קיפול הר',
+  'Valley fold': 'קיפול עמק',
+  Perforate: 'ניקוב',
+  Engrave: 'חריטה',
+  Guide: 'עזר',
+  'Contour tolerance': 'סבילות מתאר',
+  'Slot width': 'רוחב חריץ',
+  'Automatic unfolding': 'פריסה אוטומטית',
+  'Mesh edges and manual seams': 'קצוות רשת ותפרים ידניים',
+  'Manual seams are forced cuts; extra cuts are added when needed to remove fold cycles.':
+    'תפרים ידניים נכפים כחיתוכים; חיתוכים נוספים מתווספים לפי הצורך להסרת מחזורי קיפול.',
+  'Polygon sides': 'מספר צלעות',
+  sides: 'צלעות',
+  'Glue tab depth': 'עומק לשונית הדבקה',
+  'Press-fit lip depth': 'עומק לשונית לחיצה',
+  'Lid wall depth': 'עומק דופן המכסה',
+  'Lid clearance': 'מרווח המכסה',
+  'Closure flap': 'דש סגירה',
+  'Profile rotation': 'סיבוב פרופיל',
+  'Top scale (0 = pyramid)': 'קנה מידה עליון (0 = פירמידה)',
+  'Seam tab depth': 'עומק לשונית תפר',
+  'Fit clearance': 'מרווח התאמה',
+  'Profile tolerance': 'סבילות פרופיל',
+  'A fitted rectangular base with four walls.': 'בסיס מלבני מותאם עם ארבע דפנות.',
+  'A fitted open box plus a separate lid.': 'קופסה פתוחה מותאמת ומכסה נפרד.',
+  'A shallow fitted rectangular tray.': 'מגש מלבני רדוד ומותאם.',
+  'Four-sided end sections joined by a wrapping band.': 'חתכי קצה מרובעים המחוברים ברצועה עוטפת.',
+  'Paired rectangular faces with a depth gusset.': 'פאות מלבניות זוגיות עם קפל עומק.',
+  'A configurable regular polygon with a chosen extrusion length.':
+    'מצולע משוכלל ניתן להגדרה עם אורך שיחול נבחר.',
+  'Rectangular ends connected by tapered side panels.': 'קצוות מלבניים המחוברים בלוחות צד מתחדדים.',
+  'Millimetres (mm)': 'מילימטרים (מ״מ)',
+  'Centimetres (cm)': 'סנטימטרים (ס״מ)',
+  'Metres (m)': 'מטרים (מ׳)',
+  'Inches (in)': 'אינצ׳ים (in)',
+  'Choose STL file': 'בחירת קובץ STL',
+  Cancel: 'ביטול',
+  'Reading and inspecting geometry…': 'קורא ובודק את הגאומטריה…',
+  'STL imported and inspected.': 'קובץ ה־STL יובא ונבדק.',
+  'Import cancelled.': 'הייבוא בוטל.',
+  'Choose a MocknSlice project file': 'בחירת קובץ פרויקט MocknSlice',
+  'Alternating fingers meet along every enclosure edge.':
+    'אצבעות לסירוגין נפגשות לאורך כל קצה של המארז.',
+  'One panel receives material-thickness tabs; its mate receives closed slot cuts.':
+    'לוח אחד מקבל לשוניות בעובי החומר, והלוח שמולו מקבל חריצים סגורים.',
+  'Straight panels rely on adhesive, tape, or separate fasteners.':
+    'לוחות ישרים נשענים על דבק, סרט הדבקה או מחברים נפרדים.',
+  'Export is disabled because generation is': 'הייצוא מושבת משום שמצב היצירה הוא',
+  'Create a parametric folding form directly from its finished dimensions.':
+    'יצירת צורת קיפול פרמטרית ישירות מהמידות הסופיות שלה.',
+  'Two perpendicular slice families receive complementary half-depth slots.':
+    'שתי משפחות פרוסות ניצבות מקבלות חריצים משלימים בחצי העומק.',
+  'Flatten a closed, consistently oriented triangular mesh into editable seam islands. This bounded release does not repair meshes or guarantee an overlap-free net.':
+    'פריסת רשת משולשים סגורה ובעלת כיוון עקבי לאיי תפרים הניתנים לעריכה. גרסה תחומה זו אינה מתקנת רשתות ואינה מבטיחה פריסה ללא חפיפות.',
+  'Preparation is applied only to exported and previewed paths. Generated source geometry stays unchanged.':
+    'הכנת הפלט חלה רק על נתיבים מיוצאים ובתצוגה המקדימה. גאומטריית המקור שנוצרה נשארת ללא שינוי.',
+  'Area is exact for closed contours and estimated from folding panels where applicable.':
+    'השטח מדויק למתארים סגורים ומוערך מלוחות קיפול לפי הצורך.',
+  'STL files do not store reliable units. MocknSlice records this choice and converts to mm.':
+    'קובצי STL אינם שומרים יחידות אמינות. MocknSlice שומרת בחירה זו וממירה למ״מ.',
 };
 
 export function setCopyLocale(locale: Locale) {

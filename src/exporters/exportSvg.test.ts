@@ -7,8 +7,41 @@ import { generateFoldTemplate } from '../geometry/folding/generateFoldTemplate';
 import { arrangePartsInRows } from '../geometry/layout/arrangeParts';
 import { generateMeshUnfold } from '../geometry/unfolding/generateMeshUnfold';
 import { generatePanelConstruction } from '../geometry/panelConstruction/generatePanelConstruction';
+import { deriveTightOutputLayout } from '../geometry/layout/deriveTightOutputLayout';
+import { prepareFabricationOutput } from '../geometry/output/prepareFabricationOutput';
 
 describe('createSvgDocument', () => {
+  it('accepts an explicit tight Standard layout while leaving the saved sheet physical size intact', () => {
+    const project = createProject('Tight SVG');
+    project.generatedParts = [
+      {
+        id: 'tight-part',
+        name: 'Tight part',
+        thicknessMm: 1,
+        paths: [
+          {
+            id: 'tight-cut',
+            operation: 'cut',
+            closed: true,
+            points: [
+              { x: 0, y: 0 },
+              { x: 20, y: 0 },
+              { x: 20, y: 10 },
+              { x: 0, y: 10 },
+            ],
+          },
+        ],
+      },
+    ];
+    const saved = structuredClone(project.sheetLayouts);
+    const tight = deriveTightOutputLayout(prepareFabricationOutput(project).parts);
+    const svg = createSheetSvgDocument(project, tight.id, [tight]);
+
+    expect(svg).toContain(`width="${tight.widthMm}mm" height="${tight.heightMm}mm"`);
+    expect(project.sheetLayouts).toEqual(saved);
+    expect(project.sheetLayouts[0]!.widthMm).not.toBe(tight.widthMm);
+  });
+
   it('matches the deterministic millimetre SVG golden file', () => {
     const project = createProject('Golden');
     project.metadata.id = 'project-golden';
@@ -162,7 +195,7 @@ describe('createSvgDocument', () => {
     project.sheetLayouts = arrangePartsInRows(result.parts, project.sheetLayouts[0]!);
 
     const svg = createSheetSvgDocument(project, project.sheetLayouts[0]!.id);
-    expect(svg).toContain('&quot;projectFormatVersion&quot;:5');
+    expect(svg).toContain('&quot;projectFormatVersion&quot;:6');
     expect(svg).toContain('&quot;mode&quot;:&quot;mesh-unfold&quot;');
     expect(svg).toContain('id="operation-cut"');
     expect(svg).toMatch(/id="operation-(mountain|valley)-fold"/);
@@ -199,7 +232,7 @@ describe('createSvgDocument', () => {
     project.sheetLayouts = arrangePartsInRows(result.parts, project.sheetLayouts[0]!);
 
     const svg = createSheetSvgDocument(project, project.sheetLayouts[0]!.id);
-    expect(svg).toContain('&quot;projectFormatVersion&quot;:5');
+    expect(svg).toContain('&quot;projectFormatVersion&quot;:6');
     expect(svg).toContain('&quot;mode&quot;:&quot;panel-construction&quot;');
     expect(svg).toContain('data-panel-id="construction-panel-');
     expect(svg).toContain('data-edge-id="construction-joint-');

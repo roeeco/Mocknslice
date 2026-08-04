@@ -1,5 +1,5 @@
 import type { FabricationPart } from './fabrication';
-import type { FoldTab } from './folding';
+import type { FoldConnection, FoldTab } from './folding';
 import type { Point2D, Vector3Mm } from './geometry';
 import type { ValidationIssue } from './validation';
 
@@ -65,6 +65,7 @@ export interface MeshUnfoldResult {
   settings: MeshUnfoldSettings;
   faces: MeshUnfoldFace[];
   edges: MeshUnfoldEdge[];
+  connections: FoldConnection[];
   tabs: FoldTab[];
   hinges: MeshUnfoldHinge[];
   islands: MeshUnfoldIsland[];

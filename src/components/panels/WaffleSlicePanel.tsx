@@ -3,6 +3,8 @@ import type { SliceAxis } from '../../domain/fabrication';
 import type { WaffleSlotPattern } from '../../geometry/slicing/types';
 import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
+import { AdvancedSettingsSection } from './AdvancedSettingsSection';
+import { RuntimeFailureMessage } from '../RuntimeFailureMessage';
 
 const axes: SliceAxis[] = ['x', 'y', 'z'];
 
@@ -10,6 +12,7 @@ export function WaffleSlicePanel({
   hideGenerationAction = false,
 }: { hideGenerationAction?: boolean } = {}) {
   const project = useProjectStore((state) => state.project);
+  const experienceMode = useProjectStore((state) => state.experienceMode);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
   const setModeParameter = useProjectStore((state) => state.setModeParameter);
@@ -47,11 +50,13 @@ export function WaffleSlicePanel({
     <section className="panel-section slice-panel waffle-panel" aria-labelledby="waffle-heading">
       <div className="panel-heading-row">
         <p className="eyebrow">{t('Fabrication')}</p>
-        <span className={`generation-status status-${status}`}>{status}</span>
+        <span className={`generation-status status-${status}`}>
+          {copy.generationStatus[status]}
+        </span>
       </div>
       <h2 id="waffle-heading">{copy.waffleSlices}</h2>
       <p className="field-help waffle-intro">
-        Two perpendicular slice families receive complementary half-depth slots.
+        {t('Two perpendicular slice families receive complementary half-depth slots.')}
       </p>
       <fieldset disabled={status === 'processing'}>
         <div className="slice-number-grid">
@@ -118,59 +123,64 @@ export function WaffleSlicePanel({
             </div>
           </div>
         </div>
-        <div className="slice-number-grid">
-          <div className="field-stack">
-            <label htmlFor="waffle-thickness">{copy.partThickness}</label>
-            <div className="unit-input">
-              <input
-                id="waffle-thickness"
-                type="number"
-                min="0.05"
-                step="0.1"
-                value={thickness}
-                onChange={updatePositive('waffleThicknessMm')}
-              />
-              <span>mm</span>
+        {experienceMode === 'advanced' ? (
+          <AdvancedSettingsSection>
+            <div className="slice-number-grid">
+              <div className="field-stack">
+                <label htmlFor="waffle-thickness">{copy.partThickness}</label>
+                <div className="unit-input">
+                  <input
+                    id="waffle-thickness"
+                    type="number"
+                    min="0.05"
+                    step="0.1"
+                    value={thickness}
+                    onChange={updatePositive('waffleThicknessMm')}
+                  />
+                  <span>mm</span>
+                </div>
+              </div>
+              <div className="field-stack">
+                <label htmlFor="waffle-clearance">{copy.slotClearance}</label>
+                <div className="unit-input">
+                  <input
+                    id="waffle-clearance"
+                    type="number"
+                    min="0"
+                    step="0.05"
+                    value={clearance}
+                    onChange={updateNonNegative('waffleClearanceMm')}
+                  />
+                  <span>mm</span>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="field-stack">
-            <label htmlFor="waffle-clearance">{copy.slotClearance}</label>
-            <div className="unit-input">
-              <input
-                id="waffle-clearance"
-                type="number"
-                min="0"
-                step="0.05"
-                value={clearance}
-                onChange={updateNonNegative('waffleClearanceMm')}
-              />
-              <span>mm</span>
+            <p className="slot-width-readout">
+              {t('Slot width')}{' '}
+              <strong>{Math.round((thickness + clearance) * 1000) / 1000} mm</strong>
+            </p>
+            <div className="field-stack">
+              <label htmlFor="waffle-slot-pattern">{copy.slotPattern}</label>
+              <select
+                id="waffle-slot-pattern"
+                value={pattern}
+                onChange={(event) => setModeParameter('waffleSlotPattern', event.target.value)}
+              >
+                <option value="alternating">{t('Alternate top and bottom')}</option>
+                <option value="by-family">{t('Family A from one side')}</option>
+              </select>
             </div>
-          </div>
-        </div>
-        <p className="slot-width-readout">
-          Slot width <strong>{Math.round((thickness + clearance) * 1000) / 1000} mm</strong>
-        </p>
-        <div className="field-stack">
-          <label htmlFor="waffle-slot-pattern">{copy.slotPattern}</label>
-          <select
-            id="waffle-slot-pattern"
-            value={pattern}
-            onChange={(event) => setModeParameter('waffleSlotPattern', event.target.value)}
-          >
-            <option value="alternating">{t('Alternate top and bottom')}</option>
-            <option value="by-family">{t('Family A from one side')}</option>
-          </select>
-        </div>
-        <label className="checkbox-field" htmlFor="waffle-reverse-slots">
-          <input
-            id="waffle-reverse-slots"
-            type="checkbox"
-            checked={reverseSlots}
-            onChange={(event) => setModeParameter('waffleReverseSlots', event.target.checked)}
-          />
-          <span>{copy.reverseSlots}</span>
-        </label>
+            <label className="checkbox-field" htmlFor="waffle-reverse-slots">
+              <input
+                id="waffle-reverse-slots"
+                type="checkbox"
+                checked={reverseSlots}
+                onChange={(event) => setModeParameter('waffleReverseSlots', event.target.checked)}
+              />
+              <span>{copy.reverseSlots}</span>
+            </label>
+          </AdvancedSettingsSection>
+        ) : null}
       </fieldset>
       {!hideGenerationAction ? (
         <div className="generation-actions">
@@ -192,7 +202,7 @@ export function WaffleSlicePanel({
       ) : null}
       {error ? (
         <p className="inline-error" role="alert">
-          {error}
+          <RuntimeFailureMessage failure={error} />
         </p>
       ) : null}
     </section>

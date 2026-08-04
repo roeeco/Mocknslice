@@ -13,6 +13,10 @@ import type { MeshUnfoldResult } from '../domain/unfolding';
 import type { MeshUnfoldInput } from '../geometry/unfolding/generateMeshUnfold';
 import type { PanelConstructionResult } from '../domain/panelConstruction';
 import type { PanelConstructionInput } from '../geometry/panelConstruction/generatePanelConstruction';
+import type {
+  PreparePanelUnfoldInput,
+  PreparePanelUnfoldResult,
+} from '../geometry/unfolding/generatePanelUnfold';
 
 export interface GeometryTask<T> {
   promise: Promise<T>;
@@ -235,6 +239,43 @@ export function generateMeshUnfoldInWorker(input: MeshUnfoldInput): GeometryTask
       settled = true;
       worker.terminate();
       rejectTask?.(new DOMException('Mesh unfolding was cancelled.', 'AbortError'));
+    },
+  };
+}
+
+export function preparePanelUnfoldInWorker(
+  input: PreparePanelUnfoldInput,
+): GeometryTask<PreparePanelUnfoldResult> {
+  const worker = new Worker(new URL('./geometry.worker.ts', import.meta.url), { type: 'module' });
+  const id = crypto.randomUUID();
+  let settled = false;
+  let rejectTask: ((reason?: unknown) => void) | undefined;
+  const promise = new Promise<PreparePanelUnfoldResult>((resolve, reject) => {
+    rejectTask = reject;
+    worker.onmessage = (event: MessageEvent<GeometryWorkerResponse>) => {
+      if (event.data.id !== id || settled) return;
+      settled = true;
+      worker.terminate();
+      if (event.data.ok && event.data.type === 'prepare-panel-unfold') resolve(event.data.result);
+      else if (event.data.ok) reject(new Error('The geometry worker returned the wrong result.'));
+      else reject(new Error(event.data.error));
+    };
+    worker.onerror = () => {
+      if (settled) return;
+      settled = true;
+      worker.terminate();
+      reject(new Error('The geometry worker stopped unexpectedly.'));
+    };
+  });
+  const request: GeometryWorkerRequest = { id, type: 'prepare-panel-unfold', payload: input };
+  worker.postMessage(request);
+  return {
+    promise,
+    cancel: () => {
+      if (settled) return;
+      settled = true;
+      worker.terminate();
+      rejectTask?.(new DOMException('Panel unfolding was cancelled.', 'AbortError'));
     },
   };
 }

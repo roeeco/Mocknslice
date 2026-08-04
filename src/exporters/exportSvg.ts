@@ -1,4 +1,4 @@
-import type { FabricationPart, SheetPlacement } from '../domain/fabrication';
+import type { FabricationPart, SheetLayout, SheetPlacement } from '../domain/fabrication';
 import type { Point2D } from '../domain/geometry';
 import type { OperationType } from '../domain/operations';
 import type { ProjectData } from '../domain/project';
@@ -8,6 +8,7 @@ import {
   prepareFabricationOutput,
 } from '../geometry/output/prepareFabricationOutput';
 import { CURRENT_PROJECT_FILE_VERSION } from './exportProject';
+import { BRAND } from '../config/brand';
 
 const operations: OperationType[] = [
   'cut',
@@ -106,7 +107,7 @@ export function createSvgDocument(project: ProjectData): string {
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<svg xmlns="http://www.w3.org/2000/svg" width="${decimal(widthMm)}mm" height="${decimal(heightMm)}mm" viewBox="0 0 ${decimal(widthMm)} ${decimal(heightMm)}">`,
-    `  <metadata>${escapeXml(JSON.stringify({ application: 'SliceFold', projectFormatVersion: CURRENT_PROJECT_FILE_VERSION, projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', kerfMm: prepared.appliedKerfMm, foldLineOutput: project.exportSettings.foldLineOutput }))}</metadata>`,
+    `  <metadata>${escapeXml(JSON.stringify({ application: BRAND.svgApplicationName, projectFormatVersion: CURRENT_PROJECT_FILE_VERSION, projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', kerfMm: prepared.appliedKerfMm, foldLineOutput: project.exportSettings.foldLineOutput }))}</metadata>`,
   ];
   if (project.exportSettings.includeSheetBoundary) {
     lines.push(
@@ -165,7 +166,7 @@ export function createSvgDownload(project: ProjectData): void {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
   anchor.href = url;
-  anchor.download = `${safeName || 'slicefold-parts'}.svg`;
+  anchor.download = `${safeName || 'mocknslice-parts'}.svg`;
   anchor.click();
   URL.revokeObjectURL(url);
 }
@@ -179,8 +180,12 @@ function placedPathData(points: Point2D[], placement: SheetPlacement, closed: bo
   return `${commands.join(' ')}${closed ? ' Z' : ''}`;
 }
 
-export function createSheetSvgDocument(project: ProjectData, sheetId: string): string {
-  const sheet = project.sheetLayouts.find((candidate) => candidate.id === sheetId);
+export function createSheetSvgDocument(
+  project: ProjectData,
+  sheetId: string,
+  layouts: readonly SheetLayout[] = project.sheetLayouts,
+): string {
+  const sheet = layouts.find((candidate) => candidate.id === sheetId);
   if (!sheet) throw new Error(`Sheet ${sheetId} does not exist.`);
   const prepared = prepareFabricationOutput(project);
   const blockingIssue = prepared.issues.find((issue) => issue.severity === 'error');
@@ -193,11 +198,11 @@ export function createSheetSvgDocument(project: ProjectData, sheetId: string): s
   const styleByOperation = new Map(
     project.exportSettings.operationStyles.map((style) => [style.operation, style]),
   );
-  const sheetIndex = project.sheetLayouts.findIndex((candidate) => candidate.id === sheetId);
+  const sheetIndex = layouts.findIndex((candidate) => candidate.id === sheetId);
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<svg xmlns="http://www.w3.org/2000/svg" width="${decimal(sheet.widthMm)}mm" height="${decimal(sheet.heightMm)}mm" viewBox="0 0 ${decimal(sheet.widthMm)} ${decimal(sheet.heightMm)}">`,
-    `  <metadata>${escapeXml(JSON.stringify({ application: 'SliceFold', projectFormatVersion: CURRENT_PROJECT_FILE_VERSION, projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', sheetId: sheet.id, sheetNumber: sheetIndex + 1, kerfMm: prepared.appliedKerfMm, foldLineOutput: project.exportSettings.foldLineOutput }))}</metadata>`,
+    `  <metadata>${escapeXml(JSON.stringify({ application: BRAND.svgApplicationName, projectFormatVersion: CURRENT_PROJECT_FILE_VERSION, projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', sheetId: sheet.id, sheetNumber: sheetIndex + 1, kerfMm: prepared.appliedKerfMm, foldLineOutput: project.exportSettings.foldLineOutput }))}</metadata>`,
   ];
   if (project.exportSettings.includeSheetBoundary) {
     lines.push(
@@ -252,10 +257,16 @@ export function createSheetSvgDocument(project: ProjectData, sheetId: string): s
   return lines.join('\n');
 }
 
-export function createSheetSvgDownload(project: ProjectData, sheetId: string): void {
-  const sheetIndex = project.sheetLayouts.findIndex((sheet) => sheet.id === sheetId);
+export function createSheetSvgDownload(
+  project: ProjectData,
+  sheetId: string,
+  layouts: readonly SheetLayout[] = project.sheetLayouts,
+): void {
+  const sheetIndex = layouts.findIndex((sheet) => sheet.id === sheetId);
   if (sheetIndex < 0) return;
-  const blob = new Blob([createSheetSvgDocument(project, sheetId)], { type: 'image/svg+xml' });
+  const blob = new Blob([createSheetSvgDocument(project, sheetId, layouts)], {
+    type: 'image/svg+xml',
+  });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   const safeName = project.metadata.name
@@ -264,7 +275,7 @@ export function createSheetSvgDownload(project: ProjectData, sheetId: string): v
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
   anchor.href = url;
-  anchor.download = `${safeName || 'slicefold'}-sheet-${sheetIndex + 1}.svg`;
+  anchor.download = `${safeName || 'mocknslice'}-sheet-${sheetIndex + 1}.svg`;
   anchor.click();
   URL.revokeObjectURL(url);
 }

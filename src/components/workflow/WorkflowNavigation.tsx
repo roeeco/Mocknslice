@@ -1,10 +1,14 @@
 import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 import type { WorkflowStep } from '../../state/types';
-import { workflowSteps } from '../../state/workflow';
+import { visibleWorkflowSteps } from '../../state/workflow';
 
 export function WorkflowNavigation() {
-  const steps = workflowSteps.map((id) => [id, copy.workflow[id]] as [WorkflowStep, string]);
+  const project = useProjectStore((state) => state.project);
+  const experienceMode = useProjectStore((state) => state.experienceMode);
+  const generationStatus = useProjectStore((state) => state.sliceGenerationStatus);
+  const visibleSteps = visibleWorkflowSteps(project, experienceMode, generationStatus);
+  const steps = visibleSteps.map((id) => [id, copy.workflow[id]] as [WorkflowStep, string]);
   const activeStep = useProjectStore((state) => state.activeWorkflowStep);
   const setActiveStep = useProjectStore((state) => state.setActiveWorkflowStep);
   const completed = useProjectStore((state) => state.completedWorkflowSteps);

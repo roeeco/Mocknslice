@@ -68,6 +68,24 @@ export interface FoldEdgeDefinition {
   end: Point2D;
 }
 
+export interface FoldSegment {
+  start: Point2D;
+  end: Point2D;
+}
+
+/** A physical panel adjacency; a required seam is closed exactly once. */
+export interface FoldConnection {
+  id: string;
+  panelAId: string;
+  panelBId: string;
+  edgeA: FoldSegment;
+  edgeB: FoldSegment;
+  disposition: 'hinge' | 'seam';
+  closure: 'glue-tab' | 'press-fit' | 'openable-flap' | 'none';
+  required: boolean;
+  tabIds: string[];
+}
+
 export interface FoldTab {
   id: string;
   partId: string;
@@ -98,6 +116,7 @@ export interface TemplateGenerationResult {
   profile: ProjectedProfile;
   panels: FoldPanel[];
   edges: FoldEdgeDefinition[];
+  connections: FoldConnection[];
   tabs: FoldTab[];
   parts: FabricationPart[];
   issues: ValidationIssue[];

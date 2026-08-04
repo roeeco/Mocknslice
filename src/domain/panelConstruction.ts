@@ -18,8 +18,11 @@ export interface PanelConstructionSettings {
   fingerWidthMm: Millimetres;
   clearanceMm: Millimetres;
   includeLid: boolean;
+  /** Legacy single-family divider settings retained for imported projects. */
   dividerCount?: number;
   dividerAxis?: PanelDividerAxis;
+  widthDividerCount?: number;
+  depthDividerCount?: number;
 }
 
 export interface PanelConstructionMaterial {
@@ -42,7 +45,7 @@ export interface PanelConstructionPanel {
 
 export interface PanelConstructionJoint {
   id: string;
-  kind: PanelJointKind;
+  kind: PanelJointKind | 'half-lap';
   panelAId: string;
   panelBId: string;
   edgeA: PanelJointLocation;
@@ -52,6 +55,7 @@ export interface PanelConstructionJoint {
   clearanceMm: Millimetres;
   pairLabel: string;
   tabOwnerPanelId?: string;
+  receiverCentreAMm?: Point2D;
   receiverCentreMm?: Point2D;
 }
 

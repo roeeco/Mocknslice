@@ -31,13 +31,20 @@ import type {
   WaffleSlotPattern,
 } from '../../geometry/slicing/types';
 import { arrangePartsInRows } from '../../geometry/layout/arrangeParts';
-import type { WorkflowStep } from '../types';
+import { expectedGenerationSignature, hashSerializable } from '../../domain/generation';
+import type { ExperienceMode } from '../types';
+import { runtimeFailure } from '../../domain/runtimeFailure';
+
+function generationRecordFor(project: ProjectData, result: unknown, algorithmVersion: string) {
+  return {
+    ...expectedGenerationSignature(project),
+    resultHash: hashSerializable(result),
+    algorithmVersion,
+    generatedAt: new Date().toISOString(),
+  };
+}
 
 let activeTask: Pick<GeometryTask<unknown>, 'cancel'> | undefined;
-
-function completeConfigureStep(completed: readonly WorkflowStep[]): WorkflowStep[] {
-  return completed.includes('configure') ? [...completed] : [...completed, 'configure'];
-}
 
 function positiveNumber(value: unknown, fallback: number): number {
   return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : fallback;
@@ -204,7 +211,20 @@ function positiveInteger(value: unknown, fallback: number): number {
     : fallback;
 }
 
-function unfoldSettingsForProject(project: ProjectData): MeshUnfoldSettings {
+function unfoldSettingsForProject(
+  project: ProjectData,
+  experienceMode: ExperienceMode,
+): MeshUnfoldSettings {
+  if (experienceMode === 'standard') {
+    return {
+      strategy: 'automatic',
+      rootFaceIndex: 0,
+      manualSeamKeys: [],
+      tabDepthMm: 6,
+      maximumFaceCount: 200,
+      searchAttempts: 18,
+    };
+  }
   const rawStrategy = project.modeParameters.meshUnfoldStrategy;
   const strategy: MeshUnfoldStrategy = rawStrategy === 'manual' ? 'manual' : 'automatic';
   const rawSeams = project.modeParameters.meshUnfoldSeams;
@@ -241,6 +261,23 @@ function panelSettingsForProject(project: ProjectData): PanelConstructionSetting
   const rawJoint = project.modeParameters.panelJointKind;
   const jointKind: PanelJointKind =
     rawJoint === 'butt' || rawJoint === 'tab-slot' ? rawJoint : 'finger';
+  const legacyCount = Math.max(
+    0,
+    Math.min(6, Math.round(nonNegativeNumber(project.modeParameters.panelDividerCount, 0))),
+  );
+  const hasGridCounts =
+    project.modeParameters.panelWidthDividerCount !== undefined ||
+    project.modeParameters.panelDepthDividerCount !== undefined;
+  const dividerCount = (name: string, legacyFallback: number) =>
+    Math.max(
+      0,
+      Math.min(
+        6,
+        Math.round(
+          nonNegativeNumber(project.modeParameters[name], hasGridCounts ? 0 : legacyFallback),
+        ),
+      ),
+    );
   return {
     innerWidthMm: positiveNumber(project.modeParameters.panelInnerWidthMm, 80),
     innerDepthMm: positiveNumber(project.modeParameters.panelInnerDepthMm, 60),
@@ -252,11 +289,14 @@ function panelSettingsForProject(project: ProjectData): PanelConstructionSetting
       project.materialProfileSnapshot.clearanceMm,
     ),
     includeLid: Boolean(project.modeParameters.panelIncludeLid),
-    dividerCount: Math.max(
-      0,
-      Math.min(6, Math.round(nonNegativeNumber(project.modeParameters.panelDividerCount, 0))),
+    widthDividerCount: dividerCount(
+      'panelWidthDividerCount',
+      project.modeParameters.panelDividerAxis === 'depth' ? 0 : legacyCount,
     ),
-    dividerAxis: project.modeParameters.panelDividerAxis === 'depth' ? 'depth' : 'width',
+    depthDividerCount: dividerCount(
+      'panelDepthDividerCount',
+      project.modeParameters.panelDividerAxis === 'depth' ? legacyCount : 0,
+    ),
   };
 }
 
@@ -348,7 +388,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     if (!project.model.mesh || !project.model.bounds) {
       set({
         sliceGenerationStatus: 'error',
-        sliceGenerationError: 'This model has no sliceable mesh.',
+        sliceGenerationError: runtimeFailure('MODEL_MESH_MISSING'),
       });
       return;
     }
@@ -374,7 +414,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
           ) {
             return {
               sliceGenerationStatus: 'stale',
-              sliceGenerationError: 'The source or slice settings changed. Generate again.',
+              sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
             };
           }
           const changed = recordProjectChange(state, (currentProject) => {
@@ -383,6 +423,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               ...currentProject,
               generatedParts: result.parts,
               generationIssues: result.issues,
+              generationRecord: generationRecordFor(currentProject, result, 'sf9-stacked-slices'),
               foldingResult: undefined,
               unfoldingResult: undefined,
               panelConstructionResult: undefined,
@@ -398,17 +439,17 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             sliceGenerationError:
               result.parts.length > 0
                 ? undefined
-                : (result.issues.find((issue) => issue.severity === 'error')?.message ??
-                  'Template generation failed.'),
+                : runtimeFailure(
+                    'SLICE_GENERATION_FAILED',
+                    result.issues.find((issue) => issue.severity === 'error')?.message,
+                  ),
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.parts[0]?.id,
+            selectedPartId: result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
-            activeWorkflowStep: result.parts.length > 0 ? 'inspect' : state.activeWorkflowStep,
-            completedWorkflowSteps:
-              result.parts.length > 0
-                ? completeConfigureStep(state.completedWorkflowSteps)
-                : state.completedWorkflowSteps,
-            viewportMode: result.parts.length > 0 ? 'three' : state.viewportMode,
+            activeWorkflowStep: state.activeWorkflowStep,
+            completedWorkflowSteps: state.completedWorkflowSteps,
+            viewportMode: state.viewportMode,
           };
         });
       })
@@ -416,7 +457,10 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
         if (error instanceof DOMException && error.name === 'AbortError') return;
         set({
           sliceGenerationStatus: 'error',
-          sliceGenerationError: error instanceof Error ? error.message : 'Slice generation failed.',
+          sliceGenerationError: runtimeFailure(
+            'SLICE_GENERATION_FAILED',
+            error instanceof Error ? error.message : undefined,
+          ),
         });
       })
       .finally(() => {
@@ -428,7 +472,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     if (!project.model.mesh || !project.model.bounds) {
       set({
         sliceGenerationStatus: 'error',
-        sliceGenerationError: 'This model has no sliceable mesh.',
+        sliceGenerationError: runtimeFailure('MODEL_MESH_MISSING'),
       });
       return;
     }
@@ -436,7 +480,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     if (settings.primaryAxis === settings.secondaryAxis) {
       set({
         sliceGenerationStatus: 'error',
-        sliceGenerationError: 'Choose two different axes for the waffle slice families.',
+        sliceGenerationError: runtimeFailure('WAFFLE_AXES_MATCH'),
       });
       return;
     }
@@ -461,7 +505,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
           ) {
             return {
               sliceGenerationStatus: 'stale',
-              sliceGenerationError: 'The source or waffle settings changed. Generate again.',
+              sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
             };
           }
           const changed = recordProjectChange(state, (currentProject) => {
@@ -470,6 +514,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               ...currentProject,
               generatedParts: result.parts,
               generationIssues: result.issues,
+              generationRecord: generationRecordFor(currentProject, result, 'sf9-waffle-slices'),
               foldingResult: undefined,
               unfoldingResult: undefined,
               panelConstructionResult: undefined,
@@ -485,10 +530,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             sliceGenerationError: undefined,
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.parts[0]?.id,
+            selectedPartId: result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
-            activeWorkflowStep: 'inspect',
-            completedWorkflowSteps: completeConfigureStep(state.completedWorkflowSteps),
-            viewportMode: 'three',
+            activeWorkflowStep: state.activeWorkflowStep,
+            completedWorkflowSteps: state.completedWorkflowSteps,
+            viewportMode: state.viewportMode,
           };
         });
       })
@@ -496,8 +542,10 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
         if (error instanceof DOMException && error.name === 'AbortError') return;
         set({
           sliceGenerationStatus: 'error',
-          sliceGenerationError:
-            error instanceof Error ? error.message : 'Waffle generation failed.',
+          sliceGenerationError: runtimeFailure(
+            'WAFFLE_GENERATION_FAILED',
+            error instanceof Error ? error.message : undefined,
+          ),
         });
       })
       .finally(() => {
@@ -509,7 +557,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     if (!project.model.mesh || !project.model.bounds) {
       set({
         sliceGenerationStatus: 'error',
-        sliceGenerationError: 'This model has no geometry to fit.',
+        sliceGenerationError: runtimeFailure('MODEL_MESH_MISSING'),
       });
       return;
     }
@@ -536,7 +584,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
           ) {
             return {
               sliceGenerationStatus: 'stale',
-              sliceGenerationError: 'The source or template settings changed. Generate again.',
+              sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
             };
           }
           const changed = recordProjectChange(state, (currentProject) => {
@@ -545,6 +593,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               ...currentProject,
               generatedParts: result.parts,
               generationIssues: result.issues,
+              generationRecord: generationRecordFor(
+                currentProject,
+                result,
+                result.algorithmVersion,
+              ),
               foldingResult: result,
               unfoldingResult: undefined,
               panelConstructionResult: undefined,
@@ -554,16 +607,24 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             });
           });
           const nextProject = changed.project ?? state.project;
+          const blockingError = result.issues.some((issue) => issue.severity === 'error');
+          const generationSucceeded = result.parts.length > 0 && !blockingError;
           return {
             ...changed,
-            sliceGenerationStatus: 'ready',
-            sliceGenerationError: undefined,
+            sliceGenerationStatus: generationSucceeded ? 'ready' : 'error',
+            sliceGenerationError: generationSucceeded
+              ? undefined
+              : runtimeFailure(
+                  'FOLD_GENERATION_FAILED',
+                  result.issues.find((issue) => issue.severity === 'error')?.message,
+                ),
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.panels[0]?.id ?? result.parts[0]?.id,
+            selectedPartId: result.panels[0]?.partId ?? result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
-            activeWorkflowStep: 'inspect',
-            completedWorkflowSteps: completeConfigureStep(state.completedWorkflowSteps),
-            viewportMode: 'three',
+            activeWorkflowStep: state.activeWorkflowStep,
+            completedWorkflowSteps: state.completedWorkflowSteps,
+            viewportMode: state.viewportMode,
           };
         });
       })
@@ -571,8 +632,10 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
         if (error instanceof DOMException && error.name === 'AbortError') return;
         set({
           sliceGenerationStatus: 'error',
-          sliceGenerationError:
-            error instanceof Error ? error.message : 'Template generation failed.',
+          sliceGenerationError: runtimeFailure(
+            'FOLD_GENERATION_FAILED',
+            error instanceof Error ? error.message : undefined,
+          ),
         });
       })
       .finally(() => {
@@ -580,16 +643,16 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       });
   },
   generateMeshUnfold: () => {
-    const { project } = get();
+    const { project, experienceMode } = get();
     if (!project.model.mesh) {
       set({
         sliceGenerationStatus: 'error',
-        sliceGenerationError: 'This model has no mesh to unfold.',
+        sliceGenerationError: runtimeFailure('MODEL_MESH_MISSING'),
       });
       return;
     }
     activeTask?.cancel();
-    const settings = unfoldSettingsForProject(project);
+    const settings = unfoldSettingsForProject(project, experienceMode);
     const sourceMesh = project.model.mesh;
     const task = generateMeshUnfoldInWorker({
       mesh: sourceMesh,
@@ -606,11 +669,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             state.project.model.id !== project.model.id ||
             state.project.model.mesh !== sourceMesh ||
             state.project.fabricationMode !== 'mesh-unfold' ||
-            !unfoldSettingsMatch(unfoldSettingsForProject(state.project), settings)
+            !unfoldSettingsMatch(unfoldSettingsForProject(state.project, experienceMode), settings)
           ) {
             return {
               sliceGenerationStatus: 'stale',
-              sliceGenerationError: 'The source or unfolding settings changed. Generate again.',
+              sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
             };
           }
           const changed = recordProjectChange(state, (currentProject) => {
@@ -619,6 +682,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               ...currentProject,
               generatedParts: result.parts,
               generationIssues: result.issues,
+              generationRecord: generationRecordFor(
+                currentProject,
+                result,
+                result.algorithmVersion,
+              ),
               foldingResult: undefined,
               unfoldingResult: result,
               panelConstructionResult: undefined,
@@ -634,17 +702,17 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             sliceGenerationError:
               result.parts.length > 0
                 ? undefined
-                : (result.issues.find((issue) => issue.severity === 'error')?.message ??
-                  'Mesh unfolding failed.'),
+                : runtimeFailure(
+                    'UNFOLD_GENERATION_FAILED',
+                    result.issues.find((issue) => issue.severity === 'error')?.message,
+                  ),
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.faces[0]?.id ?? result.parts[0]?.id,
+            selectedPartId: result.faces[0]?.partId ?? result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
-            activeWorkflowStep: result.parts.length > 0 ? 'inspect' : state.activeWorkflowStep,
-            completedWorkflowSteps:
-              result.parts.length > 0
-                ? completeConfigureStep(state.completedWorkflowSteps)
-                : state.completedWorkflowSteps,
-            viewportMode: result.parts.length > 0 ? 'three' : state.viewportMode,
+            activeWorkflowStep: state.activeWorkflowStep,
+            completedWorkflowSteps: state.completedWorkflowSteps,
+            viewportMode: state.viewportMode,
             foldPreviewProgress: 0,
           };
         });
@@ -653,7 +721,10 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
         if (error instanceof DOMException && error.name === 'AbortError') return;
         set({
           sliceGenerationStatus: 'error',
-          sliceGenerationError: error instanceof Error ? error.message : 'Mesh unfolding failed.',
+          sliceGenerationError: runtimeFailure(
+            'UNFOLD_GENERATION_FAILED',
+            error instanceof Error ? error.message : undefined,
+          ),
         });
       })
       .finally(() => {
@@ -682,7 +753,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
           ) {
             return {
               sliceGenerationStatus: 'stale',
-              sliceGenerationError: 'The material or panel settings changed. Generate again.',
+              sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
             };
           }
           const changed = recordProjectChange(state, (currentProject) => {
@@ -691,6 +762,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               ...currentProject,
               generatedParts: result.parts,
               generationIssues: result.issues,
+              generationRecord: generationRecordFor(
+                currentProject,
+                result,
+                result.algorithmVersion,
+              ),
               foldingResult: undefined,
               unfoldingResult: undefined,
               panelConstructionResult: result,
@@ -706,17 +782,17 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             sliceGenerationError:
               result.parts.length > 0
                 ? undefined
-                : (result.issues.find((issue) => issue.severity === 'error')?.message ??
-                  'Panel generation failed.'),
+                : runtimeFailure(
+                    'PANEL_GENERATION_FAILED',
+                    result.issues.find((issue) => issue.severity === 'error')?.message,
+                  ),
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.panels[0]?.id ?? result.parts[0]?.id,
+            selectedPartId: result.panels[0]?.partId ?? result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
-            activeWorkflowStep: result.parts.length > 0 ? 'inspect' : state.activeWorkflowStep,
-            completedWorkflowSteps:
-              result.parts.length > 0
-                ? completeConfigureStep(state.completedWorkflowSteps)
-                : state.completedWorkflowSteps,
-            viewportMode: result.parts.length > 0 ? 'three' : state.viewportMode,
+            activeWorkflowStep: state.activeWorkflowStep,
+            completedWorkflowSteps: state.completedWorkflowSteps,
+            viewportMode: state.viewportMode,
           };
         });
       })
@@ -724,7 +800,10 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
         if (error instanceof DOMException && error.name === 'AbortError') return;
         set({
           sliceGenerationStatus: 'error',
-          sliceGenerationError: error instanceof Error ? error.message : 'Panel generation failed.',
+          sliceGenerationError: runtimeFailure(
+            'PANEL_GENERATION_FAILED',
+            error instanceof Error ? error.message : undefined,
+          ),
         });
       })
       .finally(() => {
@@ -736,7 +815,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     activeTask = undefined;
     set({
       sliceGenerationStatus: 'cancelled',
-      sliceGenerationError: 'Slice generation was cancelled.',
+      sliceGenerationError: runtimeFailure('GENERATION_CANCELLED'),
     });
   },
 });

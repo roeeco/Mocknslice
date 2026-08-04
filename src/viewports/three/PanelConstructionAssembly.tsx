@@ -76,7 +76,7 @@ function ConstructionPanelMesh({
       receiveShadow
       onClick={(event) => {
         event.stopPropagation();
-        selectEntity(panel.id);
+        selectEntity(panel.id, panel.partId);
       }}
     >
       <meshStandardMaterial

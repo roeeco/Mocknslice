@@ -1,5 +1,6 @@
 import { useProjectStore } from '../../state/useProjectStore';
 import { copy } from '../../locales';
+import { BRAND } from '../../config/brand';
 
 function HistoryIcon({ direction }: { direction: 'undo' | 'redo' }) {
   return (
@@ -23,7 +24,7 @@ export function AppHeader() {
     <header className="app-header">
       <div className="brand-lockup">
         <span className="brand-mark" aria-hidden="true">
-          SF
+          {BRAND.mark}
         </span>
         <div>
           <strong>{copy.appName}</strong>

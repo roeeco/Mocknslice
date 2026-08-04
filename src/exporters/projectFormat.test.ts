@@ -8,7 +8,7 @@ import { generateFoldTemplate } from '../geometry/folding/generateFoldTemplate';
 import { generateMeshUnfold } from '../geometry/unfolding/generateMeshUnfold';
 import { generatePanelConstruction } from '../geometry/panelConstruction/generatePanelConstruction';
 
-describe('SliceFold project format', () => {
+describe('MocknSlice project format', () => {
   it('round-trips the current version without losing fabrication data', () => {
     const project = createProject('Round trip');
     project.generatedParts = [
@@ -72,12 +72,16 @@ describe('SliceFold project format', () => {
     const legacy = JSON.stringify({ format: 'slicefold-project', version: 1, project });
 
     expect(parseProjectFile(legacy)).toEqual(project);
-    expect(JSON.parse(serializeProject(project))).toMatchObject({ version: 5 });
+    expect(JSON.parse(serializeProject(project))).toMatchObject({
+      format: 'mocknslice-project',
+      version: 6,
+    });
   });
 
   it('adds Phase 7 output defaults while migrating a version 2 project', () => {
     const project = createProject('Version 2');
     const file = JSON.parse(serializeProject(project)) as Record<string, unknown>;
+    file.format = 'slicefold-project';
     file.version = 2;
     const storedProject = file.project as Record<string, unknown>;
     const exportSettings = storedProject.exportSettings as Record<string, unknown>;
@@ -101,6 +105,7 @@ describe('SliceFold project format', () => {
   it('accepts a valid version 4 project without Phase 9 construction data', () => {
     const project = createProject('Version 4');
     const file = JSON.parse(serializeProject(project)) as Record<string, unknown>;
+    file.format = 'slicefold-project';
     file.version = 4;
     const storedProject = file.project as Record<string, unknown>;
     delete storedProject.panelConstructionResult;
@@ -198,7 +203,7 @@ describe('SliceFold project format', () => {
 
   it('rejects unrelated JSON with an understandable error', () => {
     expect(() => parseProjectFile('{"format":"other"}')).toThrowError(
-      new ProjectImportError('This file is not a SliceFold project.'),
+      new ProjectImportError('This file is not a MocknSlice project.'),
     );
   });
 

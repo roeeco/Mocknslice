@@ -12,6 +12,10 @@ import type {
   WaffleSliceInput,
   WaffleSliceResult,
 } from '../geometry/slicing/types';
+import type {
+  PreparePanelUnfoldInput,
+  PreparePanelUnfoldResult,
+} from '../geometry/unfolding/generatePanelUnfold';
 
 export interface NormalizeStlRequest {
   id: string;
@@ -52,12 +56,19 @@ export interface GeneratePanelConstructionRequest {
   payload: PanelConstructionInput;
 }
 
+export interface PreparePanelUnfoldRequest {
+  id: string;
+  type: 'prepare-panel-unfold';
+  payload: PreparePanelUnfoldInput;
+}
+
 export type GeometryWorkerRequest =
   | NormalizeStlRequest
   | GenerateStackedSlicesRequest
   | GenerateWaffleSlicesRequest
   | GenerateFoldTemplateRequest
   | GenerateMeshUnfoldRequest
+  | PreparePanelUnfoldRequest
   | GeneratePanelConstructionRequest;
 
 export type GeometryWorkerResponse =
@@ -66,6 +77,7 @@ export type GeometryWorkerResponse =
   | { id: string; type: 'generate-waffle-slices'; ok: true; result: WaffleSliceResult }
   | { id: string; type: 'generate-fold-template'; ok: true; result: TemplateGenerationResult }
   | { id: string; type: 'generate-mesh-unfold'; ok: true; result: MeshUnfoldResult }
+  | { id: string; type: 'prepare-panel-unfold'; ok: true; result: PreparePanelUnfoldResult }
   | {
       id: string;
       type: 'generate-panel-construction';

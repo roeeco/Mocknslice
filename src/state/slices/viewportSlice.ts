@@ -1,5 +1,5 @@
-import type { AppSliceCreator, ViewportSlice } from '../types';
-import { completedStepsBefore } from '../workflow';
+import type { AppSliceCreator, ExperienceMode, ViewportSlice } from '../types';
+import { completedStepsBefore, visibleWorkflowSteps } from '../workflow';
 import { setCopyLocale } from '../../locales';
 
 const loadInitialLocale = () => {
@@ -12,8 +12,19 @@ const loadInitialLocale = () => {
   }
 };
 
+const loadExperienceMode = (): ExperienceMode => {
+  try {
+    return window.localStorage.getItem('mocknslice-experience-mode') === 'advanced'
+      ? 'advanced'
+      : 'standard';
+  } catch {
+    return 'standard';
+  }
+};
+
 export const createViewportSlice: AppSliceCreator<ViewportSlice> = (set) => ({
   locale: loadInitialLocale(),
+  experienceMode: loadExperienceMode(),
   viewportMode: 'three',
   cameraPreset: 'isometric',
   cameraResetToken: 0,
@@ -30,6 +41,33 @@ export const createViewportSlice: AppSliceCreator<ViewportSlice> = (set) => ({
     }
     set({ locale });
   },
+  setExperienceMode: (experienceMode) =>
+    set((state) => {
+      try {
+        window.localStorage.setItem('mocknslice-experience-mode', experienceMode);
+      } catch {
+        // The preference still applies for this session when storage is unavailable.
+      }
+      const steps = visibleWorkflowSteps(
+        state.project,
+        experienceMode,
+        state.sliceGenerationStatus,
+      );
+      const activeWorkflowStep = steps.includes(state.activeWorkflowStep)
+        ? state.activeWorkflowStep
+        : state.activeWorkflowStep === 'import'
+          ? 'configure'
+          : 'export';
+      return {
+        experienceMode,
+        activeWorkflowStep,
+        completedWorkflowSteps: state.completedWorkflowSteps,
+        viewportMode:
+          activeWorkflowStep === 'export' || activeWorkflowStep === 'arrange'
+            ? 'two'
+            : state.viewportMode,
+      };
+    }),
   setCameraPreset: (cameraPreset) => set({ cameraPreset }),
   fitCamera: () => set((state) => ({ cameraResetToken: state.cameraResetToken + 1 })),
   setActiveWorkflowStep: (activeWorkflowStep) => set({ activeWorkflowStep }),
@@ -41,7 +79,11 @@ export const createViewportSlice: AppSliceCreator<ViewportSlice> = (set) => ({
     })),
   invalidateWorkflowFrom: (step) =>
     set((state) => ({
-      completedWorkflowSteps: completedStepsBefore(state.completedWorkflowSteps, step),
+      completedWorkflowSteps: completedStepsBefore(
+        state.completedWorkflowSteps,
+        step,
+        visibleWorkflowSteps(state.project, state.experienceMode, state.sliceGenerationStatus),
+      ),
     })),
   setFoldPreviewProgress: (progress) =>
     set({

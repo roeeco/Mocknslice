@@ -1,12 +1,14 @@
-import { useMemo, useRef, useState, type ChangeEvent } from 'react';
+import { useRef, useState, type ChangeEvent } from 'react';
 import { TEMPLATE_KINDS, type TemplateKind } from '../../domain/folding';
+import { deriveAssemblyInspection } from '../../domain/assembly';
+import { deriveGenerationState } from '../../domain/generation';
+import { measureConnectionAlignment } from '../../geometry/folding/measureConnectionAlignment';
 import { createProjectDownload } from '../../exporters/exportProject';
 import { parseProjectFile, ProjectImportError } from '../../exporters/importProject';
-import { validateSheetLayouts } from '../../geometry/layout/validateSheetLayouts';
 import { copy, materialLabel, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 import type { WorkflowStep } from '../../state/types';
-import { workflowStepIndex, workflowSteps } from '../../state/workflow';
+import { deriveWorkflowGate, visibleWorkflowSteps, workflowStepIndex } from '../../state/workflow';
 import { FabricationOutputPanel } from '../panels/FabricationOutputPanel';
 import { FoldTemplatePanel, FoldProfilePreview } from '../panels/FoldTemplatePanel';
 import { LayoutPanel } from '../panels/LayoutPanel';
@@ -17,13 +19,21 @@ import { PanelConstructionPanel } from '../panels/PanelConstructionPanel';
 import { StackedSlicePanel } from '../panels/StackedSlicePanel';
 import { WaffleSlicePanel } from '../panels/WaffleSlicePanel';
 import { WarningPanel } from '../panels/WarningPanel';
+import { AdvancedSettingsSection } from '../panels/AdvancedSettingsSection';
+import { RuntimeFailureMessage } from '../RuntimeFailureMessage';
+import {
+  runtimeFailure,
+  runtimeFailureMessage,
+  type RuntimeFailure,
+} from '../../domain/runtimeFailure';
 import { ModeIcon, type ModeChoice } from './ModeIcon';
 import { SourceChoiceIcon, TemplateChoiceIcon } from './TemplateChoiceIcon';
 
 function StartStep() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<RuntimeFailure>();
   const project = useProjectStore((state) => state.project);
+  const locale = useProjectStore((state) => state.locale);
   const renameProject = useProjectStore((state) => state.renameProject);
   const createNewProject = useProjectStore((state) => state.createNewProject);
   const replaceProject = useProjectStore((state) => state.replaceProject);
@@ -37,16 +47,18 @@ function StartStep() {
       setError(undefined);
     } catch (caught) {
       setError(
-        caught instanceof ProjectImportError
-          ? caught.message
-          : 'The project could not be imported.',
+        runtimeFailure(
+          'PROJECT_IMPORT_FAILED',
+          caught instanceof ProjectImportError
+            ? caught.message
+            : 'The project could not be imported.',
+        ),
       );
     }
   };
 
   return (
     <section className="panel-section workflow-step-panel" aria-labelledby="start-step-heading">
-      <p className="eyebrow">{copy.step} 1</p>
       <h2 id="start-step-heading">{copy.startProject}</h2>
       <div className="field-stack">
         <label htmlFor="project-name">{copy.projectName}</label>
@@ -61,10 +73,7 @@ function StartStep() {
         <button
           type="button"
           onClick={() => {
-            if (
-              window.confirm('Start a new project? Your current project will remain saved locally.')
-            )
-              createNewProject();
+            if (window.confirm(copy.newProjectConfirmation)) createNewProject();
           }}
         >
           {copy.newProject}
@@ -78,12 +87,12 @@ function StartStep() {
         className="visually-hidden"
         type="file"
         accept="application/json,.json"
-        aria-label={t('Choose a SliceFold project file')}
+        aria-label={t('Choose a MocknSlice project file')}
         onChange={(event) => void importProject(event)}
       />
       {error ? (
         <p className="inline-error" role="alert">
-          {error}
+          {runtimeFailureMessage(error, locale)}
         </p>
       ) : null}
       <div className="local-first-card">
@@ -107,7 +116,6 @@ function ModeStep() {
     mode === 'fold-template' || mode === 'mesh-unfold' ? 'folding' : mode;
   return (
     <section className="panel-section workflow-step-panel" aria-labelledby="mode-step-heading">
-      <p className="eyebrow">{copy.step} 2</p>
       <h2 id="mode-step-heading">{copy.chooseMode}</h2>
       <div className="mode-choice-list" role="radiogroup" aria-label={copy.fabricationMode}>
         {modes.map(({ id, label }) => (
@@ -148,7 +156,6 @@ function ImportOrCreateStep() {
         className="panel-section workflow-step-panel source-choice-panel"
         aria-labelledby="source-choice-heading"
       >
-        <p className="eyebrow">{copy.step} 3</p>
         <h2 id="source-choice-heading">{copy.sourceChoice}</h2>
         <div className="source-choice-list" role="group" aria-label={copy.sourceChoice}>
           <button
@@ -218,6 +225,7 @@ function ImportOrCreateStep() {
 
 function MaterialControls() {
   const project = useProjectStore((state) => state.project);
+  const experienceMode = useProjectStore((state) => state.experienceMode);
   const materials = useProjectStore((state) => state.materials);
   const selectMaterial = useProjectStore((state) => state.selectMaterial);
   const updateCustomMaterial = useProjectStore((state) => state.updateCustomMaterial);
@@ -253,74 +261,88 @@ function MaterialControls() {
               onChange={(event) => updateCustomMaterial({ name: event.target.value })}
             />
           </div>
-          <div className="form-grid three-column-grid">
-            <div className="field-stack">
-              <label htmlFor="custom-thickness">{copy.thickness} (mm)</label>
-              <input
-                id="custom-thickness"
-                type="number"
-                min="0"
-                step="0.01"
-                value={selected.thicknessMm}
-                onChange={(event) => updateNumber('thicknessMm', event.target.valueAsNumber)}
-              />
-            </div>
-            <div className="field-stack">
-              <label htmlFor="custom-kerf">{copy.kerf} (mm)</label>
-              <input
-                id="custom-kerf"
-                type="number"
-                min="0"
-                step="0.01"
-                value={selected.kerfMm}
-                onChange={(event) => updateNumber('kerfMm', event.target.valueAsNumber)}
-              />
-            </div>
-            <div className="field-stack">
-              <label htmlFor="custom-clearance">{copy.clearance} (mm)</label>
-              <input
-                id="custom-clearance"
-                type="number"
-                min="0"
-                step="0.01"
-                value={selected.clearanceMm}
-                onChange={(event) => updateNumber('clearanceMm', event.target.valueAsNumber)}
-              />
-            </div>
+          <div className="field-stack">
+            <label htmlFor="custom-thickness">{copy.thickness} (mm)</label>
+            <input
+              id="custom-thickness"
+              type="number"
+              min="0"
+              step="0.01"
+              value={selected.thicknessMm}
+              onChange={(event) => updateNumber('thicknessMm', event.target.valueAsNumber)}
+            />
           </div>
-          <div className="form-grid two-column-grid">
-            <div className="field-stack">
-              <label htmlFor="custom-sheet-width">{copy.defaultSheetWidth} (mm)</label>
-              <input
-                id="custom-sheet-width"
-                type="number"
-                min="1"
-                step="1"
-                value={selected.defaultSheetWidthMm}
-                onChange={(event) =>
-                  updateNumber('defaultSheetWidthMm', event.target.valueAsNumber)
-                }
-              />
-            </div>
-            <div className="field-stack">
-              <label htmlFor="custom-sheet-height">{copy.defaultSheetHeight} (mm)</label>
-              <input
-                id="custom-sheet-height"
-                type="number"
-                min="1"
-                step="1"
-                value={selected.defaultSheetHeightMm}
-                onChange={(event) =>
-                  updateNumber('defaultSheetHeightMm', event.target.valueAsNumber)
-                }
-              />
-            </div>
-          </div>
+          {experienceMode === 'advanced' ? (
+            <AdvancedSettingsSection>
+              <div className="form-grid two-column-grid">
+                <div className="field-stack">
+                  <label htmlFor="custom-kerf">{copy.kerf} (mm)</label>
+                  <input
+                    id="custom-kerf"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={selected.kerfMm}
+                    onChange={(event) => updateNumber('kerfMm', event.target.valueAsNumber)}
+                  />
+                </div>
+                <div className="field-stack">
+                  <label htmlFor="custom-clearance">{copy.clearance} (mm)</label>
+                  <input
+                    id="custom-clearance"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={selected.clearanceMm}
+                    onChange={(event) => updateNumber('clearanceMm', event.target.valueAsNumber)}
+                  />
+                </div>
+              </div>
+              <div className="form-grid two-column-grid">
+                <div className="field-stack">
+                  <label htmlFor="custom-sheet-width">{copy.defaultSheetWidth} (mm)</label>
+                  <input
+                    id="custom-sheet-width"
+                    type="number"
+                    min="1"
+                    step="1"
+                    value={selected.defaultSheetWidthMm}
+                    onChange={(event) =>
+                      updateNumber('defaultSheetWidthMm', event.target.valueAsNumber)
+                    }
+                  />
+                </div>
+                <div className="field-stack">
+                  <label htmlFor="custom-sheet-height">{copy.defaultSheetHeight} (mm)</label>
+                  <input
+                    id="custom-sheet-height"
+                    type="number"
+                    min="1"
+                    step="1"
+                    value={selected.defaultSheetHeightMm}
+                    onChange={(event) =>
+                      updateNumber('defaultSheetHeightMm', event.target.valueAsNumber)
+                    }
+                  />
+                </div>
+              </div>
+            </AdvancedSettingsSection>
+          ) : null}
         </fieldset>
       ) : (
-        <p className="material-inline-summary">
-          {selected.thicknessMm} mm · {selected.kerfMm} mm {copy.kerf}
-        </p>
+        <>
+          {experienceMode === 'advanced' ? (
+            <AdvancedSettingsSection>
+              <p className="material-inline-summary">
+                {selected.thicknessMm} mm · {selected.kerfMm} mm {copy.kerf} ·{' '}
+                {selected.clearanceMm} mm {copy.clearance}
+              </p>
+              <p className="material-inline-summary">
+                {selected.defaultSheetWidthMm} × {selected.defaultSheetHeightMm} mm
+              </p>
+            </AdvancedSettingsSection>
+          ) : null}
+        </>
       )}
     </section>
   );
@@ -342,12 +364,21 @@ function ConfigureStep() {
 
 function InspectStep() {
   const project = useProjectStore((state) => state.project);
+  const generationError = useProjectStore((state) => state.sliceGenerationError);
   const progress = useProjectStore((state) => state.foldPreviewProgress);
   const setProgress = useProjectStore((state) => state.setFoldPreviewProgress);
+  const assembly = deriveAssemblyInspection(project);
+  const alignment = project.foldingResult
+    ? measureConnectionAlignment(
+        project.foldingResult.panels,
+        project.foldingResult.assembledPreview.panels,
+        project.foldingResult.connections,
+      )
+    : undefined;
+  const hasAssembly = assembly.order.length > 0;
   return (
     <>
       <section className="panel-section workflow-step-panel" aria-labelledby="inspect-step-heading">
-        <p className="eyebrow">{copy.step} 5</p>
         <h2 id="inspect-step-heading">{copy.inspectParts}</h2>
         <p className="generation-result-summary">
           <strong>{project.generatedParts.length}</strong>{' '}
@@ -355,6 +386,11 @@ function InspectStep() {
             ? copy.fabricationPartGenerated
             : copy.fabricationPartsGenerated}
         </p>
+        {generationError ? (
+          <p className="inline-error" role="alert">
+            <RuntimeFailureMessage failure={generationError} />
+          </p>
+        ) : null}
         {project.foldingResult && project.modeParameters.workflowSourceMode !== 'template' ? (
           <FoldProfilePreview profile={project.foldingResult.profile} />
         ) : null}
@@ -372,6 +408,52 @@ function InspectStep() {
               value={Math.round(progress * 100)}
               onChange={(event) => setProgress(event.target.valueAsNumber / 100)}
             />
+          </div>
+        ) : null}
+        {hasAssembly ? (
+          <div className="assembly-inspection" data-testid="assembly-inspection">
+            <dl className="assembly-metrics">
+              <div>
+                <dt>{copy.joins}</dt>
+                <dd>
+                  {assembly.resolvedJoinCount}/{assembly.requiredJoinCount} {copy.resolved}
+                </dd>
+              </div>
+              <div>
+                <dt>{copy.hinges}</dt>
+                <dd>{assembly.hingeCount}</dd>
+              </div>
+              <div>
+                <dt>{copy.seams}</dt>
+                <dd>{assembly.seamCount}</dd>
+              </div>
+              <div>
+                <dt>{copy.glueTabs}</dt>
+                <dd>{assembly.glueTabCount}</dd>
+              </div>
+              <div>
+                <dt>{copy.tabCollisions}</dt>
+                <dd>{assembly.tabCollisionCount}</dd>
+              </div>
+              {alignment ? (
+                <div>
+                  <dt>{copy.receiverAlignment}</dt>
+                  <dd>{alignment.maximumEndpointErrorMm.toFixed(3)} mm</dd>
+                </div>
+              ) : null}
+              <div>
+                <dt>{copy.result}</dt>
+                <dd>{copy.generationState[assembly.generationState]}</dd>
+              </div>
+            </dl>
+            {assembly.missingJoinCount > 0 ? (
+              <p className="inline-error" role="alert">
+                {copy.missingJoins(assembly.missingJoinCount)}
+              </p>
+            ) : null}
+            <p className="field-help">
+              {copy.assemblyOrder(assembly.hingeCount, assembly.seamCount)}
+            </p>
           </div>
         ) : null}
       </section>
@@ -406,7 +488,6 @@ function StepContents({ step }: { step: WorkflowStep }) {
     if (mode === 'panel-construction') {
       return (
         <section className="panel-section workflow-step-panel">
-          <p className="eyebrow">{copy.step} 3</p>
           <h2>{copy.noSourceModel}</h2>
           <p className="field-help">{copy.noSourceModelBody}</p>
         </section>
@@ -430,6 +511,7 @@ export function WorkflowPanel() {
   const active = useProjectStore((state) => state.activeWorkflowStep);
   const project = useProjectStore((state) => state.project);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
+  const experienceMode = useProjectStore((state) => state.experienceMode);
   const completed = useProjectStore((state) => state.completedWorkflowSteps);
   const complete = useProjectStore((state) => state.completeWorkflowStep);
   const setStep = useProjectStore((state) => state.setActiveWorkflowStep);
@@ -441,62 +523,32 @@ export function WorkflowPanel() {
   const generatePanels = useProjectStore((state) => state.generatePanelConstruction);
   const cancel = useProjectStore((state) => state.cancelSliceGeneration);
 
-  const index = workflowStepIndex(active);
-  const layoutErrors = useMemo(
-    () => validateSheetLayouts(project).some((issue) => issue.severity === 'error'),
-    [project],
-  );
-  const placedIds = new Set(
-    project.sheetLayouts.flatMap((sheet) => sheet.placements.map((item) => item.partId)),
-  );
-  const allPlaced =
-    project.generatedParts.length > 0 &&
-    project.generatedParts.every((part) => placedIds.has(part.id));
-  const importReady =
-    project.fabricationMode === 'panel-construction' ||
-    (project.fabricationMode === 'fold-template' &&
-      project.modeParameters.workflowSourceMode === 'template') ||
-    (project.model.source.kind === 'imported' &&
-      Boolean(project.model.mesh && project.model.bounds));
-  const generationErrors = (project.generationIssues ?? []).some(
-    (issue) => issue.severity === 'error',
-  );
-  const foldDimensionsValid =
-    project.fabricationMode !== 'fold-template' ||
-    (Number(project.modeParameters.foldWidthMm) > 0 &&
-      Number(project.modeParameters.foldLengthMm) > 0 &&
-      Number(project.modeParameters.foldHeightMm) > 0);
-  const canAdvance =
-    active === 'start'
-      ? project.metadata.name.trim().length > 0
-      : active === 'mode'
-        ? true
-        : active === 'import'
-          ? importReady
-          : active === 'configure'
-            ? status !== 'processing' && foldDimensionsValid
-            : active === 'inspect'
-              ? project.generatedParts.length > 0 && !generationErrors
-              : active === 'arrange'
-                ? allPlaced && !layoutErrors
-                : false;
+  const steps = visibleWorkflowSteps(project, experienceMode, status);
+  const index = workflowStepIndex(active, steps);
+  const gate = deriveWorkflowGate(project, { activeStep: active, generationStatus: status });
+  const canAdvance = gate.allowed;
+  const generationState = deriveGenerationState(project);
+  const hasBlockingError =
+    status === 'error' ||
+    (project.generationIssues ?? []).some((issue) => issue.severity === 'error');
+  const canLeaveConfigure = generationState === 'ready' || hasBlockingError;
 
   const go = (step: WorkflowStep) => {
     setStep(step);
     setViewport(step === 'arrange' || step === 'export' ? 'two' : 'three');
   };
-  const previous = index > 0 ? workflowSteps[index - 1] : undefined;
-  const next = index < workflowSteps.length - 1 ? workflowSteps[index + 1] : undefined;
+  const previous = index > 0 ? steps[index - 1] : undefined;
+  const next = index < steps.length - 1 ? steps[index + 1] : undefined;
+  const generate = () => {
+    if (!gate.allowed) return;
+    if (project.fabricationMode === 'stacked-slices') generateSlices();
+    else if (project.fabricationMode === 'waffle-slices') generateWaffle();
+    else if (project.fabricationMode === 'fold-template') generateFold();
+    else if (project.fabricationMode === 'mesh-unfold') generateUnfold();
+    else generatePanels();
+  };
   const advance = () => {
-    if (!canAdvance) return;
-    if (active === 'configure') {
-      if (project.fabricationMode === 'stacked-slices') generateSlices();
-      else if (project.fabricationMode === 'waffle-slices') generateWaffle();
-      else if (project.fabricationMode === 'fold-template') generateFold();
-      else if (project.fabricationMode === 'mesh-unfold') generateUnfold();
-      else generatePanels();
-      return;
-    }
+    if (!canAdvance || (active === 'configure' && !canLeaveConfigure)) return;
     complete(active);
     if (next) go(next);
   };
@@ -504,6 +556,9 @@ export function WorkflowPanel() {
   return (
     <div className="workflow-panel-shell">
       <div className="workflow-panel-content">
+        <p className="eyebrow workflow-step-position">
+          {copy.step} {index + 1} / {steps.length}
+        </p>
         <StepContents step={active} />
       </div>
       <footer className="workflow-footer">
@@ -514,6 +569,20 @@ export function WorkflowPanel() {
           <button type="button" onClick={cancel}>
             {copy.cancelGenerationLong}
           </button>
+        ) : active === 'configure' ? (
+          <>
+            <button
+              className="primary-panel-action"
+              type="button"
+              disabled={!gate.allowed}
+              onClick={generate}
+            >
+              {generationState === 'absent' ? copy.generate : copy.regenerate}
+            </button>
+            <button type="button" disabled={!canLeaveConfigure} onClick={advance}>
+              {hasBlockingError ? copy.reviewErrors : copy.next}
+            </button>
+          </>
         ) : active !== 'export' ? (
           <button
             className="primary-panel-action"
@@ -521,12 +590,17 @@ export function WorkflowPanel() {
             disabled={!canAdvance}
             onClick={advance}
           >
-            {active === 'configure'
-              ? status === 'stale'
-                ? copy.regenerateInspect
-                : copy.generateInspect
-              : copy.next}
+            {copy.next}
           </button>
+        ) : null}
+        {active === 'configure' && !canLeaveConfigure && status !== 'processing' ? (
+          <p className="field-help" role="status">
+            {copy.generateBeforeContinuing}
+          </p>
+        ) : !canAdvance && gate.reasons.length > 0 ? (
+          <p className="field-help" role="status">
+            {gate.reasons.map((reason) => copy.workflowReasons[reason]).join(' ')}
+          </p>
         ) : null}
       </footer>
       <span className="visually-hidden" aria-live="polite">

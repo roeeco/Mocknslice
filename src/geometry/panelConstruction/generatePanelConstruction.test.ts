@@ -46,7 +46,7 @@ describe('generatePanelConstruction', () => {
       expect(first.parts).toHaveLength(panelCount);
       expect(first.joints).toHaveLength(jointCount);
       expect(first.assembledPreview.panels).toHaveLength(panelCount);
-      expect(first.algorithmVersion).toBe('rectangular-joints-v3');
+      expect(first.algorithmVersion).toBe('rectangular-joints-v4');
       expect(first.inputHash).toMatch(/^sf9-[0-9a-f]{8}$/);
       expect(first.issues.some((issue) => issue.severity === 'error')).toBe(false);
       expect(
@@ -136,6 +136,43 @@ describe('generatePanelConstruction', () => {
       ).toBe(true);
     },
   );
+
+  it('creates simultaneous divider families with complementary half-lap notches', () => {
+    const result = generate({
+      widthDividerCount: 2,
+      depthDividerCount: 3,
+      jointKind: 'finger',
+    });
+    const dividerPanels = result.panels.filter((panel) => panel.role.startsWith('divider-'));
+    const halfLapJoints = result.joints.filter((joint) => joint.kind === 'half-lap');
+    const baseSlots = result.parts
+      .find((part) => part.construction?.role === 'base')
+      ?.paths.filter((path) => path.id.includes('base-slot'));
+
+    expect(result).toEqual(
+      generate({ widthDividerCount: 2, depthDividerCount: 3, jointKind: 'finger' }),
+    );
+    expect(dividerPanels).toHaveLength(5);
+    expect(halfLapJoints).toHaveLength(6);
+    expect(result.joints).toHaveLength(24);
+    expect(baseSlots).toHaveLength(10);
+    expect(halfLapJoints.every((joint) => joint.receiverCentreAMm && joint.receiverCentreMm)).toBe(
+      true,
+    );
+
+    const widthDividers = dividerPanels.slice(0, 2);
+    const depthDividers = dividerPanels.slice(2);
+    expect(
+      widthDividers.every((panel) =>
+        panel.outline.some((point) => point.y === 0 && Math.abs(point.x) < panel.widthMm / 2),
+      ),
+    ).toBe(true);
+    expect(
+      depthDividers.every((panel) =>
+        panel.outline.some((point) => point.y === 0 && Math.abs(point.x) < panel.widthMm / 2),
+      ),
+    ).toBe(true);
+  });
 
   it('reports material and dimension incompatibilities without silent repair', () => {
     const paper = generatePanelConstruction({

@@ -17,6 +17,7 @@ describe('MeshUnfoldPanel', () => {
       sliceGenerationStatus: 'idle',
       sliceGenerationError: undefined,
       foldPreviewProgress: 0,
+      experienceMode: 'advanced',
     });
   });
 

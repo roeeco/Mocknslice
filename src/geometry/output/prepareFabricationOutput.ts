@@ -352,9 +352,10 @@ function partAreaMm2(project: ProjectData, part: FabricationPart): number {
 export function calculateMaterialUsage(
   project: ProjectData,
   preparedParts = prepareFabricationOutput(project).parts,
+  layouts: readonly SheetLayout[] = project.sheetLayouts,
 ): MaterialUsageEstimate {
   const partsById = new Map(preparedParts.map((part) => [part.id, part]));
-  const usedSheets = project.sheetLayouts.filter((sheet) => sheet.placements.length > 0);
+  const usedSheets = layouts.filter((sheet) => sheet.placements.length > 0);
   const totalSheetAreaMm2 = usedSheets.reduce(
     (sum, sheet) => sum + sheet.widthMm * sheet.heightMm,
     0,

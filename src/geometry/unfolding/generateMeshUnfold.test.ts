@@ -42,6 +42,12 @@ describe('generateMeshUnfold', () => {
     expect(first.edges.filter((edge) => edge.disposition === 'hinge')).toHaveLength(11);
     expect(first.edges.filter((edge) => edge.disposition === 'seam')).toHaveLength(7);
     expect(first.tabs).toHaveLength(7);
+    expect(first.connections.filter((connection) => connection.required)).toHaveLength(7);
+    expect(
+      first.connections
+        .filter((connection) => connection.required)
+        .every((connection) => connection.tabIds.length === 1),
+    ).toBe(true);
     expect(first.parts).toHaveLength(1);
     expect(first.overlapPairs).toHaveLength(0);
     expect(first.inputHash).toMatch(/^sf8-[0-9a-f]{8}$/);
