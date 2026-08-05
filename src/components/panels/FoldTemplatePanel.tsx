@@ -5,6 +5,8 @@ import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 import { AdvancedSettingsSection } from './AdvancedSettingsSection';
 import { RuntimeFailureMessage } from '../RuntimeFailureMessage';
+import { ConnectionInspector } from './ConnectionInspector';
+import type { FoldTemplateSettings } from '../../domain/modeSettings';
 
 const templateDescriptions: Record<TemplateKind, string> = {
   'open-box': 'A fitted rectangular base with four walls.',
@@ -114,34 +116,35 @@ export function FoldTemplatePanel({
   const experienceMode = useProjectStore((state) => state.experienceMode);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
-  const setModeParameter = useProjectStore((state) => state.setModeParameter);
+  const updateSettings = useProjectStore((state) => state.updateFoldTemplateSettings);
   const generate = useProjectStore((state) => state.generateFoldTemplate);
   const cancel = useProjectStore((state) => state.cancelSliceGeneration);
   if (project.fabricationMode !== 'fold-template') return null;
 
-  const parameters = project.modeParameters;
-  const kind = (parameters.foldTemplateKind as TemplateKind | undefined) ?? 'open-box';
+  const settings = project.modeSettings.foldTemplate;
+  const kind = settings.templateKind;
   const templateDimensions = {
-    widthMm: Number(parameters.foldWidthMm ?? 80),
-    lengthMm: Number(parameters.foldLengthMm ?? 60),
-    heightMm: Number(parameters.foldHeightMm ?? 40),
+    widthMm: settings.widthMm,
+    lengthMm: settings.lengthMm,
+    heightMm: settings.heightMm,
   };
-  const closureMethod = parameters.foldClosureMethod === 'press-fit' ? 'press-fit' : 'glue';
+  const closureMethod = settings.closureMethod;
+  type NumberSetting = Exclude<keyof FoldTemplateSettings, 'templateKind' | 'closureMethod'>;
   const updateNumber =
-    (name: string, allowZero = false) =>
+    (name: NumberSetting, allowZero = false) =>
     (event: ChangeEvent<HTMLInputElement>) => {
       const value = event.target.valueAsNumber;
       if (Number.isFinite(value) && (allowZero ? value >= 0 : value > 0))
-        setModeParameter(name, value);
+        updateSettings({ [name]: value });
     };
-  const updateFiniteNumber = (name: string) => (event: ChangeEvent<HTMLInputElement>) => {
+  const updateFiniteNumber = (name: NumberSetting) => (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.valueAsNumber;
-    if (Number.isFinite(value)) setModeParameter(name, value);
+    if (Number.isFinite(value)) updateSettings({ [name]: value });
   };
   const updateRange =
-    (name: string, min: number, max: number) => (event: ChangeEvent<HTMLInputElement>) => {
+    (name: NumberSetting, min: number, max: number) => (event: ChangeEvent<HTMLInputElement>) => {
       const value = event.target.valueAsNumber;
-      if (Number.isFinite(value) && value >= min && value <= max) setModeParameter(name, value);
+      if (Number.isFinite(value) && value >= min && value <= max) updateSettings({ [name]: value });
     };
   const boxLike = kind === 'open-box' || kind === 'box-with-lid' || kind === 'tray';
 
@@ -166,7 +169,9 @@ export function FoldTemplatePanel({
           <select
             id="foldTemplateKind"
             value={kind}
-            onChange={(event) => setModeParameter('foldTemplateKind', event.target.value)}
+            onChange={(event) =>
+              updateSettings({ templateKind: event.target.value as TemplateKind })
+            }
           >
             {TEMPLATE_KINDS.map((templateKind) => (
               <option value={templateKind} key={templateKind}>
@@ -181,43 +186,43 @@ export function FoldTemplatePanel({
             name="foldWidthMm"
             label="Width (X)"
             value={templateDimensions.widthMm}
-            onChange={updateNumber('foldWidthMm')}
+            onChange={updateNumber('widthMm')}
           />
           <NumberField
             name="foldLengthMm"
             label="Length / depth (Z)"
             value={templateDimensions.lengthMm}
-            onChange={updateNumber('foldLengthMm')}
+            onChange={updateNumber('lengthMm')}
           />
           <NumberField
             name="foldHeightMm"
             label="Height (Y)"
             value={templateDimensions.heightMm}
-            onChange={updateNumber('foldHeightMm')}
+            onChange={updateNumber('heightMm')}
           />
         </div>
         {kind === 'regular-prism' ? (
           <NumberField
             name="foldPrismSides"
             label="Polygon sides"
-            value={Number(parameters.foldPrismSides ?? 6)}
+            value={settings.prismSides}
             min={3}
             max={12}
             step={1}
             unit={t('sides')}
-            onChange={updateRange('foldPrismSides', 3, 12)}
+            onChange={updateRange('prismSides', 3, 12)}
           />
         ) : null}
         {kind === 'pyramid-frustum' ? (
           <NumberField
             name="foldTopScale"
             label="Top scale (0 = pyramid)"
-            value={Number(parameters.foldTopScale ?? 0)}
+            value={settings.topScale}
             min={0}
             max={1}
             step={0.1}
             unit="×"
-            onChange={updateRange('foldTopScale', 0, 1)}
+            onChange={updateRange('topScale', 0, 1)}
           />
         ) : null}
         {experienceMode === 'advanced' ? (
@@ -228,7 +233,11 @@ export function FoldTemplatePanel({
                 <select
                   id="fold-closure-method"
                   value={closureMethod}
-                  onChange={(event) => setModeParameter('foldClosureMethod', event.target.value)}
+                  onChange={(event) =>
+                    updateSettings({
+                      closureMethod: event.target.value as FoldTemplateSettings['closureMethod'],
+                    })
+                  }
                 >
                   <option value="glue">{t('Glue tabs')}</option>
                   <option value="press-fit">{t('Press-fit lips and slits')}</option>
@@ -238,12 +247,10 @@ export function FoldTemplatePanel({
                 <NumberField
                   name="foldSlotClearanceMm"
                   label={t('Slit clearance')}
-                  value={Number(
-                    parameters.foldSlotClearanceMm ?? project.materialProfileSnapshot.clearanceMm,
-                  )}
+                  value={settings.slotClearanceMm}
                   min={0}
                   step={0.05}
-                  onChange={updateNumber('foldSlotClearanceMm', true)}
+                  onChange={updateNumber('slotClearanceMm', true)}
                 />
               ) : null}
             </div>
@@ -251,8 +258,8 @@ export function FoldTemplatePanel({
               <NumberField
                 name="foldTabDepthMm"
                 label={closureMethod === 'press-fit' ? 'Press-fit lip depth' : 'Glue tab depth'}
-                value={Number(parameters.foldTabDepthMm ?? 8)}
-                onChange={updateNumber('foldTabDepthMm')}
+                value={settings.tabDepthMm}
+                onChange={updateNumber('tabDepthMm')}
               />
             ) : null}
             {kind === 'box-with-lid' ? (
@@ -260,16 +267,16 @@ export function FoldTemplatePanel({
                 <NumberField
                   name="foldLidDepthMm"
                   label="Lid wall depth"
-                  value={Number(parameters.foldLidDepthMm ?? 15)}
-                  onChange={updateNumber('foldLidDepthMm')}
+                  value={settings.lidDepthMm}
+                  onChange={updateNumber('lidDepthMm')}
                 />
                 <NumberField
                   name="foldLidClearanceMm"
                   label="Lid clearance"
-                  value={Number(parameters.foldLidClearanceMm ?? 0.5)}
+                  value={settings.lidClearanceMm}
                   min={0}
                   step={0.1}
-                  onChange={updateNumber('foldLidClearanceMm', true)}
+                  onChange={updateNumber('lidClearanceMm', true)}
                 />
               </div>
             ) : null}
@@ -277,53 +284,44 @@ export function FoldTemplatePanel({
               <NumberField
                 name="foldClosureFlapMm"
                 label="Closure flap"
-                value={Number(parameters.foldClosureFlapMm ?? 12)}
+                value={settings.closureFlapMm}
                 min={0}
-                onChange={updateNumber('foldClosureFlapMm', true)}
+                onChange={updateNumber('closureFlapMm', true)}
               />
             ) : null}
             {kind === 'regular-prism' ? (
               <NumberField
                 name="foldPrismRotationDeg"
                 label="Profile rotation"
-                value={Number(parameters.foldPrismRotationDeg ?? 0)}
+                value={settings.prismRotationDeg}
                 min={-180}
                 step={5}
                 unit="°"
-                onChange={updateFiniteNumber('foldPrismRotationDeg')}
+                onChange={updateFiniteNumber('prismRotationDeg')}
               />
             ) : null}
             {['sleeve', 'envelope', 'regular-prism', 'pyramid-frustum'].includes(kind) ? (
               <NumberField
                 name="foldSeamTabMm"
                 label={closureMethod === 'press-fit' ? 'Press-fit lip depth' : 'Seam tab depth'}
-                value={Number(parameters.foldSeamTabMm ?? 8)}
-                onChange={updateNumber('foldSeamTabMm')}
+                value={settings.seamTabMm}
+                onChange={updateNumber('seamTabMm')}
               />
             ) : null}
             <div className="slice-number-grid">
               <NumberField
-                name="foldClearanceMm"
-                label="Fit clearance"
-                value={Number(
-                  parameters.foldClearanceMm ?? project.materialProfileSnapshot.clearanceMm,
-                )}
-                min={0}
-                step={0.1}
-                onChange={updateNumber('foldClearanceMm', true)}
-              />
-              <NumberField
                 name="foldProfileToleranceMm"
                 label="Profile tolerance"
-                value={Number(parameters.foldProfileToleranceMm ?? 1)}
+                value={settings.profileToleranceMm}
                 min={0.01}
                 step={0.1}
-                onChange={updateNumber('foldProfileToleranceMm')}
+                onChange={updateNumber('profileToleranceMm')}
               />
             </div>
           </AdvancedSettingsSection>
         ) : null}
       </fieldset>
+      <ConnectionInspector mode="fold-template" />
       {!hideGenerationAction ? (
         <div className="generation-actions">
           {status === 'processing' ? (
@@ -348,11 +346,6 @@ export function FoldTemplatePanel({
         <p className="inline-error" role="alert">
           <RuntimeFailureMessage failure={error} />
         </p>
-      ) : null}
-      {!hideGenerationAction &&
-      project.foldingResult &&
-      project.modeParameters.workflowSourceMode !== 'template' ? (
-        <FoldProfilePreview profile={project.foldingResult.profile} />
       ) : null}
     </section>
   );

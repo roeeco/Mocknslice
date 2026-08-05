@@ -41,7 +41,7 @@ describe('Standard and Advanced settings cascade', () => {
 
   it('keeps family geometry in Standard and reveals folding tuning in Advanced', () => {
     setMode('fold-template');
-    useProjectStore.getState().setModeParameter('foldTemplateKind', 'box-with-lid');
+    useProjectStore.getState().updateFoldTemplateSettings({ templateKind: 'box-with-lid' });
     const view = render(<FoldTemplatePanel hideGenerationAction />);
     expect(screen.getByLabelText('Width (X)')).toBeVisible();
     expect(screen.queryByLabelText('Glue tab depth')).toBeNull();
@@ -55,7 +55,7 @@ describe('Standard and Advanced settings cascade', () => {
 
   it('cascades slice, waffle, mesh, and output tuning without resetting hidden values', () => {
     setMode('stacked-slices');
-    useProjectStore.getState().setModeParameter('sliceThicknessMm', 7.25);
+    useProjectStore.getState().updateStackedSliceSettings({ thicknessMm: 7.25 });
     const stacked = render(<StackedSlicePanel hideGenerationAction />);
     expect(screen.queryByLabelText('Part thickness')).toBeNull();
     act(() => useProjectStore.getState().setExperienceMode('advanced'));
@@ -86,7 +86,7 @@ describe('Standard and Advanced settings cascade', () => {
     expect(screen.getByLabelText('Kerf compensation')).toBeVisible();
     output.unmount();
 
-    expect(useProjectStore.getState().project.modeParameters.sliceThicknessMm).toBe(7.25);
+    expect(useProjectStore.getState().project.modeSettings.stackedSlices.thicknessMm).toBe(7.25);
   });
 
   it('localizes advanced folding, unfolding, output controls, and statuses in Hebrew', () => {
@@ -97,7 +97,7 @@ describe('Standard and Advanced settings cascade', () => {
     setMode('fold-template');
     act(() => {
       useProjectStore.setState({ experienceMode: 'advanced' });
-      useProjectStore.getState().setModeParameter('foldTemplateKind', 'box-with-lid');
+      useProjectStore.getState().updateFoldTemplateSettings({ templateKind: 'box-with-lid' });
     });
     const fold = render(<FoldTemplatePanel hideGenerationAction />);
     expect(screen.getByText('הגדרות מתקדמות')).toBeVisible();

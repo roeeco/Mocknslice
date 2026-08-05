@@ -81,19 +81,20 @@ describe('wizard workflow', () => {
     expect(container.querySelectorAll('svg.template-choice-icon')).toHaveLength(7);
     expect(useProjectStore.getState().project).toMatchObject({
       fabricationMode: 'fold-template',
-      modeParameters: {
-        workflowSourceMode: 'template',
-        foldTemplateKind: 'open-box',
-        foldSizeMode: 'custom',
+      modeSettings: {
+        foldTemplate: {
+          templateKind: 'open-box',
+        },
       },
     });
 
     await user.click(screen.getByRole('button', { name: 'Profile sleeve' }));
-    expect(useProjectStore.getState().project.modeParameters.foldTemplateKind).toBe('sleeve');
+    expect(useProjectStore.getState().project.modeSettings.foldTemplate.templateKind).toBe(
+      'sleeve',
+    );
 
     await user.click(screen.getByRole('button', { name: 'Import model' }));
     expect(screen.getByRole('heading', { name: 'Import STL model' })).toBeVisible();
-    expect(useProjectStore.getState().project.modeParameters.workflowSourceMode).toBe('import');
     expect(useProjectStore.getState().project.fabricationMode).toBe('mesh-unfold');
   });
 
@@ -131,6 +132,9 @@ describe('wizard workflow', () => {
     }));
     const view = render(<WorkflowPanel />);
     expect(screen.getByText('Step 3 / 4')).toBeVisible();
+    expect(screen.getByLabelText('Panel preset')).toBeVisible();
+    expect(screen.queryByLabelText('Material profile')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Base and wall thickness')).toHaveAttribute('type', 'range');
     view.unmount();
 
     useProjectStore.setState((state) => ({

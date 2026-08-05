@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent } from 'react';
-import { TEMPLATE_KINDS, type TemplateKind } from '../../domain/folding';
+import { TEMPLATE_KINDS } from '../../domain/folding';
 import { deriveAssemblyInspection } from '../../domain/assembly';
 import { deriveGenerationState } from '../../domain/generation';
 import { measureConnectionAlignment } from '../../geometry/folding/measureConnectionAlignment';
@@ -10,7 +10,7 @@ import { useProjectStore } from '../../state/useProjectStore';
 import type { WorkflowStep } from '../../state/types';
 import { deriveWorkflowGate, visibleWorkflowSteps, workflowStepIndex } from '../../state/workflow';
 import { FabricationOutputPanel } from '../panels/FabricationOutputPanel';
-import { FoldTemplatePanel, FoldProfilePreview } from '../panels/FoldTemplatePanel';
+import { FoldTemplatePanel } from '../panels/FoldTemplatePanel';
 import { LayoutPanel } from '../panels/LayoutPanel';
 import { MeshUnfoldPanel } from '../panels/MeshUnfoldPanel';
 import { ModelImportPanel } from '../panels/ModelImportPanel';
@@ -20,6 +20,7 @@ import { StackedSlicePanel } from '../panels/StackedSlicePanel';
 import { WaffleSlicePanel } from '../panels/WaffleSlicePanel';
 import { WarningPanel } from '../panels/WarningPanel';
 import { AdvancedSettingsSection } from '../panels/AdvancedSettingsSection';
+import { PanelComposer } from '../panels/panelComposer/PanelComposer';
 import { RuntimeFailureMessage } from '../RuntimeFailureMessage';
 import {
   runtimeFailure,
@@ -144,11 +145,7 @@ function ImportOrCreateStep() {
   const setWorkflowSourceMode = useProjectStore((state) => state.setWorkflowSourceMode);
   const selectTemplateSource = useProjectStore((state) => state.selectTemplateSource);
   const sourceMode = project.fabricationMode === 'fold-template' ? 'template' : 'import';
-  const selectedTemplate =
-    typeof project.modeParameters.foldTemplateKind === 'string' &&
-    TEMPLATE_KINDS.includes(project.modeParameters.foldTemplateKind as TemplateKind)
-      ? (project.modeParameters.foldTemplateKind as TemplateKind)
-      : 'open-box';
+  const selectedTemplate = project.modeSettings.foldTemplate.templateKind;
 
   return (
     <>
@@ -352,12 +349,17 @@ function ConfigureStep() {
   const mode = useProjectStore((state) => state.project.fabricationMode);
   return (
     <>
-      <MaterialControls />
+      {mode !== 'panel-construction' ? <MaterialControls /> : null}
       {mode === 'stacked-slices' ? <StackedSlicePanel hideGenerationAction /> : null}
       {mode === 'waffle-slices' ? <WaffleSlicePanel hideGenerationAction /> : null}
       {mode === 'fold-template' ? <FoldTemplatePanel hideGenerationAction /> : null}
       {mode === 'mesh-unfold' ? <MeshUnfoldPanel hideGenerationAction /> : null}
-      {mode === 'panel-construction' ? <PanelConstructionPanel hideGenerationAction /> : null}
+      {mode === 'panel-construction' ? (
+        <>
+          <PanelConstructionPanel hideGenerationAction />
+          <PanelComposer />
+        </>
+      ) : null}
     </>
   );
 }
@@ -390,9 +392,6 @@ function InspectStep() {
           <p className="inline-error" role="alert">
             <RuntimeFailureMessage failure={generationError} />
           </p>
-        ) : null}
-        {project.foldingResult && project.modeParameters.workflowSourceMode !== 'template' ? (
-          <FoldProfilePreview profile={project.foldingResult.profile} />
         ) : null}
         {project.unfoldingResult ? (
           <div className="field-stack unfold-progress">

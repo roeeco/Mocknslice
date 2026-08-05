@@ -56,7 +56,9 @@ export const createViewportSlice: AppSliceCreator<ViewportSlice> = (set) => ({
       const activeWorkflowStep = steps.includes(state.activeWorkflowStep)
         ? state.activeWorkflowStep
         : state.activeWorkflowStep === 'import'
-          ? 'configure'
+          ? state.project.fabricationMode === 'panel-construction'
+            ? 'configure'
+            : 'configure'
           : 'export';
       return {
         experienceMode,

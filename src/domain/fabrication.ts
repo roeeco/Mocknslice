@@ -16,6 +16,7 @@ export interface FabricationPath {
   panelId?: string;
   edgeId?: string;
   tabId?: string;
+  featureId?: string;
   slot?: {
     pairedPartId: string;
     intersectionAxis: SliceAxis;
@@ -32,6 +33,9 @@ export interface FabricationLabel {
   position: Point2D;
   operation: 'engrave' | 'guide';
   entityId?: string;
+  featureId?: string;
+  fontSizeMm?: Millimetres;
+  rotationDeg?: number;
 }
 
 export interface FabricationPart {
@@ -60,8 +64,10 @@ export interface FabricationPart {
     faceIds: string[];
   };
   construction?: {
-    panelId: string;
-    role: 'base' | 'front' | 'back' | 'left' | 'right' | 'lid' | `divider-${number}`;
+    panelId?: string;
+    panelIds?: string[];
+    role?: 'base' | 'front' | 'back' | 'left' | 'right' | 'lid' | `divider-${number}`;
+    roles?: Array<'base' | 'front' | 'back' | 'left' | 'right' | 'lid' | `divider-${number}`>;
     jointIds: string[];
   };
 }

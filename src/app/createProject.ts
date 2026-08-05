@@ -1,6 +1,7 @@
 import type { ProjectData } from '../domain/project';
 import { createCubeMesh } from '../geometry/mesh/createPrimitiveMesh';
 import { getDefaultMaterial } from '../materials/defaultMaterials';
+import { createDefaultModeSettings, normalizePanelComposerSettings } from '../domain/modeSettings';
 
 const CUBE_SIZE_MM = 40;
 
@@ -40,55 +41,11 @@ export function createProject(name = 'Untitled project'): ProjectData {
     },
     fabricationMode: 'stacked-slices',
     materialProfileSnapshot: material,
-    modeParameters: {
-      sliceAxis: 'z',
-      spacingMm: 10,
-      sliceThicknessMm: material.thicknessMm,
-      contourEpsilonMm: 0.001,
-      wafflePrimaryAxis: 'x',
-      waffleSecondaryAxis: 'y',
-      wafflePrimarySpacingMm: 20,
-      waffleSecondarySpacingMm: 20,
-      waffleThicknessMm: material.thicknessMm,
-      waffleClearanceMm: material.clearanceMm,
-      waffleSlotPattern: 'alternating',
-      waffleReverseSlots: false,
-      foldTemplateKind: 'open-box',
-      workflowSourceMode: 'import',
-      foldFitAxis: 'z',
-      foldClearanceMm: material.clearanceMm,
-      foldProfileToleranceMm: 1,
-      foldSizeMode: 'auto-fit',
-      foldWallHeightMm: CUBE_SIZE_MM,
-      foldTabDepthMm: 8,
-      foldLidDepthMm: 15,
-      foldLidClearanceMm: 0.5,
-      foldGussetDepthMm: CUBE_SIZE_MM,
-      foldClosureFlapMm: 12,
-      foldPrismSides: 6,
-      foldPrismRotationDeg: 0,
-      foldTopScale: 0,
-      foldSeamTabMm: 8,
-      foldClosureMethod: 'glue',
-      foldSlotClearanceMm: material.clearanceMm,
-      meshUnfoldStrategy: 'automatic',
-      meshUnfoldRootFace: 0,
-      meshUnfoldSeams: '',
-      meshUnfoldTabDepthMm: 6,
-      meshUnfoldMaximumFaces: 200,
-      meshUnfoldSearchAttempts: 18,
-      panelInnerWidthMm: 80,
-      panelInnerDepthMm: 60,
-      panelInnerHeightMm: 50,
-      panelJointKind: 'finger',
-      panelFingerWidthMm: 10,
-      panelClearanceMm: material.clearanceMm,
-      panelIncludeLid: false,
-      panelWidthDividerCount: 0,
-      panelDepthDividerCount: 0,
-      panelDividerCount: 0,
-      panelDividerAxis: 'width',
-    },
+    modeSettings: createDefaultModeSettings(material, {
+      widthMm: CUBE_SIZE_MM,
+      heightMm: CUBE_SIZE_MM,
+      depthMm: CUBE_SIZE_MM,
+    }),
     generatedParts: [],
     generationIssues: [],
     sheetLayouts: [
@@ -126,71 +83,12 @@ export function createProject(name = 'Untitled project'): ProjectData {
 }
 
 export function prepareProjectForUse(project: ProjectData): ProjectData {
+  const replacedTabSlot =
+    (project.modeSettings.panelConstruction as { jointKind: string }).jointKind === 'tab-slot';
   const primitive =
     project.model.source.kind === 'built-in' && (!project.model.mesh || !project.model.bounds)
       ? createCubeMesh(project.model.dimensions.widthMm)
       : undefined;
-  const modeParameters: ProjectData['modeParameters'] = {
-    sliceAxis: 'z',
-    spacingMm: 10,
-    sliceThicknessMm: project.materialProfileSnapshot.thicknessMm,
-    contourEpsilonMm: 0.001,
-    wafflePrimaryAxis: 'x',
-    waffleSecondaryAxis: 'y',
-    wafflePrimarySpacingMm: 20,
-    waffleSecondarySpacingMm: 20,
-    waffleThicknessMm: project.materialProfileSnapshot.thicknessMm,
-    waffleClearanceMm: project.materialProfileSnapshot.clearanceMm,
-    waffleSlotPattern: 'alternating',
-    waffleReverseSlots: false,
-    foldTemplateKind: 'open-box',
-    workflowSourceMode: 'import',
-    foldFitAxis: 'z',
-    foldClearanceMm: project.materialProfileSnapshot.clearanceMm,
-    foldProfileToleranceMm: 1,
-    foldSizeMode: 'auto-fit',
-    foldWallHeightMm: project.model.dimensions.depthMm,
-    foldTabDepthMm: 8,
-    foldLidDepthMm: 15,
-    foldLidClearanceMm: 0.5,
-    foldGussetDepthMm: project.model.dimensions.depthMm,
-    foldClosureFlapMm: 12,
-    foldPrismSides: 6,
-    foldPrismRotationDeg: 0,
-    foldTopScale: 0,
-    foldSeamTabMm: 8,
-    foldClosureMethod: 'glue',
-    foldSlotClearanceMm: project.materialProfileSnapshot.clearanceMm,
-    meshUnfoldStrategy: 'automatic',
-    meshUnfoldRootFace: 0,
-    meshUnfoldSeams: '',
-    meshUnfoldTabDepthMm: 6,
-    meshUnfoldMaximumFaces: 200,
-    meshUnfoldSearchAttempts: 18,
-    panelInnerWidthMm: 80,
-    panelInnerDepthMm: 60,
-    panelInnerHeightMm: 50,
-    panelJointKind: 'finger',
-    panelFingerWidthMm: 10,
-    panelClearanceMm: project.materialProfileSnapshot.clearanceMm,
-    panelIncludeLid: false,
-    panelDividerCount: 0,
-    panelDividerAxis: 'width',
-    ...project.modeParameters,
-  };
-  if (
-    project.modeParameters.panelWidthDividerCount === undefined &&
-    project.modeParameters.panelDepthDividerCount === undefined
-  ) {
-    const legacyCount = Number(project.modeParameters.panelDividerCount ?? 0);
-    if (project.modeParameters.panelDividerAxis === 'depth') {
-      modeParameters.panelWidthDividerCount = 0;
-      modeParameters.panelDepthDividerCount = legacyCount;
-    } else {
-      modeParameters.panelWidthDividerCount = legacyCount;
-      modeParameters.panelDepthDividerCount = 0;
-    }
-  }
   return {
     ...project,
     model: primitive
@@ -201,8 +99,28 @@ export function prepareProjectForUse(project: ProjectData): ProjectData {
           healthReport: primitive.healthReport,
         }
       : project.model,
-    modeParameters,
-    generationIssues: project.generationIssues ?? [],
+    modeSettings: {
+      ...project.modeSettings,
+      panelConstruction: normalizePanelComposerSettings(
+        project.modeSettings.panelConstruction,
+        project.materialProfileSnapshot,
+      ),
+    },
+    generationIssues: replacedTabSlot
+      ? [
+          ...(project.generationIssues ?? []).filter(
+            (issue) => issue.code !== 'PANEL_TAB_SLOT_REPLACED',
+          ),
+          {
+            id: 'panel-tab-slot-replaced',
+            severity: 'warning',
+            code: 'PANEL_TAB_SLOT_REPLACED',
+            message: 'Tabs and through-slots were replaced with complementary finger joints.',
+            affectedEntityIds: ['panel-construction'],
+            suggestedAction: 'Review the panel settings and regenerate before fabrication.',
+          },
+        ]
+      : (project.generationIssues ?? []),
     exportSettings: {
       ...project.exportSettings,
       kerfCompensation: project.exportSettings.kerfCompensation ?? 'none',

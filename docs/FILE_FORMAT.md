@@ -5,24 +5,32 @@ Project exports use formatted JSON with the suffix `.mocknslice.json`. Legacy `.
 ```json
 {
   "format": "mocknslice-project",
-  "version": 5,
+  "version": 7,
   "project": {}
 }
 ```
 
-Version 5 stores project metadata, a serializable source model and transform, optional normalized mesh positions and triangle indices, centred bounds, model-health data, import settings, fabrication mode and parameters, a material profile snapshot, generated parts, optional folding, mesh-unfold, or panel-construction result, sheet layouts, export settings, and acknowledged warning IDs. Phase 3 parts may include an outer/hole role per path plus slice axis, plane index, and millimetre position. Structured generation issues are persisted with the output.
+Version 8 stores project metadata, a serializable source model and transform, optional normalized mesh positions and triangle indices, centred bounds, model-health data, import settings, fabrication mode, complete typed settings for every mode, a material profile snapshot, generated parts, optional folding, mesh-unfold, or panel-construction result, canonical generation provenance, sheet layouts, export settings, and acknowledged warning IDs. Structured generation issues are persisted with the output.
 
 Each Phase 4 sheet stores its millimetre width, height, safe margin, part spacing, and ordered placements. A placement references one part and stores `x`, `y`, and `rotationDeg`. The transform convention is rotate the part's 2D points around the part origin, then translate by `x` and `y`. Sheet and placement data were already required version 1 fields, so Phase 4 needs no schema migration.
 
 Phase 5 waffle parts optionally store a family identifier and slot count. Slot cut paths remain ordinary fabrication paths with `operation: "cut"` and `closed: false`, plus serializable metadata for paired part ID, physical intersection axis, centre, width, depth, and start/end direction. These additions are optional version 1 fields, so older projects remain valid and no migration is required.
 
-The importer parses untrusted JSON as `unknown`, verifies the format and supported version, validates required project structure, and returns understandable errors. It accepts versions 1–5; validates optional Phase 6, Phase 8, and Phase 9 data when present; and adds later defaults while migrating older files to the current in-memory domain. Future schema versions must add an explicit migration branch rather than mutating old files silently.
+The importer parses untrusted JSON as `unknown`, validates a minimal envelope, dispatches by version, validates legacy structure, migrates versions 1–7, applies strict Valibot validation to version 8 settings, and then prepares runtime-only built-in geometry. Future schema versions must add an explicit migration branch rather than mutating old files silently.
 
 Large embedded source models remain allowed by the domain. Phase 2 stores normalized geometry and the source filename rather than embedding the original STL bytes. IndexedDB persists the same project payload and a separate last-autosave project ID.
 
 The Simple/Advanced experience preference is intentionally not serialized in project files. Simple tight output placements are ephemeral derived data; only Advanced manual `sheetLayouts` remain in `ProjectData`. Validation issues may include optional serializable `messageArgs` for localized interpolation; the existing English `message` fallback remains supported, so this additive field does not require a format bump.
 
-Older version 1 built-in-cube projects are enriched in memory with deterministic primitive mesh data and current parameter defaults. SliceFold versions 1–5 remain import-compatible but new exports always use MocknSlice version 6. Legacy generated geometry remains inspectable and is marked unverified until it can be regenerated with a provenance record.
+Older built-in-cube projects are enriched in memory with deterministic primitive mesh data. SliceFold versions 1–5 and MocknSlice versions 6–7 remain import-compatible, but new exports always use MocknSlice version 8. Every migration starts with complete material/model-aware defaults and overlays known legacy fields, including sorted unique seam arrays and width/depth divider counts. V7 panel `{jointKind, clearanceMm}` overrides become treatment records; manual boundary tabs start empty and both manual tab depths start at 8 mm. Existing generated topology remains inspectable but is marked stale with an explicit regeneration notice.
+
+Version 8 `modeSettings` contains `stackedSlices`, `waffleSlices`, `foldTemplate`, `meshUnfold`, and `panelConstruction`. Panel settings persist treatments for 12 shell/lid connection keys (`finger`, `butt`, or `crease`), optional finger clearance or butt-tab owner, stable free-boundary tabs, and one glue-tab depth. Folding overrides are keyed by template kind and stable generated connection ID, with `crease`/`cut` treatment, `none`/`glue-tab`/`press-fit` closure, and an explicit owner where applicable. Inactive-template records remain persisted but are excluded from the active canonical signature. Generated results may include deterministic assembled edge references for 3D hit-testing; current selection is never serialized.
+
+Current panel settings also persist `panelThicknessMm`, `dividerThicknessMm`, and `lidThicknessMm`, each constrained to 1–10 mm. Older version-7 files without these fields receive clamped defaults from their material snapshot. The retired `tab-slot` setting is accepted for compatibility, converted to `finger`, and accompanied by a structured warning; current exports never emit `tab-slot` as the active panel setting.
+
+Phase 6 adds optional `connectionOverrides` keyed by one of eight stable physical pairings (`base-front`, `base-back`, `base-left`, `base-right`, `front-left`, `front-right`, `back-left`, and `back-right`). Each record contains the shared butt/finger family and may contain a non-negative finger-joint `clearanceMm`; it never stores unrelated edge settings. `panelProfiles` contains complete `front` and `back` choices from `flat`, `arch`, `gable`, or `stepped`. Older version-7 files default to no overrides and two flat profiles. Raised profiles with a lid are structurally serializable but generation blocks them as geometrically incompatible.
+
+Structurally valid features remain serializable even when geometry validation rejects them. Generation preserves those records and returns structured issues for missing targets, invalid dimensions, panel containment, edge or joint clearance, feature collisions, kerf-sensitive openings, and excessive label length. Rectangular and circular cutouts become closed hole paths; circles use a fixed 48-segment approximation. Engraved labels retain feature ID, size, and counter-clockwise rotation in generated parts and vector exports.
 
 ## Fabrication SVG
 

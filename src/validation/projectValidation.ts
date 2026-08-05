@@ -3,6 +3,7 @@ import type { ValidationIssue } from '../domain/validation';
 import { createMeshValidationIssues } from '../geometry/mesh/createMeshValidationIssues';
 import { validateSheetLayouts } from '../geometry/layout/validateSheetLayouts';
 import { prepareFabricationOutput } from '../geometry/output/prepareFabricationOutput';
+import { classroomRecipeMaterialIssues } from '../domain/classroomRecipes';
 
 export function foundationValidationIssues(): ValidationIssue[] {
   return [
@@ -19,12 +20,20 @@ export function foundationValidationIssues(): ValidationIssue[] {
 
 export function validationIssuesForProject(project: ProjectData): ValidationIssue[] {
   const { model } = project;
+  const recipeIssues =
+    project.fabricationMode === 'panel-construction'
+      ? classroomRecipeMaterialIssues(
+          project.materialProfileSnapshot,
+          project.modeSettings.panelConstruction,
+        )
+      : [];
   if (model.healthReport && model.importSettings) {
     return [
       ...createMeshValidationIssues(model.healthReport, model.importSettings, model.id),
       ...(project.generationIssues ?? []),
       ...validateSheetLayouts(project),
       ...prepareFabricationOutput(project).issues,
+      ...recipeIssues,
     ];
   }
   return [
@@ -32,5 +41,6 @@ export function validationIssuesForProject(project: ProjectData): ValidationIssu
     ...(project.generationIssues ?? []),
     ...validateSheetLayouts(project),
     ...prepareFabricationOutput(project).issues,
+    ...recipeIssues,
   ];
 }

@@ -195,7 +195,7 @@ describe('createSvgDocument', () => {
     project.sheetLayouts = arrangePartsInRows(result.parts, project.sheetLayouts[0]!);
 
     const svg = createSheetSvgDocument(project, project.sheetLayouts[0]!.id);
-    expect(svg).toContain('&quot;projectFormatVersion&quot;:6');
+    expect(svg).toContain('&quot;projectFormatVersion&quot;:8');
     expect(svg).toContain('&quot;mode&quot;:&quot;mesh-unfold&quot;');
     expect(svg).toContain('id="operation-cut"');
     expect(svg).toMatch(/id="operation-(mountain|valley)-fold"/);
@@ -206,7 +206,7 @@ describe('createSvgDocument', () => {
     expect(svg).toContain('>S1</text>');
   });
 
-  it('exports panel outlines, tab slots, and paired joint labels', () => {
+  it('exports panel outlines, divider slots, and paired joint labels', () => {
     const project = createProject('Panel layers');
     const result = generatePanelConstruction({
       modelId: project.model.id,
@@ -220,10 +220,11 @@ describe('createSvgDocument', () => {
         innerWidthMm: 80,
         innerDepthMm: 60,
         innerHeightMm: 50,
-        jointKind: 'tab-slot',
+        jointKind: 'finger',
         fingerWidthMm: 10,
         clearanceMm: 0.15,
         includeLid: false,
+        widthDividerCount: 1,
       },
     });
     project.fabricationMode = 'panel-construction';
@@ -232,7 +233,7 @@ describe('createSvgDocument', () => {
     project.sheetLayouts = arrangePartsInRows(result.parts, project.sheetLayouts[0]!);
 
     const svg = createSheetSvgDocument(project, project.sheetLayouts[0]!.id);
-    expect(svg).toContain('&quot;projectFormatVersion&quot;:6');
+    expect(svg).toContain('&quot;projectFormatVersion&quot;:8');
     expect(svg).toContain('&quot;mode&quot;:&quot;panel-construction&quot;');
     expect(svg).toContain('data-panel-id="construction-panel-');
     expect(svg).toContain('data-edge-id="construction-joint-');

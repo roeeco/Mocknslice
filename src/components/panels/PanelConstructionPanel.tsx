@@ -1,18 +1,30 @@
 import type { ChangeEvent } from 'react';
-import type { PanelJointKind } from '../../domain/panelConstruction';
+import type { CurrentPanelJointKind } from '../../domain/panelConstruction';
+import type { PanelProfileKind } from '../../domain/panelConstruction';
+import {
+  hasRaisedPanelProfile,
+  maximumPanelDividerCount,
+  panelCellMeasurements,
+} from '../../domain/panelConstruction';
 import { useProjectStore } from '../../state/useProjectStore';
 import { copy, t } from '../../locales';
 import { AdvancedSettingsSection } from './AdvancedSettingsSection';
 import { RuntimeFailureMessage } from '../RuntimeFailureMessage';
+import type { PanelComposerSettings } from '../../domain/modeSettings';
+import { ClassroomRecipeSelect } from './ClassroomRecipePanel';
+import { ConnectionInspector } from './ConnectionInspector';
 
 function numberHandler(
-  setModeParameter: (name: string, value: number | string | boolean) => void,
-  name: string,
+  updateSettings: (patch: Partial<PanelComposerSettings>) => void,
+  name: keyof Pick<
+    PanelComposerSettings,
+    'innerWidthMm' | 'innerDepthMm' | 'innerHeightMm' | 'fingerWidthMm' | 'clearanceMm'
+  >,
   minimum: number,
 ) {
   return (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.valueAsNumber;
-    if (Number.isFinite(value) && value >= minimum) setModeParameter(name, value);
+    if (Number.isFinite(value) && value >= minimum) updateSettings({ [name]: value });
   };
 }
 
@@ -23,23 +35,31 @@ export function PanelConstructionPanel({
   const experienceMode = useProjectStore((state) => state.experienceMode);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
-  const setModeParameter = useProjectStore((state) => state.setModeParameter);
+  const updateSettings = useProjectStore((state) => state.updatePanelComposerSettings);
   const generate = useProjectStore((state) => state.generatePanelConstruction);
   const cancel = useProjectStore((state) => state.cancelSliceGeneration);
   if (project.fabricationMode !== 'panel-construction') return null;
 
-  const parameters = project.modeParameters;
-  const jointKind: PanelJointKind =
-    parameters.panelJointKind === 'butt' || parameters.panelJointKind === 'tab-slot'
-      ? parameters.panelJointKind
-      : 'finger';
-  const widthDividerCount = Number(parameters.panelWidthDividerCount ?? 0);
-  const depthDividerCount = Number(parameters.panelDepthDividerCount ?? 0);
+  const settings = project.modeSettings.panelConstruction;
+  const jointKind: CurrentPanelJointKind = settings.jointKind;
+  const widthDividerCount = settings.widthDividerCount;
+  const depthDividerCount = settings.depthDividerCount;
   const dividerCount = widthDividerCount + depthDividerCount;
+  const maximumWidthDividers = maximumPanelDividerCount(
+    settings.innerDepthMm,
+    settings.dividerThicknessMm,
+  );
+  const maximumDepthDividers = maximumPanelDividerCount(
+    settings.innerWidthMm,
+    settings.dividerThicknessMm,
+  );
+  const cells = panelCellMeasurements(settings);
   const result = project.panelConstructionResult;
   const slotCount =
     result?.parts.flatMap((part) => part.paths).filter((path) => path.contourRole === 'hole')
       .length ?? 0;
+  const updateProfile = (role: 'front' | 'back', profile: PanelProfileKind) =>
+    updateSettings({ panelProfiles: { ...settings.panelProfiles, [role]: profile } });
 
   return (
     <section
@@ -55,6 +75,7 @@ export function PanelConstructionPanel({
       <h2 id="panel-construction-heading">{copy.panelConstruction.heading}</h2>
       <p className="field-help fold-intro">{copy.panelConstruction.intro}</p>
       <fieldset disabled={status === 'processing'}>
+        <ClassroomRecipeSelect />
         <div className="slice-number-grid">
           <div className="field-stack">
             <label htmlFor="panel-inner-width">{copy.panelConstruction.insideWidth}</label>
@@ -63,8 +84,8 @@ export function PanelConstructionPanel({
               type="number"
               min={1}
               step={1}
-              value={Number(parameters.panelInnerWidthMm ?? 80)}
-              onChange={numberHandler(setModeParameter, 'panelInnerWidthMm', 1)}
+              value={settings.innerWidthMm}
+              onChange={numberHandler(updateSettings, 'innerWidthMm', 1)}
             />
           </div>
           <div className="field-stack">
@@ -74,8 +95,8 @@ export function PanelConstructionPanel({
               type="number"
               min={1}
               step={1}
-              value={Number(parameters.panelInnerDepthMm ?? 60)}
-              onChange={numberHandler(setModeParameter, 'panelInnerDepthMm', 1)}
+              value={settings.innerDepthMm}
+              onChange={numberHandler(updateSettings, 'innerDepthMm', 1)}
             />
           </div>
         </div>
@@ -86,8 +107,8 @@ export function PanelConstructionPanel({
             type="number"
             min={1}
             step={1}
-            value={Number(parameters.panelInnerHeightMm ?? 50)}
-            onChange={numberHandler(setModeParameter, 'panelInnerHeightMm', 1)}
+            value={settings.innerHeightMm}
+            onChange={numberHandler(updateSettings, 'innerHeightMm', 1)}
           />
         </div>
         <div className="field-stack">
@@ -95,30 +116,110 @@ export function PanelConstructionPanel({
           <select
             id="panel-joint-kind"
             value={jointKind}
-            onChange={(event) => setModeParameter('panelJointKind', event.target.value)}
+            onChange={(event) =>
+              updateSettings({ jointKind: event.target.value as CurrentPanelJointKind })
+            }
           >
             <option value="finger">{t('Complementary finger joints')}</option>
-            <option value="tab-slot">{t('Tabs and through-slots')}</option>
             <option value="butt">{t('Straight butt joints')}</option>
           </select>
           <p className="field-help">
             {jointKind === 'finger'
               ? t('Alternating fingers meet along every enclosure edge.')
-              : jointKind === 'tab-slot'
-                ? t(
-                    'One panel receives material-thickness tabs; its mate receives closed slot cuts.',
-                  )
-                : t('Straight panels rely on adhesive, tape, or separate fasteners.')}
+              : t('Straight panels rely on adhesive, tape, or separate fasteners.')}
           </p>
+        </div>
+        <div className="panel-thickness-controls">
+          <div className="field-stack range-field">
+            <div className="range-field-heading">
+              <label htmlFor="panel-stock-thickness">{copy.panelConstruction.panelThickness}</label>
+              <output>{settings.panelThicknessMm} mm</output>
+            </div>
+            <input
+              id="panel-stock-thickness"
+              type="range"
+              min={1}
+              max={10}
+              step={0.5}
+              value={settings.panelThicknessMm}
+              onChange={(event) => updateSettings({ panelThicknessMm: event.target.valueAsNumber })}
+            />
+          </div>
+          <div className="field-stack range-field">
+            <div className="range-field-heading">
+              <label htmlFor="panel-divider-thickness">
+                {copy.panelConstruction.dividerThickness}
+              </label>
+              <output>{settings.dividerThicknessMm} mm</output>
+            </div>
+            <input
+              id="panel-divider-thickness"
+              type="range"
+              min={1}
+              max={10}
+              step={0.5}
+              value={settings.dividerThicknessMm}
+              onChange={(event) =>
+                updateSettings({ dividerThicknessMm: event.target.valueAsNumber })
+              }
+            />
+          </div>
+          {settings.includeLid ? (
+            <div className="field-stack range-field">
+              <div className="range-field-heading">
+                <label htmlFor="panel-lid-thickness">{copy.panelConstruction.lidThickness}</label>
+                <output>{settings.lidThicknessMm} mm</output>
+              </div>
+              <input
+                id="panel-lid-thickness"
+                type="range"
+                min={1}
+                max={10}
+                step={0.5}
+                value={settings.lidThicknessMm}
+                onChange={(event) => updateSettings({ lidThicknessMm: event.target.valueAsNumber })}
+              />
+            </div>
+          ) : null}
         </div>
         <label className="checkbox-field panel-lid-option">
           <input
             type="checkbox"
-            checked={Boolean(parameters.panelIncludeLid)}
-            onChange={(event) => setModeParameter('panelIncludeLid', event.target.checked)}
+            checked={settings.includeLid}
+            onChange={(event) => updateSettings({ includeLid: event.target.checked })}
           />
           <span>{copy.panelConstruction.includeLid}</span>
         </label>
+        <div className="panel-profile-controls">
+          <h3>{copy.panelConstruction.panelProfiles}</h3>
+          <p className="field-help">{copy.panelConstruction.panelProfilesHelp}</p>
+          <div className="slice-number-grid">
+            {(['front', 'back'] as const).map((role) => (
+              <div className="field-stack" key={role}>
+                <label htmlFor={`panel-${role}-profile`}>
+                  {role === 'front'
+                    ? copy.panelConstruction.frontProfile
+                    : copy.panelConstruction.backProfile}
+                </label>
+                <select
+                  id={`panel-${role}-profile`}
+                  value={settings.panelProfiles[role]}
+                  onChange={(event) => updateProfile(role, event.target.value as PanelProfileKind)}
+                >
+                  <option value="flat">{copy.panelConstruction.profileKinds.flat}</option>
+                  <option value="arch">{copy.panelConstruction.profileKinds.arch}</option>
+                  <option value="gable">{copy.panelConstruction.profileKinds.gable}</option>
+                  <option value="stepped">{copy.panelConstruction.profileKinds.stepped}</option>
+                </select>
+              </div>
+            ))}
+          </div>
+          {settings.includeLid && hasRaisedPanelProfile(settings.panelProfiles) ? (
+            <p className="inline-error" role="alert">
+              {copy.panelConstruction.profileLidConflict}
+            </p>
+          ) : null}
+        </div>
         <div className="slice-number-grid">
           <div className="field-stack">
             <label htmlFor="panel-width-divider-count">
@@ -126,20 +227,25 @@ export function PanelConstructionPanel({
             </label>
             <input
               id="panel-width-divider-count"
-              type="number"
+              type="range"
               min={0}
-              max={6}
+              max={maximumWidthDividers}
               step={1}
               value={widthDividerCount}
               onChange={(event) => {
                 const value = event.target.valueAsNumber;
                 if (Number.isFinite(value))
-                  setModeParameter(
-                    'panelWidthDividerCount',
-                    Math.max(0, Math.min(6, Math.round(value))),
-                  );
+                  updateSettings({
+                    widthDividerCount: Math.max(
+                      0,
+                      Math.min(maximumWidthDividers, Math.round(value)),
+                    ),
+                  });
               }}
             />
+            <output>
+              {widthDividerCount} / {maximumWidthDividers}
+            </output>
           </div>
           <div className="field-stack">
             <label htmlFor="panel-depth-divider-count">
@@ -147,21 +253,34 @@ export function PanelConstructionPanel({
             </label>
             <input
               id="panel-depth-divider-count"
-              type="number"
+              type="range"
               min={0}
-              max={6}
+              max={maximumDepthDividers}
               step={1}
               value={depthDividerCount}
               onChange={(event) => {
                 const value = event.target.valueAsNumber;
                 if (Number.isFinite(value))
-                  setModeParameter(
-                    'panelDepthDividerCount',
-                    Math.max(0, Math.min(6, Math.round(value))),
-                  );
+                  updateSettings({
+                    depthDividerCount: Math.max(
+                      0,
+                      Math.min(maximumDepthDividers, Math.round(value)),
+                    ),
+                  });
               }}
             />
+            <output>
+              {depthDividerCount} / {maximumDepthDividers}
+            </output>
           </div>
+        </div>
+        <div className="panel-cell-measurements" aria-live="polite">
+          <strong>{copy.panelConstruction.cellSpace}</strong>
+          <span>
+            {cells.count} {copy.panelConstruction.cells} · {cells.widthMm.toFixed(1)} ×{' '}
+            {cells.depthMm.toFixed(1)} × {cells.heightMm.toFixed(1)} mm
+          </span>
+          <small>{copy.panelConstruction.cellSpaceOrder}</small>
         </div>
         {dividerCount > 0 ? (
           <p className="field-help">{copy.panelConstruction.dividerHelp}</p>
@@ -176,8 +295,8 @@ export function PanelConstructionPanel({
                   type="number"
                   min={0.5}
                   step={0.5}
-                  value={Number(parameters.panelFingerWidthMm ?? 10)}
-                  onChange={numberHandler(setModeParameter, 'panelFingerWidthMm', 0.5)}
+                  value={settings.fingerWidthMm}
+                  onChange={numberHandler(updateSettings, 'fingerWidthMm', 0.5)}
                 />
               </div>
               <div className="field-stack">
@@ -187,17 +306,16 @@ export function PanelConstructionPanel({
                   type="number"
                   min={0}
                   step={0.05}
-                  disabled={jointKind !== 'tab-slot' && dividerCount === 0}
-                  value={Number(
-                    parameters.panelClearanceMm ?? project.materialProfileSnapshot.clearanceMm,
-                  )}
-                  onChange={numberHandler(setModeParameter, 'panelClearanceMm', 0)}
+                  disabled={dividerCount === 0}
+                  value={settings.clearanceMm}
+                  onChange={numberHandler(updateSettings, 'clearanceMm', 0)}
                 />
               </div>
             </div>
           </AdvancedSettingsSection>
         ) : null}
       </fieldset>
+      <ConnectionInspector mode="panel-construction" />
       {!hideGenerationAction ? (
         <div className="generation-actions">
           {status === 'processing' ? (

@@ -11,6 +11,9 @@ Projects are saved locally in the browser. No account, backend, or upload is req
 - Import ASCII or binary STL models and inspect their mesh health.
 - Start with a built-in cube or create a parametric folding form from dimensions.
 - Generate fabrication parts with stacked slices, interlocking waffle slices, folding templates, low-poly mesh unfolding, or panel construction.
+- Start panel projects from five classroom recipes: survey/ballot box, sorting tray, flash-card holder, game-component box, or a blank panel box.
+- Add rectangular or circular cutouts and engraved labels in a panel-local editor with drag, keyboard, and exact numeric controls.
+- Mix paired butt/finger connections and choose bounded arch, gable, or stepped profiles for open front/back panels.
 - Preview the result as an assembled 3D model and as a labelled 2D sheet layout.
 - Arrange parts across multiple sheets with material-aware spacing, margins, rotation, and validation checks.
 - Prepare output with kerf compensation, fold-line conversion, perforation patterns, operation styles, labels, and registration marks.
@@ -19,13 +22,13 @@ Projects are saved locally in the browser. No account, backend, or upload is req
 
 ## Fabrication workflows
 
-| Workflow                | Best for                                                                           |
-| ----------------------- | ---------------------------------------------------------------------------------- |
-| **Stacked slices**      | Building a form from parallel contour slices                                       |
-| **Interlocking slices** | Making orthogonal waffle-style structures with complementary slots                 |
-| **Folding template**    | Creating boxes, trays, sleeves, envelopes, prisms, and pyramid/frustum forms       |
-| **3D model unfolding**  | Producing bounded low-poly nets from closed, manifold triangular meshes            |
-| **Panel construction**  | Designing material-thickness-aware boxes with butt, finger, or tab-and-slot joints |
+| Workflow                | Best for                                                                     |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| **Stacked slices**      | Building a form from parallel contour slices                                 |
+| **Interlocking slices** | Making orthogonal waffle-style structures with complementary slots           |
+| **Folding template**    | Creating boxes, trays, sleeves, envelopes, prisms, and pyramid/frustum forms |
+| **3D model unfolding**  | Producing bounded low-poly nets from closed, manifold triangular meshes      |
+| **Panel construction**  | Designing mixed-thickness boxes with butt or complementary finger joints     |
 
 Each workflow generates deterministic millimetre geometry and reports warnings or blocking issues when the input or layout needs attention.
 
@@ -43,7 +46,7 @@ npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite. To try the built-in demonstration path, create a new project and generate the default cube, or choose **Create from template**.
+Open the local URL printed by Vite. To try the built-in demonstration path, create a new project and generate the default cube, choose **Create from template**, or select **Panel construction** and pick a classroom kit.
 
 ### Build and preview the production bundle
 
@@ -92,6 +95,14 @@ The domain and geometry layers are independent of React and Three.js. Persisted 
 
 ## Project status
 
-The current implementation covers the foundation through the first advanced panel-construction workflow. Complex polygon nesting, radial slicing, living hinges, guided assembly, PWA packaging, and cloud collaboration remain future work. The tool prioritizes predictable fabrication output and explicit validation over unrestricted CAD functionality.
+The current implementation covers the architecture campaign through paired panel connections and bounded open-top profiles. Complex polygon nesting, radial slicing, arbitrary profile editing, living hinges, guided assembly, PWA packaging, and cloud collaboration remain future work. The tool prioritizes predictable fabrication output and explicit validation over unrestricted CAD functionality.
+
+The current project format is version 8, with typed settings for every fabrication mode, canonical generation provenance, and a bilingual classroom recipe registry. Recipes are ordinary settings factories: applying one resolves a complete editable panel setup, and saved projects retain those resolved values even if registry defaults later change. Panel features use stable IDs and panel-local coordinates, generate deterministic cut or engrave geometry, and remain editable after export and re-import.
+
+Panel construction and folding results expose selectable assembled edges in the 3D viewport. After initial generation, the Configure inspector can replace panel finger joints with butt joints or scored creases, split folding creases into cuts, choose explicit glue-tab ownership, and add tabs to eligible exposed edges. A keyboard edge list mirrors 3D selection. Regeneration emits direct score operations, merges crease-connected panel components, splits cut folding components, and blocks invalid cycles, stock-thickness mismatches, missing edges, and unsafe tab dimensions. Crease positions are nominal: cardboard bend allowance and real fit still require a physical test.
+
+Panel construction keeps its presets inside Configure and uses direct 1–10 mm sliders for base/wall, divider, and lid stock. Divider sliders derive their maximum from the available inner span and report the resulting clear width × depth × height of every equal-sized cell. Tabs and through-slots are temporarily retired; older project settings are converted to finger joints with a visible warning before regeneration.
+
+Panel-feature validation is a digital geometry check, not a fabrication certification. Real material fit, laser cutting, and assembly quality have not been physically verified.
 
 More detail is available in [the product specification](docs/PRODUCT_SPEC.md), [architecture notes](docs/ARCHITECTURE.md), and [testing guide](docs/TESTING.md).

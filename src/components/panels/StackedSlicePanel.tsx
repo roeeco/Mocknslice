@@ -4,6 +4,7 @@ import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 import { AdvancedSettingsSection } from './AdvancedSettingsSection';
 import { RuntimeFailureMessage } from '../RuntimeFailureMessage';
+import type { StackedSliceSettings } from '../../domain/slicing';
 
 const axes: SliceAxis[] = ['x', 'y', 'z'];
 
@@ -14,21 +15,19 @@ export function StackedSlicePanel({
   const experienceMode = useProjectStore((state) => state.experienceMode);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
-  const setModeParameter = useProjectStore((state) => state.setModeParameter);
+  const updateSettings = useProjectStore((state) => state.updateStackedSliceSettings);
   const generateSlices = useProjectStore((state) => state.generateSlices);
   const cancelSliceGeneration = useProjectStore((state) => state.cancelSliceGeneration);
-  const axis = (project.modeParameters.sliceAxis as SliceAxis | undefined) ?? 'z';
-  const spacing = Number(project.modeParameters.spacingMm ?? 10);
-  const thickness = Number(
-    project.modeParameters.sliceThicknessMm ?? project.materialProfileSnapshot.thicknessMm,
-  );
+  const settings = project.modeSettings.stackedSlices;
   const disabled = project.fabricationMode !== 'stacked-slices';
   if (disabled) return null;
 
-  const updateNumber = (name: string) => (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.valueAsNumber;
-    if (Number.isFinite(value) && value > 0) setModeParameter(name, value);
-  };
+  const updateNumber =
+    (name: keyof Pick<StackedSliceSettings, 'spacingMm' | 'thicknessMm' | 'contourEpsilonMm'>) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.valueAsNumber;
+      if (Number.isFinite(value) && value > 0) updateSettings({ [name]: value });
+    };
 
   return (
     <section className="panel-section slice-panel" aria-labelledby="slice-heading">
@@ -44,8 +43,8 @@ export function StackedSlicePanel({
           <label htmlFor="slice-axis">{copy.sliceAxis}</label>
           <select
             id="slice-axis"
-            value={axis}
-            onChange={(event) => setModeParameter('sliceAxis', event.target.value)}
+            value={settings.axis}
+            onChange={(event) => updateSettings({ axis: event.target.value as SliceAxis })}
           >
             {axes.map((candidate) => (
               <option value={candidate} key={candidate}>
@@ -63,7 +62,7 @@ export function StackedSlicePanel({
                 type="number"
                 min="0.1"
                 step="0.5"
-                value={spacing}
+                value={settings.spacingMm}
                 onChange={updateNumber('spacingMm')}
               />
               <span>mm</span>
@@ -81,8 +80,8 @@ export function StackedSlicePanel({
                     type="number"
                     min="0.05"
                     step="0.1"
-                    value={thickness}
-                    onChange={updateNumber('sliceThicknessMm')}
+                    value={settings.thicknessMm}
+                    onChange={updateNumber('thicknessMm')}
                   />
                   <span>mm</span>
                 </div>
@@ -95,7 +94,7 @@ export function StackedSlicePanel({
                     type="number"
                     min="0.0001"
                     step="0.001"
-                    value={Number(project.modeParameters.contourEpsilonMm ?? 0.001)}
+                    value={settings.contourEpsilonMm}
                     onChange={updateNumber('contourEpsilonMm')}
                   />
                   <span>mm</span>

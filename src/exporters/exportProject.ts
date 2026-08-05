@@ -1,10 +1,10 @@
 import { BRAND } from '../config/brand';
-import type { MocknSliceProjectFileV6, ProjectData } from '../domain/project';
+import type { MocknSliceProjectFileV8, ProjectData } from '../domain/project';
 
-export const CURRENT_PROJECT_FILE_VERSION = 6 as const;
+export const CURRENT_PROJECT_FILE_VERSION = 8 as const;
 
 export function serializeProject(project: ProjectData): string {
-  const file: MocknSliceProjectFileV6 = {
+  const file: MocknSliceProjectFileV8 = {
     format: 'mocknslice-project',
     version: CURRENT_PROJECT_FILE_VERSION,
     project,

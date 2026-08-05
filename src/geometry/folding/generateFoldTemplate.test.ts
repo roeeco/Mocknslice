@@ -80,7 +80,7 @@ describe('generateFoldTemplate', () => {
     expect(first.panels).toHaveLength(panelCount);
     expect(first.assembledPreview.panels).toHaveLength(panelCount);
     expect(first.inputHash).toMatch(/^sf6-[0-9a-f]{8}$/);
-    expect(first.algorithmVersion).toBe('standalone-template-v3');
+    expect(first.algorithmVersion).toBe('interactive-connections-v8');
     expect(first.parts.flatMap((part) => part.paths).some((path) => path.operation === 'cut')).toBe(
       true,
     );
@@ -109,6 +109,145 @@ describe('generateFoldTemplate', () => {
       expect(pointOnBoundary(tab.baseEnd, owner!.outline), `${tab.id} end`).toBe(true);
       expect(tab.depthMm).toBeGreaterThanOrEqual(1);
     }
+  });
+
+  it('splits a default crease into separate fabrication components when changed to cut', () => {
+    const baseline = generate('open-box');
+    const connection = baseline.connections.find((candidate) => candidate.disposition === 'hinge')!;
+    const editedSettings = settings('open-box');
+    editedSettings.connectionOverrides = [
+      {
+        id: 'cut-one-hinge',
+        templateKind: 'open-box',
+        connectionId: connection.id,
+        treatment: 'cut',
+        closure: 'none',
+      },
+    ];
+    const edited = generateFoldTemplate({
+      mesh: cube.mesh,
+      bounds: cube.bounds,
+      modelId: 'cube',
+      materialThicknessMm: 1,
+      settings: editedSettings,
+    });
+
+    expect(edited.issues.some((issue) => issue.severity === 'error')).toBe(false);
+    expect(edited.parts).toHaveLength(2);
+    expect(edited.connections.find((candidate) => candidate.id === connection.id)).toMatchObject({
+      disposition: 'seam',
+      closure: 'none',
+    });
+    expect(
+      edited.parts.flatMap((part) => part.paths).some((path) => path.edgeId === connection.id),
+    ).toBe(false);
+  });
+
+  it('emits a receiving slit for an explicitly owned press-fit cut', () => {
+    const baseline = generate('open-box');
+    const connection = baseline.connections.find((candidate) => candidate.disposition === 'hinge')!;
+    const editedSettings = settings('open-box');
+    editedSettings.connectionOverrides = [
+      {
+        id: 'press-fit-cut',
+        templateKind: 'open-box',
+        connectionId: connection.id,
+        treatment: 'cut',
+        closure: 'press-fit',
+        tabOwnerPanelId: connection.panelAId,
+      },
+    ];
+    const edited = generateFoldTemplate({
+      mesh: cube.mesh,
+      bounds: cube.bounds,
+      modelId: 'cube',
+      materialThicknessMm: 1,
+      settings: editedSettings,
+    });
+
+    expect(edited.issues.some((issue) => issue.severity === 'error')).toBe(false);
+    expect(edited.tabs).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          ownerPanelId: connection.panelAId,
+          receiverPanelId: connection.panelBId,
+          style: 'press-fit',
+        }),
+      ]),
+    );
+    expect(
+      edited.parts.flatMap((part) => part.paths).some((path) => path.id.endsWith('receiver-slit')),
+    ).toBe(true);
+  });
+
+  it('rejects cyclic seam-to-crease edits without discarding the override', () => {
+    const baseline = generate('open-box');
+    const seam = baseline.connections.find((candidate) => candidate.disposition === 'seam')!;
+    const editedSettings = settings('open-box');
+    editedSettings.connectionOverrides = [
+      {
+        id: 'close-cycle',
+        templateKind: 'open-box',
+        connectionId: seam.id,
+        treatment: 'crease',
+        closure: 'none',
+      },
+    ];
+    const edited = generateFoldTemplate({
+      mesh: cube.mesh,
+      bounds: cube.bounds,
+      modelId: 'cube',
+      materialThicknessMm: 1,
+      settings: editedSettings,
+    });
+
+    expect(edited.issues).toEqual(
+      expect.arrayContaining([expect.objectContaining({ code: 'CONNECTION_CREASE_CYCLE' })]),
+    );
+    expect(edited.settings.connectionOverrides).toEqual(editedSettings.connectionOverrides);
+  });
+
+  it('deterministically re-nets an acyclic seam-to-crease edit', () => {
+    const baseline = generate('open-box');
+    const seam = baseline.connections.find((candidate) => candidate.disposition === 'seam')!;
+    const replacedHinge = baseline.connections.find(
+      (candidate) =>
+        candidate.disposition === 'hinge' &&
+        (candidate.panelBId === seam.panelAId || candidate.panelBId === seam.panelBId),
+    )!;
+    const editedSettings = settings('open-box');
+    editedSettings.connectionOverrides = [
+      {
+        id: 'release-old-hinge',
+        templateKind: 'open-box',
+        connectionId: replacedHinge.id,
+        treatment: 'cut',
+        closure: 'none',
+      },
+      {
+        id: 'crease-old-seam',
+        templateKind: 'open-box',
+        connectionId: seam.id,
+        treatment: 'crease',
+        closure: 'none',
+      },
+    ];
+    const input = {
+      mesh: cube.mesh,
+      bounds: cube.bounds,
+      modelId: 'cube',
+      materialThicknessMm: 1,
+      settings: editedSettings,
+    };
+    const first = generateFoldTemplate(input);
+    const second = generateFoldTemplate(input);
+
+    expect(first).toEqual(second);
+    expect(first.issues.some((issue) => issue.severity === 'error')).toBe(false);
+    expect(first.parts).toHaveLength(1);
+    expect(
+      first.parts[0]?.paths.some((path) => path.edgeId === seam.id && path.operation === 'score'),
+    ).toBe(true);
   });
 
   it('applies regular-prism side count and rotation controls', () => {

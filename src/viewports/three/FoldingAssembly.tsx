@@ -3,6 +3,7 @@ import { BufferGeometry, DoubleSide, Float32BufferAttribute } from 'three';
 import type { AssembledFoldPanel } from '../../domain/folding';
 import { assemblySelectionPanelIds } from '../../domain/assembly';
 import { useProjectStore } from '../../state/useProjectStore';
+import { ConnectionEdgeTargets } from './ConnectionEdgeTargets';
 
 const panelColors = ['#d85c2f', '#4f897b', '#e0a83e', '#607a9b', '#a45d78', '#73834d'];
 const EMPTY_PANELS: readonly AssembledFoldPanel[] = [];
@@ -73,6 +74,19 @@ export function FoldingAssembly() {
       {panels.map((panel, index) => (
         <PanelMesh key={panel.id} panel={panel} index={index} relatedPanelIds={relatedPanelIds} />
       ))}
+      <ConnectionEdgeTargets
+        edges={result?.editableEdges ?? []}
+        colourFor={(edge) => {
+          if (edge.kind === 'boundary') return '#64748b';
+          const override = project.modeSettings.foldTemplate.connectionOverrides.find(
+            (candidate) => candidate.connectionId === edge.id,
+          );
+          const connection = result?.connections.find((candidate) => candidate.id === edge.id);
+          const treatment =
+            override?.treatment ?? (connection?.disposition === 'hinge' ? 'crease' : 'cut');
+          return treatment === 'crease' ? '#2563eb' : '#dc2626';
+        }}
+      />
     </>
   );
 }

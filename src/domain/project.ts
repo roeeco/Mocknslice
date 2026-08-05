@@ -7,6 +7,7 @@ import type { TemplateGenerationResult } from './folding';
 import type { MeshUnfoldResult } from './unfolding';
 import type { PanelConstructionResult } from './panelConstruction';
 import type { GenerationRecord } from './generation';
+import type { LegacyModeParameters, ModeSettingsByMode } from './modeSettings';
 
 export interface ProjectMetadata {
   id: string;
@@ -20,7 +21,7 @@ export interface ProjectData {
   model: ModelData;
   fabricationMode: FabricationMode;
   materialProfileSnapshot: MaterialProfile;
-  modeParameters: Record<string, number | string | boolean>;
+  modeSettings: ModeSettingsByMode;
   generatedParts: FabricationPart[];
   generationRecord?: GenerationRecord;
   generationIssues?: ValidationIssue[];
@@ -32,39 +33,55 @@ export interface ProjectData {
   acknowledgedWarningIds: string[];
 }
 
+export type LegacyProjectData = Omit<ProjectData, 'modeSettings'> & {
+  modeParameters: LegacyModeParameters;
+};
+
 export interface SliceFoldProjectFileV1 {
   format: 'slicefold-project';
   version: 1;
-  project: ProjectData;
+  project: LegacyProjectData;
 }
 
 export interface SliceFoldProjectFileV2 {
   format: 'slicefold-project';
   version: 2;
-  project: ProjectData;
+  project: LegacyProjectData;
 }
 
 export interface SliceFoldProjectFileV3 {
   format: 'slicefold-project';
   version: 3;
-  project: ProjectData;
+  project: LegacyProjectData;
 }
 
 export interface SliceFoldProjectFileV4 {
   format: 'slicefold-project';
   version: 4;
-  project: ProjectData;
+  project: LegacyProjectData;
 }
 
 export interface SliceFoldProjectFileV5 {
   format: 'slicefold-project';
   version: 5;
-  project: ProjectData;
+  project: LegacyProjectData;
 }
 
 export interface MocknSliceProjectFileV6 {
   format: 'mocknslice-project';
   version: 6;
+  project: LegacyProjectData;
+}
+
+export interface MocknSliceProjectFileV7 {
+  format: 'mocknslice-project';
+  version: 7;
+  project: ProjectData;
+}
+
+export interface MocknSliceProjectFileV8 {
+  format: 'mocknslice-project';
+  version: 8;
   project: ProjectData;
 }
 
@@ -74,4 +91,6 @@ export type SliceFoldProjectFile =
   | SliceFoldProjectFileV3
   | SliceFoldProjectFileV4
   | SliceFoldProjectFileV5
-  | MocknSliceProjectFileV6;
+  | MocknSliceProjectFileV6
+  | MocknSliceProjectFileV7
+  | MocknSliceProjectFileV8;

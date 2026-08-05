@@ -32,11 +32,11 @@ describe('WaffleSlicePanel', () => {
     await user.selectOptions(screen.getByLabelText('Slot pattern'), 'by-family');
     await user.click(screen.getByLabelText('Reverse all slot directions'));
 
-    const parameters = useProjectStore.getState().project.modeParameters;
-    expect(parameters.waffleSecondaryAxis).toBe('z');
-    expect(parameters.waffleClearanceMm).toBe(0.25);
-    expect(parameters.waffleSlotPattern).toBe('by-family');
-    expect(parameters.waffleReverseSlots).toBe(true);
+    const settings = useProjectStore.getState().project.modeSettings.waffleSlices;
+    expect(settings.secondaryAxis).toBe('z');
+    expect(settings.clearanceMm).toBe(0.25);
+    expect(settings.slotPattern).toBe('by-family');
+    expect(settings.reverseSlots).toBe(true);
     expect(screen.getByText('0.6 mm', { exact: true })).toBeInTheDocument();
   });
 

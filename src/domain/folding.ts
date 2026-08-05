@@ -1,6 +1,11 @@
 import type { FabricationPart, SliceAxis } from './fabrication';
 import type { Millimetres, Point2D, Vector3Mm } from './geometry';
 import type { ValidationIssue } from './validation';
+import type {
+  BoundaryGlueTab,
+  EditableAssemblyEdge,
+  FoldingConnectionOverride,
+} from './connections';
 
 export const TEMPLATE_KINDS = [
   'open-box',
@@ -31,6 +36,9 @@ export interface TemplateFitSettings {
   sizeMode?: TemplateSizeMode;
   envelopeDimensions?: TemplateEnvelopeDimensions;
   parameters: Record<string, number | string | boolean>;
+  connectionOverrides?: FoldingConnectionOverride[];
+  boundaryGlueTabs?: BoundaryGlueTab[];
+  glueTabDepthMm?: Millimetres;
 }
 
 export interface ProjectedProfile {
@@ -123,6 +131,7 @@ export interface TemplateGenerationResult {
   assembledPreview: {
     panels: AssembledFoldPanel[];
   };
+  editableEdges?: EditableAssemblyEdge[];
   resolvedDimensions?: TemplateEnvelopeDimensions;
   algorithmVersion: string;
   inputHash: string;

@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react';
 import type { SliceAxis } from '../../domain/fabrication';
-import type { WaffleSlotPattern } from '../../geometry/slicing/types';
+import type { WaffleSliceSettings } from '../../domain/slicing';
 import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 import { AdvancedSettingsSection } from './AdvancedSettingsSection';
@@ -15,36 +15,32 @@ export function WaffleSlicePanel({
   const experienceMode = useProjectStore((state) => state.experienceMode);
   const status = useProjectStore((state) => state.sliceGenerationStatus);
   const error = useProjectStore((state) => state.sliceGenerationError);
-  const setModeParameter = useProjectStore((state) => state.setModeParameter);
+  const updateSettings = useProjectStore((state) => state.updateWaffleSliceSettings);
   const generateWaffleSlices = useProjectStore((state) => state.generateWaffleSlices);
   const cancelSliceGeneration = useProjectStore((state) => state.cancelSliceGeneration);
   if (project.fabricationMode !== 'waffle-slices') return null;
 
-  const primaryAxis = (project.modeParameters.wafflePrimaryAxis as SliceAxis | undefined) ?? 'x';
-  const secondaryAxis =
-    (project.modeParameters.waffleSecondaryAxis as SliceAxis | undefined) ?? 'y';
-  const primarySpacing = Number(project.modeParameters.wafflePrimarySpacingMm ?? 20);
-  const secondarySpacing = Number(project.modeParameters.waffleSecondarySpacingMm ?? 20);
-  const thickness = Number(
-    project.modeParameters.waffleThicknessMm ?? project.materialProfileSnapshot.thicknessMm,
-  );
-  const clearance = Number(
-    project.modeParameters.waffleClearanceMm ?? project.materialProfileSnapshot.clearanceMm,
-  );
-  const pattern =
-    (project.modeParameters.waffleSlotPattern as WaffleSlotPattern | undefined) ?? 'alternating';
-  const reverseSlots = Boolean(project.modeParameters.waffleReverseSlots);
+  const settings = project.modeSettings.waffleSlices;
   const jointCount =
     project.generatedParts.reduce((count, part) => count + (part.waffle?.slotCount ?? 0), 0) / 2;
 
-  const updatePositive = (name: string) => (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.valueAsNumber;
-    if (Number.isFinite(value) && value > 0) setModeParameter(name, value);
-  };
-  const updateNonNegative = (name: string) => (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.valueAsNumber;
-    if (Number.isFinite(value) && value >= 0) setModeParameter(name, value);
-  };
+  const updatePositive =
+    (
+      name: keyof Pick<
+        WaffleSliceSettings,
+        'primarySpacingMm' | 'secondarySpacingMm' | 'thicknessMm'
+      >,
+    ) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.valueAsNumber;
+      if (Number.isFinite(value) && value > 0) updateSettings({ [name]: value });
+    };
+  const updateNonNegative =
+    (name: keyof Pick<WaffleSliceSettings, 'clearanceMm'>) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.valueAsNumber;
+      if (Number.isFinite(value) && value >= 0) updateSettings({ [name]: value });
+    };
 
   return (
     <section className="panel-section slice-panel waffle-panel" aria-labelledby="waffle-heading">
@@ -64,11 +60,11 @@ export function WaffleSlicePanel({
             <label htmlFor="waffle-primary-axis">{copy.primaryAxis}</label>
             <select
               id="waffle-primary-axis"
-              value={primaryAxis}
-              onChange={(event) => setModeParameter('wafflePrimaryAxis', event.target.value)}
+              value={settings.primaryAxis}
+              onChange={(event) => updateSettings({ primaryAxis: event.target.value as SliceAxis })}
             >
               {axes
-                .filter((axis) => axis !== secondaryAxis)
+                .filter((axis) => axis !== settings.secondaryAxis)
                 .map((axis) => (
                   <option value={axis} key={axis}>
                     {axis.toUpperCase()} axis
@@ -80,11 +76,13 @@ export function WaffleSlicePanel({
             <label htmlFor="waffle-secondary-axis">{copy.secondaryAxis}</label>
             <select
               id="waffle-secondary-axis"
-              value={secondaryAxis}
-              onChange={(event) => setModeParameter('waffleSecondaryAxis', event.target.value)}
+              value={settings.secondaryAxis}
+              onChange={(event) =>
+                updateSettings({ secondaryAxis: event.target.value as SliceAxis })
+              }
             >
               {axes
-                .filter((axis) => axis !== primaryAxis)
+                .filter((axis) => axis !== settings.primaryAxis)
                 .map((axis) => (
                   <option value={axis} key={axis}>
                     {axis.toUpperCase()} axis
@@ -102,8 +100,8 @@ export function WaffleSlicePanel({
                 type="number"
                 min="0.1"
                 step="0.5"
-                value={primarySpacing}
-                onChange={updatePositive('wafflePrimarySpacingMm')}
+                value={settings.primarySpacingMm}
+                onChange={updatePositive('primarySpacingMm')}
               />
               <span>mm</span>
             </div>
@@ -116,8 +114,8 @@ export function WaffleSlicePanel({
                 type="number"
                 min="0.1"
                 step="0.5"
-                value={secondarySpacing}
-                onChange={updatePositive('waffleSecondarySpacingMm')}
+                value={settings.secondarySpacingMm}
+                onChange={updatePositive('secondarySpacingMm')}
               />
               <span>mm</span>
             </div>
@@ -134,8 +132,8 @@ export function WaffleSlicePanel({
                     type="number"
                     min="0.05"
                     step="0.1"
-                    value={thickness}
-                    onChange={updatePositive('waffleThicknessMm')}
+                    value={settings.thicknessMm}
+                    onChange={updatePositive('thicknessMm')}
                   />
                   <span>mm</span>
                 </div>
@@ -148,8 +146,8 @@ export function WaffleSlicePanel({
                     type="number"
                     min="0"
                     step="0.05"
-                    value={clearance}
-                    onChange={updateNonNegative('waffleClearanceMm')}
+                    value={settings.clearanceMm}
+                    onChange={updateNonNegative('clearanceMm')}
                   />
                   <span>mm</span>
                 </div>
@@ -157,14 +155,20 @@ export function WaffleSlicePanel({
             </div>
             <p className="slot-width-readout">
               {t('Slot width')}{' '}
-              <strong>{Math.round((thickness + clearance) * 1000) / 1000} mm</strong>
+              <strong>
+                {Math.round((settings.thicknessMm + settings.clearanceMm) * 1000) / 1000} mm
+              </strong>
             </p>
             <div className="field-stack">
               <label htmlFor="waffle-slot-pattern">{copy.slotPattern}</label>
               <select
                 id="waffle-slot-pattern"
-                value={pattern}
-                onChange={(event) => setModeParameter('waffleSlotPattern', event.target.value)}
+                value={settings.slotPattern}
+                onChange={(event) =>
+                  updateSettings({
+                    slotPattern: event.target.value as WaffleSliceSettings['slotPattern'],
+                  })
+                }
               >
                 <option value="alternating">{t('Alternate top and bottom')}</option>
                 <option value="by-family">{t('Family A from one side')}</option>
@@ -174,8 +178,8 @@ export function WaffleSlicePanel({
               <input
                 id="waffle-reverse-slots"
                 type="checkbox"
-                checked={reverseSlots}
-                onChange={(event) => setModeParameter('waffleReverseSlots', event.target.checked)}
+                checked={settings.reverseSlots}
+                onChange={(event) => updateSettings({ reverseSlots: event.target.checked })}
               />
               <span>{copy.reverseSlots}</span>
             </label>

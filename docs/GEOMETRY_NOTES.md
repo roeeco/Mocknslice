@@ -159,27 +159,29 @@ Automatic search is deterministic optimization, not a global optimum guarantee. 
 
 ## Parametric panel construction
 
-Phase 9's first advanced feature builds a rectangular enclosure from five or six separate nominal panels.
+Panel construction builds an enclosure from five or six separate nominal panels.
 
 1. Use explicit inside width, depth, and height plus the selected material thickness.
 2. Pair the base to four walls, pair adjacent vertical wall edges, and optionally pair a lid to all four top edges.
 3. Choose an odd segment count nearest the target finger width so reversing edge direction preserves alternating parity.
 4. For finger joints, protrude material-thickness fingers on alternating complementary segments of both paired outlines.
-5. For tab-slot joints, protrude alternate tabs from panel A and add clearance-expanded closed through-slot paths just inside panel B's paired edge.
+5. Boundary tab-slot generation is retired. Legacy requests return a structured unsupported-joint issue rather than geometry.
 6. For butt joints, retain straight nominal outlines and report the need for adhesive or separate fasteners.
 7. Add stable `Jn` labels to both panels, exact outer/hole contour roles, panel/joint IDs, exact assembled outlines and holes, structured issues, and an `sf9-` input hash.
 8. Optional dividers use two bottom tabs plus alternating fingers on both vertical sides. The base and intersected enclosure walls receive matching clearance-expanded slots.
 9. The assembled preview extrudes those exact outlines and holes at material thickness. Enclosure panels extrude outward from the requested inside dimensions, while dividers remain centred on their section planes.
+10. Resolve each optional base/wall override from one stable connection key before emitting either panel edge. Per-connection finger clearance shortens both complementary finger sets symmetrically.
+11. For open tops, replace the front/back nominal top segment with a deterministic arch, gable, or stepped row while preserving both vertical side-joint endpoints.
 
-The target finger width chooses a stable segment count; it is not silently substituted as the final pitch. Slot clearance affects tab-slot holes. Finger-joint fit is controlled by exact outlines plus the existing kerf-output settings, so a physical scrap test remains required.
+The target finger width chooses a stable segment count; it is not silently substituted as the final pitch. Divider clearance affects base, wall, and crossing receiver slots. Finger-joint fit is controlled by exact outlines plus the existing kerf-output settings, so a physical scrap test remains required.
 
-## Phase 9 panel-construction limitations
+## Panel-construction limitations
 
-- The generator currently produces only rectangular open or closed enclosure kits.
+- The generator produces rectangular open or closed enclosure kits; only open front/back panels receive bounded profiles.
 - The assembled preview displays exact zero-thickness outlines and slot holes, but does not simulate material volume, collision, flex, or insertion order.
 - A jointed lid receives an assembly-order warning because all closing edges may not be simultaneously insertable in rigid material.
-- Finger and tab-slot joints on paper/card receive a material warning; the generator does not replace them automatically.
-- Dividers run in one direction per box; crossing grids, angled panels, ribs, locking tabs, hinges, reinforcement folds, fastener holes, dog-bones, and CNC tool-radius compensation remain deferred.
+- Finger joints on paper/card receive a material warning; the generator does not replace them automatically.
+- Width and depth dividers may cross with deterministic half-lap notches. Angled panels, arbitrary profile nodes, ribs, locking tabs, hinges, reinforcement folds, fastener holes, dog-bones, and CNC tool-radius compensation remain deferred.
 - Kerf, grain, glue, press-fit tolerance, and real material variation require a physical fit test.
 
 ## Phase 7 limitations

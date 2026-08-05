@@ -1,24 +1,54 @@
 import type { FabricationLabel, FabricationPart, FabricationPath } from '../../domain/fabrication';
-import type { AssembledFoldPanel } from '../../domain/folding';
+import type { AssembledFoldPanel, FoldTab } from '../../domain/folding';
 import type { Point2D, Vector3Mm } from '../../domain/geometry';
+import type { PanelConnectionTreatment } from '../../domain/connections';
 import type {
+  CurrentPanelJointKind,
+  PanelConnectionKey,
   PanelConstructionJoint,
   PanelConstructionMaterial,
   PanelConstructionPanel,
   PanelConstructionResult,
   PanelConstructionSettings,
   PanelEdgeName,
-  PanelJointKind,
+  PanelProfileKind,
   PanelRole,
 } from '../../domain/panelConstruction';
+import {
+  DEFAULT_PANEL_PROFILES,
+  hasRaisedPanelProfile,
+  maximumPanelDividerCount,
+  PANEL_CONNECTION_KEYS,
+  PANEL_PROFILE_KINDS,
+} from '../../domain/panelConstruction';
 import type { ValidationIssue } from '../../domain/validation';
+import type { PanelFeature } from '../../domain/modeSettings';
+import { hashSerializable } from '../../domain/canonicalHash';
+import { applyPanelFeatures } from './panelFeatures';
+import { panelProfileTopEdge } from './panelProfiles';
+import {
+  glueTabOutline,
+  layoutCreaseComponents,
+  polygonsOverlap,
+  sameSegment,
+  traceClosedContours,
+  transformPoint,
+  type BoundarySegment,
+  type TopologyConnection,
+} from '../connections/topology2d';
 
-export const PANEL_CONSTRUCTION_ALGORITHM_VERSION = 'rectangular-joints-v4';
+export const PANEL_CONSTRUCTION_ALGORITHM_VERSION = 'interactive-connections-v8';
 
 export interface PanelConstructionInput {
-  modelId: string;
+  sourceId?: string;
+  /** Legacy compatibility for direct geometry callers. */
+  modelId?: string;
   material: PanelConstructionMaterial;
-  settings: PanelConstructionSettings;
+  settings: PanelConstructionSettings & { features?: PanelFeature[] };
+}
+
+function inputSourceId(input: PanelConstructionInput): string {
+  return input.sourceId ?? input.modelId ?? 'panel-construction';
 }
 
 interface PanelSpec {
@@ -30,9 +60,11 @@ interface PanelSpec {
   dividerPositionMm?: number;
   crossingSlotCentresMm?: number[];
   tabCentresMm?: number[];
+  profile?: PanelProfileKind;
 }
 
 interface JointSpec {
+  connectionKey?: PanelConnectionKey;
   panelA: PanelRole;
   panelB: PanelRole;
   edgeA: PanelEdgeName;
@@ -50,11 +82,11 @@ interface DividerSideJointSpec {
 
 interface EdgeTreatment {
   jointId: string;
-  kind: PanelJointKind;
+  kind: PanelConnectionTreatment;
   segmentCount: number;
   phase: 0 | 1;
   depthMm: number;
-  slotReceiver: boolean;
+  clearanceMm: number;
 }
 
 const edgeOrder: PanelEdgeName[] = ['bottom', 'right', 'top', 'left'];
@@ -83,6 +115,37 @@ function dividerCountsFor(settings: PanelConstructionSettings): {
     : { width: legacyCount, depth: 0 };
 }
 
+function panelThicknessMm(
+  settings: PanelConstructionSettings,
+  material: PanelConstructionMaterial,
+): number {
+  return settings.panelThicknessMm ?? material.thicknessMm;
+}
+
+function dividerThicknessMm(
+  settings: PanelConstructionSettings,
+  material: PanelConstructionMaterial,
+): number {
+  return settings.dividerThicknessMm ?? panelThicknessMm(settings, material);
+}
+
+function lidThicknessMm(
+  settings: PanelConstructionSettings,
+  material: PanelConstructionMaterial,
+): number {
+  return settings.lidThicknessMm ?? panelThicknessMm(settings, material);
+}
+
+function thicknessForRole(
+  role: PanelRole,
+  settings: PanelConstructionSettings,
+  material: PanelConstructionMaterial,
+): number {
+  if (isDividerRole(role)) return dividerThicknessMm(settings, material);
+  if (role === 'lid') return lidThicknessMm(settings, material);
+  return panelThicknessMm(settings, material);
+}
+
 function fnv1a(values: readonly (string | number | boolean)[]): string {
   let hash = 0x811c9dc5;
   const text = values.join('|');
@@ -96,11 +159,14 @@ function fnv1a(values: readonly (string | number | boolean)[]): string {
 export function deterministicPanelConstructionHash(input: PanelConstructionInput): string {
   return fnv1a([
     PANEL_CONSTRUCTION_ALGORITHM_VERSION,
-    input.modelId,
+    inputSourceId(input),
     input.material.id,
     input.material.category,
     input.material.thicknessMm,
     input.material.kerfMm,
+    panelThicknessMm(input.settings, input.material),
+    dividerThicknessMm(input.settings, input.material),
+    lidThicknessMm(input.settings, input.material),
     input.settings.innerWidthMm,
     input.settings.innerDepthMm,
     input.settings.innerHeightMm,
@@ -110,6 +176,17 @@ export function deterministicPanelConstructionHash(input: PanelConstructionInput
     input.settings.includeLid,
     dividerCountsFor(input.settings).width,
     dividerCountsFor(input.settings).depth,
+    hashSerializable(input.settings.connectionOverrides ?? {}),
+    hashSerializable(input.settings.panelProfiles ?? DEFAULT_PANEL_PROFILES),
+    input.settings.glueTabDepthMm ?? 8,
+    hashSerializable(
+      [...(input.settings.boundaryGlueTabs ?? [])].sort((left, right) =>
+        left.id.localeCompare(right.id),
+      ),
+    ),
+    hashSerializable(
+      [...(input.settings.features ?? [])].sort((left, right) => left.id.localeCompare(right.id)),
+    ),
   ]);
 }
 
@@ -176,7 +253,13 @@ function panelOutline(
     const geometry = edgeGeometry(edge, spec.widthMm, spec.heightMm);
     const treatment = treatments.get(edge);
     pushUnique(points, geometry.start);
-    if (!treatment || treatment.kind === 'butt' || treatment.slotReceiver) {
+    if (edge === 'top' && spec.profile && spec.profile !== 'flat') {
+      for (const point of panelProfileTopEdge(spec.profile, spec.widthMm, spec.heightMm)) {
+        pushUnique(points, point);
+      }
+      continue;
+    }
+    if (!treatment || treatment.kind !== 'finger') {
       pushUnique(points, geometry.end);
       continue;
     }
@@ -189,14 +272,23 @@ function panelOutline(
       );
       const protrudes = (index + treatment.phase) % 2 === 0;
       if (protrudes) {
+        const segmentLength = Math.hypot(
+          segmentEnd.x - segmentStart.x,
+          segmentEnd.y - segmentStart.y,
+        );
+        const inset = Math.min(0.49, treatment.clearanceMm / 2 / segmentLength);
+        const protrusionStart = pointAlong(segmentStart, segmentEnd, inset);
+        const protrusionEnd = pointAlong(segmentStart, segmentEnd, 1 - inset);
+        pushUnique(points, protrusionStart);
         pushUnique(points, {
-          x: segmentStart.x + geometry.outward.x * treatment.depthMm,
-          y: segmentStart.y + geometry.outward.y * treatment.depthMm,
+          x: protrusionStart.x + geometry.outward.x * treatment.depthMm,
+          y: protrusionStart.y + geometry.outward.y * treatment.depthMm,
         });
         pushUnique(points, {
-          x: segmentEnd.x + geometry.outward.x * treatment.depthMm,
-          y: segmentEnd.y + geometry.outward.y * treatment.depthMm,
+          x: protrusionEnd.x + geometry.outward.x * treatment.depthMm,
+          y: protrusionEnd.y + geometry.outward.y * treatment.depthMm,
         });
+        pushUnique(points, protrusionEnd);
       }
       pushUnique(points, segmentEnd);
     }
@@ -286,7 +378,8 @@ function appendFingerEdge(
 
 function dividerOutline(
   spec: PanelSpec,
-  thicknessMm: number,
+  ownThicknessMm: number,
+  receiverThicknessMm: number,
   clearanceMm: number,
   fingerSegmentCount: number,
 ): Point2D[] {
@@ -294,9 +387,9 @@ function dividerOutline(
   const right = spec.widthMm / 2;
   const bottom = -spec.heightMm / 2;
   const top = spec.heightMm / 2;
-  const tabWidth = dividerTabWidth(spec.widthMm, thicknessMm);
-  const tabDepth = thicknessMm;
-  const crossingWidth = thicknessMm + clearanceMm;
+  const tabWidth = dividerTabWidth(spec.widthMm, ownThicknessMm);
+  const tabDepth = receiverThicknessMm;
+  const crossingWidth = ownThicknessMm + clearanceMm;
   const crossings = spec.crossingSlotCentresMm ?? [];
   const tabCentres = spec.tabCentresMm ?? [-spec.widthMm / 4, spec.widthMm / 4];
   const bottomFeatures: HorizontalEdgeFeature[] = tabCentres.map((centreMm) => ({
@@ -321,7 +414,7 @@ function dividerOutline(
     { x: right, y: top },
     { x: 1, y: 0 },
     fingerSegmentCount,
-    thicknessMm,
+    receiverThicknessMm,
   );
   if (spec.dividerAxis === 'width') {
     appendHorizontalFeatures(
@@ -344,7 +437,7 @@ function dividerOutline(
     { x: left, y: bottom },
     { x: -1, y: 0 },
     fingerSegmentCount,
-    thicknessMm,
+    receiverThicknessMm,
   );
   return points;
 }
@@ -355,11 +448,12 @@ function dividerBaseSlots(
   specs: readonly PanelSpec[],
 ): FabricationPath[] {
   const paths: FabricationPath[] = [];
+  const thicknessMm = dividerThicknessMm(settings, material);
   for (const spec of specs.filter((candidate) => isDividerRole(candidate.role))) {
     const position = spec.dividerPositionMm ?? 0;
-    const tabWidth = dividerTabWidth(spec.widthMm, material.thicknessMm);
+    const tabWidth = dividerTabWidth(spec.widthMm, thicknessMm);
     const slotLength = tabWidth + settings.clearanceMm;
-    const slotWidth = material.thicknessMm + settings.clearanceMm;
+    const slotWidth = thicknessMm + settings.clearanceMm;
     const centres = spec.tabCentresMm ?? [-spec.widthMm / 4, spec.widthMm / 4];
     centres.forEach((alongPosition, index) => {
       const centre =
@@ -386,58 +480,6 @@ function dividerBaseSlots(
   return paths;
 }
 
-function slotPaths(
-  spec: PanelSpec,
-  treatments: ReadonlyMap<PanelEdgeName, EdgeTreatment>,
-  clearanceMm: number,
-): FabricationPath[] {
-  const paths: FabricationPath[] = [];
-  for (const edge of edgeOrder) {
-    const treatment = treatments.get(edge);
-    if (!treatment?.slotReceiver) continue;
-    const geometry = edgeGeometry(edge, spec.widthMm, spec.heightMm);
-    const length = Math.hypot(geometry.end.x - geometry.start.x, geometry.end.y - geometry.start.y);
-    const tangent = {
-      x: (geometry.end.x - geometry.start.x) / length,
-      y: (geometry.end.y - geometry.start.y) / length,
-    };
-    const inward = { x: -geometry.outward.x, y: -geometry.outward.y };
-    const pitch = length / treatment.segmentCount;
-    const slotLength = pitch + clearanceMm;
-    const slotDepth = treatment.depthMm + clearanceMm;
-    const inset = slotDepth / 2 + Math.max(0.5, treatment.depthMm * 0.25);
-    for (let index = 0; index < treatment.segmentCount; index += 1) {
-      if ((index + treatment.phase) % 2 !== 0) continue;
-      const midpoint = pointAlong(
-        geometry.start,
-        geometry.end,
-        (index + 0.5) / treatment.segmentCount,
-      );
-      const centre = {
-        x: midpoint.x + inward.x * inset,
-        y: midpoint.y + inward.y * inset,
-      };
-      const along = { x: tangent.x * (slotLength / 2), y: tangent.y * (slotLength / 2) };
-      const across = { x: inward.x * (slotDepth / 2), y: inward.y * (slotDepth / 2) };
-      paths.push({
-        id: `${treatment.jointId}-${spec.role}-slot-${index + 1}`,
-        operation: 'cut',
-        closed: true,
-        contourRole: 'hole',
-        panelId: `construction-panel-${spec.role}`,
-        edgeId: treatment.jointId,
-        points: [
-          roundedPoint({ x: centre.x - along.x - across.x, y: centre.y - along.y - across.y }),
-          roundedPoint({ x: centre.x + along.x - across.x, y: centre.y + along.y - across.y }),
-          roundedPoint({ x: centre.x + along.x + across.x, y: centre.y + along.y + across.y }),
-          roundedPoint({ x: centre.x - along.x + across.x, y: centre.y - along.y + across.y }),
-        ],
-      });
-    }
-  }
-  return paths;
-}
-
 function panelSpecs(
   settings: PanelConstructionSettings,
   material: PanelConstructionMaterial,
@@ -454,12 +496,14 @@ function panelSpecs(
       name: 'Front panel',
       widthMm: settings.innerWidthMm,
       heightMm: settings.innerHeightMm,
+      profile: settings.panelProfiles?.front ?? 'flat',
     },
     {
       role: 'back',
       name: 'Back panel',
       widthMm: settings.innerWidthMm,
       heightMm: settings.innerHeightMm,
+      profile: settings.panelProfiles?.back ?? 'flat',
     },
     {
       role: 'left',
@@ -483,15 +527,20 @@ function panelSpecs(
     });
   }
   const counts = dividerCountsFor(settings);
+  const dividerThickness = dividerThicknessMm(settings, material);
+  const widthCellDepth =
+    (settings.innerDepthMm - counts.width * dividerThickness) / (counts.width + 1);
+  const depthCellWidth =
+    (settings.innerWidthMm - counts.depth * dividerThickness) / (counts.depth + 1);
   const widthPositions = Array.from(
     { length: counts.width },
     (_, index) =>
-      -settings.innerDepthMm / 2 + (settings.innerDepthMm * (index + 1)) / (counts.width + 1),
+      -settings.innerDepthMm / 2 + widthCellDepth * (index + 1) + dividerThickness * (index + 0.5),
   );
   const depthPositions = Array.from(
     { length: counts.depth },
     (_, index) =>
-      -settings.innerWidthMm / 2 + (settings.innerWidthMm * (index + 1)) / (counts.depth + 1),
+      -settings.innerWidthMm / 2 + depthCellWidth * (index + 1) + dividerThickness * (index + 0.5),
   );
   let dividerIndex = 0;
   for (const position of widthPositions) {
@@ -509,8 +558,8 @@ function panelSpecs(
   }
   for (const position of depthPositions) {
     dividerIndex += 1;
-    const tabWidth = dividerTabWidth(settings.innerDepthMm, material.thicknessMm);
-    const crossingWidth = material.thicknessMm + settings.clearanceMm;
+    const tabWidth = dividerTabWidth(settings.innerDepthMm, dividerThickness);
+    const crossingWidth = dividerThickness + settings.clearanceMm;
     specs.push({
       role: `divider-${dividerIndex}`,
       name: `Depth divider ${dividerIndex - counts.width}`,
@@ -533,6 +582,7 @@ function panelSpecs(
 function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
   const joints: JointSpec[] = [
     {
+      connectionKey: 'base-front',
       panelA: 'base',
       panelB: 'front',
       edgeA: 'bottom',
@@ -540,6 +590,7 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
       lengthMm: settings.innerWidthMm,
     },
     {
+      connectionKey: 'base-back',
       panelA: 'base',
       panelB: 'back',
       edgeA: 'top',
@@ -547,6 +598,7 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
       lengthMm: settings.innerWidthMm,
     },
     {
+      connectionKey: 'base-left',
       panelA: 'base',
       panelB: 'left',
       edgeA: 'left',
@@ -554,6 +606,7 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
       lengthMm: settings.innerDepthMm,
     },
     {
+      connectionKey: 'base-right',
       panelA: 'base',
       panelB: 'right',
       edgeA: 'right',
@@ -561,6 +614,7 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
       lengthMm: settings.innerDepthMm,
     },
     {
+      connectionKey: 'front-left',
       panelA: 'front',
       panelB: 'left',
       edgeA: 'left',
@@ -568,6 +622,7 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
       lengthMm: settings.innerHeightMm,
     },
     {
+      connectionKey: 'front-right',
       panelA: 'front',
       panelB: 'right',
       edgeA: 'right',
@@ -575,6 +630,7 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
       lengthMm: settings.innerHeightMm,
     },
     {
+      connectionKey: 'back-left',
       panelA: 'back',
       panelB: 'left',
       edgeA: 'left',
@@ -582,6 +638,7 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
       lengthMm: settings.innerHeightMm,
     },
     {
+      connectionKey: 'back-right',
       panelA: 'back',
       panelB: 'right',
       edgeA: 'right',
@@ -592,6 +649,7 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
   if (settings.includeLid) {
     joints.push(
       {
+        connectionKey: 'lid-front',
         panelA: 'lid',
         panelB: 'front',
         edgeA: 'bottom',
@@ -599,6 +657,7 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
         lengthMm: settings.innerWidthMm,
       },
       {
+        connectionKey: 'lid-back',
         panelA: 'lid',
         panelB: 'back',
         edgeA: 'top',
@@ -606,6 +665,7 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
         lengthMm: settings.innerWidthMm,
       },
       {
+        connectionKey: 'lid-left',
         panelA: 'lid',
         panelB: 'left',
         edgeA: 'left',
@@ -613,6 +673,7 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
         lengthMm: settings.innerDepthMm,
       },
       {
+        connectionKey: 'lid-right',
         panelA: 'lid',
         panelB: 'right',
         edgeA: 'right',
@@ -622,6 +683,24 @@ function jointSpecs(settings: PanelConstructionSettings): JointSpec[] {
     );
   }
   return joints;
+}
+
+function resolvedConnection(
+  settings: PanelConstructionSettings,
+  spec: JointSpec,
+): {
+  kind: PanelConnectionTreatment;
+  clearanceMm: number;
+  fabricationClearanceMm: number;
+} {
+  const override = spec.connectionKey
+    ? settings.connectionOverrides?.[spec.connectionKey]
+    : undefined;
+  return {
+    kind: override?.treatment ?? (settings.jointKind as CurrentPanelJointKind),
+    clearanceMm: override?.clearanceMm ?? settings.clearanceMm,
+    fabricationClearanceMm: override?.clearanceMm ?? 0,
+  };
 }
 
 function dividerSideJointSpecs(
@@ -789,9 +868,441 @@ function assembledPanels(
   });
 }
 
+function logicalPanelEdge(
+  panel: PanelConstructionPanel,
+  edge: PanelEdgeName,
+): { start: Point2D; end: Point2D } {
+  const geometry = edgeGeometry(edge, panel.widthMm, panel.heightMm);
+  return { start: geometry.start, end: geometry.end };
+}
+
+function editablePanelEdges(
+  settings: PanelConstructionSettings,
+  panels: readonly PanelConstructionPanel[],
+  joints: readonly PanelConstructionJoint[],
+  assembled: readonly AssembledFoldPanel[],
+): NonNullable<PanelConstructionResult['editableEdges']> {
+  const panelById = new Map(panels.map((panel) => [panel.id, panel]));
+  const assembledById = new Map(assembled.map((panel) => [panel.id, panel]));
+  const result: NonNullable<PanelConstructionResult['editableEdges']> = [];
+  const worldSegment = (panelId: string, edge: PanelEdgeName) => {
+    const panel = panelById.get(panelId)!;
+    const assembledPanel = assembledById.get(panelId)!;
+    const geometry = logicalPanelEdge(panel, edge);
+    const indexFor = (point: Point2D) =>
+      panel.outline.findIndex(
+        (candidate) => Math.hypot(candidate.x - point.x, candidate.y - point.y) <= 1e-5,
+      );
+    const startIndex = indexFor(geometry.start);
+    const endIndex = indexFor(geometry.end);
+    return {
+      startMm: assembledPanel.verticesMm[startIndex >= 0 ? startIndex : 0]!,
+      endMm: assembledPanel.verticesMm[endIndex >= 0 ? endIndex : 0]!,
+    };
+  };
+  for (const joint of joints.filter(
+    (candidate) =>
+      candidate.connectionKey && candidate.edgeA !== 'face' && candidate.edgeB !== 'face',
+  )) {
+    const segment = worldSegment(joint.panelAId, joint.edgeA as PanelEdgeName);
+    result.push({
+      id: joint.connectionKey!,
+      kind: 'connection',
+      panelAId: joint.panelAId,
+      panelBId: joint.panelBId,
+      ...segment,
+      editable: true,
+    });
+  }
+  const connected = new Set(
+    joints.flatMap((joint) => [
+      `${joint.panelAId}:${joint.edgeA}`,
+      `${joint.panelBId}:${joint.edgeB}`,
+    ]),
+  );
+  for (const panel of panels.filter((candidate) => !isDividerRole(candidate.role))) {
+    for (const edge of edgeOrder) {
+      if (connected.has(`${panel.id}:${edge}`)) continue;
+      const raisedTop =
+        edge === 'top' &&
+        (panel.role === 'front' || panel.role === 'back') &&
+        (settings.panelProfiles?.[panel.role] ?? 'flat') !== 'flat';
+      result.push({
+        id: `${panel.id}:${edge}`,
+        kind: 'boundary',
+        panelAId: panel.id,
+        ...worldSegment(panel.id, edge),
+        editable: !raisedTop,
+        ...(raisedTop
+          ? { unavailableReason: 'Raised-profile top edges cannot receive a free glue tab.' }
+          : {}),
+      });
+    }
+  }
+  return result.sort((left, right) => left.id.localeCompare(right.id));
+}
+
+function applyPanelConnectionEditing(
+  input: PanelConstructionInput,
+  panels: PanelConstructionPanel[],
+  joints: PanelConstructionJoint[],
+  parts: FabricationPart[],
+): {
+  panels: PanelConstructionPanel[];
+  joints: PanelConstructionJoint[];
+  parts: FabricationPart[];
+  tabs: FoldTab[];
+  issues: ValidationIssue[];
+} {
+  const creaseJoints = joints.filter((joint) => joint.kind === 'crease');
+  const pairedTabJoints = joints.filter(
+    (joint) => joint.kind === 'butt' && Boolean(joint.tabOwnerPanelId),
+  );
+  const boundaryTabs = input.settings.boundaryGlueTabs ?? [];
+  if (creaseJoints.length === 0 && pairedTabJoints.length === 0 && boundaryTabs.length === 0) {
+    return { panels, joints, parts, tabs: [], issues: [] };
+  }
+
+  const panelById = new Map(panels.map((panel) => [panel.id, panel]));
+  const issues: ValidationIssue[] = [];
+  const topologyConnections: TopologyConnection[] = creaseJoints.flatMap((joint) => {
+    if (joint.edgeA === 'face' || joint.edgeB === 'face') return [];
+    const panelA = panelById.get(joint.panelAId);
+    const panelB = panelById.get(joint.panelBId);
+    if (!panelA || !panelB) return [];
+    return [
+      {
+        id: joint.id,
+        panelAId: panelA.id,
+        panelBId: panelB.id,
+        edgeA: logicalPanelEdge(panelA, joint.edgeA),
+        edgeB: logicalPanelEdge(panelB, joint.edgeB),
+      },
+    ];
+  });
+  const layout = layoutCreaseComponents(panels, topologyConnections);
+  if (layout.cycleConnectionIds.length > 0) {
+    issues.push({
+      id: 'panel-crease-cycle',
+      severity: 'error',
+      code: 'CONNECTION_CREASE_CYCLE',
+      message: 'The selected panel creases form a cycle and cannot be unfolded into one flat net.',
+      affectedEntityIds: layout.cycleConnectionIds,
+      suggestedAction: 'Change at least one crease in the cycle to a butt or finger connection.',
+    });
+  }
+  for (const joint of creaseJoints) {
+    const panelA = panels.find((panel) => panel.id === joint.panelAId)!;
+    const panelB = panels.find((panel) => panel.id === joint.panelBId)!;
+    if (
+      Math.abs(
+        thicknessForRole(panelA.role, input.settings, input.material) -
+          thicknessForRole(panelB.role, input.settings, input.material),
+      ) > 1e-6
+    ) {
+      issues.push({
+        id: `panel-crease-thickness-${joint.id}`,
+        severity: 'error',
+        code: 'CONNECTION_THICKNESS_MISMATCH',
+        message: 'A scored crease cannot join panels made from different stock thicknesses.',
+        affectedEntityIds: [joint.id, panelA.id, panelB.id],
+        suggestedAction: 'Use matching stock thicknesses or change this connection to butt.',
+      });
+    }
+  }
+
+  const tabDepth = input.settings.glueTabDepthMm ?? 8;
+  const tabs: FoldTab[] = [];
+  const tabEdges = new Map<string, { id: string; panelId: string; edge: PanelEdgeName }>();
+  for (const joint of pairedTabJoints) {
+    const ownerId = joint.tabOwnerPanelId!;
+    const edge = ownerId === joint.panelAId ? joint.edgeA : joint.edgeB;
+    if (edge === 'face' || (ownerId !== joint.panelAId && ownerId !== joint.panelBId)) {
+      issues.push({
+        id: `panel-tab-owner-${joint.id}`,
+        severity: 'error',
+        code: 'CONNECTION_TAB_OWNER_INVALID',
+        message: 'A paired glue tab must be owned by one of the two connected panels.',
+        affectedEntityIds: [joint.id, ownerId],
+        suggestedAction: 'Select either connected panel as the glue-tab owner.',
+      });
+      continue;
+    }
+    tabEdges.set(`${ownerId}:${edge}`, { id: `${joint.id}-glue-tab`, panelId: ownerId, edge });
+  }
+  for (const record of boundaryTabs) {
+    const panel = panelById.get(record.ownerPanelId);
+    const edge = record.edgeId.split(':').at(-1) as PanelEdgeName;
+    const connected = joints.some(
+      (joint) =>
+        (joint.panelAId === record.ownerPanelId && joint.edgeA === edge) ||
+        (joint.panelBId === record.ownerPanelId && joint.edgeB === edge),
+    );
+    const raisedTop =
+      edge === 'top' &&
+      (panel?.role === 'front' || panel?.role === 'back') &&
+      (input.settings.panelProfiles?.[panel.role] ?? 'flat') !== 'flat';
+    if (!panel || !edgeOrder.includes(edge) || connected || raisedTop) {
+      issues.push({
+        id: `panel-boundary-tab-${record.id}`,
+        severity: 'error',
+        code: 'BOUNDARY_TAB_EDGE_INVALID',
+        message: 'A free glue tab targets a missing, connected, or shaped panel edge.',
+        affectedEntityIds: [record.id, record.ownerPanelId, record.edgeId],
+        suggestedAction: 'Choose a straight exposed panel edge.',
+      });
+      continue;
+    }
+    tabEdges.set(`${panel.id}:${edge}`, { id: record.id, panelId: panel.id, edge });
+  }
+
+  const transformedParts: FabricationPart[] = [];
+  const panelPartIds = new Map<string, string>();
+  for (const component of layout.components) {
+    const componentPanels = component.map((id) => panelById.get(id)!);
+    const componentJointIds = joints
+      .filter((joint) => component.includes(joint.panelAId) || component.includes(joint.panelBId))
+      .map((joint) => joint.id);
+    const partId =
+      component.length === 1
+        ? componentPanels[0]!.partId
+        : `construction-net-${componentPanels
+            .map((panel) => panel.role)
+            .sort()
+            .join('-')}`;
+    for (const panel of componentPanels) panelPartIds.set(panel.id, partId);
+    const segments: BoundarySegment[] = [];
+    for (const panel of componentPanels) {
+      const transform = layout.transforms.get(panel.id)!;
+      panel.outline.forEach((start, index) => {
+        const end = panel.outline[(index + 1) % panel.outline.length]!;
+        const omittedForCrease = topologyConnections.some((connection) => {
+          if (connection.panelAId === panel.id) {
+            return sameSegment(start, end, connection.edgeA.start, connection.edgeA.end);
+          }
+          if (connection.panelBId === panel.id) {
+            return sameSegment(start, end, connection.edgeB.start, connection.edgeB.end);
+          }
+          return false;
+        });
+        const tab = [...tabEdges.values()].find((candidate) => {
+          if (candidate.panelId !== panel.id) return false;
+          const logical = logicalPanelEdge(panel, candidate.edge);
+          return sameSegment(start, end, logical.start, logical.end);
+        });
+        if (omittedForCrease || tab) return;
+        segments.push({
+          start: transformPoint(start, transform),
+          end: transformPoint(end, transform),
+          panelId: panel.id,
+        });
+      });
+      for (const tab of [...tabEdges.values()].filter(
+        (candidate) => candidate.panelId === panel.id,
+      )) {
+        const logical = logicalPanelEdge(panel, tab.edge);
+        const length = Math.hypot(logical.end.x - logical.start.x, logical.end.y - logical.start.y);
+        if (length < tabDepth * 2 || tabDepth > Math.min(15, length * 0.35) + 1e-6) {
+          issues.push({
+            id: `panel-tab-depth-${tab.id}`,
+            severity: 'error',
+            code: 'GLUE_TAB_DEPTH_INVALID',
+            message: 'The glue tab depth is too large for its selected edge.',
+            affectedEntityIds: [tab.id, panel.id],
+            suggestedAction: 'Reduce glue-tab depth or choose a longer edge.',
+          });
+          continue;
+        }
+        const outline = glueTabOutline(logical.start, logical.end, tabDepth).map((point) =>
+          transformPoint(point, transform),
+        );
+        for (let index = 0; index < outline.length - 1; index += 1) {
+          segments.push({
+            start: outline[index]!,
+            end: outline[index + 1]!,
+            panelId: panel.id,
+            tabId: tab.id,
+          });
+        }
+        tabs.push({
+          id: tab.id,
+          partId,
+          edgeId: `${tab.id}-base`,
+          ownerPanelId: panel.id,
+          style: 'glue',
+          depthMm: tabDepth,
+          shoulderAngleDeg: 20,
+          enabled: true,
+          baseStart: transformPoint(logical.start, transform),
+          baseEnd: transformPoint(logical.end, transform),
+          outline,
+        });
+      }
+    }
+    const contours = traceClosedContours(segments);
+    if (contours.length === 0) {
+      issues.push({
+        id: `panel-component-contour-${partId}`,
+        severity: 'error',
+        code: 'CONNECTION_CONTOUR_INVALID',
+        message: 'The edited panel component could not be traced into a closed cut contour.',
+        affectedEntityIds: component,
+        suggestedAction: 'Reset the conflicting connection or glue-tab edit.',
+      });
+    }
+    const sourceParts = componentPanels.map((panel) =>
+      parts.find((part) => part.id === panel.partId)!,
+    );
+    const innerPaths = sourceParts.flatMap((part) =>
+      part.paths
+        .filter((path) => path.contourRole !== 'outer')
+        .map((path) => ({
+          ...path,
+          points: path.points.map((point) =>
+            transformPoint(point, layout.transforms.get(path.panelId ?? component[0]!)!),
+          ),
+        })),
+    );
+    const scorePaths: FabricationPath[] = topologyConnections
+      .filter((connection) => component.includes(connection.panelAId))
+      .map((connection) => ({
+        id: `${connection.id}-score`,
+        operation: 'score',
+        closed: false,
+        points: [
+          transformPoint(connection.edgeA.start, layout.transforms.get(connection.panelAId)!),
+          transformPoint(connection.edgeA.end, layout.transforms.get(connection.panelAId)!),
+        ],
+        panelId: connection.panelAId,
+        edgeId: connection.id,
+      }));
+    const tabScores: FabricationPath[] = tabs
+      .filter((tab) => tab.partId === partId)
+      .map((tab) => ({
+        id: `${tab.id}-score`,
+        operation: 'score',
+        closed: false,
+        points: [tab.baseStart, tab.baseEnd],
+        panelId: tab.ownerPanelId,
+        tabId: tab.id,
+        edgeId: tab.edgeId,
+      }));
+    const labels = sourceParts.flatMap((part) =>
+      (part.labels ?? []).map((label) => {
+        const owner = componentPanels.find((panel) => label.entityId?.includes(panel.role));
+        return {
+          ...label,
+          position: transformPoint(
+            label.position,
+            layout.transforms.get(owner?.id ?? component[0]!)!,
+          ),
+        };
+      }),
+    );
+    transformedParts.push({
+      id: partId,
+      name: componentPanels.map((panel) => panel.name).join(' + '),
+      label: componentPanels.map((panel) => panel.role.toUpperCase()).join(' + '),
+      thicknessMm: thicknessForRole(componentPanels[0]!.role, input.settings, input.material),
+      sourceReference: inputSourceId(input),
+      paths: [
+        ...contours.map((points, index): FabricationPath => ({
+          id: `${partId}-outline-${index + 1}`,
+          operation: 'cut',
+          closed: true,
+          contourRole: 'outer',
+          points,
+        })),
+        ...innerPaths,
+        ...scorePaths,
+        ...tabScores,
+      ],
+      labels,
+      construction: {
+        panelIds: component,
+        roles: componentPanels.map((panel) => panel.role),
+        jointIds: componentJointIds,
+      },
+    });
+  }
+  if (creaseJoints.length > 0) {
+    issues.push({
+      id: 'panel-cardboard-fit-unverified',
+      severity: 'warning',
+      code: 'CARDBOARD_FIT_UNVERIFIED',
+      message:
+        'Panel crease positions are nominal and do not include bend allowance, grain, or material compression.',
+      affectedEntityIds: creaseJoints.map((joint) => joint.id),
+      suggestedAction: 'Make and measure a physical cardboard test before final fabrication.',
+    });
+  }
+  const updatedPanels = panels.map((panel) => ({
+    ...panel,
+    partId: panelPartIds.get(panel.id) ?? panel.partId,
+  }));
+  const updatedJoints = joints.map((joint) => ({
+    ...joint,
+    ...(tabs.some(
+      (tab) => tab.ownerPanelId === joint.panelAId || tab.ownerPanelId === joint.panelBId,
+    )
+      ? {
+          tabIds: tabs
+            .filter(
+              (tab) => tab.ownerPanelId === joint.panelAId || tab.ownerPanelId === joint.panelBId,
+            )
+            .map((tab) => tab.id),
+        }
+      : {}),
+  }));
+  for (const tab of tabs) {
+    for (const panel of panels.filter(
+      (candidate) =>
+        candidate.id !== tab.ownerPanelId && panelPartIds.get(candidate.id) === tab.partId,
+    )) {
+      const transformedOutline = panel.outline.map((point) =>
+        transformPoint(point, layout.transforms.get(panel.id)!),
+      );
+      if (!polygonsOverlap(tab.outline, transformedOutline)) continue;
+      issues.push({
+        id: `panel-tab-overlap-${tab.id}-${panel.id}`,
+        severity: 'error',
+        code: 'GLUE_TAB_OVERLAP',
+        message: 'A glue tab overlaps another panel in its flat fabrication component.',
+        affectedEntityIds: [tab.id, panel.id],
+        suggestedAction: 'Reduce tab depth, change its owner, or change the nearby crease.',
+      });
+    }
+  }
+  for (let first = 0; first < tabs.length; first += 1) {
+    for (let second = first + 1; second < tabs.length; second += 1) {
+      const tabA = tabs[first]!;
+      const tabB = tabs[second]!;
+      if (tabA.partId !== tabB.partId || !polygonsOverlap(tabA.outline, tabB.outline)) continue;
+      issues.push({
+        id: `panel-tab-collision-${tabA.id}-${tabB.id}`,
+        severity: 'error',
+        code: 'GLUE_TAB_COLLISION',
+        message: 'Two glue tabs overlap in the same fabrication component.',
+        affectedEntityIds: [tabA.id, tabB.id],
+        suggestedAction: 'Remove one tab, select another owner, or reduce tab depth.',
+      });
+    }
+  }
+  return { panels: updatedPanels, joints: updatedJoints, parts: transformedParts, tabs, issues };
+}
+
 function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
   const { settings, material } = input;
+  const sourceId = inputSourceId(input);
   const dividerCounts = dividerCountsFor(settings);
+  const panelThickness = panelThicknessMm(settings, material);
+  const dividerThickness = dividerThicknessMm(settings, material);
+  const lidThickness = lidThicknessMm(settings, material);
+  const maximumStockThickness = Math.max(
+    panelThickness,
+    dividerThickness,
+    settings.includeLid ? lidThickness : 0,
+  );
   const dimensions = [settings.innerWidthMm, settings.innerDepthMm, settings.innerHeightMm];
   if (
     dimensions.some((value) => !Number.isFinite(value) || value <= 0) ||
@@ -799,62 +1310,163 @@ function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
     settings.fingerWidthMm <= 0 ||
     !Number.isFinite(settings.clearanceMm) ||
     settings.clearanceMm < 0 ||
-    !Number.isFinite(material.thicknessMm) ||
-    material.thicknessMm <= 0 ||
+    [panelThickness, dividerThickness, lidThickness].some(
+      (value) => !Number.isFinite(value) || value < 1 || value > 10,
+    ) ||
     !Number.isInteger(dividerCounts.width) ||
     !Number.isInteger(dividerCounts.depth) ||
     dividerCounts.width < 0 ||
-    dividerCounts.width > 6 ||
     dividerCounts.depth < 0 ||
-    dividerCounts.depth > 6
+    dividerCounts.width > maximumPanelDividerCount(settings.innerDepthMm, dividerThickness) ||
+    dividerCounts.depth > maximumPanelDividerCount(settings.innerWidthMm, dividerThickness)
   ) {
     return [
       {
-        id: `panel-settings-invalid-${input.modelId}`,
+        id: `panel-settings-invalid-${sourceId}`,
         severity: 'error',
         code: 'PANEL_SETTINGS_INVALID',
         message:
-          'Panel dimensions, material thickness, and finger width must be positive; clearance cannot be negative.',
-        affectedEntityIds: [input.modelId],
+          'Panel dimensions and finger width must be positive; stock must be 1–10 mm and divider counts must fit the available space.',
+        affectedEntityIds: [sourceId],
         suggestedAction: 'Correct the panel-construction dimensions and generate again.',
       },
     ];
   }
+  if (settings.jointKind === 'tab-slot') {
+    return [
+      {
+        id: `panel-joint-unsupported-${sourceId}`,
+        severity: 'error',
+        code: 'PANEL_JOINT_UNSUPPORTED',
+        message: 'Tabs and through-slots are temporarily unavailable.',
+        affectedEntityIds: [sourceId],
+        suggestedAction: 'Use complementary finger joints or straight butt joints.',
+      },
+    ];
+  }
+  const profiles = settings.panelProfiles ?? DEFAULT_PANEL_PROFILES;
+  if (
+    !PANEL_PROFILE_KINDS.includes(profiles.front) ||
+    !PANEL_PROFILE_KINDS.includes(profiles.back)
+  ) {
+    return [
+      {
+        id: `panel-profile-invalid-${sourceId}`,
+        severity: 'error',
+        code: 'PANEL_PROFILE_INVALID',
+        message: 'Front and back panel profiles must use a supported bounded shape.',
+        affectedEntityIds: [sourceId],
+        suggestedAction: 'Choose flat, arch, gable, or stepped profiles.',
+      },
+    ];
+  }
+  if (settings.includeLid && hasRaisedPanelProfile(profiles)) {
+    return [
+      {
+        id: `panel-profile-lid-${sourceId}`,
+        severity: 'error',
+        code: 'PANEL_PROFILE_LID_INCOMPATIBLE',
+        message: 'Raised front or back profiles require an open top.',
+        affectedEntityIds: ['construction-panel-front', 'construction-panel-back'],
+        suggestedAction: 'Remove the lid or set both panel profiles to flat.',
+      },
+    ];
+  }
+  const overrides = settings.connectionOverrides ?? {};
+  const unknownConnectionKey = Object.keys(overrides).find(
+    (key) => !PANEL_CONNECTION_KEYS.includes(key as PanelConnectionKey),
+  );
+  if (unknownConnectionKey) {
+    return [
+      {
+        id: `panel-connection-key-${sourceId}`,
+        severity: 'error',
+        code: 'PANEL_CONNECTION_OVERRIDE_INVALID',
+        message: 'A connection override targets an inaccessible panel pairing.',
+        affectedEntityIds: [sourceId],
+        suggestedAction: 'Remove the unsupported connection override.',
+      },
+    ];
+  }
+  for (const spec of jointSpecs(settings).filter((candidate) => candidate.connectionKey)) {
+    const override = settings.connectionOverrides?.[spec.connectionKey!];
+    if (!override) continue;
+    if (
+      !(['butt', 'finger', 'crease'] as const).includes(override.treatment) ||
+      (override.clearanceMm !== undefined &&
+        (!Number.isFinite(override.clearanceMm) || override.clearanceMm < 0)) ||
+      (override.treatment !== 'finger' && override.clearanceMm !== undefined) ||
+      (override.glueTabOwnerPanelId !== undefined && override.treatment !== 'butt') ||
+      (override.glueTabOwnerPanelId !== undefined &&
+        override.glueTabOwnerPanelId !== `construction-panel-${spec.panelA}` &&
+        override.glueTabOwnerPanelId !== `construction-panel-${spec.panelB}`)
+    ) {
+      return [
+        {
+          id: `panel-connection-override-${spec.connectionKey}-${sourceId}`,
+          severity: 'error',
+          code: 'PANEL_CONNECTION_OVERRIDE_INVALID',
+          message: 'A connection override has an incompatible treatment, clearance, or tab owner.',
+          affectedEntityIds: [sourceId, spec.connectionKey!],
+          suggestedAction:
+            'Use finger clearance only for finger joints and select one connected panel as a glue-tab owner.',
+        },
+      ];
+    }
+    const pitch = spec.lengthMm / segmentCount(spec.lengthMm, settings.fingerWidthMm);
+    if (override.clearanceMm !== undefined && override.clearanceMm >= pitch) {
+      return [
+        {
+          id: `panel-connection-clearance-${spec.connectionKey}-${sourceId}`,
+          severity: 'error',
+          code: 'PANEL_CONNECTION_CLEARANCE_TOO_LARGE',
+          message: 'A connection clearance is at least as large as its finger pitch.',
+          affectedEntityIds: [sourceId, spec.connectionKey!],
+          suggestedAction: 'Reduce the connection clearance or use wider fingers.',
+        },
+      ];
+    }
+  }
   const issues: ValidationIssue[] = [];
   const dividerCount = dividerCounts.width + dividerCounts.depth;
-  const usesFingers = settings.jointKind !== 'butt' || dividerCount > 0;
-  const widthSpacing = settings.innerDepthMm / (dividerCounts.width + 1);
-  const depthSpacing = settings.innerWidthMm / (dividerCounts.depth + 1);
+  const usesFingers =
+    settings.jointKind !== 'butt' ||
+    Object.values(overrides).some((override) => override?.treatment === 'finger') ||
+    dividerCount > 0;
+  const widthSpacing =
+    (settings.innerDepthMm - dividerCounts.width * dividerThickness) / (dividerCounts.width + 1);
+  const depthSpacing =
+    (settings.innerWidthMm - dividerCounts.depth * dividerThickness) / (dividerCounts.depth + 1);
   if (
-    (dividerCounts.width > 0 && widthSpacing < material.thicknessMm * 4) ||
-    (dividerCounts.depth > 0 && depthSpacing < material.thicknessMm * 4)
+    (dividerCounts.width > 0 && widthSpacing < dividerThickness * 4) ||
+    (dividerCounts.depth > 0 && depthSpacing < dividerThickness * 4)
   ) {
     issues.push({
-      id: `panel-divider-spacing-${input.modelId}`,
+      id: `panel-divider-spacing-${sourceId}`,
       severity: 'error',
       code: 'PANEL_DIVIDER_SPACING_TOO_NARROW',
       message: 'The requested dividers leave sections narrower than four material thicknesses.',
-      affectedEntityIds: [input.modelId],
+      affectedEntityIds: [sourceId],
       suggestedAction: 'Use fewer dividers, a larger box, or thinner material.',
     });
   }
-  if (Math.min(...dimensions) < material.thicknessMm * 4) {
+  if (Math.min(...dimensions) < maximumStockThickness * 4) {
     issues.push({
-      id: `panel-dimension-too-small-${input.modelId}`,
+      id: `panel-dimension-too-small-${sourceId}`,
       severity: 'error',
       code: 'PANEL_DIMENSION_TOO_SMALL',
       message: 'Every enclosure dimension must be at least four material thicknesses.',
-      affectedEntityIds: [input.modelId],
+      affectedEntityIds: [sourceId],
       suggestedAction: 'Increase the enclosure dimensions or choose thinner material.',
     });
   }
-  if (usesFingers && settings.fingerWidthMm < material.thicknessMm * 1.5) {
+  if (usesFingers && settings.fingerWidthMm < maximumStockThickness * 1.5) {
     issues.push({
-      id: `panel-finger-narrow-${input.modelId}`,
+      id: `panel-finger-narrow-${sourceId}`,
       severity: 'warning',
       code: 'PANEL_FINGER_TOO_NARROW',
       message: 'The target finger width is narrow relative to material thickness.',
-      affectedEntityIds: [input.modelId],
+      affectedEntityIds: [sourceId],
       suggestedAction: 'Increase finger width and test the joint in scrap material.',
     });
   }
@@ -864,71 +1476,60 @@ function inputIssues(input: PanelConstructionInput): ValidationIssue[] {
     settings.innerHeightMm / segmentCount(settings.innerHeightMm, settings.fingerWidthMm);
   if (usesFingers && settings.fingerWidthMm > shortestJoint / 3) {
     issues.push({
-      id: `panel-finger-sparse-${input.modelId}`,
+      id: `panel-finger-sparse-${sourceId}`,
       severity: 'warning',
       code: 'PANEL_TOO_FEW_FINGERS',
       message: 'The target width produces only a few large fingers on at least one joint.',
-      affectedEntityIds: [input.modelId],
+      affectedEntityIds: [sourceId],
       suggestedAction: 'Reduce target finger width for better load distribution.',
     });
   }
   if (usesFingers && Math.min(minimumPitch, dividerPitch) <= material.kerfMm * 4) {
     issues.push({
-      id: `panel-finger-kerf-${input.modelId}`,
+      id: `panel-finger-kerf-${sourceId}`,
       severity: 'warning',
       code: 'PANEL_FINGER_NEAR_KERF_LIMIT',
       message: 'At least one finger pitch is very small relative to the material kerf.',
-      affectedEntityIds: [input.modelId, material.id],
+      affectedEntityIds: [sourceId, material.id],
       suggestedAction: 'Use wider fingers or a lower-kerf cutting process.',
-    });
-  }
-  if (settings.jointKind === 'tab-slot' && settings.clearanceMm >= minimumPitch) {
-    issues.push({
-      id: `panel-clearance-large-${input.modelId}`,
-      severity: 'error',
-      code: 'PANEL_CLEARANCE_TOO_LARGE',
-      message: 'Slot clearance is at least as large as the narrowest tab pitch.',
-      affectedEntityIds: [input.modelId],
-      suggestedAction: 'Reduce slot clearance or use wider fingers.',
     });
   }
   if (dividerCount > 0 && settings.clearanceMm >= dividerPitch) {
     issues.push({
-      id: `panel-divider-clearance-large-${input.modelId}`,
+      id: `panel-divider-clearance-large-${sourceId}`,
       severity: 'error',
       code: 'PANEL_DIVIDER_CLEARANCE_TOO_LARGE',
       message: 'Divider slot clearance is at least as large as the side-finger pitch.',
-      affectedEntityIds: [input.modelId],
+      affectedEntityIds: [sourceId],
       suggestedAction: 'Reduce slot clearance or use wider divider fingers.',
     });
   }
   if (
     usesFingers &&
-    (material.category === 'paper' || (material.category === 'card' && material.thicknessMm < 0.8))
+    (material.category === 'paper' || (material.category === 'card' && panelThickness < 0.8))
   ) {
     issues.push({
-      id: `panel-flexible-material-${input.modelId}`,
+      id: `panel-flexible-material-${sourceId}`,
       severity: 'warning',
       code: 'PANEL_RIGID_JOINT_MATERIAL_REVIEW',
-      message:
-        'Finger and tab-slot joints are intended for rigid sheet material; paper or card may tear.',
+      message: 'Finger joints are intended for rigid sheet material; paper or card may tear.',
       affectedEntityIds: [material.id],
       suggestedAction: 'Use a rigid material or choose butt joints with adhesive.',
     });
   }
   if (settings.jointKind === 'butt') {
     issues.push({
-      id: `panel-butt-fastener-${input.modelId}`,
+      id: `panel-butt-fastener-${sourceId}`,
       severity: 'info',
       code: 'PANEL_BUTT_JOINT_FASTENER_REQUIRED',
       message: 'Butt-joint panels require adhesive, tape, or external fasteners.',
-      affectedEntityIds: [input.modelId],
+      affectedEntityIds: [sourceId],
       suggestedAction: 'Plan the assembly method before cutting.',
     });
   }
   if (settings.includeLid && settings.jointKind !== 'butt') {
     issues.push({
-      id: `panel-closed-assembly-${input.modelId}`,
+      id: `panel-closed-assembly-${sourceId}`,
       severity: 'warning',
       code: 'PANEL_CLOSED_ASSEMBLY_REVIEW',
       message:
@@ -958,52 +1559,67 @@ function emptyResult(
 }
 
 export function generatePanelConstruction(input: PanelConstructionInput): PanelConstructionResult {
+  input = {
+    ...input,
+    settings: {
+      ...input.settings,
+      ...(input.settings.features
+        ? {
+            features: [...input.settings.features].sort((left, right) =>
+              left.id.localeCompare(right.id),
+            ),
+          }
+        : {}),
+    },
+  };
   const issues = inputIssues(input);
   if (issues.some((issue) => issue.severity === 'error')) return emptyResult(input, issues);
   const specs = panelSpecs(input.settings, input.material);
-  const specsByRole = new Map(specs.map((spec) => [spec.role, spec]));
   const treatmentsByRole = new Map<PanelRole, Map<PanelEdgeName, EdgeTreatment>>(
     specs.map((spec) => [spec.role, new Map()]),
   );
   const enclosureJoints: PanelConstructionJoint[] = jointSpecs(input.settings).map(
     (spec, index) => {
       const id = `construction-joint-${index + 1}`;
+      const resolved = resolvedConnection(input.settings, spec);
       const count =
-        input.settings.jointKind === 'butt'
-          ? 0
-          : segmentCount(spec.lengthMm, input.settings.fingerWidthMm);
-      const tabOwnerPanelId =
-        input.settings.jointKind === 'tab-slot' ? `construction-panel-${spec.panelA}` : undefined;
+        resolved.kind === 'finger' ? segmentCount(spec.lengthMm, input.settings.fingerWidthMm) : 0;
       const treatmentA: EdgeTreatment = {
         jointId: id,
-        kind: input.settings.jointKind,
+        kind: resolved.kind,
         segmentCount: count,
         phase: 0,
-        depthMm: input.material.thicknessMm,
-        slotReceiver: false,
+        depthMm: thicknessForRole(spec.panelB, input.settings, input.material),
+        clearanceMm: resolved.fabricationClearanceMm,
       };
       const treatmentB: EdgeTreatment = {
         jointId: id,
-        kind: input.settings.jointKind,
+        kind: resolved.kind,
         segmentCount: count,
-        phase: input.settings.jointKind === 'finger' ? 1 : 0,
-        depthMm: input.material.thicknessMm,
-        slotReceiver: input.settings.jointKind === 'tab-slot',
+        phase: resolved.kind === 'finger' ? 1 : 0,
+        depthMm: thicknessForRole(spec.panelA, input.settings, input.material),
+        clearanceMm: resolved.fabricationClearanceMm,
       };
       treatmentsByRole.get(spec.panelA)!.set(spec.edgeA, treatmentA);
       treatmentsByRole.get(spec.panelB)!.set(spec.edgeB, treatmentB);
       return {
         id,
-        kind: input.settings.jointKind,
+        ...(spec.connectionKey ? { connectionKey: spec.connectionKey } : {}),
+        kind: resolved.kind,
         panelAId: `construction-panel-${spec.panelA}`,
         panelBId: `construction-panel-${spec.panelB}`,
         edgeA: spec.edgeA,
         edgeB: spec.edgeB,
         sharedLengthMm: rounded(spec.lengthMm),
         fingerCount: count,
-        clearanceMm: rounded(input.settings.clearanceMm),
+        clearanceMm: rounded(resolved.clearanceMm),
         pairLabel: `J${index + 1}`,
-        ...(tabOwnerPanelId ? { tabOwnerPanelId } : {}),
+        ...(input.settings.connectionOverrides?.[spec.connectionKey!]?.glueTabOwnerPanelId
+          ? {
+              tabOwnerPanelId:
+                input.settings.connectionOverrides[spec.connectionKey!]!.glueTabOwnerPanelId,
+            }
+          : {}),
       };
     },
   );
@@ -1055,7 +1671,8 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
       outline: isDividerRole(spec.role)
         ? dividerOutline(
             spec,
-            input.material.thicknessMm,
+            dividerThicknessMm(input.settings, input.material),
+            panelThicknessMm(input.settings, input.material),
             input.settings.clearanceMm,
             dividerFingerCount,
           )
@@ -1105,8 +1722,8 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
       id: panel.partId,
       name: spec.name,
       label: spec.role.toUpperCase(),
-      thicknessMm: input.material.thicknessMm,
-      sourceReference: input.modelId,
+      thicknessMm: thicknessForRole(spec.role, input.settings, input.material),
+      sourceReference: inputSourceId(input),
       paths: [
         {
           id: `${panel.id}-outline`,
@@ -1116,15 +1733,10 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
           points: panel.outline,
           panelId: panel.id,
         },
-        ...slotPaths(
-          specsByRole.get(spec.role)!,
-          treatmentsByRole.get(spec.role)!,
-          input.settings.clearanceMm,
-        ),
         ...dividerReceiverSlotPaths(
           spec.role,
           joints,
-          input.material.thicknessMm,
+          dividerThicknessMm(input.settings, input.material),
           input.settings.clearanceMm,
         ),
         ...(spec.role === 'base' ? dividerBaseSlots(input.settings, input.material, specs) : []),
@@ -1137,14 +1749,37 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
       },
     };
   });
+  const featureApplication = applyPanelFeatures(
+    input.settings.features ?? [],
+    panels,
+    parts,
+    input.material,
+    (role) => thicknessForRole(role, input.settings, input.material),
+  );
+  const edited = applyPanelConnectionEditing(input, panels, joints, featureApplication.parts);
+  const assembledPreviewPanels = assembledPanels(
+    input.settings,
+    edited.panels,
+    edited.parts,
+    specs,
+  );
   return {
     settings: input.settings,
     material: input.material,
-    panels,
-    joints,
-    parts,
-    issues,
-    assembledPreview: { panels: assembledPanels(input.settings, panels, parts, specs) },
+    panels: edited.panels,
+    joints: edited.joints,
+    parts: edited.parts,
+    tabs: edited.tabs,
+    issues: [...issues, ...featureApplication.issues, ...edited.issues],
+    assembledPreview: {
+      panels: assembledPreviewPanels,
+    },
+    editableEdges: editablePanelEdges(
+      input.settings,
+      edited.panels,
+      edited.joints,
+      assembledPreviewPanels,
+    ),
     algorithmVersion: PANEL_CONSTRUCTION_ALGORITHM_VERSION,
     inputHash: deterministicPanelConstructionHash(input),
   };

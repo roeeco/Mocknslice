@@ -40,10 +40,10 @@ describe('FoldTemplatePanel', () => {
     fireEvent.change(screen.getByLabelText('Width (X)'), { target: { value: '120' } });
     fireEvent.change(screen.getByLabelText('Polygon sides'), { target: { value: '8' } });
 
-    expect(useProjectStore.getState().project.modeParameters).toMatchObject({
-      foldTemplateKind: 'regular-prism',
-      foldWidthMm: 120,
-      foldPrismSides: 8,
+    expect(useProjectStore.getState().project.modeSettings.foldTemplate).toMatchObject({
+      templateKind: 'regular-prism',
+      widthMm: 120,
+      prismSides: 8,
     });
     expect(screen.queryByLabelText('Fitting axis')).toBeNull();
     expect(screen.getByText(/chosen extrusion length/)).toBeVisible();
@@ -57,13 +57,13 @@ describe('FoldTemplatePanel', () => {
     expect(screen.getByLabelText('Press-fit lip depth')).toBeVisible();
     fireEvent.change(screen.getByLabelText('Slit clearance'), { target: { value: '0.3' } });
 
-    expect(useProjectStore.getState().project.modeParameters).toMatchObject({
-      foldClosureMethod: 'press-fit',
-      foldSlotClearanceMm: 0.3,
+    expect(useProjectStore.getState().project.modeSettings.foldTemplate).toMatchObject({
+      closureMethod: 'press-fit',
+      slotClearanceMm: 0.3,
     });
   });
 
-  it('shows source and fitted profiles after generation', () => {
+  it('shows the standalone result summary without model provenance', () => {
     const project = useProjectStore.getState().project;
     if (!project.model.mesh || !project.model.bounds)
       throw new Error('Fixture model is incomplete.');
@@ -86,8 +86,50 @@ describe('FoldTemplatePanel', () => {
     });
 
     render(<FoldTemplatePanel />);
-    expect(screen.getByTestId('fold-profile-preview')).toBeVisible();
-    expect(screen.getByText('1 mm clearance')).toBeVisible();
+    expect(screen.queryByTestId('fold-profile-preview')).not.toBeInTheDocument();
     expect(screen.getByText(/5 panels/)).toBeVisible();
+  });
+
+  it('keeps 3D and keyboard connection selection synchronized with typed edits', async () => {
+    const user = userEvent.setup();
+    const project = useProjectStore.getState().project;
+    if (!project.model.mesh || !project.model.bounds)
+      throw new Error('Fixture model is incomplete.');
+    const foldingResult = generateFoldTemplate({
+      mesh: project.model.mesh,
+      bounds: project.model.bounds,
+      modelId: project.model.id,
+      materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
+      settings: {
+        templateKind: 'open-box',
+        fitAxis: 'z',
+        clearanceMm: 1,
+        profileToleranceMm: 0.5,
+        parameters: { wallHeightMm: 20, tabDepthMm: 8 },
+      },
+    });
+    useProjectStore.setState({
+      project: { ...project, foldingResult, generatedParts: foldingResult.parts },
+      sliceGenerationStatus: 'ready',
+    });
+    render(<FoldTemplatePanel />);
+
+    const connectionButton = screen
+      .getAllByRole('listitem')
+      .find((button) => button.textContent?.includes('↔'))!;
+    await user.click(connectionButton);
+    const selectedId = useProjectStore.getState().selectedEntityId;
+    expect(selectedId).toBeTruthy();
+    const historyBefore = useProjectStore.getState().past.length;
+    await user.selectOptions(screen.getByLabelText('Edge treatment'), 'cut');
+
+    expect(
+      useProjectStore
+        .getState()
+        .project.modeSettings.foldTemplate.connectionOverrides.find(
+          (override) => override.connectionId === selectedId,
+        ),
+    ).toMatchObject({ treatment: 'cut', closure: 'none' });
+    expect(useProjectStore.getState().past).toHaveLength(historyBefore + 1);
   });
 });

@@ -3,6 +3,7 @@ import { rotateModelMesh90, scaleModelMeshToDimension } from '../../geometry/mes
 import { recordProjectChange, touchProject } from '../projectChange';
 import type { AppSliceCreator, ModelSlice } from '../types';
 import { runtimeFailure } from '../../domain/runtimeFailure';
+import { generationInputChanged } from '../../domain/generationInputs';
 
 function modelName(fileName: string): string {
   return fileName.replace(/\.stl$/i, '') || 'Imported STL';
@@ -66,28 +67,48 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
   cancelModelImport: () =>
     set({ modelImportStatus: 'cancelled', modelImportError: runtimeFailure('IMPORT_CANCELLED') }),
   rotateModel90: (axis) =>
-    set((state) => ({
-      ...recordProjectChange(state, (project) =>
+    set((state) => {
+      const changed = recordProjectChange(state, (project) =>
         touchProject({ ...project, model: rotateModelMesh90(project.model, axis) }),
-      ),
-      sliceGenerationStatus: state.project.generatedParts.length > 0 ? 'stale' : 'idle',
-      completedWorkflowSteps: state.completedWorkflowSteps.filter((step) =>
-        ['start', 'mode', 'import'].includes(step),
-      ),
-    })),
+      );
+      const nextProject = changed.project ?? state.project;
+      const activeInputChanged = generationInputChanged(state.project, nextProject);
+      return {
+        ...changed,
+        sliceGenerationStatus:
+          state.project.generatedParts.length > 0 && activeInputChanged
+            ? 'stale'
+            : state.sliceGenerationStatus,
+        completedWorkflowSteps: activeInputChanged
+          ? state.completedWorkflowSteps.filter((step) =>
+              ['start', 'mode', 'import'].includes(step),
+            )
+          : state.completedWorkflowSteps,
+      };
+    }),
   scaleModelToDimension: (axis, targetMm) =>
-    set((state) => ({
-      ...recordProjectChange(state, (project) =>
+    set((state) => {
+      const changed = recordProjectChange(state, (project) =>
         touchProject({
           ...project,
           model: scaleModelMeshToDimension(project.model, axis, targetMm),
         }),
-      ),
-      sliceGenerationStatus: state.project.generatedParts.length > 0 ? 'stale' : 'idle',
-      completedWorkflowSteps: state.completedWorkflowSteps.filter((step) =>
-        ['start', 'mode', 'import'].includes(step),
-      ),
-    })),
+      );
+      const nextProject = changed.project ?? state.project;
+      const activeInputChanged = generationInputChanged(state.project, nextProject);
+      return {
+        ...changed,
+        sliceGenerationStatus:
+          state.project.generatedParts.length > 0 && activeInputChanged
+            ? 'stale'
+            : state.sliceGenerationStatus,
+        completedWorkflowSteps: activeInputChanged
+          ? state.completedWorkflowSteps.filter((step) =>
+              ['start', 'mode', 'import'].includes(step),
+            )
+          : state.completedWorkflowSteps,
+      };
+    }),
   scaleModelToLongestDimension: (targetMm) =>
     set((state) => {
       const dimensions = state.project.model.dimensions;
@@ -97,17 +118,25 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
         ['z', dimensions.depthMm],
       ] as const;
       const [axis] = entries.reduce((largest, entry) => (entry[1] > largest[1] ? entry : largest));
+      const changed = recordProjectChange(state, (project) =>
+        touchProject({
+          ...project,
+          model: scaleModelMeshToDimension(project.model, axis, targetMm),
+        }),
+      );
+      const nextProject = changed.project ?? state.project;
+      const activeInputChanged = generationInputChanged(state.project, nextProject);
       return {
-        ...recordProjectChange(state, (project) =>
-          touchProject({
-            ...project,
-            model: scaleModelMeshToDimension(project.model, axis, targetMm),
-          }),
-        ),
-        sliceGenerationStatus: state.project.generatedParts.length > 0 ? 'stale' : 'idle',
-        completedWorkflowSteps: state.completedWorkflowSteps.filter((step) =>
-          ['start', 'mode', 'import'].includes(step),
-        ),
+        ...changed,
+        sliceGenerationStatus:
+          state.project.generatedParts.length > 0 && activeInputChanged
+            ? 'stale'
+            : state.sliceGenerationStatus,
+        completedWorkflowSteps: activeInputChanged
+          ? state.completedWorkflowSteps.filter((step) =>
+              ['start', 'mode', 'import'].includes(step),
+            )
+          : state.completedWorkflowSteps,
       };
     }),
 });

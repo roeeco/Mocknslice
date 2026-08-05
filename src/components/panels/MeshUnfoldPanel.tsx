@@ -1,20 +1,23 @@
 import type { ChangeEvent } from 'react';
-import type { MeshUnfoldStrategy } from '../../domain/unfolding';
+import type { MeshUnfoldSettings, MeshUnfoldStrategy } from '../../domain/unfolding';
 import { useProjectStore } from '../../state/useProjectStore';
 import { copy, t } from '../../locales';
 import { AdvancedSettingsSection } from './AdvancedSettingsSection';
 import { RuntimeFailureMessage } from '../RuntimeFailureMessage';
 
 function numericChange(
-  setModeParameter: (name: string, value: number | string | boolean) => void,
-  name: string,
+  updateSettings: (patch: Partial<MeshUnfoldSettings>) => void,
+  name: keyof Pick<
+    MeshUnfoldSettings,
+    'rootFaceIndex' | 'tabDepthMm' | 'maximumFaceCount' | 'searchAttempts'
+  >,
   minimum: number,
   integer = false,
 ) {
   return (event: ChangeEvent<HTMLInputElement>) => {
     const raw = event.target.valueAsNumber;
     if (!Number.isFinite(raw) || raw < minimum) return;
-    setModeParameter(name, integer ? Math.round(raw) : raw);
+    updateSettings({ [name]: integer ? Math.round(raw) : raw });
   };
 }
 
@@ -27,27 +30,21 @@ export function MeshUnfoldPanel({
   const error = useProjectStore((state) => state.sliceGenerationError);
   const progress = useProjectStore((state) => state.foldPreviewProgress);
   const setProgress = useProjectStore((state) => state.setFoldPreviewProgress);
-  const setModeParameter = useProjectStore((state) => state.setModeParameter);
+  const updateSettings = useProjectStore((state) => state.updateMeshUnfoldSettings);
   const generate = useProjectStore((state) => state.generateMeshUnfold);
   const cancel = useProjectStore((state) => state.cancelSliceGeneration);
   if (project.fabricationMode !== 'mesh-unfold') return null;
 
-  const parameters = project.modeParameters;
-  const strategy: MeshUnfoldStrategy =
-    parameters.meshUnfoldStrategy === 'manual' ? 'manual' : 'automatic';
-  const seamKeys = new Set(
-    String(parameters.meshUnfoldSeams ?? '')
-      .split(',')
-      .map((key) => key.trim())
-      .filter(Boolean),
-  );
+  const settings = project.modeSettings.meshUnfold;
+  const strategy: MeshUnfoldStrategy = settings.strategy;
+  const seamKeys = new Set(settings.manualSeamKeys);
   const result = project.unfoldingResult;
   const sharedEdges = result?.edges.filter((edge) => edge.faceBIndex !== undefined) ?? [];
   const toggleSeam = (key: string, checked: boolean) => {
     const next = new Set(seamKeys);
     if (checked) next.add(key);
     else next.delete(key);
-    setModeParameter('meshUnfoldSeams', [...next].sort().join(','));
+    updateSettings({ manualSeamKeys: [...next].sort() });
   };
 
   return (
@@ -75,7 +72,9 @@ export function MeshUnfoldPanel({
               <select
                 id="mesh-unfold-strategy"
                 value={strategy}
-                onChange={(event) => setModeParameter('meshUnfoldStrategy', event.target.value)}
+                onChange={(event) =>
+                  updateSettings({ strategy: event.target.value as MeshUnfoldStrategy })
+                }
               >
                 <option value="automatic">{t('Automatic tree search')}</option>
                 <option value="manual">{t('Manual seam constraints')}</option>
@@ -94,8 +93,8 @@ export function MeshUnfoldPanel({
                   type="number"
                   min={0}
                   step={1}
-                  value={Number(parameters.meshUnfoldRootFace ?? 0)}
-                  onChange={numericChange(setModeParameter, 'meshUnfoldRootFace', 0, true)}
+                  value={settings.rootFaceIndex}
+                  onChange={numericChange(updateSettings, 'rootFaceIndex', 0, true)}
                 />
               </div>
               <div className="field-stack">
@@ -105,8 +104,8 @@ export function MeshUnfoldPanel({
                   type="number"
                   min={0.1}
                   step={0.5}
-                  value={Number(parameters.meshUnfoldTabDepthMm ?? 6)}
-                  onChange={numericChange(setModeParameter, 'meshUnfoldTabDepthMm', 0.1)}
+                  value={settings.tabDepthMm}
+                  onChange={numericChange(updateSettings, 'tabDepthMm', 0.1)}
                 />
               </div>
             </div>
@@ -119,8 +118,8 @@ export function MeshUnfoldPanel({
                   min={1}
                   max={1000}
                   step={1}
-                  value={Number(parameters.meshUnfoldMaximumFaces ?? 200)}
-                  onChange={numericChange(setModeParameter, 'meshUnfoldMaximumFaces', 1, true)}
+                  value={settings.maximumFaceCount}
+                  onChange={numericChange(updateSettings, 'maximumFaceCount', 1, true)}
                 />
               </div>
               <div className="field-stack">
@@ -132,8 +131,8 @@ export function MeshUnfoldPanel({
                   max={1200}
                   step={1}
                   disabled={strategy === 'manual'}
-                  value={Number(parameters.meshUnfoldSearchAttempts ?? 18)}
-                  onChange={numericChange(setModeParameter, 'meshUnfoldSearchAttempts', 1, true)}
+                  value={settings.searchAttempts}
+                  onChange={numericChange(updateSettings, 'searchAttempts', 1, true)}
                 />
               </div>
             </div>

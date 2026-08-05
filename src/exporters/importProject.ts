@@ -1,5 +1,12 @@
-import type { ProjectData, SliceFoldProjectFile } from '../domain/project';
+import { safeParse } from 'valibot';
+import type { LegacyProjectData, MocknSliceProjectFileV8, ProjectData } from '../domain/project';
 import { createCubeMesh } from '../geometry/mesh/createPrimitiveMesh';
+import { modeSettingsSchema } from '../domain/modeSettingsSchema';
+import {
+  migrateLegacyModeParameters,
+  normalizePanelComposerSettings,
+} from '../domain/modeSettings';
+import { upgradeLegacyGenerationRecord } from '../domain/generation';
 
 export class ProjectImportError extends Error {
   constructor(message: string) {
@@ -223,15 +230,11 @@ function isFabricationPart(value: unknown): boolean {
         isStringArray(unfolding.faceIds))) &&
     (construction === undefined ||
       (isRecord(construction) &&
-        isString(construction.panelId) &&
-        (construction.role === 'base' ||
-          construction.role === 'front' ||
-          construction.role === 'back' ||
-          construction.role === 'left' ||
-          construction.role === 'right' ||
-          construction.role === 'lid' ||
-          (isString(construction.role) && /^divider-\d+$/.test(construction.role))) &&
-        isStringArray(construction.jointIds)))
+        isStringArray(construction.jointIds) &&
+        ((isString(construction.panelId) && isPanelRole(construction.role)) ||
+          (isStringArray(construction.panelIds) &&
+            Array.isArray(construction.roles) &&
+            construction.roles.every(isPanelRole)))))
   );
 }
 
@@ -264,6 +267,33 @@ function isTemplateFitSettings(value: unknown): boolean {
     (value.fitAxis === 'x' || value.fitAxis === 'y' || value.fitAxis === 'z') &&
     isFiniteNumber(value.clearanceMm) &&
     isFiniteNumber(value.profileToleranceMm) &&
+    (value.connectionOverrides === undefined ||
+      (Array.isArray(value.connectionOverrides) &&
+        value.connectionOverrides.every(
+          (override) =>
+            isRecord(override) &&
+            isString(override.id) &&
+            isString(override.templateKind) &&
+            templateKinds.has(override.templateKind) &&
+            isString(override.connectionId) &&
+            (override.treatment === 'crease' || override.treatment === 'cut') &&
+            (override.closure === 'none' ||
+              override.closure === 'glue-tab' ||
+              override.closure === 'press-fit') &&
+            (override.tabOwnerPanelId === undefined || isString(override.tabOwnerPanelId)),
+        ))) &&
+    (value.boundaryGlueTabs === undefined ||
+      (Array.isArray(value.boundaryGlueTabs) &&
+        value.boundaryGlueTabs.every(
+          (tab) =>
+            isRecord(tab) &&
+            isString(tab.id) &&
+            isString(tab.templateKind) &&
+            templateKinds.has(tab.templateKind) &&
+            isString(tab.edgeId) &&
+            isString(tab.ownerPanelId),
+        ))) &&
+    (value.glueTabDepthMm === undefined || isFiniteNumber(value.glueTabDepthMm)) &&
     isRecord(value.parameters) &&
     Object.values(value.parameters).every(
       (parameter) =>
@@ -271,6 +301,20 @@ function isTemplateFitSettings(value: unknown): boolean {
         typeof parameter === 'boolean' ||
         isFiniteNumber(parameter),
     )
+  );
+}
+
+function isEditableAssemblyEdge(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    isString(value.id) &&
+    (value.kind === 'connection' || value.kind === 'boundary') &&
+    isString(value.panelAId) &&
+    (value.panelBId === undefined || isString(value.panelBId)) &&
+    isVector3(value.startMm) &&
+    isVector3(value.endMm) &&
+    typeof value.editable === 'boolean' &&
+    (value.unavailableReason === undefined || isString(value.unavailableReason))
   );
 }
 
@@ -331,6 +375,27 @@ function isTemplateGenerationResult(value: unknown): boolean {
     ) &&
     Array.isArray(value.tabs) &&
     value.tabs.every(isFoldTab) &&
+    Array.isArray(value.connections) &&
+    value.connections.every(
+      (connection) =>
+        isRecord(connection) &&
+        isString(connection.id) &&
+        isString(connection.panelAId) &&
+        isString(connection.panelBId) &&
+        isRecord(connection.edgeA) &&
+        isPoint2D(connection.edgeA.start) &&
+        isPoint2D(connection.edgeA.end) &&
+        isRecord(connection.edgeB) &&
+        isPoint2D(connection.edgeB.start) &&
+        isPoint2D(connection.edgeB.end) &&
+        (connection.disposition === 'hinge' || connection.disposition === 'seam') &&
+        (connection.closure === 'none' ||
+          connection.closure === 'glue-tab' ||
+          connection.closure === 'press-fit' ||
+          connection.closure === 'openable-flap') &&
+        typeof connection.required === 'boolean' &&
+        isStringArray(connection.tabIds),
+    ) &&
     Array.isArray(value.parts) &&
     value.parts.every(isFabricationPart) &&
     Array.isArray(value.issues) &&
@@ -351,6 +416,8 @@ function isTemplateGenerationResult(value: unknown): boolean {
           (Array.isArray(panel.holesVerticesMm) &&
             panel.holesVerticesMm.every((hole) => Array.isArray(hole) && hole.every(isVector3)))),
     ) &&
+    (value.editableEdges === undefined ||
+      (Array.isArray(value.editableEdges) && value.editableEdges.every(isEditableAssemblyEdge))) &&
     isString(value.algorithmVersion) &&
     isString(value.inputHash)
   );
@@ -460,7 +527,49 @@ function isPanelRole(value: unknown): boolean {
 const panelEdges = new Set(['bottom', 'right', 'top', 'left']);
 const panelJointLocations = new Set([...panelEdges, 'face']);
 const panelBoundaryJointKinds = new Set(['butt', 'finger', 'tab-slot']);
-const panelJointKinds = new Set([...panelBoundaryJointKinds, 'half-lap']);
+const panelJointKinds = new Set([...panelBoundaryJointKinds, 'crease', 'half-lap']);
+const panelConnectionKeys = new Set([
+  'base-front',
+  'base-back',
+  'base-left',
+  'base-right',
+  'front-left',
+  'front-right',
+  'back-left',
+  'back-right',
+  'lid-front',
+  'lid-back',
+  'lid-left',
+  'lid-right',
+]);
+const panelProfileKinds = new Set(['flat', 'arch', 'gable', 'stepped']);
+
+function isPanelConnectionOverrides(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    Object.entries(value).every(
+      ([key, override]) =>
+        panelConnectionKeys.has(key) &&
+        isRecord(override) &&
+        (override.jointKind === 'butt' ||
+          override.jointKind === 'finger' ||
+          override.treatment === 'butt' ||
+          override.treatment === 'finger' ||
+          override.treatment === 'crease') &&
+        (override.clearanceMm === undefined || isFiniteNumber(override.clearanceMm)),
+    )
+  );
+}
+
+function isPanelProfiles(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    isString(value.front) &&
+    panelProfileKinds.has(value.front) &&
+    isString(value.back) &&
+    panelProfileKinds.has(value.back)
+  );
+}
 
 function isPanelConstructionResult(value: unknown): boolean {
   if (!isRecord(value)) return false;
@@ -477,12 +586,25 @@ function isPanelConstructionResult(value: unknown): boolean {
     isFiniteNumber(settings.fingerWidthMm) &&
     isFiniteNumber(settings.clearanceMm) &&
     typeof settings.includeLid === 'boolean' &&
+    (settings.panelThicknessMm === undefined || isFiniteNumber(settings.panelThicknessMm)) &&
+    (settings.dividerThicknessMm === undefined || isFiniteNumber(settings.dividerThicknessMm)) &&
+    (settings.lidThicknessMm === undefined || isFiniteNumber(settings.lidThicknessMm)) &&
     (settings.dividerCount === undefined || Number.isInteger(settings.dividerCount)) &&
     (settings.dividerAxis === undefined ||
       settings.dividerAxis === 'width' ||
       settings.dividerAxis === 'depth') &&
     (settings.widthDividerCount === undefined || Number.isInteger(settings.widthDividerCount)) &&
     (settings.depthDividerCount === undefined || Number.isInteger(settings.depthDividerCount)) &&
+    (settings.connectionOverrides === undefined ||
+      isPanelConnectionOverrides(settings.connectionOverrides)) &&
+    (settings.glueTabDepthMm === undefined || isFiniteNumber(settings.glueTabDepthMm)) &&
+    (settings.boundaryGlueTabs === undefined ||
+      (Array.isArray(settings.boundaryGlueTabs) &&
+        settings.boundaryGlueTabs.every(
+          (tab) =>
+            isRecord(tab) && isString(tab.id) && isString(tab.ownerPanelId) && isString(tab.edgeId),
+        ))) &&
+    (settings.panelProfiles === undefined || isPanelProfiles(settings.panelProfiles)) &&
     isRecord(material) &&
     isString(material.id) &&
     isString(material.category) &&
@@ -510,6 +632,8 @@ function isPanelConstructionResult(value: unknown): boolean {
       (joint) =>
         isRecord(joint) &&
         isString(joint.id) &&
+        (joint.connectionKey === undefined ||
+          (isString(joint.connectionKey) && panelConnectionKeys.has(joint.connectionKey))) &&
         isString(joint.kind) &&
         panelJointKinds.has(joint.kind) &&
         isString(joint.panelAId) &&
@@ -523,11 +647,13 @@ function isPanelConstructionResult(value: unknown): boolean {
         isFiniteNumber(joint.clearanceMm) &&
         isString(joint.pairLabel) &&
         (joint.tabOwnerPanelId === undefined || isString(joint.tabOwnerPanelId)) &&
+        (joint.tabIds === undefined || isStringArray(joint.tabIds)) &&
         (joint.receiverCentreAMm === undefined || isPoint2D(joint.receiverCentreAMm)) &&
         (joint.receiverCentreMm === undefined || isPoint2D(joint.receiverCentreMm)),
     ) &&
     Array.isArray(value.parts) &&
     value.parts.every(isFabricationPart) &&
+    (value.tabs === undefined || (Array.isArray(value.tabs) && value.tabs.every(isFoldTab))) &&
     Array.isArray(value.issues) &&
     value.issues.every(isValidationIssue) &&
     isRecord(preview) &&
@@ -544,6 +670,8 @@ function isPanelConstructionResult(value: unknown): boolean {
           (Array.isArray(panel.holesVerticesMm) &&
             panel.holesVerticesMm.every((hole) => Array.isArray(hole) && hole.every(isVector3)))),
     ) &&
+    (value.editableEdges === undefined ||
+      (Array.isArray(value.editableEdges) && value.editableEdges.every(isEditableAssemblyEdge))) &&
     isString(value.algorithmVersion) &&
     isString(value.inputHash)
   );
@@ -628,7 +756,35 @@ function isCurrentExportSettings(value: unknown): boolean {
   );
 }
 
-function isProjectData(value: unknown): value is ProjectData {
+function isCanonicalGenerationRecord(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    value.signatureVersion === 2 &&
+    isString(value.mode) &&
+    fabricationModes.has(value.mode) &&
+    isString(value.inputHash) &&
+    isString(value.resultHash) &&
+    isString(value.algorithmVersion) &&
+    isString(value.generatedAt)
+  );
+}
+
+function isLegacyGenerationRecord(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    isString(value.mode) &&
+    fabricationModes.has(value.mode) &&
+    isString(value.sourceModelId) &&
+    isString(value.sourceMeshHash) &&
+    isString(value.settingsHash) &&
+    isString(value.materialHash) &&
+    isString(value.resultHash) &&
+    isString(value.algorithmVersion) &&
+    isString(value.generatedAt)
+  );
+}
+
+function isLegacyProjectData(value: unknown): value is LegacyProjectData {
   if (!isRecord(value)) return false;
 
   const metadata = value.metadata;
@@ -654,6 +810,9 @@ function isProjectData(value: unknown): value is ProjectData {
     ) &&
     Array.isArray(value.generatedParts) &&
     value.generatedParts.every(isFabricationPart) &&
+    (value.generationRecord === undefined ||
+      isCanonicalGenerationRecord(value.generationRecord) ||
+      isLegacyGenerationRecord(value.generationRecord)) &&
     (value.generationIssues === undefined ||
       (Array.isArray(value.generationIssues) && value.generationIssues.every(isValidationIssue))) &&
     (value.foldingResult === undefined || isTemplateGenerationResult(value.foldingResult)) &&
@@ -667,7 +826,158 @@ function isProjectData(value: unknown): value is ProjectData {
   );
 }
 
-function migrateProjectFile(value: unknown): SliceFoldProjectFile {
+function isCurrentProjectData(value: unknown): value is ProjectData {
+  if (
+    !isRecord(value) ||
+    value.modeParameters !== undefined ||
+    !safeParse(modeSettingsSchema, value.modeSettings).success
+  ) {
+    return false;
+  }
+  if (
+    value.generationRecord !== undefined &&
+    !isCanonicalGenerationRecord(value.generationRecord)
+  ) {
+    return false;
+  }
+  return isLegacyProjectData({ ...value, modeParameters: {} });
+}
+
+function withCurrentExportSettings(project: LegacyProjectData): LegacyProjectData;
+function withCurrentExportSettings(project: ProjectData): ProjectData;
+function withCurrentExportSettings(project: LegacyProjectData | ProjectData) {
+  return {
+    ...project,
+    exportSettings: {
+      ...project.exportSettings,
+      kerfCompensation: project.exportSettings.kerfCompensation ?? 'none',
+      customKerfMm: project.exportSettings.customKerfMm ?? project.materialProfileSnapshot.kerfMm,
+      foldLineOutput: project.exportSettings.foldLineOutput ?? 'preserve',
+      perforationDashMm: project.exportSettings.perforationDashMm ?? 2,
+      perforationGapMm: project.exportSettings.perforationGapMm ?? 1,
+      labelFontSizeMm: project.exportSettings.labelFontSizeMm ?? 3,
+    },
+  };
+}
+
+function withCurrentPanelSettings(project: ProjectData): ProjectData {
+  const replacedTabSlot =
+    (project.modeSettings.panelConstruction as { jointKind: string }).jointKind === 'tab-slot';
+  return {
+    ...project,
+    modeSettings: {
+      ...project.modeSettings,
+      panelConstruction: normalizePanelComposerSettings(
+        project.modeSettings.panelConstruction,
+        project.materialProfileSnapshot,
+      ),
+    },
+    ...(replacedTabSlot
+      ? {
+          generationIssues: [
+            ...(project.generationIssues ?? []).filter(
+              (issue) => issue.code !== 'PANEL_TAB_SLOT_REPLACED',
+            ),
+            {
+              id: 'panel-tab-slot-replaced',
+              severity: 'warning' as const,
+              code: 'PANEL_TAB_SLOT_REPLACED',
+              message: 'Tabs and through-slots were replaced with complementary finger joints.',
+              affectedEntityIds: ['panel-construction'],
+              suggestedAction: 'Review the panel settings and regenerate before fabrication.',
+            },
+          ],
+        }
+      : project.generationIssues
+        ? { generationIssues: project.generationIssues }
+        : {}),
+  };
+}
+
+function upgradeV7ConnectionContracts(value: unknown): unknown {
+  if (!isRecord(value)) return value;
+  const upgraded = structuredClone(value);
+  if (!isRecord(upgraded) || !isRecord(upgraded.project)) return upgraded;
+  const modeSettings = upgraded.project.modeSettings;
+  if (!isRecord(modeSettings)) return upgraded;
+
+  const foldSettings = modeSettings.foldTemplate;
+  if (isRecord(foldSettings)) {
+    foldSettings.connectionOverrides ??= [];
+    foldSettings.boundaryGlueTabs ??= [];
+    foldSettings.glueTabDepthMm ??= 8;
+  }
+
+  const panelSettings = modeSettings.panelConstruction;
+  if (isRecord(panelSettings)) {
+    panelSettings.connectionOverrides ??= {};
+    panelSettings.panelProfiles ??= { front: 'flat', back: 'flat' };
+    panelSettings.glueTabDepthMm ??= 8;
+    panelSettings.boundaryGlueTabs ??= [];
+    if (isRecord(panelSettings.connectionOverrides)) {
+      panelSettings.connectionOverrides = Object.fromEntries(
+        Object.entries(panelSettings.connectionOverrides).map(([key, rawOverride]) => {
+          if (!isRecord(rawOverride) || rawOverride.treatment !== undefined) {
+            return [key, rawOverride];
+          }
+          const { jointKind, ...shared } = rawOverride;
+          return [key, { ...shared, treatment: jointKind }];
+        }),
+      );
+    }
+  }
+
+  const result = upgraded.project.panelConstructionResult;
+  if (isRecord(result) && isRecord(result.settings)) {
+    result.settings.glueTabDepthMm ??= 8;
+    result.settings.boundaryGlueTabs ??= [];
+    if (isRecord(result.settings.connectionOverrides)) {
+      result.settings.connectionOverrides = Object.fromEntries(
+        Object.entries(result.settings.connectionOverrides).map(([key, rawOverride]) => {
+          if (!isRecord(rawOverride) || rawOverride.treatment !== undefined) {
+            return [key, rawOverride];
+          }
+          const { jointKind, ...shared } = rawOverride;
+          return [key, { ...shared, treatment: jointKind }];
+        }),
+      );
+    }
+  }
+  return upgraded;
+}
+
+function markMigratedTopologyStale(project: ProjectData): ProjectData {
+  if (
+    project.fabricationMode !== 'fold-template' &&
+    project.fabricationMode !== 'panel-construction'
+  ) {
+    return project;
+  }
+  if (project.generatedParts.length === 0) return project;
+  const projectWithoutGenerationRecord = { ...project };
+  delete projectWithoutGenerationRecord.generationRecord;
+  return {
+    ...projectWithoutGenerationRecord,
+    generationIssues: [
+      ...(project.generationIssues ?? []).filter(
+        (issue) => issue.code !== 'CONNECTION_TOPOLOGY_REGENERATION_REQUIRED',
+      ),
+      {
+        id: 'connection-topology-regeneration-required',
+        severity: 'warning',
+        code: 'CONNECTION_TOPOLOGY_REGENERATION_REQUIRED',
+        message:
+          'This saved output uses the earlier connection topology and must be regenerated before fabrication.',
+        affectedEntityIds: [project.fabricationMode],
+        suggestedAction: 'Review the connection settings, then regenerate the fabrication parts.',
+      },
+    ],
+  };
+}
+
+export function migrateProjectFile(value: unknown): MocknSliceProjectFileV8 {
+  const originalVersion = isRecord(value) ? value.version : undefined;
+  value = originalVersion === 7 ? upgradeV7ConnectionContracts(value) : value;
   if (
     !isRecord(value) ||
     (value.format !== 'slicefold-project' && value.format !== 'mocknslice-project')
@@ -683,14 +993,33 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
       value.version !== 3 &&
       value.version !== 4 &&
       value.version !== 5) ||
-    (!legacy && value.version !== 6)
+    (!legacy && value.version !== 6 && value.version !== 7 && value.version !== 8)
   ) {
     throw new ProjectImportError(
       `Project version ${String(value.version)} is not supported by this build.`,
     );
   }
 
-  if (!isProjectData(value.project)) {
+  if (value.version === 7 || value.version === 8) {
+    if (
+      !isCurrentProjectData(value.project) ||
+      !isCurrentExportSettings(value.project.exportSettings)
+    ) {
+      throw new ProjectImportError('The project file is incomplete or damaged.');
+    }
+    return {
+      format: 'mocknslice-project',
+      version: 8,
+      project:
+        value.version === 7
+          ? markMigratedTopologyStale(
+              withCurrentPanelSettings(withCurrentExportSettings(value.project)),
+            )
+          : withCurrentPanelSettings(withCurrentExportSettings(value.project)),
+    };
+  }
+
+  if (!isLegacyProjectData(value.project)) {
     throw new ProjectImportError('The project file is incomplete or damaged.');
   }
 
@@ -701,24 +1030,61 @@ function migrateProjectFile(value: unknown): SliceFoldProjectFile {
     throw new ProjectImportError('The project file is incomplete or damaged.');
   }
 
+  const legacyProject = withCurrentExportSettings(value.project);
+  const { modeParameters, ...sharedProject } = legacyProject;
+  let modeSettings: ProjectData['modeSettings'];
+  try {
+    modeSettings = migrateLegacyModeParameters(
+      modeParameters,
+      legacyProject.materialProfileSnapshot,
+      legacyProject.model.dimensions,
+    );
+  } catch {
+    throw new ProjectImportError('The project file is incomplete or damaged.');
+  }
   const project: ProjectData = {
-    ...value.project,
-    exportSettings: {
-      ...value.project.exportSettings,
-      kerfCompensation: value.project.exportSettings.kerfCompensation ?? 'none',
-      customKerfMm:
-        value.project.exportSettings.customKerfMm ?? value.project.materialProfileSnapshot.kerfMm,
-      foldLineOutput: value.project.exportSettings.foldLineOutput ?? 'preserve',
-      perforationDashMm: value.project.exportSettings.perforationDashMm ?? 2,
-      perforationGapMm: value.project.exportSettings.perforationGapMm ?? 1,
-      labelFontSizeMm: value.project.exportSettings.labelFontSizeMm ?? 3,
-    },
+    ...sharedProject,
+    modeSettings,
+    ...(modeParameters.panelJointKind === 'tab-slot'
+      ? {
+          generationIssues: [
+            ...(sharedProject.generationIssues ?? []).filter(
+              (issue) => issue.code !== 'PANEL_TAB_SLOT_REPLACED',
+            ),
+            {
+              id: 'panel-tab-slot-replaced',
+              severity: 'warning' as const,
+              code: 'PANEL_TAB_SLOT_REPLACED',
+              message: 'Tabs and through-slots were replaced with complementary finger joints.',
+              affectedEntityIds: ['panel-construction'],
+              suggestedAction: 'Review the panel settings and regenerate before fabrication.',
+            },
+          ],
+        }
+      : {}),
   };
+  const runtimeProject =
+    project.model.source.kind === 'built-in' && (!project.model.mesh || !project.model.bounds)
+      ? (() => {
+          const primitive = createCubeMesh(project.model.dimensions.widthMm);
+          return {
+            ...project,
+            model: {
+              ...project.model,
+              mesh: primitive.mesh,
+              bounds: primitive.bounds,
+              healthReport: primitive.healthReport,
+            },
+          };
+        })()
+      : project;
 
   return {
     format: 'mocknslice-project',
-    version: 6,
-    project,
+    version: 8,
+    project: markMigratedTopologyStale(
+      upgradeLegacyGenerationRecord(legacyProject, runtimeProject),
+    ),
   };
 }
 

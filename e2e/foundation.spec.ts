@@ -136,7 +136,10 @@ async function reachConfigureStep(
   experience: 'standard' | 'advanced' = 'advanced',
 ) {
   await reachImportStep(page, mode, experience);
-  if (mode === 'Panel construction') return;
+  if (mode === 'Panel construction') {
+    await page.getByLabel('Panel preset').selectOption('blank-panel-box');
+    return;
+  }
   if (mode === 'Folding template') {
     await page.getByRole('button', { name: 'Create from template' }).click();
   } else if (importStl) {
@@ -160,6 +163,48 @@ async function generateAndReachExport(page: Page) {
   await expect(page.getByRole('heading', { name: 'Sheet layout' })).toBeVisible();
   await page.getByRole('button', { name: 'Next' }).click();
   await expect(page.getByRole('heading', { name: 'Fabrication output' })).toBeVisible();
+}
+
+async function reachClassroomRecipe(
+  page: Page,
+  recipeId: string,
+  experience: 'standard' | 'advanced' = 'advanced',
+) {
+  if (experience === 'advanced') await page.getByRole('button', { name: 'Advanced' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('radio', { name: 'Panel construction' }).check();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByLabel('Panel preset').selectOption(recipeId);
+}
+
+async function downloadedText(page: Page, buttonName: string): Promise<string> {
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: buttonName }).click();
+  const download = await downloadPromise;
+  const stream = await download.createReadStream();
+  const chunks: Uint8Array[] = [];
+  for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
+  return Buffer.concat(chunks).toString('utf8');
+}
+
+async function setRangeValue(page: Page, label: string | RegExp, value: number) {
+  const input = page.getByLabel(label);
+  const minimum = Number(await input.getAttribute('min'));
+  const step = Number(await input.getAttribute('step'));
+  await input.focus();
+  await input.press('Home');
+  const presses = Math.round((value - minimum) / step);
+  for (let index = 0; index < presses; index += 1) await input.press('ArrowRight');
+}
+
+async function selectSheetContaining(page: Page, selector: string) {
+  const activeSheet = page.getByLabel('Active sheet');
+  const sheetCount = await activeSheet.locator('option').count();
+  for (let index = 0; index < sheetCount; index += 1) {
+    await activeSheet.selectOption({ index });
+    if ((await page.locator(selector).count()) > 0) return;
+  }
+  throw new Error(`No generated sheet contains ${selector}.`);
 }
 
 test('opens the foundation workspace and switches to the sheet preview', async ({ page }) => {
@@ -308,10 +353,14 @@ test('Simple panel construction skips source, Inspect, and Arrange and generates
 
   await expect(page.getByText('Step 3 / 4')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Panel construction' })).toBeVisible();
+  await page.getByLabel('Panel preset').selectOption('sorting-tray');
   await expect(page.getByRole('button', { name: /Import or create/ })).toHaveCount(0);
   await expect(page.getByRole('button', { name: /Inspect/ })).toHaveCount(0);
   await expect(page.getByRole('button', { name: /Arrange/ })).toHaveCount(0);
 
+  await page.getByRole('button', { name: 'Base', exact: true }).click();
+  await page.getByRole('button', { name: 'Label', exact: true }).click();
+  await page.getByLabel('Label text').fill('Sort by colour');
   await page.getByRole('button', { name: '2D parts' }).click();
   await page.getByRole('button', { name: 'Generate', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Panel construction' })).toBeVisible();
@@ -323,8 +372,114 @@ test('Simple panel construction skips source, Inspect, and Arrange and generates
   await page.getByRole('button', { name: 'Regenerate', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Panel construction' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
+  await expect(page.locator('text[data-feature-id^="panel-feature-"]')).toContainText(
+    'Sort by colour',
+  );
   await page.getByRole('button', { name: 'Next' }).click();
   await expect(page.getByRole('heading', { name: 'Fabrication output' })).toBeVisible();
+});
+
+test('edits a survey kit, exports feature geometry, and re-imports the v8 project', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await reachClassroomRecipe(page, 'survey-ballot-box');
+
+  await page.getByRole('button', { name: 'Lid', exact: true }).click();
+  const responseSlot = page.locator('[data-feature-id="survey-response-slot"]');
+  await expect(responseSlot).toBeVisible();
+  await responseSlot.focus();
+  await responseSlot.press('ArrowRight');
+  await responseSlot.press('Shift+ArrowUp');
+  await expect(page.getByLabel('Horizontal position (mm)')).toHaveValue('1');
+  await expect(page.getByLabel('Vertical position (mm)')).toHaveValue('10');
+
+  await page.getByRole('button', { name: 'Label', exact: true }).click();
+  await page.getByLabel('Label text').fill('Class 5 Vote');
+  await page.getByRole('button', { name: 'Generate', exact: true }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByRole('heading', { name: 'Inspect generated parts' })).toBeVisible();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByRole('heading', { name: 'Sheet layout' })).toBeVisible();
+  await selectSheetContaining(page, '[data-feature-id="survey-response-slot"]');
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByRole('heading', { name: 'Fabrication output' })).toBeVisible();
+
+  const svg = await downloadedText(page, 'Download active sheet SVG');
+  expect(svg).toContain('data-feature-id="survey-response-slot"');
+  expect(svg).toContain('data-feature-id="panel-feature-');
+  expect(svg).toContain('Class 5 Vote');
+
+  const projectFile = await downloadedText(page, 'Export project');
+  const serialized = JSON.parse(projectFile) as {
+    format: string;
+    version: number;
+    project: { modeSettings: { panelConstruction: { features: Array<{ id: string }> } } };
+  };
+  expect(serialized.format).toBe('mocknslice-project');
+  expect(serialized.version).toBe(8);
+  expect(serialized.project.modeSettings.panelConstruction.features).toHaveLength(2);
+
+  await page.locator('.workflow-nav').getByRole('button', { name: /Start/ }).click();
+  await page.getByLabel('Choose a MocknSlice project file').setInputFiles({
+    name: 'survey-class-5.mocknslice.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(projectFile),
+  });
+  await page
+    .locator('.workflow-nav')
+    .getByRole('button', { name: /Configure/ })
+    .click();
+  await page.getByRole('button', { name: 'Lid', exact: true }).click();
+  const importedLabel = page.locator('[data-feature-id^="panel-feature-"]');
+  await expect(importedLabel).toBeVisible();
+  await page
+    .locator('.panel-feature-list button')
+    .filter({ hasText: /^Label$/ })
+    .click();
+  await expect(page.getByLabel('Label text')).toHaveValue('Class 5 Vote');
+  await expect(page.locator('[data-feature-id="survey-response-slot"]')).toBeVisible();
+});
+
+test('edits and generates the flash-card access notch in 2D and 3D', async ({ page }) => {
+  const consoleErrors: string[] = [];
+  page.on('console', (message) => {
+    if (message.type() === 'error') consoleErrors.push(message.text());
+  });
+  await page.goto('/');
+  await reachClassroomRecipe(page, 'flash-card-holder');
+
+  const notch = page.locator('[data-feature-id="flash-card-access-notch"]');
+  await expect(notch).toBeVisible();
+  await notch.click();
+  await page.getByLabel('Diameter (mm)').fill('40');
+  await page.getByRole('button', { name: 'Generate', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
+  await page.getByRole('button', { name: 'Next' }).click();
+
+  await expect(page.locator('canvas')).toBeVisible();
+  await expect(page.getByText('The 3D preview stopped rendering.')).toHaveCount(0);
+  await page.getByRole('button', { name: '2D parts' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await selectSheetContaining(page, '[data-feature-id="flash-card-access-notch"]');
+  await expect(page.locator('path[data-feature-id="flash-card-access-notch"]')).toBeVisible();
+  expect(consoleErrors).toEqual([]);
+});
+
+test('shows the compact classroom preset menu in Hebrew RTL', async ({ page }) => {
+  await page.setViewportSize({ width: 400, height: 900 });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('radio', { name: 'Panel construction' }).check();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('button', { name: 'עב' }).click();
+
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  const preset = page.getByLabel('הגדרה מוכנה ללוחות');
+  await expect(preset).toBeVisible();
+  await expect(preset.locator('option')).toHaveCount(6);
+  await preset.selectOption('sorting-tray');
+  await expect(preset).toHaveValue('sorting-tray');
 });
 
 test('Simple warnings open the issue drawer and a blocking generation error inserts Inspect', async ({
@@ -545,14 +700,14 @@ test('imports a low-poly STL, unfolds it, edits seams, previews folding, and exp
   for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
   const svg = Buffer.concat(chunks).toString('utf8');
   expect(svg).toContain('&quot;mode&quot;:&quot;mesh-unfold&quot;');
-  expect(svg).toContain('&quot;projectFormatVersion&quot;:6');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:8');
   expect(svg).toContain('data-panel-id="unfold-face-');
   expect(svg).toContain('data-edge-id="unfold-edge-');
   expect(svg).toContain('data-tab-id="unfold-tab-');
   expect(svg).toContain('>T1</text>');
 });
 
-test('builds a tab-slot panel enclosure, previews it, and exports labelled joint geometry', async ({
+test('builds a mixed-thickness divided panel enclosure and exports labelled joint geometry', async ({
   page,
 }) => {
   const consoleErrors: string[] = [];
@@ -561,18 +716,20 @@ test('builds a tab-slot panel enclosure, previews it, and exports labelled joint
   });
   await page.goto('/');
   await reachConfigureStep(page, 'Panel construction');
-  await page.getByLabel('Material profile').selectOption('plywood-3mm');
-
   await expect(page.getByRole('heading', { name: 'Panel construction' })).toBeVisible();
   await expect(page.getByLabel('Inside width (mm)')).toHaveValue('80');
-  await page.getByLabel('Edge joint').selectOption('tab-slot');
+  await expect(page.getByLabel('Edge joint').locator('option')).toHaveCount(2);
+  await setRangeValue(page, /Base and wall thickness/, 3);
+  await setRangeValue(page, /Divider thickness/, 2);
+  await page.getByLabel('Include a fully jointed lid').check();
+  await setRangeValue(page, /Lid thickness/, 4);
+  await setRangeValue(page, 'Dividers across width', 2);
+  await setRangeValue(page, 'Dividers across depth', 2);
   await page.getByLabel('Slot clearance (mm)').fill('0.2');
-  await page.getByLabel('Dividers across width').fill('2');
-  await page.getByLabel('Dividers across depth').fill('2');
   await page.getByRole('button', { name: 'Generate', exact: true }).click();
   await page.getByRole('button', { name: 'Next' }).click();
 
-  await expect(page.getByText(/9 fabrication parts generated/)).toBeVisible();
+  await expect(page.getByText(/10 fabrication parts generated/)).toBeVisible();
   await expect(page.getByText('Assembled panel kit', { exact: true })).toBeVisible();
   await expect(page.locator('canvas')).toBeVisible();
   await expect(page.getByText('The 3D preview stopped rendering.')).toHaveCount(0);
@@ -592,13 +749,131 @@ test('builds a tab-slot panel enclosure, previews it, and exports labelled joint
   for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
   const svg = Buffer.concat(chunks).toString('utf8');
   expect(svg).toContain('&quot;mode&quot;:&quot;panel-construction&quot;');
-  expect(svg).toContain('&quot;projectFormatVersion&quot;:6');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:8');
   expect(svg).toContain('data-panel-id="construction-panel-');
   expect(svg).toContain('data-edge-id="construction-joint-');
   expect(svg).toContain('divider-1-base-slot');
   expect(svg).toContain('-side-slot-');
   expect(svg).toContain('data-contour-role="hole"');
   expect(svg).toContain('>J1</text>');
+});
+
+test('builds paired connection overrides with bounded open-top panel profiles', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await reachConfigureStep(page, 'Panel construction');
+
+  await page.getByLabel('Front profile').selectOption('arch');
+  await page.getByLabel('Back profile').selectOption('stepped');
+  await page.getByLabel('Include a fully jointed lid').check();
+  await expect(page.getByRole('alert')).toContainText('Raised profiles require an open top');
+  await page.getByLabel('Include a fully jointed lid').uncheck();
+
+  await page.getByRole('button', { name: 'Generate', exact: true }).click();
+
+  await page
+    .getByRole('listitem')
+    .filter({ hasText: /Base panel.*Front panel/ })
+    .click();
+  await page.getByLabel('Edge treatment').selectOption('butt');
+  await page
+    .getByRole('listitem')
+    .filter({ hasText: /Front panel.*Left panel/ })
+    .click();
+  await page.getByLabel('Fit clearance (mm)').fill('0.25');
+  await page.getByRole('button', { name: 'Regenerate', exact: true }).click();
+
+  await expect(page.getByRole('button', { name: 'Regenerate', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByText(/5 fabrication parts generated/)).toBeVisible();
+  await expect(page.getByText('Assembled panel kit', { exact: true })).toBeVisible();
+  await expect(page.getByText('The 3D preview stopped rendering.')).toHaveCount(0);
+});
+
+test('edits cardboard panel creases and glue seams, then exports v8 score metadata', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await reachConfigureStep(page, 'Panel construction');
+  await page.getByRole('button', { name: 'Generate', exact: true }).click();
+
+  await page
+    .getByRole('listitem')
+    .filter({ hasText: /Base panel.*Front panel/ })
+    .click();
+  await page.getByLabel('Edge treatment').selectOption('crease');
+  await page
+    .getByRole('listitem')
+    .filter({ hasText: /Front panel.*Left panel/ })
+    .click();
+  await page.getByLabel('Edge treatment').selectOption('butt');
+  await page.getByLabel('Glue-tab owner').selectOption('construction-panel-front');
+  await page.getByRole('button', { name: 'Regenerate', exact: true }).click();
+
+  await page.getByRole('button', { name: '2D parts' }).click();
+  await expect(
+    page.locator('path[data-operation="score"][data-edge-id="construction-joint-1"]'),
+  ).toHaveCount(1);
+  await expect(page.locator('path[data-operation="score"][data-tab-id]')).not.toHaveCount(0);
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByText(/4 fabrication parts generated/)).toBeVisible();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await selectSheetContaining(page, 'path[data-operation="score"][data-tab-id]');
+  await page.getByRole('button', { name: 'Next' }).click();
+
+  const svg = await downloadedText(page, 'Download active sheet SVG');
+  expect(svg).toContain('id="operation-score"');
+  expect(svg).toContain('data-tab-id=');
+  expect(svg).toContain('data-edge-id="construction-joint-1"');
+  const projectFile = JSON.parse(await downloadedText(page, 'Export project')) as {
+    version: number;
+    project: {
+      modeSettings: {
+        panelConstruction: { connectionOverrides: Record<string, { treatment: string }> };
+      };
+    };
+  };
+  expect(projectFile.version).toBe(8);
+  expect(
+    projectFile.project.modeSettings.panelConstruction.connectionOverrides['base-front'],
+  ).toMatchObject({ treatment: 'crease' });
+});
+
+test('splits a folding crease, adds a free glue tab, and exports cut and score layers', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await reachConfigureStep(page, 'Folding template');
+  await page.getByRole('button', { name: 'Generate', exact: true }).click();
+
+  await page
+    .getByRole('listitem')
+    .filter({ hasText: /Base.*Bottom wall/ })
+    .first()
+    .click();
+  await page.getByLabel('Edge treatment').selectOption('cut');
+  await page
+    .getByRole('listitem')
+    .filter({ hasText: /Bottom wall ·/ })
+    .first()
+    .click();
+  await page.getByRole('button', { name: 'Add free glue tab' }).click();
+  await page.getByRole('button', { name: 'Regenerate', exact: true }).click();
+
+  await page.getByRole('button', { name: '2D parts' }).click();
+  await expect(page.locator('path[data-operation="score"][data-tab-id]')).not.toHaveCount(0);
+  await expect(page.locator('path[data-operation="cut"]')).not.toHaveCount(0);
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByText(/2 fabrication parts generated/)).toBeVisible();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await selectSheetContaining(page, 'path[data-operation="score"][data-tab-id]');
+  await page.getByRole('button', { name: 'Next' }).click();
+
+  const svg = await downloadedText(page, 'Download active sheet SVG');
+  expect(svg).toContain('id="operation-cut"');
+  expect(svg).toContain('id="operation-score"');
+  expect(svg).toContain('data-tab-id=');
 });
 
 test('prepares kerf, perforations, labels, registration marks, styles, and PDF output', async ({
@@ -636,7 +911,7 @@ test('prepares kerf, perforations, labels, registration marks, styles, and PDF o
   const svgChunks: Uint8Array[] = [];
   for await (const chunk of svgStream as AsyncIterable<Uint8Array>) svgChunks.push(chunk);
   const svg = Buffer.concat(svgChunks).toString('utf8');
-  expect(svg).toContain('&quot;projectFormatVersion&quot;:6');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:8');
   expect(svg).toContain('&quot;kerfMm&quot;:0.1');
   expect(svg).toContain('id="operation-perforate"');
   expect(svg).toContain('data-registration-mark="true"');

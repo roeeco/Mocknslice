@@ -1,4 +1,4 @@
-import type { AppSliceCreator, FabricationSlice } from '../types';
+import type { AppSliceCreator, AppState, FabricationSlice } from '../types';
 import { recordProjectChange, touchProject } from '../projectChange';
 import { validationIssuesForProject } from '../../validation/projectValidation';
 import {
@@ -9,31 +9,50 @@ import {
   generateWaffleSlicesInWorker,
   type GeometryTask,
 } from '../../workers/geometryWorkerClient';
-import type { SliceAxis } from '../../domain/fabrication';
-import type {
-  TemplateEnvelopeDimensions,
-  TemplateFitSettings,
-  TemplateKind,
-  TemplateSizeMode,
-} from '../../domain/folding';
-import { TEMPLATE_KINDS } from '../../domain/folding';
-import type { MeshUnfoldSettings, MeshUnfoldStrategy } from '../../domain/unfolding';
-import type {
-  PanelConstructionMaterial,
-  PanelConstructionSettings,
-  PanelJointKind,
-} from '../../domain/panelConstruction';
+import { TEMPLATE_KINDS, type TemplateKind } from '../../domain/folding';
 import type { ProjectData } from '../../domain/project';
-import type {
-  StackedSliceSettings,
-  WaffleSliceResult,
-  WaffleSliceSettings,
-  WaffleSlotPattern,
-} from '../../geometry/slicing/types';
+import type { WaffleSliceResult } from '../../geometry/slicing/types';
 import { arrangePartsInRows } from '../../geometry/layout/arrangeParts';
 import { expectedGenerationSignature, hashSerializable } from '../../domain/generation';
-import type { ExperienceMode } from '../types';
 import { runtimeFailure } from '../../domain/runtimeFailure';
+import {
+  buildCanonicalGenerationInput,
+  canonicalGenerationInputHash,
+  generationInputChanged,
+  type CanonicalGenerationInput,
+} from '../../domain/generationInputs';
+import type { ModeSettingsByMode } from '../../domain/modeSettings';
+import {
+  classroomRecipeSettingsArePristine,
+  resolveClassroomRecipeSettings,
+} from '../../domain/classroomRecipes';
+import {
+  clampPanelThickness,
+  DEFAULT_PANEL_PROFILES,
+  maximumPanelDividerCount,
+} from '../../domain/panelConstruction';
+import type { PanelComposerSettings } from '../../domain/modeSettings';
+
+function updatedPanelSettings(
+  current: PanelComposerSettings,
+  patch: Partial<PanelComposerSettings>,
+): PanelComposerSettings {
+  const next = { ...current, ...patch };
+  next.panelThicknessMm = clampPanelThickness(next.panelThicknessMm);
+  next.dividerThicknessMm = clampPanelThickness(next.dividerThicknessMm);
+  next.lidThicknessMm = clampPanelThickness(next.lidThicknessMm);
+  next.widthDividerCount = Math.min(
+    Math.max(0, Math.round(next.widthDividerCount)),
+    maximumPanelDividerCount(next.innerDepthMm, next.dividerThicknessMm),
+  );
+  next.depthDividerCount = Math.min(
+    Math.max(0, Math.round(next.depthDividerCount)),
+    maximumPanelDividerCount(next.innerWidthMm, next.dividerThicknessMm),
+  );
+  next.connectionOverrides = structuredClone(next.connectionOverrides ?? {});
+  next.panelProfiles = structuredClone(next.panelProfiles ?? DEFAULT_PANEL_PROFILES);
+  return next;
+}
 
 function generationRecordFor(project: ProjectData, result: unknown, algorithmVersion: string) {
   return {
@@ -44,281 +63,78 @@ function generationRecordFor(project: ProjectData, result: unknown, algorithmVer
   };
 }
 
+type GenerationInputForMode<M extends CanonicalGenerationInput['mode']> = Extract<
+  CanonicalGenerationInput,
+  { mode: M }
+>;
+
+function generationInputForMode<M extends CanonicalGenerationInput['mode']>(
+  project: ProjectData,
+  mode: M,
+): GenerationInputForMode<M> {
+  const input = buildCanonicalGenerationInput(project);
+  if (input.mode !== mode) throw new Error(`Expected ${mode} generation input.`);
+  return input as GenerationInputForMode<M>;
+}
+
+function generationInputStillMatches(
+  project: ProjectData,
+  dispatched: CanonicalGenerationInput,
+): boolean {
+  try {
+    const current = buildCanonicalGenerationInput(project);
+    return (
+      current.mode === dispatched.mode &&
+      canonicalGenerationInputHash(current) === canonicalGenerationInputHash(dispatched)
+    );
+  } catch {
+    return false;
+  }
+}
+
 let activeTask: Pick<GeometryTask<unknown>, 'cancel'> | undefined;
-
-function positiveNumber(value: unknown, fallback: number): number {
-  return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : fallback;
-}
-
-function nonNegativeNumber(value: unknown, fallback: number): number {
-  return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : fallback;
-}
-
-function settingsForProject(project: ProjectData): StackedSliceSettings {
-  return {
-    axis: (project.modeParameters.sliceAxis as SliceAxis | undefined) ?? 'z',
-    spacingMm: positiveNumber(project.modeParameters.spacingMm, 10),
-    thicknessMm: positiveNumber(
-      project.modeParameters.sliceThicknessMm,
-      project.materialProfileSnapshot.thicknessMm,
-    ),
-    contourEpsilonMm: positiveNumber(project.modeParameters.contourEpsilonMm, 0.001),
-  };
-}
-
-function settingsMatch(a: StackedSliceSettings, b: StackedSliceSettings): boolean {
-  return (
-    a.axis === b.axis &&
-    a.spacingMm === b.spacingMm &&
-    a.thicknessMm === b.thicknessMm &&
-    a.contourEpsilonMm === b.contourEpsilonMm
-  );
-}
-
-function waffleSettingsForProject(project: ProjectData): WaffleSliceSettings {
-  return {
-    primaryAxis: (project.modeParameters.wafflePrimaryAxis as SliceAxis | undefined) ?? 'x',
-    secondaryAxis: (project.modeParameters.waffleSecondaryAxis as SliceAxis | undefined) ?? 'y',
-    primarySpacingMm: positiveNumber(project.modeParameters.wafflePrimarySpacingMm, 20),
-    secondarySpacingMm: positiveNumber(project.modeParameters.waffleSecondarySpacingMm, 20),
-    thicknessMm: positiveNumber(
-      project.modeParameters.waffleThicknessMm,
-      project.materialProfileSnapshot.thicknessMm,
-    ),
-    clearanceMm: nonNegativeNumber(
-      project.modeParameters.waffleClearanceMm,
-      project.materialProfileSnapshot.clearanceMm,
-    ),
-    contourEpsilonMm: positiveNumber(project.modeParameters.contourEpsilonMm, 0.001),
-    slotPattern:
-      (project.modeParameters.waffleSlotPattern as WaffleSlotPattern | undefined) ?? 'alternating',
-    reverseSlots: Boolean(project.modeParameters.waffleReverseSlots),
-  };
-}
-
-function waffleSettingsMatch(a: WaffleSliceSettings, b: WaffleSliceSettings): boolean {
-  return (
-    a.primaryAxis === b.primaryAxis &&
-    a.secondaryAxis === b.secondaryAxis &&
-    a.primarySpacingMm === b.primarySpacingMm &&
-    a.secondarySpacingMm === b.secondarySpacingMm &&
-    a.thicknessMm === b.thicknessMm &&
-    a.clearanceMm === b.clearanceMm &&
-    a.contourEpsilonMm === b.contourEpsilonMm &&
-    a.slotPattern === b.slotPattern &&
-    a.reverseSlots === b.reverseSlots
-  );
-}
-
 const templateKinds = new Set<TemplateKind>(TEMPLATE_KINDS);
 
 function withTemplateSource(project: ProjectData, templateKind: TemplateKind): ProjectData {
-  const alreadyCreating = project.modeParameters.workflowSourceMode === 'template';
+  const alreadyCreating = project.fabricationMode === 'fold-template';
+  const current = project.modeSettings.foldTemplate;
   return touchProject({
     ...project,
     fabricationMode: 'fold-template',
-    modeParameters: {
-      ...project.modeParameters,
-      workflowSourceMode: 'template',
-      foldTemplateKind: templateKind,
-      foldSizeMode: 'custom',
-      foldStandalone: true,
-      foldFitAxis: 'y',
-      foldClearanceMm: 0,
-      foldWidthMm: alreadyCreating ? positiveNumber(project.modeParameters.foldWidthMm, 80) : 80,
-      foldLengthMm: alreadyCreating ? positiveNumber(project.modeParameters.foldLengthMm, 60) : 60,
-      foldHeightMm: alreadyCreating ? positiveNumber(project.modeParameters.foldHeightMm, 40) : 40,
+    modeSettings: {
+      ...project.modeSettings,
+      foldTemplate: {
+        ...current,
+        templateKind,
+        widthMm: alreadyCreating && current.widthMm > 0 ? current.widthMm : 80,
+        lengthMm: alreadyCreating && current.lengthMm > 0 ? current.lengthMm : 60,
+        heightMm: alreadyCreating && current.heightMm > 0 ? current.heightMm : 40,
+      },
     },
   });
 }
 
-function foldSettingsForProject(project: ProjectData): TemplateFitSettings {
-  const rawKind = project.modeParameters.foldTemplateKind;
-  const templateKind =
-    typeof rawKind === 'string' && templateKinds.has(rawKind as TemplateKind)
-      ? (rawKind as TemplateKind)
-      : 'open-box';
-  const rawAxis = project.modeParameters.foldFitAxis;
-  const fitAxis: SliceAxis =
-    project.fabricationMode === 'fold-template'
-      ? 'y'
-      : rawAxis === 'x' || rawAxis === 'y' || rawAxis === 'z'
-        ? rawAxis
-        : 'z';
-  const sizeMode: TemplateSizeMode =
-    project.fabricationMode === 'fold-template' || project.modeParameters.foldSizeMode === 'custom'
-      ? 'custom'
-      : 'auto-fit';
-  const envelopeDimensions: TemplateEnvelopeDimensions | undefined =
-    sizeMode === 'custom'
-      ? {
-          widthMm: positiveNumber(
-            project.modeParameters.foldWidthMm,
-            project.model.dimensions.widthMm,
-          ),
-          lengthMm: positiveNumber(
-            project.modeParameters.foldLengthMm,
-            project.model.dimensions.depthMm,
-          ),
-          heightMm: positiveNumber(
-            project.modeParameters.foldHeightMm,
-            project.model.dimensions.heightMm,
-          ),
-        }
-      : undefined;
-  return {
-    templateKind,
-    fitAxis,
-    clearanceMm: nonNegativeNumber(
-      project.modeParameters.foldClearanceMm,
-      project.materialProfileSnapshot.clearanceMm,
-    ),
-    profileToleranceMm: positiveNumber(project.modeParameters.foldProfileToleranceMm, 1),
-    sizeMode,
-    ...(envelopeDimensions ? { envelopeDimensions } : {}),
-    parameters: {
-      wallHeightMm: positiveNumber(project.modeParameters.foldWallHeightMm, 20),
-      tabDepthMm: positiveNumber(project.modeParameters.foldTabDepthMm, 8),
-      lidDepthMm: positiveNumber(project.modeParameters.foldLidDepthMm, 15),
-      lidClearanceMm: nonNegativeNumber(project.modeParameters.foldLidClearanceMm, 0.5),
-      gussetDepthMm: positiveNumber(project.modeParameters.foldGussetDepthMm, 20),
-      closureFlapMm: nonNegativeNumber(project.modeParameters.foldClosureFlapMm, 12),
-      prismSides: Math.round(positiveNumber(project.modeParameters.foldPrismSides, 6)),
-      prismRotationDeg:
-        typeof project.modeParameters.foldPrismRotationDeg === 'number'
-          ? project.modeParameters.foldPrismRotationDeg
-          : 0,
-      topScale: nonNegativeNumber(project.modeParameters.foldTopScale, 0),
-      seamTabMm: positiveNumber(project.modeParameters.foldSeamTabMm, 8),
-      standalone: project.fabricationMode === 'fold-template',
-      closureMethod:
-        project.modeParameters.foldClosureMethod === 'press-fit' ? 'press-fit' : 'glue',
-      slotClearanceMm: nonNegativeNumber(
-        project.modeParameters.foldSlotClearanceMm,
-        project.materialProfileSnapshot.clearanceMm,
-      ),
-    },
-  };
-}
-
-function foldSettingsMatch(a: TemplateFitSettings, b: TemplateFitSettings): boolean {
-  return JSON.stringify(a) === JSON.stringify(b);
-}
-
-function positiveInteger(value: unknown, fallback: number): number {
-  return typeof value === 'number' && Number.isFinite(value) && value >= 1
-    ? Math.round(value)
-    : fallback;
-}
-
-function unfoldSettingsForProject(
-  project: ProjectData,
-  experienceMode: ExperienceMode,
-): MeshUnfoldSettings {
-  if (experienceMode === 'standard') {
-    return {
-      strategy: 'automatic',
-      rootFaceIndex: 0,
-      manualSeamKeys: [],
-      tabDepthMm: 6,
-      maximumFaceCount: 200,
-      searchAttempts: 18,
-    };
-  }
-  const rawStrategy = project.modeParameters.meshUnfoldStrategy;
-  const strategy: MeshUnfoldStrategy = rawStrategy === 'manual' ? 'manual' : 'automatic';
-  const rawSeams = project.modeParameters.meshUnfoldSeams;
-  const manualSeamKeys =
-    typeof rawSeams === 'string'
-      ? [
-          ...new Set(
-            rawSeams
-              .split(',')
-              .map((key) => key.trim())
-              .filter(Boolean),
-          ),
-        ].sort()
-      : [];
-  const rawRoot = project.modeParameters.meshUnfoldRootFace;
-  return {
-    strategy,
-    rootFaceIndex:
-      typeof rawRoot === 'number' && Number.isFinite(rawRoot)
-        ? Math.max(0, Math.round(rawRoot))
-        : 0,
-    manualSeamKeys,
-    tabDepthMm: positiveNumber(project.modeParameters.meshUnfoldTabDepthMm, 6),
-    maximumFaceCount: positiveInteger(project.modeParameters.meshUnfoldMaximumFaces, 200),
-    searchAttempts: positiveInteger(project.modeParameters.meshUnfoldSearchAttempts, 18),
-  };
-}
-
-function unfoldSettingsMatch(first: MeshUnfoldSettings, second: MeshUnfoldSettings): boolean {
-  return JSON.stringify(first) === JSON.stringify(second);
-}
-
-function panelSettingsForProject(project: ProjectData): PanelConstructionSettings {
-  const rawJoint = project.modeParameters.panelJointKind;
-  const jointKind: PanelJointKind =
-    rawJoint === 'butt' || rawJoint === 'tab-slot' ? rawJoint : 'finger';
-  const legacyCount = Math.max(
-    0,
-    Math.min(6, Math.round(nonNegativeNumber(project.modeParameters.panelDividerCount, 0))),
+function settingsChange(
+  state: AppState,
+  update: (settings: ModeSettingsByMode) => ModeSettingsByMode,
+) {
+  const changed = recordProjectChange(state, (project) =>
+    touchProject({ ...project, modeSettings: update(project.modeSettings) }),
   );
-  const hasGridCounts =
-    project.modeParameters.panelWidthDividerCount !== undefined ||
-    project.modeParameters.panelDepthDividerCount !== undefined;
-  const dividerCount = (name: string, legacyFallback: number) =>
-    Math.max(
-      0,
-      Math.min(
-        6,
-        Math.round(
-          nonNegativeNumber(project.modeParameters[name], hasGridCounts ? 0 : legacyFallback),
-        ),
-      ),
-    );
+  const nextProject = changed.project ?? state.project;
+  const activeInputChanged = generationInputChanged(state.project, nextProject);
   return {
-    innerWidthMm: positiveNumber(project.modeParameters.panelInnerWidthMm, 80),
-    innerDepthMm: positiveNumber(project.modeParameters.panelInnerDepthMm, 60),
-    innerHeightMm: positiveNumber(project.modeParameters.panelInnerHeightMm, 50),
-    jointKind,
-    fingerWidthMm: positiveNumber(project.modeParameters.panelFingerWidthMm, 10),
-    clearanceMm: nonNegativeNumber(
-      project.modeParameters.panelClearanceMm,
-      project.materialProfileSnapshot.clearanceMm,
-    ),
-    includeLid: Boolean(project.modeParameters.panelIncludeLid),
-    widthDividerCount: dividerCount(
-      'panelWidthDividerCount',
-      project.modeParameters.panelDividerAxis === 'depth' ? 0 : legacyCount,
-    ),
-    depthDividerCount: dividerCount(
-      'panelDepthDividerCount',
-      project.modeParameters.panelDividerAxis === 'depth' ? legacyCount : 0,
-    ),
+    ...changed,
+    sliceGenerationStatus:
+      state.project.generatedParts.length > 0 && activeInputChanged
+        ? ('stale' as const)
+        : state.sliceGenerationStatus,
+    sliceGenerationError: activeInputChanged ? undefined : state.sliceGenerationError,
+    validationIssues: validationIssuesForProject(nextProject),
+    completedWorkflowSteps: activeInputChanged
+      ? state.completedWorkflowSteps.filter((step) => ['start', 'mode', 'import'].includes(step))
+      : state.completedWorkflowSteps,
   };
-}
-
-function panelMaterialForProject(project: ProjectData): PanelConstructionMaterial {
-  const material = project.materialProfileSnapshot;
-  return {
-    id: material.id,
-    category: material.category,
-    thicknessMm: material.thicknessMm,
-    kerfMm: material.kerfMm,
-  };
-}
-
-function panelInputMatches(
-  project: ProjectData,
-  settings: PanelConstructionSettings,
-  material: PanelConstructionMaterial,
-): boolean {
-  return (
-    JSON.stringify(panelSettingsForProject(project)) === JSON.stringify(settings) &&
-    JSON.stringify(panelMaterialForProject(project)) === JSON.stringify(material)
-  );
 }
 
 export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, get) => ({
@@ -337,18 +153,13 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
         workflowSourceMode === 'template'
           ? withTemplateSource(
               project,
-              templateKinds.has(project.modeParameters.foldTemplateKind as TemplateKind)
-                ? (project.modeParameters.foldTemplateKind as TemplateKind)
+              templateKinds.has(project.modeSettings.foldTemplate.templateKind)
+                ? project.modeSettings.foldTemplate.templateKind
                 : 'open-box',
             )
           : touchProject({
               ...project,
               fabricationMode: 'mesh-unfold',
-              modeParameters: {
-                ...project.modeParameters,
-                workflowSourceMode,
-                foldStandalone: false,
-              },
             }),
       ),
       sliceGenerationStatus:
@@ -368,50 +179,141 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
         ['start', 'mode'].includes(step),
       ),
     })),
-  setModeParameter: (name, value) =>
-    set((state) => ({
-      ...recordProjectChange(state, (project) =>
-        touchProject({
-          ...project,
-          modeParameters: { ...project.modeParameters, [name]: value },
-        }),
-      ),
-      sliceGenerationStatus:
-        state.project.generatedParts.length > 0 ? 'stale' : state.sliceGenerationStatus,
-      sliceGenerationError: undefined,
-      completedWorkflowSteps: state.completedWorkflowSteps.filter((step) =>
-        ['start', 'mode', 'import'].includes(step),
-      ),
-    })),
+  updateStackedSliceSettings: (patch) =>
+    set((state) =>
+      settingsChange(state, (settings) => ({
+        ...settings,
+        stackedSlices: { ...settings.stackedSlices, ...patch },
+      })),
+    ),
+  updateWaffleSliceSettings: (patch) =>
+    set((state) =>
+      settingsChange(state, (settings) => ({
+        ...settings,
+        waffleSlices: { ...settings.waffleSlices, ...patch },
+      })),
+    ),
+  updateFoldTemplateSettings: (patch) =>
+    set((state) =>
+      settingsChange(state, (settings) => ({
+        ...settings,
+        foldTemplate: { ...settings.foldTemplate, ...patch },
+      })),
+    ),
+  updateMeshUnfoldSettings: (patch) =>
+    set((state) =>
+      settingsChange(state, (settings) => ({
+        ...settings,
+        meshUnfold: { ...settings.meshUnfold, ...patch },
+      })),
+    ),
+  updatePanelComposerSettings: (patch) =>
+    set((state) =>
+      settingsChange(state, (settings) => ({
+        ...settings,
+        panelConstruction: updatedPanelSettings(settings.panelConstruction, patch),
+      })),
+    ),
+  replacePanelComposerSettings: (panelConstruction) =>
+    set((state) => settingsChange(state, (settings) => ({ ...settings, panelConstruction }))),
+  applyPanelRecipe: (id) =>
+    set((state) => {
+      const material = state.project.materialProfileSnapshot;
+      const current = state.project.modeSettings.panelConstruction;
+      const next = resolveClassroomRecipeSettings(id, material);
+      if (current.recipe?.id === id && classroomRecipeSettingsArePristine(current, material)) {
+        return state;
+      }
+      return settingsChange(state, (modeSettings) => ({
+        ...modeSettings,
+        panelConstruction: next,
+      }));
+    }),
+  addPanelFeature: (feature) =>
+    set((state) =>
+      settingsChange(state, (modeSettings) => ({
+        ...modeSettings,
+        panelConstruction: {
+          ...modeSettings.panelConstruction,
+          features: [...modeSettings.panelConstruction.features, feature].sort((left, right) =>
+            left.id.localeCompare(right.id),
+          ),
+        },
+      })),
+    ),
+  updatePanelFeature: (id, feature) =>
+    set((state) =>
+      settingsChange(state, (modeSettings) => ({
+        ...modeSettings,
+        panelConstruction: {
+          ...modeSettings.panelConstruction,
+          features: modeSettings.panelConstruction.features
+            .map((candidate) => (candidate.id === id ? feature : candidate))
+            .sort((left, right) => left.id.localeCompare(right.id)),
+        },
+      })),
+    ),
+  duplicatePanelFeature: (id, newId) =>
+    set((state) =>
+      settingsChange(state, (modeSettings) => {
+        const source = modeSettings.panelConstruction.features.find(
+          (candidate) => candidate.id === id,
+        );
+        if (!source) return modeSettings;
+        const duplicate = {
+          ...structuredClone(source),
+          id: newId,
+          offsetMm: {
+            x: (source.offsetMm?.x ?? 0) + 5,
+            y: (source.offsetMm?.y ?? 0) - 5,
+          },
+        };
+        return {
+          ...modeSettings,
+          panelConstruction: {
+            ...modeSettings.panelConstruction,
+            features: [...modeSettings.panelConstruction.features, duplicate].sort((left, right) =>
+              left.id.localeCompare(right.id),
+            ),
+          },
+        };
+      }),
+    ),
+  removePanelFeature: (id) =>
+    set((state) =>
+      settingsChange(state, (modeSettings) => ({
+        ...modeSettings,
+        panelConstruction: {
+          ...modeSettings.panelConstruction,
+          features: modeSettings.panelConstruction.features.filter((feature) => feature.id !== id),
+        },
+      })),
+    ),
   generateSlices: () => {
     const { project } = get();
-    if (!project.model.mesh || !project.model.bounds) {
+    let input: GenerationInputForMode<'stacked-slices'>;
+    try {
+      input = generationInputForMode(project, 'stacked-slices');
+    } catch (error) {
       set({
         sliceGenerationStatus: 'error',
-        sliceGenerationError: runtimeFailure('MODEL_MESH_MISSING'),
+        sliceGenerationError: runtimeFailure(
+          project.model.mesh && project.model.bounds
+            ? 'SLICE_GENERATION_FAILED'
+            : 'MODEL_MESH_MISSING',
+          error instanceof Error ? error.message : undefined,
+        ),
       });
       return;
     }
     activeTask?.cancel();
-    const settings = settingsForProject(project);
-    const sourceMesh = project.model.mesh;
-    const task = generateStackedSlicesInWorker({
-      mesh: sourceMesh,
-      bounds: project.model.bounds,
-      modelId: project.model.id,
-      settings,
-    });
+    const task = generateStackedSlicesInWorker(input.payload);
     activeTask = task;
     set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
     void task.promise
       .then((result) => {
         set((state) => {
-          if (
-            state.project.model.id !== project.model.id ||
-            state.project.model.mesh !== sourceMesh ||
-            state.project.fabricationMode !== 'stacked-slices' ||
-            !settingsMatch(settingsForProject(state.project), settings)
-          ) {
+          if (!generationInputStillMatches(state.project, input)) {
             return {
               sliceGenerationStatus: 'stale',
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
@@ -469,15 +371,22 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
   },
   generateWaffleSlices: () => {
     const { project } = get();
-    if (!project.model.mesh || !project.model.bounds) {
+    let input: GenerationInputForMode<'waffle-slices'>;
+    try {
+      input = generationInputForMode(project, 'waffle-slices');
+    } catch (error) {
       set({
         sliceGenerationStatus: 'error',
-        sliceGenerationError: runtimeFailure('MODEL_MESH_MISSING'),
+        sliceGenerationError: runtimeFailure(
+          project.model.mesh && project.model.bounds
+            ? 'WAFFLE_GENERATION_FAILED'
+            : 'MODEL_MESH_MISSING',
+          error instanceof Error ? error.message : undefined,
+        ),
       });
       return;
     }
-    const settings = waffleSettingsForProject(project);
-    if (settings.primaryAxis === settings.secondaryAxis) {
+    if (input.payload.settings.primaryAxis === input.payload.settings.secondaryAxis) {
       set({
         sliceGenerationStatus: 'error',
         sliceGenerationError: runtimeFailure('WAFFLE_AXES_MATCH'),
@@ -485,24 +394,13 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       return;
     }
     activeTask?.cancel();
-    const sourceMesh = project.model.mesh;
-    const task = generateWaffleSlicesInWorker({
-      mesh: sourceMesh,
-      bounds: project.model.bounds,
-      modelId: project.model.id,
-      settings,
-    });
+    const task = generateWaffleSlicesInWorker(input.payload);
     activeTask = task;
     set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
     void task.promise
       .then((result: WaffleSliceResult) => {
         set((state) => {
-          if (
-            state.project.model.id !== project.model.id ||
-            state.project.model.mesh !== sourceMesh ||
-            state.project.fabricationMode !== 'waffle-slices' ||
-            !waffleSettingsMatch(waffleSettingsForProject(state.project), settings)
-          ) {
+          if (!generationInputStillMatches(state.project, input)) {
             return {
               sliceGenerationStatus: 'stale',
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
@@ -554,37 +452,37 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
   },
   generateFoldTemplate: () => {
     const { project } = get();
-    if (!project.model.mesh || !project.model.bounds) {
+    let input: GenerationInputForMode<'fold-template'>;
+    try {
+      input = generationInputForMode(project, 'fold-template');
+    } catch (error) {
       set({
         sliceGenerationStatus: 'error',
-        sliceGenerationError: runtimeFailure('MODEL_MESH_MISSING'),
+        sliceGenerationError: runtimeFailure(
+          'FOLD_GENERATION_FAILED',
+          error instanceof Error ? error.message : undefined,
+        ),
       });
       return;
     }
     activeTask?.cancel();
-    const settings = foldSettingsForProject(project);
-    const sourceMesh = project.model.mesh;
-    const task = generateFoldTemplateInWorker({
-      mesh: sourceMesh,
-      bounds: project.model.bounds,
-      modelId: project.model.id,
-      materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
-      settings,
-    });
+    const task = generateFoldTemplateInWorker(input.payload);
     activeTask = task;
     set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
     void task.promise
       .then((result) => {
         set((state) => {
-          if (
-            state.project.model.id !== project.model.id ||
-            state.project.model.mesh !== sourceMesh ||
-            state.project.fabricationMode !== 'fold-template' ||
-            !foldSettingsMatch(foldSettingsForProject(state.project), settings)
-          ) {
+          if (!generationInputStillMatches(state.project, input)) {
             return {
               sliceGenerationStatus: 'stale',
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
+            };
+          }
+          const blockingIssue = result.issues.find((issue) => issue.severity === 'error');
+          if (blockingIssue) {
+            return {
+              sliceGenerationStatus: 'error',
+              sliceGenerationError: runtimeFailure('FOLD_GENERATION_FAILED', blockingIssue.message),
             };
           }
           const changed = recordProjectChange(state, (currentProject) => {
@@ -607,8 +505,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             });
           });
           const nextProject = changed.project ?? state.project;
-          const blockingError = result.issues.some((issue) => issue.severity === 'error');
-          const generationSucceeded = result.parts.length > 0 && !blockingError;
+          const generationSucceeded = result.parts.length > 0;
           return {
             ...changed,
             sliceGenerationStatus: generationSucceeded ? 'ready' : 'error',
@@ -643,34 +540,28 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       });
   },
   generateMeshUnfold: () => {
-    const { project, experienceMode } = get();
-    if (!project.model.mesh) {
+    const { project } = get();
+    let input: GenerationInputForMode<'mesh-unfold'>;
+    try {
+      input = generationInputForMode(project, 'mesh-unfold');
+    } catch (error) {
       set({
         sliceGenerationStatus: 'error',
-        sliceGenerationError: runtimeFailure('MODEL_MESH_MISSING'),
+        sliceGenerationError: runtimeFailure(
+          project.model.mesh ? 'UNFOLD_GENERATION_FAILED' : 'MODEL_MESH_MISSING',
+          error instanceof Error ? error.message : undefined,
+        ),
       });
       return;
     }
     activeTask?.cancel();
-    const settings = unfoldSettingsForProject(project, experienceMode);
-    const sourceMesh = project.model.mesh;
-    const task = generateMeshUnfoldInWorker({
-      mesh: sourceMesh,
-      modelId: project.model.id,
-      materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
-      settings,
-    });
+    const task = generateMeshUnfoldInWorker(input.payload);
     activeTask = task;
     set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
     void task.promise
       .then((result) => {
         set((state) => {
-          if (
-            state.project.model.id !== project.model.id ||
-            state.project.model.mesh !== sourceMesh ||
-            state.project.fabricationMode !== 'mesh-unfold' ||
-            !unfoldSettingsMatch(unfoldSettingsForProject(state.project, experienceMode), settings)
-          ) {
+          if (!generationInputStillMatches(state.project, input)) {
             return {
               sliceGenerationStatus: 'stale',
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
@@ -733,27 +624,40 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
   },
   generatePanelConstruction: () => {
     const { project } = get();
+    let input: GenerationInputForMode<'panel-construction'>;
+    try {
+      input = generationInputForMode(project, 'panel-construction');
+    } catch (error) {
+      set({
+        sliceGenerationStatus: 'error',
+        sliceGenerationError: runtimeFailure(
+          'PANEL_GENERATION_FAILED',
+          error instanceof Error ? error.message : undefined,
+        ),
+      });
+      return;
+    }
     activeTask?.cancel();
-    const settings = panelSettingsForProject(project);
-    const material = panelMaterialForProject(project);
-    const task = generatePanelConstructionInWorker({
-      modelId: project.model.id,
-      material,
-      settings,
-    });
+    const task = generatePanelConstructionInWorker(input.payload);
     activeTask = task;
     set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
     void task.promise
       .then((result) => {
         set((state) => {
-          if (
-            state.project.model.id !== project.model.id ||
-            state.project.fabricationMode !== 'panel-construction' ||
-            !panelInputMatches(state.project, settings, material)
-          ) {
+          if (!generationInputStillMatches(state.project, input)) {
             return {
               sliceGenerationStatus: 'stale',
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
+            };
+          }
+          const blockingIssue = result.issues.find((issue) => issue.severity === 'error');
+          if (blockingIssue) {
+            return {
+              sliceGenerationStatus: 'error',
+              sliceGenerationError: runtimeFailure(
+                'PANEL_GENERATION_FAILED',
+                blockingIssue.message,
+              ),
             };
           }
           const changed = recordProjectChange(state, (currentProject) => {

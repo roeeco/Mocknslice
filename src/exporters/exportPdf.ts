@@ -66,8 +66,17 @@ function pathCommands(
   return `${transformed.map((point, index) => pointCommand(point, heightMm, index === 0 ? 'm' : 'l')).join('\n')}\n${closed ? 'h\n' : ''}S`;
 }
 
-function textCommand(text: string, point: Point2D, heightMm: number, fontSizeMm: number): string {
-  return `BT /F1 ${pdfNumber(fontSizeMm * MM_TO_POINTS)} Tf ${pdfNumber(point.x * MM_TO_POINTS)} ${pdfNumber((heightMm - point.y) * MM_TO_POINTS)} Td (${pdfText(text)}) Tj ET`;
+function textCommand(
+  text: string,
+  point: Point2D,
+  heightMm: number,
+  fontSizeMm: number,
+  rotationDeg = 0,
+): string {
+  const radians = (-rotationDeg * Math.PI) / 180;
+  const cosine = pdfNumber(Math.cos(radians));
+  const sine = pdfNumber(Math.sin(radians));
+  return `BT /F1 ${pdfNumber(fontSizeMm * MM_TO_POINTS)} Tf ${cosine} ${sine} ${pdfNumber(-Math.sin(radians))} ${cosine} ${pdfNumber(point.x * MM_TO_POINTS)} ${pdfNumber((heightMm - point.y) * MM_TO_POINTS)} Tm (${pdfText(text)}) Tj ET`;
 }
 
 function pageContent(
@@ -120,7 +129,8 @@ function pageContent(
               label.text,
               transformPoint(label.position, placement),
               sheet.heightMm,
-              project.exportSettings.labelFontSizeMm,
+              label.fontSizeMm ?? project.exportSettings.labelFontSizeMm,
+              (label.rotationDeg ?? 0) + placement.rotationDeg,
             ),
           );
         }

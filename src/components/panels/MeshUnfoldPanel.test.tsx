@@ -30,11 +30,11 @@ describe('MeshUnfoldPanel', () => {
     fireEvent.change(screen.getByLabelText('Tab depth (mm)'), { target: { value: '7.5' } });
     fireEvent.change(screen.getByLabelText('Face limit'), { target: { value: '120' } });
 
-    expect(useProjectStore.getState().project.modeParameters).toMatchObject({
-      meshUnfoldStrategy: 'manual',
-      meshUnfoldRootFace: 3,
-      meshUnfoldTabDepthMm: 7.5,
-      meshUnfoldMaximumFaces: 120,
+    expect(useProjectStore.getState().project.modeSettings.meshUnfold).toMatchObject({
+      strategy: 'manual',
+      rootFaceIndex: 3,
+      tabDepthMm: 7.5,
+      maximumFaceCount: 120,
     });
     expect(screen.getByText(/does not repair meshes/)).toBeVisible();
   });
@@ -74,7 +74,7 @@ describe('MeshUnfoldPanel', () => {
     await user.selectOptions(screen.getByLabelText('Seam strategy'), 'manual');
     const firstEdge = screen.getAllByRole('checkbox')[0]!;
     await user.click(firstEdge);
-    expect(String(useProjectStore.getState().project.modeParameters.meshUnfoldSeams)).toMatch(
+    expect(useProjectStore.getState().project.modeSettings.meshUnfold.manualSeamKeys[0]).toMatch(
       /^\d+:\d+$/,
     );
     expect(useProjectStore.getState().sliceGenerationStatus).toBe('stale');

@@ -27,8 +27,7 @@ export function deriveWorkflowGate(
   if (active === 'mode') return { allowed: true, reasons: [] };
   const importReady =
     project.fabricationMode === 'panel-construction' ||
-    (project.fabricationMode === 'fold-template' &&
-      project.modeParameters.workflowSourceMode === 'template') ||
+    project.fabricationMode === 'fold-template' ||
     (project.model.source.kind === 'imported' &&
       Boolean(project.model.mesh && project.model.bounds));
   if (active === 'import')
@@ -37,9 +36,9 @@ export function deriveWorkflowGate(
       : { allowed: false, reasons: ['SOURCE_REQUIRED'] };
   const foldDimensionsValid =
     project.fabricationMode !== 'fold-template' ||
-    (Number(project.modeParameters.foldWidthMm) > 0 &&
-      Number(project.modeParameters.foldLengthMm) > 0 &&
-      Number(project.modeParameters.foldHeightMm) > 0);
+    (project.modeSettings.foldTemplate.widthMm > 0 &&
+      project.modeSettings.foldTemplate.lengthMm > 0 &&
+      project.modeSettings.foldTemplate.heightMm > 0);
   if (active === 'configure') {
     const reasons: WorkflowBlockReason[] = [];
     if (state.generationStatus === 'processing') reasons.push('GENERATION_PROCESSING');
@@ -145,8 +144,7 @@ export function inferredWorkflowProgress(
   const completed: WorkflowStep[] = ['start', 'mode'];
   const modelReady =
     project.fabricationMode === 'panel-construction' ||
-    (project.fabricationMode === 'fold-template' &&
-      project.modeParameters.workflowSourceMode === 'template') ||
+    project.fabricationMode === 'fold-template' ||
     (project.model.source.kind === 'imported' &&
       Boolean(project.model.mesh && project.model.bounds));
   if (!modelReady)

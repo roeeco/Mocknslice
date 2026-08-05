@@ -1,13 +1,13 @@
 import type { Bounds3D, Point2D, SerializableTriangleMesh } from '../../domain/geometry';
-import type { FabricationPart, SliceAxis } from '../../domain/fabrication';
+import type { FabricationPart } from '../../domain/fabrication';
 import type { ValidationIssue } from '../../domain/validation';
+import type { StackedSliceSettings, WaffleSliceSettings } from '../../domain/slicing';
 
-export interface StackedSliceSettings {
-  axis: SliceAxis;
-  spacingMm: number;
-  thicknessMm: number;
-  contourEpsilonMm: number;
-}
+export type {
+  StackedSliceSettings,
+  WaffleSliceSettings,
+  WaffleSlotPattern,
+} from '../../domain/slicing';
 
 export interface SliceSegment {
   start: Point2D;
@@ -35,20 +35,6 @@ export interface StackedSliceResult {
   parts: FabricationPart[];
   issues: ValidationIssue[];
   planePositionsMm: number[];
-}
-
-export type WaffleSlotPattern = 'by-family' | 'alternating';
-
-export interface WaffleSliceSettings {
-  primaryAxis: SliceAxis;
-  secondaryAxis: SliceAxis;
-  primarySpacingMm: number;
-  secondarySpacingMm: number;
-  thicknessMm: number;
-  clearanceMm: number;
-  contourEpsilonMm: number;
-  slotPattern: WaffleSlotPattern;
-  reverseSlots: boolean;
 }
 
 export interface WaffleSliceInput {

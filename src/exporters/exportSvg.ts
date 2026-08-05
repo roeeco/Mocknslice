@@ -45,6 +45,7 @@ function pathEntityAttributes(path: FabricationPart['paths'][number]): string {
     path.panelId ? ` data-panel-id="${escapeXml(path.panelId)}"` : '',
     path.edgeId ? ` data-edge-id="${escapeXml(path.edgeId)}"` : '',
     path.tabId ? ` data-tab-id="${escapeXml(path.tabId)}"` : '',
+    path.featureId ? ` data-feature-id="${escapeXml(path.featureId)}"` : '',
   ].join('');
 }
 
@@ -131,8 +132,10 @@ export function createSvgDocument(project: ProjectData): string {
         for (const label of placement.part.labels?.filter(
           (candidate) => candidate.operation === operation,
         ) ?? []) {
+          const x = label.position.x + placement.offsetX;
+          const y = label.position.y + placement.offsetY;
           lines.push(
-            `    <text id="${escapeXml(label.id)}" data-part-id="${escapeXml(placement.part.id)}"${label.entityId ? ` data-entity-id="${escapeXml(label.entityId)}"` : ''} x="${decimal(label.position.x + placement.offsetX)}" y="${decimal(label.position.y + placement.offsetY)}" fill="${escapeXml(style?.stroke ?? '#000000')}" stroke="none" font-family="sans-serif" font-size="${decimal(project.exportSettings.labelFontSizeMm)}" text-anchor="middle">${escapeXml(label.text)}</text>`,
+            `    <text id="${escapeXml(label.id)}" data-part-id="${escapeXml(placement.part.id)}"${label.entityId ? ` data-entity-id="${escapeXml(label.entityId)}"` : ''}${label.featureId ? ` data-feature-id="${escapeXml(label.featureId)}"` : ''} x="${decimal(x)}" y="${decimal(y)}"${label.rotationDeg ? ` transform="rotate(${decimal(label.rotationDeg)} ${decimal(x)} ${decimal(y)})"` : ''} fill="${escapeXml(style?.stroke ?? '#000000')}" stroke="none" font-family="sans-serif" font-size="${decimal(label.fontSizeMm ?? project.exportSettings.labelFontSizeMm)}" text-anchor="middle">${escapeXml(label.text)}</text>`,
           );
         }
       }
@@ -224,8 +227,9 @@ export function createSheetSvgDocument(
         for (const label of part.labels?.filter((candidate) => candidate.operation === operation) ??
           []) {
           const point = transformPoint(label.position, placement);
+          const rotationDeg = (label.rotationDeg ?? 0) + placement.rotationDeg;
           lines.push(
-            `    <text id="${escapeXml(label.id)}" data-part-id="${escapeXml(part.id)}"${label.entityId ? ` data-entity-id="${escapeXml(label.entityId)}"` : ''} x="${decimal(point.x)}" y="${decimal(point.y)}" fill="${escapeXml(style?.stroke ?? '#000000')}" stroke="none" font-family="sans-serif" font-size="${decimal(project.exportSettings.labelFontSizeMm)}" text-anchor="middle">${escapeXml(label.text)}</text>`,
+            `    <text id="${escapeXml(label.id)}" data-part-id="${escapeXml(part.id)}"${label.entityId ? ` data-entity-id="${escapeXml(label.entityId)}"` : ''}${label.featureId ? ` data-feature-id="${escapeXml(label.featureId)}"` : ''} x="${decimal(point.x)}" y="${decimal(point.y)}"${rotationDeg ? ` transform="rotate(${decimal(rotationDeg)} ${decimal(point.x)} ${decimal(point.y)})"` : ''} fill="${escapeXml(style?.stroke ?? '#000000')}" stroke="none" font-family="sans-serif" font-size="${decimal(label.fontSizeMm ?? project.exportSettings.labelFontSizeMm)}" text-anchor="middle">${escapeXml(label.text)}</text>`,
           );
         }
       }

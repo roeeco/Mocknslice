@@ -1771,6 +1771,292 @@ h2 {
   border: 0;
 }
 
+.panel-preset-field,
+.panel-thickness-controls,
+.panel-profile-controls,
+.panel-connection-overrides,
+.panel-cell-measurements {
+  margin-block-end: 1rem;
+}
+
+.panel-profile-controls h3 {
+  margin-block-end: 0.35rem;
+}
+
+.panel-connection-overrides {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.75rem;
+  background: var(--panel);
+}
+
+.panel-connection-overrides summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.panel-connection-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin-block-start: 0.75rem;
+}
+
+.connection-inspector {
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.85rem;
+  background: var(--panel);
+}
+
+.connection-inspector h3,
+.connection-inspector p {
+  margin: 0;
+}
+
+.connection-edge-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: 0.35rem;
+  max-block-size: 11rem;
+  overflow: auto;
+}
+
+.connection-edge-list button {
+  min-block-size: 2.25rem;
+  padding: 0.35rem 0.5rem;
+  text-align: start;
+}
+
+.connection-edge-list button.selected {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--orange) 28%, transparent);
+}
+
+.connection-inspector-fields {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.connection-inspector-fields label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+body.connection-edge-hover canvas {
+  cursor: pointer;
+}
+
+.panel-connection-clearance {
+  display: grid;
+  grid-template-columns: 1fr minmax(5rem, 0.45fr);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.panel-thickness-controls {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.range-field-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.range-field output,
+.panel-construction-panel output {
+  color: var(--green-dark);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.panel-construction-panel input[type='range'] {
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+  cursor: pointer;
+}
+
+.panel-cell-measurements {
+  display: grid;
+  gap: 0.2rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.75rem;
+  background: var(--panel);
+}
+
+.panel-cell-measurements span {
+  font-variant-numeric: tabular-nums;
+}
+
+.panel-cell-measurements small {
+  color: var(--muted);
+}
+
+.panel-selector,
+.panel-feature-toolbar,
+.panel-feature-list,
+.feature-alignment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.panel-selector,
+.panel-feature-toolbar {
+  margin-block: 0.75rem;
+}
+
+.panel-selector button,
+.panel-feature-toolbar button,
+.panel-feature-list button,
+.feature-alignment-actions button {
+  min-height: 42px;
+}
+
+.panel-selector button[aria-pressed='true'],
+.panel-feature-list button[aria-pressed='true'] {
+  border-color: var(--green);
+  background: #dce8e3;
+  box-shadow: inset 0 0 0 1px var(--green);
+}
+
+.panel-local-preview-shell {
+  margin-block: 0.8rem;
+}
+
+.panel-local-preview {
+  display: block;
+  width: 100%;
+  min-height: 240px;
+  max-height: 360px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fffdf8;
+  touch-action: none;
+}
+
+.panel-local-outline {
+  fill: #f3efe4;
+  stroke: var(--green-dark);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.panel-local-axis {
+  stroke: #b9b5aa;
+  stroke-width: 0.5;
+  stroke-dasharray: 3 3;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.panel-local-feature {
+  cursor: grab;
+  outline: none;
+}
+
+.panel-local-feature polygon {
+  fill: #dedbd2;
+  stroke: #b33f2f;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.panel-local-feature .panel-feature-hit-target {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 16;
+  pointer-events: stroke;
+}
+
+.panel-local-feature text {
+  fill: var(--ink);
+  stroke: transparent;
+  stroke-width: 8px;
+  paint-order: stroke fill;
+  user-select: none;
+}
+
+.panel-local-feature:focus-visible polygon,
+.panel-local-feature.is-selected polygon,
+.panel-local-feature:focus-visible text,
+.panel-local-feature.is-selected text {
+  stroke: var(--orange);
+  stroke-width: 2;
+}
+
+.panel-local-feature:focus-visible .panel-feature-hit-target,
+.panel-local-feature.is-selected .panel-feature-hit-target {
+  stroke: transparent;
+  stroke-width: 16;
+}
+
+.panel-feature-handle {
+  fill: #fff;
+  stroke: var(--orange);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.panel-feature-resize-handle {
+  fill: #fff;
+  stroke: var(--orange);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  cursor: nwse-resize;
+}
+
+.panel-feature-resize-handle:focus-visible {
+  outline: none;
+  stroke: var(--green-dark);
+  stroke-width: 3;
+}
+
+.panel-feature-list {
+  margin-block-end: 0.8rem;
+}
+
+.panel-feature-inspector {
+  display: grid;
+  gap: 0.7rem;
+  border-block-start: 1px solid var(--line);
+  padding-block-start: 0.8rem;
+}
+
+.panel-feature-inspector h3 {
+  margin: 0;
+}
+
+.panel-feature-inspector code {
+  max-width: 45%;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.58rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.advanced-feature-fields {
+  display: grid;
+  gap: 0.7rem;
+  border-inline-start: 3px solid var(--green);
+  padding-inline-start: 0.7rem;
+}
+
+.danger-action {
+  border-color: #b91c1c;
+  color: #8f1d1d;
+}
+
+.panel-feature-issues {
+  margin-block-start: 0.8rem;
+}
+
 @media (max-width: 980px) {
   body {
     overflow: hidden;

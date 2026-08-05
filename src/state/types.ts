@@ -9,6 +9,14 @@ import type { ProjectData } from '../domain/project';
 import type { ValidationIssue } from '../domain/validation';
 import type { Locale } from '../locales';
 import type { RuntimeFailure } from '../domain/runtimeFailure';
+import type { StackedSliceSettings, WaffleSliceSettings } from '../domain/slicing';
+import type {
+  FoldTemplateSettings,
+  PanelComposerSettings,
+  PanelFeature,
+} from '../domain/modeSettings';
+import type { MeshUnfoldSettings } from '../domain/unfolding';
+import type { ClassroomRecipeId } from '../domain/classroomRecipes';
 
 export type AutosaveStatus = 'idle' | 'pending' | 'saving' | 'saved' | 'error';
 export type ViewportMode = 'three' | 'two';
@@ -48,7 +56,17 @@ export interface FabricationSlice {
   setFabricationMode: (mode: FabricationMode) => void;
   setWorkflowSourceMode: (mode: 'import' | 'template') => void;
   selectTemplateSource: (kind: TemplateKind) => void;
-  setModeParameter: (name: string, value: number | string | boolean) => void;
+  updateStackedSliceSettings: (patch: Partial<StackedSliceSettings>) => void;
+  updateWaffleSliceSettings: (patch: Partial<WaffleSliceSettings>) => void;
+  updateFoldTemplateSettings: (patch: Partial<FoldTemplateSettings>) => void;
+  updateMeshUnfoldSettings: (patch: Partial<MeshUnfoldSettings>) => void;
+  updatePanelComposerSettings: (patch: Partial<PanelComposerSettings>) => void;
+  replacePanelComposerSettings: (settings: PanelComposerSettings) => void;
+  applyPanelRecipe: (id: ClassroomRecipeId) => void;
+  addPanelFeature: (feature: PanelFeature) => void;
+  updatePanelFeature: (id: string, feature: PanelFeature) => void;
+  duplicatePanelFeature: (id: string, newId: string) => void;
+  removePanelFeature: (id: string) => void;
   generateSlices: () => void;
   generateWaffleSlices: () => void;
   generateFoldTemplate: () => void;

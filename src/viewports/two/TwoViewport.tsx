@@ -130,8 +130,10 @@ function PartOnSheet({
       onClick={onSelect}
     >
       {part.paths.map((path) => {
-        const entityId = path.tabId ?? path.edgeId ?? path.panelId;
-        const entitySelected = [path.tabId, path.edgeId, path.panelId].includes(selectedEntityId);
+        const entityId = path.featureId ?? path.tabId ?? path.edgeId ?? path.panelId;
+        const entitySelected = [path.featureId, path.tabId, path.edgeId, path.panelId].includes(
+          selectedEntityId,
+        );
         const receiverSelected = path.panelId ? relatedPanelIds.has(path.panelId) : false;
         const style = styleByOperation.get(path.operation);
         return (
@@ -161,6 +163,7 @@ function PartOnSheet({
             data-panel-id={path.panelId}
             data-edge-id={path.edgeId}
             data-tab-id={path.tabId}
+            data-feature-id={path.featureId}
             onClick={
               entityId
                 ? (event) => {
@@ -192,16 +195,22 @@ function PartOnSheet({
                 key={label.id}
                 x={point.x}
                 y={point.y}
-                fontSize={labelFontSizeMm}
+                fontSize={label.fontSizeMm ?? labelFontSizeMm}
+                transform={
+                  (label.rotationDeg ?? 0) + placement.rotationDeg
+                    ? `rotate(${(label.rotationDeg ?? 0) + placement.rotationDeg} ${point.x} ${point.y})`
+                    : undefined
+                }
                 textAnchor="middle"
                 fill={entitySelected ? '#d85c2f' : '#1f2724'}
                 data-operation={label.operation}
                 data-entity-id={label.entityId}
+                data-feature-id={label.featureId}
                 onClick={
                   label.entityId
                     ? (event) => {
                         event.stopPropagation();
-                        onSelectEntity(label.entityId!);
+                        onSelectEntity(label.entityId!, part.id);
                       }
                     : undefined
                 }

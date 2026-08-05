@@ -2,7 +2,9 @@ import { Edges } from '@react-three/drei';
 import { useEffect, useMemo } from 'react';
 import { DoubleSide, ExtrudeGeometry, Matrix4, Path, Shape, Vector2, Vector3 } from 'three';
 import type { AssembledFoldPanel } from '../../domain/folding';
+import type { PanelConnectionKey } from '../../domain/panelConstruction';
 import { useProjectStore } from '../../state/useProjectStore';
+import { ConnectionEdgeTargets } from './ConnectionEdgeTargets';
 
 const colours = ['#d15e35', '#39786a', '#d29a34', '#577896', '#8e658d', '#73834d'];
 const EMPTY_PANELS: readonly AssembledFoldPanel[] = [];
@@ -51,6 +53,7 @@ function ConstructionPanelMesh({
   thicknessMm: number;
 }) {
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
+  const selectedPartId = useProjectStore((state) => state.selectedPartId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
   const geometry = useMemo(() => {
     const centredThickness = panel.id.includes('divider-');
@@ -81,7 +84,9 @@ function ConstructionPanelMesh({
     >
       <meshStandardMaterial
         color={
-          selectedEntityId === panel.id ? '#f7b32b' : (colours[index % colours.length] ?? '#39786a')
+          selectedEntityId === panel.id || selectedPartId === panel.partId
+            ? '#f7b32b'
+            : (colours[index % colours.length] ?? '#39786a')
         }
         roughness={0.72}
         metalness={0.01}
@@ -100,8 +105,9 @@ export function PanelConstructionAssembly() {
   const heightMm = useProjectStore(
     (state) => state.project.panelConstructionResult?.settings.innerHeightMm ?? 0,
   );
-  const thicknessMm = useProjectStore(
-    (state) => state.project.panelConstructionResult?.material.thicknessMm ?? 1,
+  const thicknessByPart = useMemo(
+    () => new Map(result?.parts.map((part) => [part.id, part.thicknessMm]) ?? []),
+    [result?.parts],
   );
   return (
     <group position={[0, -heightMm / 2, 0]}>
@@ -110,9 +116,18 @@ export function PanelConstructionAssembly() {
           key={panel.id}
           panel={panel}
           index={index}
-          thicknessMm={thicknessMm}
+          thicknessMm={thicknessByPart.get(panel.partId) ?? 1}
         />
       ))}
+      <ConnectionEdgeTargets
+        edges={result?.editableEdges ?? []}
+        colourFor={(edge) => {
+          if (edge.kind === 'boundary') return '#64748b';
+          const treatment =
+            result?.settings.connectionOverrides?.[edge.id as PanelConnectionKey]?.treatment;
+          return treatment === 'crease' ? '#2563eb' : treatment === 'butt' ? '#7c3aed' : '#dc2626';
+        }}
+      />
     </group>
   );
 }

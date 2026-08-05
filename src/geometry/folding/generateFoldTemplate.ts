@@ -23,13 +23,18 @@ import {
   offsetConvexPolygon,
   profilePointToWorld,
 } from './profile';
+import { applyFoldingConnectionEditing } from './connectionEditing';
 
 export interface FoldTemplateInput {
-  mesh: SerializableTriangleMesh;
-  bounds: Bounds3D;
-  modelId: string;
+  mesh?: SerializableTriangleMesh;
+  bounds?: Bounds3D;
+  modelId?: string;
   materialThicknessMm: number;
   settings: TemplateFitSettings;
+}
+
+function inputSourceId(input: FoldTemplateInput): string {
+  return input.modelId ?? 'standalone-template';
 }
 
 interface BuiltTemplate {
@@ -649,6 +654,7 @@ function resamplePolygon(points: readonly Point2D[], count: number): Point2D[] {
 }
 
 function sectionProfile(input: FoldTemplateInput, positionMm: number): Point2D[] | undefined {
+  if (!input.mesh) return undefined;
   const intersection = intersectMeshWithPlane(
     input.mesh,
     input.settings.fitAxis,
@@ -855,16 +861,18 @@ function incompatibleResult(
   input: FoldTemplateInput,
   issues: ValidationIssue[],
 ): TemplateGenerationResult {
-  const extent: [number, number] =
-    input.settings.fitAxis === 'x'
-      ? [input.bounds.minMm[0], input.bounds.maxMm[0]]
+  const bounds = input.bounds;
+  const extent: [number, number] = bounds
+    ? input.settings.fitAxis === 'x'
+      ? [bounds.minMm[0], bounds.maxMm[0]]
       : input.settings.fitAxis === 'y'
-        ? [input.bounds.minMm[1], input.bounds.maxMm[1]]
-        : [input.bounds.minMm[2], input.bounds.maxMm[2]];
+        ? [bounds.minMm[1], bounds.maxMm[1]]
+        : [bounds.minMm[2], bounds.maxMm[2]]
+    : [0, 0];
   return {
     settings: input.settings,
     profile: {
-      sourceModelId: input.modelId,
+      sourceModelId: inputSourceId(input),
       fitAxis: input.settings.fitAxis,
       sourceHullPoints: [],
       fittedPoints: [],
@@ -885,7 +893,7 @@ function incompatibleResult(
     assembledPreview: { panels: [] },
     algorithmVersion: FOLDING_ALGORITHM_VERSION,
     inputHash: deterministicFoldingHash({
-      mesh: input.mesh,
+      ...(input.mesh ? { mesh: input.mesh } : {}),
       settings: input.settings,
       materialThicknessMm: input.materialThicknessMm,
     }),
@@ -927,14 +935,15 @@ function standaloneProfile(input: FoldTemplateInput): ProjectedProfile | undefin
 }
 
 export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerationResult {
+  const sourceId = inputSourceId(input);
   if (input.settings.clearanceMm < 0 || input.settings.profileToleranceMm <= 0) {
     return incompatibleResult(input, [
       {
-        id: `template-invalid-settings-${input.modelId}`,
+        id: `template-invalid-settings-${sourceId}`,
         severity: 'error',
         code: 'TEMPLATE_INCOMPATIBLE',
         message: 'Clearance must be non-negative and profile tolerance must be positive.',
-        affectedEntityIds: [input.modelId],
+        affectedEntityIds: [sourceId],
         suggestedAction: 'Correct the fit settings and generate again.',
       },
     ]);
@@ -944,11 +953,11 @@ export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerati
   if (standalone && !parametricProfile) {
     return incompatibleResult(input, [
       {
-        id: `template-dimensions-invalid-${input.modelId}`,
+        id: `template-dimensions-invalid-${sourceId}`,
         severity: 'error',
         code: 'TEMPLATE_INCOMPATIBLE',
         message: 'Standalone template width, length, and height must all be positive.',
-        affectedEntityIds: [input.modelId],
+        affectedEntityIds: [sourceId],
         suggestedAction: 'Enter positive template dimensions and generate again.',
       },
     ]);
@@ -961,11 +970,11 @@ export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerati
     return {
       ...incompatibleResult(input, [
         {
-          id: `template-material-minimum-${input.modelId}`,
+          id: `template-material-minimum-${sourceId}`,
           severity: 'error',
           code: 'TEMPLATE_INCOMPATIBLE',
           message: 'At least one template dimension is smaller than two material thicknesses.',
-          affectedEntityIds: [input.modelId],
+          affectedEntityIds: [sourceId],
           suggestedAction: 'Increase the template dimensions or choose thinner material.',
         },
       ]),
@@ -973,9 +982,27 @@ export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerati
       resolvedDimensions: input.settings.envelopeDimensions!,
     };
   }
+  if (!standalone && (!input.mesh || !input.bounds || !input.modelId)) {
+    return incompatibleResult(input, [
+      {
+        id: `template-source-missing-${sourceId}`,
+        severity: 'error',
+        code: 'TEMPLATE_INCOMPATIBLE',
+        message: 'A model-based template requires mesh geometry and bounds.',
+        affectedEntityIds: [sourceId],
+        suggestedAction: 'Import a valid model and generate again.',
+      },
+    ]);
+  }
   const extracted = standalone
     ? { profile: parametricProfile, issues: [] as ValidationIssue[] }
-    : extractProjectedProfile({ ...input, settings: input.settings });
+    : extractProjectedProfile({
+        mesh: input.mesh!,
+        bounds: input.bounds!,
+        modelId: input.modelId!,
+        materialThicknessMm: input.materialThicknessMm,
+        settings: input.settings,
+      });
   if (!extracted.profile) return incompatibleResult(input, extracted.issues);
   let profile = extracted.profile;
   if (extracted.issues.some((issue) => issue.severity === 'error')) {
@@ -993,11 +1020,11 @@ export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerati
       const issues: ValidationIssue[] = [
         ...extracted.issues,
         {
-          id: `template-dimensions-too-small-${input.modelId}`,
+          id: `template-dimensions-too-small-${sourceId}`,
           severity: 'error',
           code: 'TEMPLATE_INCOMPATIBLE',
           message: 'Custom template dimensions are smaller than the fitted model envelope.',
-          affectedEntityIds: [input.modelId],
+          affectedEntityIds: [sourceId],
           suggestedAction: 'Increase width, length, and height to at least the fitted values.',
         },
       ];
@@ -1127,17 +1154,19 @@ export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerati
   } else {
     built = pyramidNet(input, profile);
   }
+  const edited = applyFoldingConnectionEditing(built, input.settings, input.materialThicknessMm);
+  built = edited;
   const issues = [...extracted.issues, ...built.issues];
   if (
     wallHeightMm < profile.depthMm &&
     ['open-box', 'box-with-lid'].includes(input.settings.templateKind)
   ) {
     issues.push({
-      id: `template-wall-short-${input.modelId}`,
+      id: `template-wall-short-${sourceId}`,
       severity: 'warning',
       code: 'TEMPLATE_INCOMPATIBLE',
       message: 'The selected wall height is shorter than the model depth.',
-      affectedEntityIds: [input.modelId],
+      affectedEntityIds: [sourceId],
       suggestedAction: 'Increase wall height to fully contain the model.',
     });
   }
@@ -1151,10 +1180,11 @@ export function generateFoldTemplate(input: FoldTemplateInput): TemplateGenerati
     parts: built.parts,
     issues,
     assembledPreview: { panels: built.assembled },
+    editableEdges: edited.editableEdges,
     resolvedDimensions,
     algorithmVersion: FOLDING_ALGORITHM_VERSION,
     inputHash: deterministicFoldingHash({
-      mesh: input.mesh,
+      ...(input.mesh ? { mesh: input.mesh } : {}),
       settings: input.settings,
       materialThicknessMm: input.materialThicknessMm,
     }),

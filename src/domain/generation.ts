@@ -1,8 +1,10 @@
 import type { FabricationMode } from './fabrication';
 import type { SerializableTriangleMesh } from './geometry';
-import type { ProjectData } from './project';
+import type { LegacyProjectData, ProjectData } from './project';
+import { hashSerializable } from './canonicalHash';
+import { canonicalGenerationSignature } from './generationInputs';
 
-export interface GenerationRecord {
+export interface LegacyGenerationRecord {
   mode: FabricationMode;
   sourceModelId: string;
   sourceMeshHash: string;
@@ -13,33 +15,28 @@ export interface GenerationRecord {
   generatedAt: string;
 }
 
+export interface CanonicalGenerationRecord {
+  signatureVersion: 2;
+  mode: FabricationMode;
+  inputHash: string;
+  resultHash: string;
+  algorithmVersion: string;
+  generatedAt: string;
+}
+
+export type GenerationRecord = LegacyGenerationRecord | CanonicalGenerationRecord;
+
 export type GenerationState = 'absent' | 'ready' | 'stale' | 'invalid' | 'legacy-unverified';
 export type GenerationBlockingReason =
   'GENERATION_ABSENT' | 'GENERATION_STALE' | 'GENERATION_INVALID' | 'GENERATION_UNVERIFIED';
 
-function stable(value: unknown): string {
-  if (value === null || typeof value !== 'object') return JSON.stringify(value);
-  if (Array.isArray(value)) return `[${value.map(stable).join(',')}]`;
-  return `{${Object.keys(value as Record<string, unknown>)
-    .sort()
-    .map((key) => `${JSON.stringify(key)}:${stable((value as Record<string, unknown>)[key])}`)
-    .join(',')}}`;
-}
-
-export function hashSerializable(value: unknown): string {
-  let hash = 2166136261;
-  for (const character of stable(value)) {
-    hash ^= character.charCodeAt(0);
-    hash = Math.imul(hash, 16777619);
-  }
-  return `sf9-${(hash >>> 0).toString(16).padStart(8, '0')}`;
-}
+export { hashSerializable } from './canonicalHash';
 
 export function hashSerializableMesh(mesh: SerializableTriangleMesh | undefined): string {
   return hashSerializable(mesh ?? null);
 }
 
-export function expectedGenerationSignature(project: ProjectData) {
+export function legacyGenerationSignature(project: LegacyProjectData) {
   return {
     mode: project.fabricationMode,
     sourceModelId: project.model.id,
@@ -49,19 +46,58 @@ export function expectedGenerationSignature(project: ProjectData) {
   };
 }
 
+export function expectedGenerationSignature(project: ProjectData) {
+  return canonicalGenerationSignature(project);
+}
+
+export function upgradeLegacyGenerationRecord(
+  legacyProject: LegacyProjectData,
+  project: ProjectData,
+): ProjectData {
+  const record = legacyProject.generationRecord;
+  if (!record) return project;
+  if ('signatureVersion' in record) return { ...project, generationRecord: record };
+  const legacy = legacyGenerationSignature(legacyProject);
+  if (
+    record.mode !== legacy.mode ||
+    record.sourceModelId !== legacy.sourceModelId ||
+    record.sourceMeshHash !== legacy.sourceMeshHash ||
+    record.settingsHash !== legacy.settingsHash ||
+    record.materialHash !== legacy.materialHash
+  ) {
+    const unverified: ProjectData = { ...project };
+    delete unverified.generationRecord;
+    return unverified;
+  }
+  try {
+    return {
+      ...project,
+      generationRecord: {
+        ...canonicalGenerationSignature(project),
+        resultHash: record.resultHash,
+        algorithmVersion: record.algorithmVersion,
+        generatedAt: record.generatedAt,
+      },
+    };
+  } catch {
+    const unverified: ProjectData = { ...project };
+    delete unverified.generationRecord;
+    return unverified;
+  }
+}
+
 export function deriveGenerationState(project: ProjectData): GenerationState {
   if (project.generatedParts.length === 0) return 'absent';
   const record = project.generationRecord;
   if (!record) return 'legacy-unverified';
-  const expected = expectedGenerationSignature(project);
-  if (
-    record.mode !== expected.mode ||
-    record.sourceModelId !== expected.sourceModelId ||
-    record.sourceMeshHash !== expected.sourceMeshHash ||
-    record.settingsHash !== expected.settingsHash ||
-    record.materialHash !== expected.materialHash
-  )
-    return 'stale';
+  if (!('signatureVersion' in record)) return 'legacy-unverified';
+  let expected: ReturnType<typeof canonicalGenerationSignature>;
+  try {
+    expected = canonicalGenerationSignature(project);
+  } catch {
+    return 'invalid';
+  }
+  if (record.mode !== expected.mode || record.inputHash !== expected.inputHash) return 'stale';
   return project.generationIssues?.some((issue) => issue.severity === 'error')
     ? 'invalid'
     : 'ready';
