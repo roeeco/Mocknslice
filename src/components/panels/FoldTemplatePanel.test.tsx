@@ -90,7 +90,7 @@ describe('FoldTemplatePanel', () => {
     expect(screen.getByText(/5 panels/)).toBeVisible();
   });
 
-  it('keeps 3D and keyboard connection selection synchronized with typed edits', async () => {
+  it('keeps compact keyboard edge selection synchronized with the 3D editor', async () => {
     const user = userEvent.setup();
     const project = useProjectStore.getState().project;
     if (!project.model.mesh || !project.model.bounds)
@@ -114,22 +114,15 @@ describe('FoldTemplatePanel', () => {
     });
     render(<FoldTemplatePanel />);
 
-    const connectionButton = screen
-      .getAllByRole('listitem')
-      .find((button) => button.textContent?.includes('↔'))!;
-    await user.click(connectionButton);
+    await user.click(screen.getByText('Connections and glue tabs'));
+    const edgeSelect = screen.getByLabelText('Editable assembly edges');
+    const connectionOption = Array.from(edgeSelect.querySelectorAll('option')).find((option) =>
+      option.textContent?.includes('↔'),
+    )!;
+    await user.selectOptions(edgeSelect, connectionOption.value);
     const selectedId = useProjectStore.getState().selectedEntityId;
     expect(selectedId).toBeTruthy();
-    const historyBefore = useProjectStore.getState().past.length;
-    await user.selectOptions(screen.getByLabelText('Edge treatment'), 'cut');
-
-    expect(
-      useProjectStore
-        .getState()
-        .project.modeSettings.foldTemplate.connectionOverrides.find(
-          (override) => override.connectionId === selectedId,
-        ),
-    ).toMatchObject({ treatment: 'cut', closure: 'none' });
-    expect(useProjectStore.getState().past).toHaveLength(historyBefore + 1);
+    expect(screen.queryByLabelText('Edge treatment')).not.toBeInTheDocument();
+    expect(screen.getByText(/Glue-tab depth:/)).toBeVisible();
   });
 });

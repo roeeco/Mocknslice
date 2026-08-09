@@ -75,16 +75,44 @@ export function FoldingAssembly() {
         <PanelMesh key={panel.id} panel={panel} index={index} relatedPanelIds={relatedPanelIds} />
       ))}
       <ConnectionEdgeTargets
+        mode="fold-template"
         edges={result?.editableEdges ?? []}
         colourFor={(edge) => {
           if (edge.kind === 'boundary') return '#64748b';
           const override = project.modeSettings.foldTemplate.connectionOverrides.find(
-            (candidate) => candidate.connectionId === edge.id,
+            (candidate) =>
+              candidate.templateKind === project.modeSettings.foldTemplate.templateKind &&
+              candidate.connectionId === edge.id,
           );
           const connection = result?.connections.find((candidate) => candidate.id === edge.id);
           const treatment =
             override?.treatment ?? (connection?.disposition === 'hinge' ? 'crease' : 'cut');
           return treatment === 'crease' ? '#2563eb' : '#dc2626';
+        }}
+        appearanceFor={(edge) => {
+          if (edge.kind === 'boundary') {
+            return {
+              treatment: 'boundary',
+              hasGlueTab: project.modeSettings.foldTemplate.boundaryGlueTabs.some(
+                (tab) =>
+                  tab.templateKind === project.modeSettings.foldTemplate.templateKind &&
+                  tab.edgeId === edge.id,
+              ),
+              overridden: false,
+            };
+          }
+          const override = project.modeSettings.foldTemplate.connectionOverrides.find(
+            (candidate) =>
+              candidate.templateKind === project.modeSettings.foldTemplate.templateKind &&
+              candidate.connectionId === edge.id,
+          );
+          const connection = result?.connections.find((candidate) => candidate.id === edge.id);
+          return {
+            treatment:
+              override?.treatment ?? (connection?.disposition === 'hinge' ? 'crease' : 'cut'),
+            hasGlueTab: override?.closure === 'glue-tab',
+            overridden: Boolean(override),
+          };
         }}
       />
     </>

@@ -32,18 +32,6 @@ interface DragState {
 interface ViewState {
   sheetId: string;
   zoom: number;
-  centerX: number;
-  centerY: number;
-}
-
-interface PanState {
-  pointerId: number;
-  startClientX: number;
-  startClientY: number;
-  originCenterX: number;
-  originCenterY: number;
-  unitsPerPixelX: number;
-  unitsPerPixelY: number;
 }
 
 const MIN_ZOOM = 0.5;
@@ -52,11 +40,6 @@ const ZOOM_STEP = 0.25;
 
 function clampZoom(value: number) {
   return Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, value));
-}
-
-function clampCenter(center: number, sheetSize: number, viewSize: number) {
-  if (viewSize >= sheetSize) return sheetSize / 2;
-  return Math.max(viewSize / 2, Math.min(sheetSize - viewSize / 2, center));
 }
 
 function decimal(value: number): string {
@@ -227,7 +210,6 @@ function PartOnSheet({
 export function TwoViewport() {
   const svgRef = useRef<SVGSVGElement>(null);
   const [drag, setDrag] = useState<DragState>();
-  const [pan, setPan] = useState<PanState>();
   const [storedView, setStoredView] = useState<ViewState>();
   const project = useProjectStore((state) => state.project);
   const experienceMode = useProjectStore((state) => state.experienceMode);
@@ -257,14 +239,9 @@ export function TwoViewport() {
       : {
           sheetId: sheet.id,
           zoom: 1,
-          centerX: sheet.widthMm / 2,
-          centerY: sheet.heightMm / 2,
         };
   const zoom = view.zoom;
-  const viewWidth = sheet.widthMm / zoom;
-  const viewHeight = sheet.heightMm / zoom;
-  const viewX = view.centerX - viewWidth / 2;
-  const viewY = view.centerY - viewHeight / 2;
+  const sheetAspectRatio = sheet.widthMm / sheet.heightMm;
 
   const partsById = new Map(preparedParts.map((part) => [part.id, part]));
   const invalidIds = new Set(
@@ -307,32 +284,19 @@ export function TwoViewport() {
       y: placement.y,
     });
   };
-  const setZoomAt = (requestedZoom: number, focus?: Point2D) => {
+  const setZoom = (requestedZoom: number) => {
     const nextZoom = clampZoom(requestedZoom);
-    const anchor = focus ?? { x: view.centerX, y: view.centerY };
-    const relativeX = (anchor.x - viewX) / viewWidth;
-    const relativeY = (anchor.y - viewY) / viewHeight;
-    const nextViewWidth = sheet.widthMm / nextZoom;
-    const nextViewHeight = sheet.heightMm / nextZoom;
-    const nextCenterX = anchor.x - (relativeX - 0.5) * nextViewWidth;
-    const nextCenterY = anchor.y - (relativeY - 0.5) * nextViewHeight;
     setStoredView({
       sheetId: sheet.id,
       zoom: nextZoom,
-      centerX: clampCenter(nextCenterX, sheet.widthMm, nextViewWidth),
-      centerY: clampCenter(nextCenterY, sheet.heightMm, nextViewHeight),
     });
   };
   const resetView = () =>
     setStoredView({
       sheetId: sheet.id,
       zoom: 1,
-      centerX: sheet.widthMm / 2,
-      centerY: sheet.heightMm / 2,
     });
   const handleWheel = (event: WheelEvent<SVGSVGElement>) => {
-    const focus = screenPoint(event.currentTarget, event.clientX, event.clientY);
-    if (!focus) return;
     event.preventDefault();
     const delta =
       event.deltaMode === 1
@@ -340,40 +304,9 @@ export function TwoViewport() {
         : event.deltaMode === 2
           ? event.deltaY * event.currentTarget.clientHeight
           : event.deltaY;
-    setZoomAt(zoom * Math.exp(-delta * 0.002), focus);
-  };
-  const beginPan = (event: PointerEvent<SVGSVGElement>) => {
-    const target = event.target as Element;
-    if (event.button === 0 && target.closest('.sheet-part')) return;
-    if (event.button !== 0 && event.button !== 1) return;
-    const matrix = event.currentTarget.getScreenCTM();
-    if (!matrix || matrix.a === 0 || matrix.d === 0) return;
-    event.preventDefault();
-    event.currentTarget.setPointerCapture(event.pointerId);
-    setPan({
-      pointerId: event.pointerId,
-      startClientX: event.clientX,
-      startClientY: event.clientY,
-      originCenterX: view.centerX,
-      originCenterY: view.centerY,
-      unitsPerPixelX: Math.abs(1 / matrix.a),
-      unitsPerPixelY: Math.abs(1 / matrix.d),
-    });
+    setZoom(zoom * Math.exp(-delta * 0.002));
   };
   const continuePointerInteraction = (event: PointerEvent<SVGSVGElement>) => {
-    if (pan && event.pointerId === pan.pointerId) {
-      const nextCenterX =
-        pan.originCenterX - (event.clientX - pan.startClientX) * pan.unitsPerPixelX;
-      const nextCenterY =
-        pan.originCenterY - (event.clientY - pan.startClientY) * pan.unitsPerPixelY;
-      setStoredView({
-        sheetId: sheet.id,
-        zoom,
-        centerX: clampCenter(nextCenterX, sheet.widthMm, viewWidth),
-        centerY: clampCenter(nextCenterY, sheet.heightMm, viewHeight),
-      });
-      return;
-    }
     if (experienceMode === 'advanced' && drag && event.pointerId === drag.pointerId) {
       const point = screenPoint(event.currentTarget, event.clientX, event.clientY);
       if (!point) return;
@@ -385,12 +318,6 @@ export function TwoViewport() {
     }
   };
   const finishPointerInteraction = (event: PointerEvent<SVGSVGElement>) => {
-    if (pan && event.pointerId === pan.pointerId) {
-      if (event.currentTarget.hasPointerCapture(event.pointerId))
-        event.currentTarget.releasePointerCapture(event.pointerId);
-      setPan(undefined);
-      return;
-    }
     if (experienceMode === 'advanced' && drag && event.pointerId === drag.pointerId) {
       updatePartPlacement(sheet.id, drag.partId, { x: drag.x, y: drag.y });
       setDrag(undefined);
@@ -421,7 +348,7 @@ export function TwoViewport() {
           aria-label={copy.zoomOut}
           title={copy.zoomOut}
           disabled={zoom <= MIN_ZOOM}
-          onClick={() => setZoomAt(zoom - ZOOM_STEP)}
+          onClick={() => setZoom(zoom - ZOOM_STEP)}
         >
           −
         </button>
@@ -431,7 +358,7 @@ export function TwoViewport() {
           aria-label={copy.zoomIn}
           title={copy.zoomIn}
           disabled={zoom >= MAX_ZOOM}
-          onClick={() => setZoomAt(zoom + ZOOM_STEP)}
+          onClick={() => setZoom(zoom + ZOOM_STEP)}
         >
           +
         </button>
@@ -439,100 +366,100 @@ export function TwoViewport() {
           {copy.fitSheet}
         </button>
       </div>
-      <svg
-        ref={svgRef}
-        className={`sheet-preview interactive-sheet${pan ? ' is-panning' : ''}`}
-        viewBox={`${decimal(viewX)} ${decimal(viewY)} ${decimal(viewWidth)} ${decimal(viewHeight)}`}
-        data-zoom={zoom}
-        data-view-x={decimal(viewX)}
-        data-view-y={decimal(viewY)}
-        aria-label={`${sheet.widthMm} by ${sheet.heightMm} millimetre sheet`}
-        aria-describedby="sheet-navigation-help"
-        onWheel={handleWheel}
-        onPointerDown={beginPan}
-        onPointerMove={continuePointerInteraction}
-        onPointerUp={finishPointerInteraction}
-        onPointerCancel={() => {
-          setDrag(undefined);
-          setPan(undefined);
-        }}
-      >
-        <defs>
-          <pattern
-            id="tab-hatch"
-            width="3"
-            height="3"
-            patternUnits="userSpaceOnUse"
-            patternTransform="rotate(35)"
-          >
-            <rect width="3" height="3" fill="#d85c2f" fillOpacity="0.13" />
-            <line
-              x1="0"
-              y1="0"
-              x2="0"
-              y2="3"
-              stroke="#d85c2f"
-              strokeOpacity="0.55"
-              strokeWidth="0.45"
-            />
-          </pattern>
-        </defs>
-        <rect
-          x="0.5"
-          y="0.5"
-          width={Math.max(0, sheet.widthMm - 1)}
-          height={Math.max(0, sheet.heightMm - 1)}
-          fill="#fffdf8"
-          stroke="#315c52"
-          vectorEffect="non-scaling-stroke"
-        />
-        <rect
-          x={sheet.marginMm}
-          y={sheet.marginMm}
-          width={Math.max(0, sheet.widthMm - sheet.marginMm * 2)}
-          height={Math.max(0, sheet.heightMm - sheet.marginMm * 2)}
-          fill="none"
-          stroke="#b4aea0"
-          strokeDasharray="3 2"
-          vectorEffect="non-scaling-stroke"
-          pointerEvents="none"
-        />
-        {project.exportSettings.includeRegistrationMarks
-          ? createRegistrationMarkPaths(sheet).map((path) => (
-              <path
-                key={path.id}
-                d={pathData(
-                  path.points,
-                  { partId: 'registration', x: 0, y: 0, rotationDeg: 0 },
-                  false,
-                )}
-                fill="none"
-                stroke={styleByOperation.get('guide')?.stroke ?? '#6b7280'}
-                strokeWidth={styleByOperation.get('guide')?.strokeWidthMm ?? 0.35}
-                vectorEffect="non-scaling-stroke"
-                data-registration-mark="true"
-                pointerEvents="none"
+      <div className="sheet-document-stage">
+        <svg
+          ref={svgRef}
+          className="sheet-preview interactive-sheet"
+          viewBox={`0 0 ${decimal(sheet.widthMm)} ${decimal(sheet.heightMm)}`}
+          style={{
+            width: `min(${80 * zoom}%, ${76 * sheetAspectRatio * zoom}vh, ${660 * sheetAspectRatio * zoom}px)`,
+            height: 'auto',
+          }}
+          data-zoom={zoom}
+          aria-label={`${sheet.widthMm} by ${sheet.heightMm} millimetre sheet`}
+          aria-describedby="sheet-navigation-help"
+          onWheel={handleWheel}
+          onPointerMove={continuePointerInteraction}
+          onPointerUp={finishPointerInteraction}
+          onPointerCancel={() => setDrag(undefined)}
+        >
+          <defs>
+            <pattern
+              id="tab-hatch"
+              width="3"
+              height="3"
+              patternUnits="userSpaceOnUse"
+              patternTransform="rotate(35)"
+            >
+              <rect width="3" height="3" fill="#d85c2f" fillOpacity="0.13" />
+              <line
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="3"
+                stroke="#d85c2f"
+                strokeOpacity="0.55"
+                strokeWidth="0.45"
               />
-            ))
-          : null}
-        {placements.map(({ part, placement }) => (
-          <PartOnSheet
-            key={part.id}
-            part={part}
-            placement={placement}
-            selected={selectedPartId === part.id}
-            selectedEntityId={selectedEntityId}
-            relatedPanelIds={relatedPanelIds}
-            invalid={invalidIds.has(part.id)}
-            styleByOperation={styleByOperation}
-            labelFontSizeMm={project.exportSettings.labelFontSizeMm}
-            includeLabels={project.exportSettings.includeLabels}
-            onPointerDown={(event) => beginDrag(event, placement)}
-            onSelect={() => selectEntity(part.id, part.id)}
-            onSelectEntity={selectEntity}
+            </pattern>
+          </defs>
+          <rect
+            x="0.5"
+            y="0.5"
+            width={Math.max(0, sheet.widthMm - 1)}
+            height={Math.max(0, sheet.heightMm - 1)}
+            fill="#fffdf8"
+            stroke="#315c52"
+            vectorEffect="non-scaling-stroke"
           />
-        ))}
-      </svg>
+          <rect
+            x={sheet.marginMm}
+            y={sheet.marginMm}
+            width={Math.max(0, sheet.widthMm - sheet.marginMm * 2)}
+            height={Math.max(0, sheet.heightMm - sheet.marginMm * 2)}
+            fill="none"
+            stroke="#b4aea0"
+            strokeDasharray="3 2"
+            vectorEffect="non-scaling-stroke"
+            pointerEvents="none"
+          />
+          {project.exportSettings.includeRegistrationMarks
+            ? createRegistrationMarkPaths(sheet).map((path) => (
+                <path
+                  key={path.id}
+                  d={pathData(
+                    path.points,
+                    { partId: 'registration', x: 0, y: 0, rotationDeg: 0 },
+                    false,
+                  )}
+                  fill="none"
+                  stroke={styleByOperation.get('guide')?.stroke ?? '#6b7280'}
+                  strokeWidth={styleByOperation.get('guide')?.strokeWidthMm ?? 0.35}
+                  vectorEffect="non-scaling-stroke"
+                  data-registration-mark="true"
+                  pointerEvents="none"
+                />
+              ))
+            : null}
+          {placements.map(({ part, placement }) => (
+            <PartOnSheet
+              key={part.id}
+              part={part}
+              placement={placement}
+              selected={selectedPartId === part.id}
+              selectedEntityId={selectedEntityId}
+              relatedPanelIds={relatedPanelIds}
+              invalid={invalidIds.has(part.id)}
+              styleByOperation={styleByOperation}
+              labelFontSizeMm={project.exportSettings.labelFontSizeMm}
+              includeLabels={project.exportSettings.includeLabels}
+              onPointerDown={(event) => beginDrag(event, placement)}
+              onSelect={() => selectEntity(part.id, part.id)}
+              onSelectEntity={selectEntity}
+            />
+          ))}
+        </svg>
+      </div>
       <p className="visually-hidden" id="sheet-navigation-help">
         {copy.sheetNavigationHelp}
       </p>

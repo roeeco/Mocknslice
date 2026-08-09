@@ -37,7 +37,7 @@ import {
   type TopologyConnection,
 } from '../connections/topology2d';
 
-export const PANEL_CONSTRUCTION_ALGORITHM_VERSION = 'interactive-connections-v8';
+export const PANEL_CONSTRUCTION_ALGORITHM_VERSION = 'interlocking-panel-fingers-v8';
 
 export interface PanelConstructionInput {
   sourceId?: string;
@@ -85,8 +85,15 @@ interface EdgeTreatment {
   kind: PanelConnectionTreatment;
   segmentCount: number;
   phase: 0 | 1;
+  relief: 'protrude' | 'inset';
   depthMm: number;
   clearanceMm: number;
+  startGuardMm: number;
+  endGuardMm: number;
+  startFingerExtensionMm: number;
+  endFingerExtensionMm: number;
+  suppressStartFinger: boolean;
+  suppressEndFinger: boolean;
 }
 
 const edgeOrder: PanelEdgeName[] = ['bottom', 'right', 'top', 'left'];
@@ -259,39 +266,72 @@ function panelOutline(
       }
       continue;
     }
-    if (!treatment || treatment.kind !== 'finger') {
+    if (!treatment) {
+      pushUnique(points, geometry.end);
+      continue;
+    }
+    const edgeLength = Math.hypot(
+      geometry.end.x - geometry.start.x,
+      geometry.end.y - geometry.start.y,
+    );
+    const featureStart = pointAlong(
+      geometry.start,
+      geometry.end,
+      treatment.startGuardMm / edgeLength,
+    );
+    const featureEnd = pointAlong(
+      geometry.start,
+      geometry.end,
+      1 - treatment.endGuardMm / edgeLength,
+    );
+    pushUnique(points, featureStart);
+    if (treatment.kind !== 'finger') {
+      pushUnique(points, featureEnd);
       pushUnique(points, geometry.end);
       continue;
     }
     for (let index = 0; index < treatment.segmentCount; index += 1) {
-      const segmentStart = pointAlong(geometry.start, geometry.end, index / treatment.segmentCount);
-      const segmentEnd = pointAlong(
-        geometry.start,
-        geometry.end,
-        (index + 1) / treatment.segmentCount,
-      );
-      const protrudes = (index + treatment.phase) % 2 === 0;
-      if (protrudes) {
+      const segmentStart = pointAlong(featureStart, featureEnd, index / treatment.segmentCount);
+      const segmentEnd = pointAlong(featureStart, featureEnd, (index + 1) / treatment.segmentCount);
+      const hasRelief =
+        (index + treatment.phase) % 2 === 0 &&
+        !(index === 0 && treatment.suppressStartFinger) &&
+        !(index === treatment.segmentCount - 1 && treatment.suppressEndFinger);
+      if (hasRelief) {
         const segmentLength = Math.hypot(
           segmentEnd.x - segmentStart.x,
           segmentEnd.y - segmentStart.y,
         );
-        const inset = Math.min(0.49, treatment.clearanceMm / 2 / segmentLength);
-        const protrusionStart = pointAlong(segmentStart, segmentEnd, inset);
-        const protrusionEnd = pointAlong(segmentStart, segmentEnd, 1 - inset);
+        const clearanceDirection = treatment.relief === 'protrude' ? 1 : -1;
+        const inset = Math.max(
+          -0.49,
+          Math.min(0.49, (treatment.clearanceMm / 2 / segmentLength) * clearanceDirection),
+        );
+        const startExtension =
+          treatment.relief === 'protrude' && index === 0
+            ? treatment.startFingerExtensionMm / segmentLength
+            : 0;
+        const endExtension =
+          treatment.relief === 'protrude' && index === treatment.segmentCount - 1
+            ? treatment.endFingerExtensionMm / segmentLength
+            : 0;
+        const protrusionStart = pointAlong(segmentStart, segmentEnd, inset - startExtension);
+        const protrusionEnd = pointAlong(segmentStart, segmentEnd, 1 - inset + endExtension);
+        const reliefDirection = treatment.relief === 'protrude' ? 1 : -1;
         pushUnique(points, protrusionStart);
         pushUnique(points, {
-          x: protrusionStart.x + geometry.outward.x * treatment.depthMm,
-          y: protrusionStart.y + geometry.outward.y * treatment.depthMm,
+          x: protrusionStart.x + geometry.outward.x * treatment.depthMm * reliefDirection,
+          y: protrusionStart.y + geometry.outward.y * treatment.depthMm * reliefDirection,
         });
         pushUnique(points, {
-          x: protrusionEnd.x + geometry.outward.x * treatment.depthMm,
-          y: protrusionEnd.y + geometry.outward.y * treatment.depthMm,
+          x: protrusionEnd.x + geometry.outward.x * treatment.depthMm * reliefDirection,
+          y: protrusionEnd.y + geometry.outward.y * treatment.depthMm * reliefDirection,
         });
         pushUnique(points, protrusionEnd);
       }
       pushUnique(points, segmentEnd);
     }
+    pushUnique(points, geometry.end);
   }
   return points;
 }
@@ -484,6 +524,8 @@ function panelSpecs(
   settings: PanelConstructionSettings,
   material: PanelConstructionMaterial,
 ): PanelSpec[] {
+  const wallThickness = panelThicknessMm(settings, material);
+  const outerWidth = settings.innerWidthMm + wallThickness * 2;
   const specs: PanelSpec[] = [
     {
       role: 'base',
@@ -494,14 +536,14 @@ function panelSpecs(
     {
       role: 'front',
       name: 'Front panel',
-      widthMm: settings.innerWidthMm,
+      widthMm: outerWidth,
       heightMm: settings.innerHeightMm,
       profile: settings.panelProfiles?.front ?? 'flat',
     },
     {
       role: 'back',
       name: 'Back panel',
-      widthMm: settings.innerWidthMm,
+      widthMm: outerWidth,
       heightMm: settings.innerHeightMm,
       profile: settings.panelProfiles?.back ?? 'flat',
     },
@@ -871,8 +913,17 @@ function assembledPanels(
 function logicalPanelEdge(
   panel: PanelConstructionPanel,
   edge: PanelEdgeName,
+  sharedLengthMm?: number,
 ): { start: Point2D; end: Point2D } {
   const geometry = edgeGeometry(edge, panel.widthMm, panel.heightMm);
+  const length = Math.hypot(geometry.end.x - geometry.start.x, geometry.end.y - geometry.start.y);
+  if (sharedLengthMm !== undefined && sharedLengthMm < length - 1e-6) {
+    const guard = (length - sharedLengthMm) / 2;
+    return {
+      start: pointAlong(geometry.start, geometry.end, guard / length),
+      end: pointAlong(geometry.start, geometry.end, 1 - guard / length),
+    };
+  }
   return { start: geometry.start, end: geometry.end };
 }
 
@@ -885,10 +936,10 @@ function editablePanelEdges(
   const panelById = new Map(panels.map((panel) => [panel.id, panel]));
   const assembledById = new Map(assembled.map((panel) => [panel.id, panel]));
   const result: NonNullable<PanelConstructionResult['editableEdges']> = [];
-  const worldSegment = (panelId: string, edge: PanelEdgeName) => {
+  const worldSegment = (panelId: string, edge: PanelEdgeName, sharedLengthMm?: number) => {
     const panel = panelById.get(panelId)!;
     const assembledPanel = assembledById.get(panelId)!;
-    const geometry = logicalPanelEdge(panel, edge);
+    const geometry = logicalPanelEdge(panel, edge, sharedLengthMm);
     const indexFor = (point: Point2D) =>
       panel.outline.findIndex(
         (candidate) => Math.hypot(candidate.x - point.x, candidate.y - point.y) <= 1e-5,
@@ -904,7 +955,11 @@ function editablePanelEdges(
     (candidate) =>
       candidate.connectionKey && candidate.edgeA !== 'face' && candidate.edgeB !== 'face',
   )) {
-    const segment = worldSegment(joint.panelAId, joint.edgeA as PanelEdgeName);
+    const segment = worldSegment(
+      joint.panelAId,
+      joint.edgeA as PanelEdgeName,
+      joint.sharedLengthMm,
+    );
     result.push({
       id: joint.connectionKey!,
       kind: 'connection',
@@ -975,8 +1030,8 @@ function applyPanelConnectionEditing(
         id: joint.id,
         panelAId: panelA.id,
         panelBId: panelB.id,
-        edgeA: logicalPanelEdge(panelA, joint.edgeA),
-        edgeB: logicalPanelEdge(panelB, joint.edgeB),
+        edgeA: logicalPanelEdge(panelA, joint.edgeA, joint.sharedLengthMm),
+        edgeB: logicalPanelEdge(panelB, joint.edgeB, joint.sharedLengthMm),
       },
     ];
   });
@@ -1013,7 +1068,10 @@ function applyPanelConnectionEditing(
 
   const tabDepth = input.settings.glueTabDepthMm ?? 8;
   const tabs: FoldTab[] = [];
-  const tabEdges = new Map<string, { id: string; panelId: string; edge: PanelEdgeName }>();
+  const tabEdges = new Map<
+    string,
+    { id: string; panelId: string; edge: PanelEdgeName; sharedLengthMm?: number }
+  >();
   for (const joint of pairedTabJoints) {
     const ownerId = joint.tabOwnerPanelId!;
     const edge = ownerId === joint.panelAId ? joint.edgeA : joint.edgeB;
@@ -1028,7 +1086,12 @@ function applyPanelConnectionEditing(
       });
       continue;
     }
-    tabEdges.set(`${ownerId}:${edge}`, { id: `${joint.id}-glue-tab`, panelId: ownerId, edge });
+    tabEdges.set(`${ownerId}:${edge}`, {
+      id: `${joint.id}-glue-tab`,
+      panelId: ownerId,
+      edge,
+      sharedLengthMm: joint.sharedLengthMm,
+    });
   }
   for (const record of boundaryTabs) {
     const panel = panelById.get(record.ownerPanelId);
@@ -1087,7 +1150,7 @@ function applyPanelConnectionEditing(
         });
         const tab = [...tabEdges.values()].find((candidate) => {
           if (candidate.panelId !== panel.id) return false;
-          const logical = logicalPanelEdge(panel, candidate.edge);
+          const logical = logicalPanelEdge(panel, candidate.edge, candidate.sharedLengthMm);
           return sameSegment(start, end, logical.start, logical.end);
         });
         if (omittedForCrease || tab) return;
@@ -1100,7 +1163,7 @@ function applyPanelConnectionEditing(
       for (const tab of [...tabEdges.values()].filter(
         (candidate) => candidate.panelId === panel.id,
       )) {
-        const logical = logicalPanelEdge(panel, tab.edge);
+        const logical = logicalPanelEdge(panel, tab.edge, tab.sharedLengthMm);
         const length = Math.hypot(logical.end.x - logical.start.x, logical.end.y - logical.start.y);
         if (length < tabDepth * 2 || tabDepth > Math.min(15, length * 0.35) + 1e-6) {
           issues.push({
@@ -1588,17 +1651,47 @@ export function generatePanelConstruction(input: PanelConstructionInput): PanelC
         jointId: id,
         kind: resolved.kind,
         segmentCount: count,
-        phase: 0,
+        phase: spec.panelA === 'base' || spec.panelA === 'lid' ? 1 : 0,
+        relief: spec.panelA === 'base' || spec.panelA === 'lid' ? 'protrude' : 'inset',
         depthMm: thicknessForRole(spec.panelB, input.settings, input.material),
         clearanceMm: resolved.fabricationClearanceMm,
+        startGuardMm: 0,
+        endGuardMm: 0,
+        startFingerExtensionMm: 0,
+        endFingerExtensionMm: 0,
+        suppressStartFinger: false,
+        suppressEndFinger: false,
       };
       const treatmentB: EdgeTreatment = {
         jointId: id,
         kind: resolved.kind,
         segmentCount: count,
-        phase: resolved.kind === 'finger' ? 1 : 0,
+        phase: 0,
+        relief: 'protrude',
         depthMm: thicknessForRole(spec.panelA, input.settings, input.material),
         clearanceMm: resolved.fabricationClearanceMm,
+        startGuardMm:
+          (spec.panelB === 'front' || spec.panelB === 'back') &&
+          (spec.edgeB === 'bottom' || spec.edgeB === 'top')
+            ? panelThicknessMm(input.settings, input.material)
+            : 0,
+        endGuardMm:
+          (spec.panelB === 'front' || spec.panelB === 'back') &&
+          (spec.edgeB === 'bottom' || spec.edgeB === 'top')
+            ? panelThicknessMm(input.settings, input.material)
+            : 0,
+        startFingerExtensionMm:
+          (spec.panelB === 'left' || spec.panelB === 'right') &&
+          (spec.edgeB === 'bottom' || spec.edgeB === 'top')
+            ? panelThicknessMm(input.settings, input.material)
+            : 0,
+        endFingerExtensionMm:
+          (spec.panelB === 'left' || spec.panelB === 'right') &&
+          (spec.edgeB === 'bottom' || spec.edgeB === 'top')
+            ? panelThicknessMm(input.settings, input.material)
+            : 0,
+        suppressStartFinger: false,
+        suppressEndFinger: false,
       };
       treatmentsByRole.get(spec.panelA)!.set(spec.edgeA, treatmentA);
       treatmentsByRole.get(spec.panelB)!.set(spec.edgeB, treatmentB);

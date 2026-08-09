@@ -67,6 +67,15 @@ function previewFeature(drag: FeatureDrag): PanelFeature {
     : resizedFeature(drag.original, drag.delta);
 }
 
+function featureDimensions(feature: PanelFeature): string | undefined {
+  const format = (value: number) => String(Math.round(value * 1_000) / 1_000);
+  if (feature.kind === 'rectangular-cutout') {
+    return `${format(feature.widthMm)} × ${format(feature.heightMm)} mm`;
+  }
+  if (feature.kind === 'circular-cutout') return `Ø ${format(feature.diameterMm)} mm`;
+  return undefined;
+}
+
 function resizeHandlePoint(feature: PanelFeature, centre: Point2D): Point2D | undefined {
   if (feature.kind === 'engraved-label') return undefined;
   if (feature.kind === 'circular-cutout') {
@@ -118,6 +127,10 @@ export function PanelLocalPreview({
   const features = settings.features
     .filter((feature) => feature.targetRole === panelRole)
     .map((feature) => (drag?.featureId === feature.id ? previewFeature(drag) : feature));
+  const selectedPreviewFeature = features.find((feature) => feature.id === selectedFeatureId);
+  const selectedDimensions = selectedPreviewFeature
+    ? featureDimensions(selectedPreviewFeature)
+    : undefined;
   const margin = Math.max(12, Math.min(dimensions.widthMm, dimensions.heightMm) * 0.12);
   const panelBounds = panel.outline.reduce(
     (bounds, point) => ({
@@ -156,9 +169,13 @@ export function PanelLocalPreview({
     if (!drag || drag.pointerId !== event.pointerId) return;
     const point = localPoint(event.currentTarget, event.clientX, event.clientY);
     if (!point) return;
+    let delta = { x: point.x - drag.start.x, y: point.y - drag.start.y };
+    if (drag.mode === 'move' && event.shiftKey) {
+      delta = Math.abs(delta.x) >= Math.abs(delta.y) ? { x: delta.x, y: 0 } : { x: 0, y: delta.y };
+    }
     setDrag({
       ...drag,
-      delta: { x: point.x - drag.start.x, y: point.y - drag.start.y },
+      delta,
     });
   };
   const finishDrag = (event: PointerEvent<SVGSVGElement>) => {
@@ -282,7 +299,17 @@ export function PanelLocalPreview({
           );
         })}
       </svg>
-      <p className="field-help">{copy.panelComposer.coordinateHelp}</p>
+      {selectedDimensions ? (
+        <output
+          className="panel-feature-dimensions"
+          aria-label={copy.panelComposer.openingDimensions}
+        >
+          {selectedDimensions}
+        </output>
+      ) : null}
+      <p className="field-help">
+        {copy.panelComposer.coordinateHelp} {copy.panelComposer.dragSnapHelp}
+      </p>
     </div>
   );
 }

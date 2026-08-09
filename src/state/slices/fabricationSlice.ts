@@ -506,6 +506,9 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
           });
           const nextProject = changed.project ?? state.project;
           const generationSucceeded = result.parts.length > 0;
+          const retainedEdge = result.editableEdges?.find(
+            (edge) => edge.id === state.selectedEntityId,
+          );
           return {
             ...changed,
             sliceGenerationStatus: generationSucceeded ? 'ready' : 'error',
@@ -516,8 +519,13 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
                   result.issues.find((issue) => issue.severity === 'error')?.message,
                 ),
             validationIssues: validationIssuesForProject(nextProject),
-            selectedEntityId: result.panels[0]?.id ?? result.parts[0]?.id,
-            selectedPartId: result.panels[0]?.partId ?? result.parts[0]?.id,
+            selectedEntityId: retainedEdge?.id ?? result.panels[0]?.id ?? result.parts[0]?.id,
+            selectedPartId:
+              (retainedEdge
+                ? result.panels.find((panel) => panel.id === retainedEdge.panelAId)?.partId
+                : undefined) ??
+              result.panels[0]?.partId ??
+              result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
             activeWorkflowStep: state.activeWorkflowStep,
             completedWorkflowSteps: state.completedWorkflowSteps,
@@ -680,6 +688,9 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             });
           });
           const nextProject = changed.project ?? state.project;
+          const retainedEdge = result.editableEdges?.find(
+            (edge) => edge.id === state.selectedEntityId,
+          );
           return {
             ...changed,
             sliceGenerationStatus: result.parts.length > 0 ? 'ready' : 'error',
@@ -691,8 +702,13 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
                     result.issues.find((issue) => issue.severity === 'error')?.message,
                   ),
             validationIssues: validationIssuesForProject(nextProject),
-            selectedEntityId: result.panels[0]?.id ?? result.parts[0]?.id,
-            selectedPartId: result.panels[0]?.partId ?? result.parts[0]?.id,
+            selectedEntityId: retainedEdge?.id ?? result.panels[0]?.id ?? result.parts[0]?.id,
+            selectedPartId:
+              (retainedEdge
+                ? result.panels.find((panel) => panel.id === retainedEdge.panelAId)?.partId
+                : undefined) ??
+              result.panels[0]?.partId ??
+              result.parts[0]?.id,
             activeSheetId: nextProject.sheetLayouts[0]?.id,
             activeWorkflowStep: state.activeWorkflowStep,
             completedWorkflowSteps: state.completedWorkflowSteps,

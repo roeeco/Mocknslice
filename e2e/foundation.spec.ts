@@ -207,6 +207,22 @@ async function selectSheetContaining(page: Page, selector: string) {
   throw new Error(`No generated sheet contains ${selector}.`);
 }
 
+async function openDisclosure(page: Page, name: string) {
+  const summary = page.locator('summary').filter({ hasText: name }).first();
+  const details = summary.locator('..');
+  if ((await details.getAttribute('open')) === null) {
+    await summary.click();
+  }
+}
+
+async function selectEditableEdge(page: Page, name: RegExp) {
+  const select = page.getByLabel('Editable assembly edges');
+  const option = select.locator('option').filter({ hasText: name }).first();
+  const value = await option.getAttribute('value');
+  if (!value) throw new Error(`No editable edge matches ${name}.`);
+  await select.selectOption(value);
+}
+
 test('opens the foundation workspace and switches to the sheet preview', async ({ page }) => {
   const consoleErrors: string[] = [];
   page.on('console', (message) => {
@@ -232,31 +248,32 @@ test('opens the foundation workspace and switches to the sheet preview', async (
   await expect(page.getByRole('heading', { name: 'No fabrication parts yet' })).toBeVisible();
   const sheetPreview = page.getByRole('img', { name: /millimetre sheet/ });
   await expect(sheetPreview).toBeVisible();
+  const initialSheetBounds = await sheetPreview.boundingBox();
+  if (!initialSheetBounds) throw new Error('The 2D sheet preview has no rendered bounds.');
+  await expect(sheetPreview).toHaveAttribute('viewBox', '0 0 10 10');
   await expect(page.getByRole('button', { name: 'Zoom in' })).toBeVisible();
   await page.getByRole('button', { name: 'Zoom in' }).click();
   await expect(sheetPreview).toHaveAttribute('data-zoom', '1.25');
   await expect(page.getByLabel('Zoom level')).toHaveText('125%');
+  const enlargedSheetBounds = await sheetPreview.boundingBox();
+  if (!enlargedSheetBounds) throw new Error('The enlarged sheet preview has no rendered bounds.');
+  expect(enlargedSheetBounds.width).toBeGreaterThan(initialSheetBounds.width * 1.2);
+  expect(enlargedSheetBounds.height).toBeGreaterThan(initialSheetBounds.height * 1.2);
+  await expect(sheetPreview).toHaveAttribute('viewBox', '0 0 10 10');
   await page.getByRole('button', { name: 'Fit sheet' }).click();
   await expect(sheetPreview).toHaveAttribute('data-zoom', '1');
 
-  const sheetBounds = await sheetPreview.boundingBox();
-  if (!sheetBounds) throw new Error('The 2D sheet preview has no rendered bounds.');
   await page.mouse.move(
-    sheetBounds.x + sheetBounds.width * 0.3,
-    sheetBounds.y + sheetBounds.height * 0.2,
+    initialSheetBounds.x + initialSheetBounds.width * 0.3,
+    initialSheetBounds.y + initialSheetBounds.height * 0.2,
   );
   await page.mouse.wheel(0, -240);
   await expect(sheetPreview).not.toHaveAttribute('data-zoom', '1');
-  const viewBeforePan = await sheetPreview.getAttribute('viewBox');
-
-  await page.mouse.down();
-  await page.mouse.move(
-    sheetBounds.x + sheetBounds.width * 0.3 + 42,
-    sheetBounds.y + sheetBounds.height * 0.2 + 28,
-    { steps: 4 },
-  );
-  await page.mouse.up();
-  await expect.poll(() => sheetPreview.getAttribute('viewBox')).not.toBe(viewBeforePan);
+  const wheelZoomBounds = await sheetPreview.boundingBox();
+  if (!wheelZoomBounds) throw new Error('The wheel-zoomed sheet preview has no rendered bounds.');
+  expect(wheelZoomBounds.width).toBeGreaterThan(initialSheetBounds.width);
+  expect(wheelZoomBounds.height).toBeGreaterThan(initialSheetBounds.height);
+  await expect(sheetPreview).toHaveAttribute('viewBox', '0 0 10 10');
 
   await page.getByRole('button', { name: 'Fit sheet' }).click();
   await expect(sheetPreview).toHaveAttribute('viewBox', '0 0 10 10');
@@ -351,13 +368,13 @@ test('Simple panel construction skips source, Inspect, and Arrange and generates
   await page.getByRole('radio', { name: 'Panel construction' }).check();
   await page.getByRole('button', { name: 'Next' }).click();
 
-  await expect(page.getByText('Step 3 / 4')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Panel construction' })).toBeVisible();
   await page.getByLabel('Panel preset').selectOption('sorting-tray');
   await expect(page.getByRole('button', { name: /Import or create/ })).toHaveCount(0);
   await expect(page.getByRole('button', { name: /Inspect/ })).toHaveCount(0);
   await expect(page.getByRole('button', { name: /Arrange/ })).toHaveCount(0);
 
+  await openDisclosure(page, 'Openings & labels');
   await page.getByRole('button', { name: 'Base', exact: true }).click();
   await page.getByRole('button', { name: 'Label', exact: true }).click();
   await page.getByLabel('Label text').fill('Sort by colour');
@@ -384,6 +401,7 @@ test('edits a survey kit, exports feature geometry, and re-imports the v8 projec
 }) => {
   await page.goto('/');
   await reachClassroomRecipe(page, 'survey-ballot-box');
+  await openDisclosure(page, 'Openings & labels');
 
   await page.getByRole('button', { name: 'Lid', exact: true }).click();
   const responseSlot = page.locator('[data-feature-id="survey-response-slot"]');
@@ -430,6 +448,7 @@ test('edits a survey kit, exports feature geometry, and re-imports the v8 projec
     .locator('.workflow-nav')
     .getByRole('button', { name: /Configure/ })
     .click();
+  await openDisclosure(page, 'Openings & labels');
   await page.getByRole('button', { name: 'Lid', exact: true }).click();
   const importedLabel = page.locator('[data-feature-id^="panel-feature-"]');
   await expect(importedLabel).toBeVisible();
@@ -448,6 +467,7 @@ test('edits and generates the flash-card access notch in 2D and 3D', async ({ pa
   });
   await page.goto('/');
   await reachClassroomRecipe(page, 'flash-card-holder');
+  await openDisclosure(page, 'Openings & labels');
 
   const notch = page.locator('[data-feature-id="flash-card-access-notch"]');
   await expect(notch).toBeVisible();
@@ -771,18 +791,15 @@ test('builds paired connection overrides with bounded open-top panel profiles', 
   await page.getByLabel('Include a fully jointed lid').uncheck();
 
   await page.getByRole('button', { name: 'Generate', exact: true }).click();
+  await openDisclosure(page, 'Connections and glue tabs');
 
-  await page
-    .getByRole('listitem')
-    .filter({ hasText: /Base panel.*Front panel/ })
-    .click();
-  await page.getByLabel('Edge treatment').selectOption('butt');
-  await page
-    .getByRole('listitem')
-    .filter({ hasText: /Front panel.*Left panel/ })
-    .click();
+  await selectEditableEdge(page, /Base.*Front/);
+  await page.getByRole('button', { name: 'Butt joint' }).click();
+  await selectEditableEdge(page, /Front.*Left/);
   await page.getByLabel('Fit clearance (mm)').fill('0.25');
+  await expect(page.locator('.generation-status')).toContainText('Needs regeneration');
   await page.getByRole('button', { name: 'Regenerate', exact: true }).click();
+  await expect(page.locator('.generation-status')).toContainText('Current');
 
   await expect(page.getByRole('button', { name: 'Regenerate', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Next' }).click();
@@ -797,19 +814,29 @@ test('edits cardboard panel creases and glue seams, then exports v8 score metada
   await page.goto('/');
   await reachConfigureStep(page, 'Panel construction');
   await page.getByRole('button', { name: 'Generate', exact: true }).click();
+  await openDisclosure(page, 'Connections and glue tabs');
 
-  await page
-    .getByRole('listitem')
-    .filter({ hasText: /Base panel.*Front panel/ })
-    .click();
-  await page.getByLabel('Edge treatment').selectOption('crease');
-  await page
-    .getByRole('listitem')
-    .filter({ hasText: /Front panel.*Left panel/ })
-    .click();
-  await page.getByLabel('Edge treatment').selectOption('butt');
-  await page.getByLabel('Glue-tab owner').selectOption('construction-panel-front');
+  await selectEditableEdge(page, /Base.*Front/);
+  await page.getByRole('button', { name: 'Scored crease' }).click();
+  await selectEditableEdge(page, /Front.*Left/);
+  await page.getByRole('button', { name: 'Butt joint' }).click();
+  await page.getByRole('button', { name: /Glue tab: Front/ }).click();
+  await expect(page.locator('.generation-status')).toContainText('Needs regeneration');
   await page.getByRole('button', { name: 'Regenerate', exact: true }).click();
+  await expect(page.locator('.generation-status')).toContainText('Current');
+  await selectEditableEdge(page, /Base.*Back/);
+  await expect(
+    page.locator('.connection-treatment-badge').filter({ hasText: 'Scored crease' }),
+  ).toBeVisible();
+  await expect(
+    page.locator('.connection-treatment-badge').filter({ hasText: 'Glue tab' }),
+  ).toBeVisible();
+  await expect(page.getByRole('dialog', { name: /Edge treatment:/ })).toBeVisible();
+  const canvas = page.locator('canvas');
+  const canvasBox = await canvas.boundingBox();
+  if (!canvasBox) throw new Error('The 3D canvas is not visible.');
+  await canvas.click({ position: { x: 6, y: canvasBox.height - 6 } });
+  await expect(page.getByRole('dialog', { name: /Edge treatment:/ })).toHaveCount(0);
 
   await page.getByRole('button', { name: '2D parts' }).click();
   await expect(
@@ -846,20 +873,19 @@ test('splits a folding crease, adds a free glue tab, and exports cut and score l
   await page.goto('/');
   await reachConfigureStep(page, 'Folding template');
   await page.getByRole('button', { name: 'Generate', exact: true }).click();
+  await openDisclosure(page, 'Connections and glue tabs');
 
-  await page
-    .getByRole('listitem')
-    .filter({ hasText: /Base.*Bottom wall/ })
-    .first()
-    .click();
-  await page.getByLabel('Edge treatment').selectOption('cut');
-  await page
-    .getByRole('listitem')
-    .filter({ hasText: /Bottom wall ·/ })
-    .first()
-    .click();
+  await selectEditableEdge(page, /Base.*Bottom wall/);
+  await page.getByRole('button', { name: 'Cut', exact: true }).click();
+  await selectEditableEdge(page, /Bottom wall ·/);
   await page.getByRole('button', { name: 'Add free glue tab' }).click();
+  await expect(page.locator('.generation-status')).toContainText('Needs regeneration');
   await page.getByRole('button', { name: 'Regenerate', exact: true }).click();
+  await expect(page.locator('.generation-status')).toContainText('Current');
+  await selectEditableEdge(page, /Base.*Top wall/);
+  await expect(page.locator('.connection-treatment-badge[data-glue-tab="true"]')).toContainText(
+    'Glue tab',
+  );
 
   await page.getByRole('button', { name: '2D parts' }).click();
   await expect(page.locator('path[data-operation="score"][data-tab-id]')).not.toHaveCount(0);

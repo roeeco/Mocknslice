@@ -188,7 +188,7 @@ describe('architecture regression baselines', () => {
     );
     expect({ unfolding: hashSerializable(physicalResult(unfolding)), panels }).toEqual({
       unfolding: 'sf9-eade5786',
-      panels: ['sf9-c16442ca', 'sf9-3f5064ca', 'sf9-7a2aae82', 'sf9-dae2f04b', 'sf9-17fa3c2b'],
+      panels: ['sf9-4648fd8c', 'sf9-acfbe5be', 'sf9-240c104a', 'sf9-91262e65', 'sf9-d69afb69'],
     });
   });
 });

@@ -38,6 +38,7 @@ export function PanelConstructionPanel({
   const updateSettings = useProjectStore((state) => state.updatePanelComposerSettings);
   const generate = useProjectStore((state) => state.generatePanelConstruction);
   const cancel = useProjectStore((state) => state.cancelSliceGeneration);
+  const result = project.panelConstructionResult;
   if (project.fabricationMode !== 'panel-construction') return null;
 
   const settings = project.modeSettings.panelConstruction;
@@ -54,7 +55,6 @@ export function PanelConstructionPanel({
     settings.dividerThicknessMm,
   );
   const cells = panelCellMeasurements(settings);
-  const result = project.panelConstructionResult;
   const slotCount =
     result?.parts.flatMap((part) => part.paths).filter((path) => path.contourRole === 'hole')
       .length ?? 0;

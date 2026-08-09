@@ -24,6 +24,8 @@ This is a fabrication generator, not a general solid modeller. The source model 
 - Every paired edge has one stable joint ID and label on both panels.
 - Paired edges use the same odd segment count derived from their shared nominal length.
 - Finger joints alternate complementary protruding segments at material thickness.
+- Base/lid and wall edges alternate protruding fingers across the complete shared span, so each plate finger enters the wall thickness and every intervening wall finger enters the plate thickness.
+- At vertical enclosure corners, front/back receiver intervals alternate with side-panel fingers; the outermost side fingers extend by one wall thickness to meet the outside-width front/back panels.
 - Connection overrides are keyed by a physical panel pair, so both participating edges always resolve from the same family, pitch, and clearance specification.
 - Per-connection finger clearance shortens complementary fingers symmetrically without changing side-joint length.
 - Butt joints preserve straight outlines and explicitly require a separate fastening method.

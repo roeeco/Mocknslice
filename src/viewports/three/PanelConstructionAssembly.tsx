@@ -101,6 +101,7 @@ function ConstructionPanelMesh({
 
 export function PanelConstructionAssembly() {
   const result = useProjectStore((state) => state.project.panelConstructionResult);
+  const settings = useProjectStore((state) => state.project.modeSettings.panelConstruction);
   const panels = result?.assembledPreview.panels ?? EMPTY_PANELS;
   const heightMm = useProjectStore(
     (state) => state.project.panelConstructionResult?.settings.innerHeightMm ?? 0,
@@ -120,12 +121,29 @@ export function PanelConstructionAssembly() {
         />
       ))}
       <ConnectionEdgeTargets
+        mode="panel-construction"
         edges={result?.editableEdges ?? []}
         colourFor={(edge) => {
           if (edge.kind === 'boundary') return '#64748b';
           const treatment =
-            result?.settings.connectionOverrides?.[edge.id as PanelConnectionKey]?.treatment;
+            settings.connectionOverrides?.[edge.id as PanelConnectionKey]?.treatment ??
+            settings.jointKind;
           return treatment === 'crease' ? '#2563eb' : treatment === 'butt' ? '#7c3aed' : '#dc2626';
+        }}
+        appearanceFor={(edge) => {
+          if (edge.kind === 'boundary') {
+            return {
+              treatment: 'boundary',
+              hasGlueTab: settings.boundaryGlueTabs.some((tab) => tab.edgeId === edge.id),
+              overridden: false,
+            };
+          }
+          const override = settings.connectionOverrides?.[edge.id as PanelConnectionKey];
+          return {
+            treatment: override?.treatment ?? settings.jointKind,
+            hasGlueTab: Boolean(override?.glueTabOwnerPanelId),
+            overridden: Boolean(override),
+          };
         }}
       />
     </group>

@@ -132,55 +132,72 @@ export function PanelComposer() {
   const selectedIssues = selectedFeature
     ? validationIssues.filter((issue) => issue.affectedEntityIds.includes(selectedFeature.id))
     : [];
+  const featuresNeedRegeneration = Boolean(
+    settings.features.length > 0 &&
+    (!project.panelConstructionResult ||
+      hashSerializable(project.panelConstructionResult.settings.features ?? []) !==
+        hashSerializable(settings.features)),
+  );
 
   return (
-    <section className="panel-section panel-composer" aria-labelledby="panel-composer-heading">
-      <h2 id="panel-composer-heading">{copy.panelComposer.heading}</h2>
-      <p className="field-help">{copy.panelComposer.intro}</p>
-      <PanelSelector selected={panelRole} includeLid={settings.includeLid} onSelect={selectPanel} />
-      <PanelFeatureToolbar onAdd={add} />
-      <PanelLocalPreview
-        settings={settings}
-        panelRole={panelRole}
-        {...(exactPanel ? { exactPanel } : {})}
-        {...(selectedFeature ? { selectedFeatureId: selectedFeature.id } : {})}
-        onSelectFeature={selectFeature}
-        onCommitFeature={change}
-      />
-      <div className="panel-feature-list" aria-label={copy.panelComposer.featureList}>
-        {settings.features.filter((feature) => feature.targetRole === panelRole).length === 0 ? (
-          <p className="field-help">{copy.panelComposer.noFeatures}</p>
-        ) : (
-          settings.features
-            .filter((feature) => feature.targetRole === panelRole)
-            .map((feature) => (
-              <button
-                key={feature.id}
-                type="button"
-                aria-pressed={feature.id === selectedFeature?.id}
-                onClick={() => selectFeature(feature)}
-              >
-                {feature.purpose ||
-                  (feature.kind === 'engraved-label' ? feature.text : copy.panelComposer.opening)}
-              </button>
-            ))
-        )}
-      </div>
-      {selectedFeature ? (
-        <PanelFeatureInspector
-          feature={selectedFeature}
-          settings={settings}
-          experienceMode={experienceMode}
-          onChange={change}
-          onDuplicate={() => duplicate(selectedFeature)}
-          onDelete={() => remove(selectedFeature)}
+    <details className="panel-section panel-composer" aria-labelledby="panel-composer-heading">
+      <summary id="panel-composer-heading">{copy.panelComposer.heading}</summary>
+      <div className="panel-composer-body">
+        <p className="field-help">{copy.panelComposer.intro}</p>
+        <PanelSelector
+          selected={panelRole}
+          includeLid={settings.includeLid}
+          onSelect={selectPanel}
         />
-      ) : null}
-      {selectedIssues.length > 0 ? (
-        <div className="panel-feature-issues" aria-label={copy.panelComposer.featureIssues}>
-          <IssueList issues={selectedIssues} />
+        <PanelFeatureToolbar onAdd={add} />
+        {featuresNeedRegeneration ? (
+          <p className="manual-regeneration-notice" role="status">
+            {copy.panelComposer.regenerateNotice}
+          </p>
+        ) : null}
+        <PanelLocalPreview
+          settings={settings}
+          panelRole={panelRole}
+          {...(exactPanel ? { exactPanel } : {})}
+          {...(selectedFeature ? { selectedFeatureId: selectedFeature.id } : {})}
+          onSelectFeature={selectFeature}
+          onCommitFeature={change}
+        />
+        <div className="panel-feature-list" aria-label={copy.panelComposer.featureList}>
+          {settings.features.filter((feature) => feature.targetRole === panelRole).length === 0 ? (
+            <p className="field-help">{copy.panelComposer.noFeatures}</p>
+          ) : (
+            settings.features
+              .filter((feature) => feature.targetRole === panelRole)
+              .map((feature) => (
+                <button
+                  key={feature.id}
+                  type="button"
+                  aria-pressed={feature.id === selectedFeature?.id}
+                  onClick={() => selectFeature(feature)}
+                >
+                  {feature.purpose ||
+                    (feature.kind === 'engraved-label' ? feature.text : copy.panelComposer.opening)}
+                </button>
+              ))
+          )}
         </div>
-      ) : null}
-    </section>
+        {selectedFeature ? (
+          <PanelFeatureInspector
+            feature={selectedFeature}
+            settings={settings}
+            experienceMode={experienceMode}
+            onChange={change}
+            onDuplicate={() => duplicate(selectedFeature)}
+            onDelete={() => remove(selectedFeature)}
+          />
+        ) : null}
+        {selectedIssues.length > 0 ? (
+          <div className="panel-feature-issues" aria-label={copy.panelComposer.featureIssues}>
+            <IssueList issues={selectedIssues} />
+          </div>
+        ) : null}
+      </div>
+    </details>
   );
 }

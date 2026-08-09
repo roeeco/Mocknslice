@@ -124,14 +124,14 @@ describe('wizard workflow', () => {
     });
   });
 
-  it('numbers the currently visible workflow instead of using fixed phase numbers', () => {
+  it('uses the currently visible workflow without a redundant step counter', () => {
     useProjectStore.setState((state) => ({
       project: { ...state.project, fabricationMode: 'panel-construction' },
       activeWorkflowStep: 'configure',
       experienceMode: 'standard',
     }));
     const view = render(<WorkflowPanel />);
-    expect(screen.getByText('Step 3 / 4')).toBeVisible();
+    expect(screen.queryByText(/Step \d+ \/ \d+/)).not.toBeInTheDocument();
     expect(screen.getByLabelText('Panel preset')).toBeVisible();
     expect(screen.queryByLabelText('Material profile')).not.toBeInTheDocument();
     expect(screen.getByLabelText('Base and wall thickness')).toHaveAttribute('type', 'range');
@@ -143,7 +143,7 @@ describe('wizard workflow', () => {
       experienceMode: 'advanced',
     }));
     render(<WorkflowPanel />);
-    expect(screen.getByText('Step 4 / 7')).toBeVisible();
+    expect(screen.queryByText(/Step \d+ \/ \d+/)).not.toBeInTheDocument();
   });
 
   it('stores editable custom material values in the project snapshot', async () => {

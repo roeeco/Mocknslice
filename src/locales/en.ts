@@ -22,7 +22,7 @@ export const copy = {
   fitSheet: 'Fit sheet',
   zoomLevel: 'Zoom level',
   sheetNavigationHelp:
-    'Use the mouse wheel or trackpad to zoom. Drag the sheet background or use the middle mouse button to pan.',
+    'Use the mouse wheel or trackpad to enlarge the whole sheet, then scroll the workspace to inspect it.',
   noPartsTitle: 'No fabrication parts yet',
   noPartsBody: 'Choose a fabrication mode, configure it, then generate parts to inspect.',
   sheetLayout: 'Sheet layout',
@@ -305,9 +305,13 @@ export const copy = {
     noFeatures: 'This panel has no openings or labels yet.',
     localPreview: 'Panel-local preview',
     coordinateHelp: 'Horizontal runs left to right; vertical runs bottom to top in millimetres.',
+    dragSnapHelp: 'Hold Shift while dragging to lock movement to the X or Y axis.',
     keyboardMoveHelp:
       'Use arrow keys to move 1 mm, Shift plus an arrow for 10 mm, or Alt plus an arrow for 0.1 mm.',
     resizeHandle: 'Resize feature',
+    openingDimensions: 'Opening dimensions',
+    regenerateNotice:
+      'Openings or labels changed. Select Generate or Regenerate to update the 3D model and fabrication parts.',
     opening: 'Opening',
     label: 'Label',
     defaultLabel: 'Label',

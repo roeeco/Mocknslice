@@ -16,6 +16,8 @@ export function ThreeViewport() {
   const cameraPreset = useProjectStore((state) => state.cameraPreset);
   const setCameraPreset = useProjectStore((state) => state.setCameraPreset);
   const fitCamera = useProjectStore((state) => state.fitCamera);
+  const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
+  const selectEntity = useProjectStore((state) => state.selectEntity);
   const modelId = useProjectStore((state) => state.project.model.id);
   const hasImportedModel = useProjectStore(
     (state) => state.project.model.source.kind === 'imported',
@@ -28,6 +30,15 @@ export function ThreeViewport() {
   const panelHash = useProjectStore(
     (state) => state.project.panelConstructionResult?.inputHash ?? 'none',
   );
+  const selectedEdgeIsOpen = useProjectStore((state) => {
+    const edges =
+      state.project.fabricationMode === 'panel-construction'
+        ? state.project.panelConstructionResult?.editableEdges
+        : state.project.fabricationMode === 'fold-template'
+          ? state.project.foldingResult?.editableEdges
+          : undefined;
+    return Boolean(edges?.some((edge) => edge.id === state.selectedEntityId));
+  });
   const resetKey = `${modelId}:${fabricationMode}:${foldingHash}:${unfoldingHash}:${panelHash}`;
 
   return (
@@ -52,6 +63,9 @@ export function ThreeViewport() {
         <Canvas
           camera={{ position: [82, 68, 82], fov: 38 }}
           shadows
+          onPointerMissed={() => {
+            if (selectedEdgeIsOpen && selectedEntityId) selectEntity();
+          }}
           fallback={
             <div className="webgl-fallback" role="alert">
               3D preview is unavailable in this browser. Model inspection data is still available.

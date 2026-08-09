@@ -94,7 +94,7 @@ describe('PanelConstructionPanel', () => {
     expect(screen.getByText('5 panels · 8 joints')).toBeVisible();
   });
 
-  it('edits a generated connection through the accessible inspector with undo support', async () => {
+  it('keeps keyboard edge selection, fit clearance, and tab depth in the inspector', async () => {
     const user = userEvent.setup();
     const project = useProjectStore.getState().project;
     const result = generatePanelConstruction({
@@ -113,28 +113,26 @@ describe('PanelConstructionPanel', () => {
     });
     render(<PanelConstructionPanel />);
 
-    const edgeButton = screen
-      .getAllByRole('listitem')
-      .find(
-        (button) => button.textContent?.includes('Base') && button.textContent.includes('Front'),
-      )!;
-    await user.click(edgeButton);
+    const connectionDetails = screen.getByText('Connections and glue tabs').closest('details');
+    expect(connectionDetails).not.toHaveAttribute('open');
+    await user.click(screen.getByText('Connections and glue tabs'));
+    expect(connectionDetails).toHaveAttribute('open');
+    const edgeSelect = screen.getByLabelText('Editable assembly edges');
+    await user.selectOptions(edgeSelect, 'base-front');
     expect(useProjectStore.getState().selectedEntityId).toBe('base-front');
     const historyBefore = useProjectStore.getState().past.length;
-    await user.selectOptions(screen.getByLabelText('Edge treatment'), 'crease');
+    expect(screen.queryByLabelText('Edge treatment')).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText('Fit clearance (mm)'), {
+      target: { value: '0.25' },
+    });
 
     expect(
       useProjectStore.getState().project.modeSettings.panelConstruction.connectionOverrides[
         'base-front'
       ],
-    ).toEqual({ treatment: 'crease' });
+    ).toEqual({ treatment: 'finger', clearanceMm: 0.25 });
     expect(useProjectStore.getState().past).toHaveLength(historyBefore + 1);
-    useProjectStore.getState().undo();
-    expect(
-      useProjectStore.getState().project.modeSettings.panelConstruction.connectionOverrides[
-        'base-front'
-      ],
-    ).toBeUndefined();
+    expect(screen.getByText(/Glue-tab depth:/)).toBeVisible();
   });
 
   it('keeps finger width and slot clearance available for dividers with butt walls', async () => {

@@ -555,9 +555,6 @@ export function WorkflowPanel() {
   return (
     <div className="workflow-panel-shell">
       <div className="workflow-panel-content">
-        <p className="eyebrow workflow-step-position">
-          {copy.step} {index + 1} / {steps.length}
-        </p>
         <StepContents step={active} />
       </div>
       <footer className="workflow-footer">

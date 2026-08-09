@@ -30,6 +30,44 @@ function generate(overrides: Partial<PanelConstructionSettings> = {}) {
   });
 }
 
+function hasProperSelfIntersection(points: readonly { x: number; y: number }[]): boolean {
+  const cross = (
+    first: { x: number; y: number },
+    second: { x: number; y: number },
+    third: { x: number; y: number },
+  ) => (second.x - first.x) * (third.y - first.y) - (second.y - first.y) * (third.x - first.x);
+  for (let firstIndex = 0; firstIndex < points.length; firstIndex += 1) {
+    const firstStart = points[firstIndex]!;
+    const firstEnd = points[(firstIndex + 1) % points.length]!;
+    for (let secondIndex = firstIndex + 2; secondIndex < points.length; secondIndex += 1) {
+      if (firstIndex === 0 && secondIndex === points.length - 1) continue;
+      const secondStart = points[secondIndex]!;
+      const secondEnd = points[(secondIndex + 1) % points.length]!;
+      if (
+        cross(firstStart, firstEnd, secondStart) * cross(firstStart, firstEnd, secondEnd) < 0 &&
+        cross(secondStart, secondEnd, firstStart) * cross(secondStart, secondEnd, firstEnd) < 0
+      ) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function horizontalSegmentsAt(
+  points: readonly { x: number; y: number }[],
+  y: number,
+): Array<[number, number]> {
+  return points
+    .flatMap((start, index): Array<[number, number]> => {
+      const end = points[(index + 1) % points.length]!;
+      if (Math.abs(start.y - y) > 1e-6 || Math.abs(end.y - y) > 1e-6) return [];
+      return [[Math.min(start.x, end.x), Math.max(start.x, end.x)]];
+    })
+    .filter(([start, end]) => end - start > 1e-6)
+    .sort((left, right) => left[0] - right[0]);
+}
+
 describe('generatePanelConstruction', () => {
   it.each([
     ['butt', 5, 8, 0],
@@ -45,7 +83,7 @@ describe('generatePanelConstruction', () => {
       expect(first.parts).toHaveLength(panelCount);
       expect(first.joints).toHaveLength(jointCount);
       expect(first.assembledPreview.panels).toHaveLength(panelCount);
-      expect(first.algorithmVersion).toBe('interactive-connections-v8');
+      expect(first.algorithmVersion).toBe('interlocking-panel-fingers-v8');
       expect(first.inputHash).toMatch(/^sf9-[0-9a-f]{8}$/);
       expect(first.issues.some((issue) => issue.severity === 'error')).toBe(false);
       expect(
@@ -84,6 +122,29 @@ describe('generatePanelConstruction', () => {
     expect(result.issues).toEqual(
       expect.arrayContaining([expect.objectContaining({ code: 'CARDBOARD_FIT_UNVERIFIED' })]),
     );
+  });
+
+  it.each([
+    'base-front',
+    'base-back',
+    'base-left',
+    'base-right',
+    'front-left',
+    'front-right',
+    'back-left',
+    'back-right',
+  ] as const)('keeps the flush %s connection usable as a crease', (connectionKey) => {
+    const result = generate({
+      connectionOverrides: { [connectionKey]: { treatment: 'crease' } },
+    });
+
+    expect(result.issues.some((issue) => issue.severity === 'error')).toBe(false);
+    expect(result.parts).toHaveLength(4);
+    expect(
+      result.parts
+        .flatMap((part) => part.paths)
+        .some((path) => path.operation === 'score' && path.closed === false),
+    ).toBe(true);
   });
 
   it('adds a shouldered paired glue tab with a score at its base', () => {
@@ -156,6 +217,89 @@ describe('generatePanelConstruction', () => {
       if (joint.edgeB !== 'face') expect(panelB.edgeJointIds[joint.edgeB]).toBe(joint.id);
     }
     expect(result.panels.every((panel) => panel.outline.length > 4)).toBe(true);
+  });
+
+  it('keeps complementary finger relief inside one flush outer cuboid', () => {
+    const result = generate({ jointKind: 'finger' });
+    const base = result.panels.find((panel) => panel.role === 'base')!;
+    const front = result.panels.find((panel) => panel.role === 'front')!;
+    const right = result.panels.find((panel) => panel.role === 'right')!;
+    expect(base).toMatchObject({ widthMm: 80, heightMm: 60 });
+    expect(front).toMatchObject({ widthMm: 86, heightMm: 50 });
+    expect(right).toMatchObject({ widthMm: 60, heightMm: 50 });
+    expect(front.outline.some((point) => Math.abs(point.x) === 40)).toBe(true);
+    expect(right.outline.some((point) => Math.abs(point.x) === 33 && point.y === -28)).toBe(true);
+
+    for (const point of result.assembledPreview.panels.flatMap((panel) => panel.verticesMm)) {
+      expect(Math.abs(point[0])).toBeLessThanOrEqual(43);
+      expect(point[1]).toBeGreaterThanOrEqual(-3);
+      expect(point[1]).toBeLessThanOrEqual(50);
+      expect(Math.abs(point[2])).toBeLessThanOrEqual(33);
+    }
+  });
+
+  it('alternates base fingers with wall fingers across the full shared edge', () => {
+    const result = generate({ jointKind: 'finger', panelThicknessMm: 3 });
+    const base = result.panels.find((panel) => panel.role === 'base')!;
+    const front = result.panels.find((panel) => panel.role === 'front')!;
+    const baseFingers = horizontalSegmentsAt(base.outline, -33);
+    const wallFingers = horizontalSegmentsAt(front.outline, -28);
+    const alternating = [...baseFingers, ...wallFingers].sort((left, right) => left[0] - right[0]);
+
+    expect(baseFingers).toHaveLength(4);
+    expect(wallFingers).toHaveLength(5);
+    expect(alternating[0]![0]).toBeCloseTo(-40);
+    expect(alternating.at(-1)![1]).toBeCloseTo(40);
+    for (let index = 1; index < alternating.length; index += 1) {
+      expect(alternating[index]![0]).toBeCloseTo(alternating[index - 1]![1]);
+    }
+    for (const baseFinger of baseFingers) {
+      expect(
+        wallFingers.every(
+          (wallFinger) =>
+            Math.min(baseFinger[1], wallFinger[1]) - Math.max(baseFinger[0], wallFinger[0]) <= 1e-6,
+        ),
+      ).toBe(true);
+    }
+  });
+
+  it('assigns butt-joint corner volume to the spanning panels without overlap', () => {
+    const result = generate({ jointKind: 'butt' });
+    expect(result.panels.map((panel) => [panel.role, panel.widthMm, panel.heightMm])).toEqual([
+      ['base', 80, 60],
+      ['front', 86, 50],
+      ['back', 86, 50],
+      ['left', 60, 50],
+      ['right', 60, 50],
+    ]);
+    expect(result.panels.every((panel) => panel.outline.length >= 4)).toBe(true);
+  });
+
+  it('extends the outermost side-panel fingers into base and lid corners', () => {
+    const result = generate({ includeLid: true, jointKind: 'finger' });
+    const side = result.panels.find((panel) => panel.role === 'right')!;
+
+    expect(side.outline).toEqual(
+      expect.arrayContaining([
+        { x: -33, y: -28 },
+        { x: 33, y: -28 },
+        { x: -33, y: 28 },
+        { x: 33, y: 28 },
+      ]),
+    );
+    expect(result.panels.find((panel) => panel.role === 'base')).toMatchObject({
+      widthMm: 80,
+      heightMm: 60,
+    });
+    expect(result.panels.find((panel) => panel.role === 'lid')).toMatchObject({
+      widthMm: 80,
+      heightMm: 60,
+    });
+    expect(
+      result.panels
+        .filter((panel) => hasProperSelfIntersection(panel.outline))
+        .map((panel) => panel.role),
+    ).toEqual([]);
   });
 
   it('resolves mixed joint families once per stable physical connection', () => {
