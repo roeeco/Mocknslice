@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600mm" height="400mm" viewBox="0 0 600 400">
+  <metadata>{&quot;application&quot;:&quot;MocknSlice&quot;,&quot;projectFormatVersion&quot;:8,&quot;projectId&quot;:&quot;project-upgrade-baseline&quot;,&quot;mode&quot;:&quot;fold-template&quot;,&quot;units&quot;:&quot;mm&quot;,&quot;sheetId&quot;:&quot;sheet-upgrade-baseline&quot;,&quot;sheetNumber&quot;:1,&quot;kerfMm&quot;:0,&quot;foldLineOutput&quot;:&quot;preserve&quot;}</metadata>
+  <rect id="sheet-boundary" x="0.05" y="0.05" width="599.9" height="399.9" fill="none" stroke="#777777" stroke-width="0.1"/>
+  <g id="operation-cut" data-operation="cut" fill="none" stroke="#ff0000" stroke-width="0.1">
+    <path id="fold-pyramid-main-side-1-boundary-2-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-1" data-edge-id="fold-pyramid-main-side-1-boundary-2" d="M 46.909239 48.190575 L 64.409239 5.439376"/>
+    <path id="fold-pyramid-main-side-1-boundary-3-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-1" data-edge-id="fold-pyramid-main-side-1-boundary-3" d="M 64.409239 5.439376 L 99.409239 5.439376"/>
+    <path id="fold-pyramid-main-side-2-boundary-2-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-2" data-edge-id="fold-pyramid-main-side-2-boundary-2" d="M 116.909239 48.190575 L 162.435297 56.019565"/>
+    <path id="fold-pyramid-main-side-2-boundary-3-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-2" data-edge-id="fold-pyramid-main-side-2-boundary-3" d="M 162.435297 56.019565 L 167.435297 86.019565"/>
+    <path id="fold-pyramid-main-side-3-boundary-2-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-3" data-edge-id="fold-pyramid-main-side-3-boundary-2" d="M 126.909239 108.190575 L 109.409239 150.941774"/>
+    <path id="fold-pyramid-main-side-3-boundary-3-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-3" data-edge-id="fold-pyramid-main-side-3-boundary-3" d="M 109.409239 150.941774 L 74.409239 150.941774"/>
+    <path id="fold-pyramid-main-side-4-boundary-2-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-4" data-edge-id="fold-pyramid-main-side-4-boundary-2" d="M 56.909239 108.190575 L 11.383181 100.361585"/>
+    <path id="fold-pyramid-main-side-4-boundary-3-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-4" data-edge-id="fold-pyramid-main-side-4-boundary-3" d="M 11.383181 100.361585 L 6.383181 70.361585"/>
+    <path id="fold-pyramid-main-side-1-seam-tab-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-1" data-tab-id="fold-pyramid-main-side-1-seam-tab" d="M 99.409239 5.439376 L 107.873691 5 L 123.252218 42.568599 L 116.909239 48.190575"/>
+    <path id="fold-pyramid-main-side-2-seam-tab-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-2" data-tab-id="fold-pyramid-main-side-2-seam-tab" d="M 167.435297 86.019565 L 168.818478 94.381791 L 133.205274 113.865075 L 126.909239 108.190575"/>
+    <path id="fold-pyramid-main-side-3-seam-tab-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-3" data-tab-id="fold-pyramid-main-side-3-seam-tab" d="M 74.409239 150.941774 L 65.944787 151.38115 L 50.56626 113.812551 L 56.909239 108.190575"/>
+    <path id="fold-pyramid-main-side-4-seam-tab-cut" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-4" data-tab-id="fold-pyramid-main-side-4-seam-tab" d="M 6.383181 70.361585 L 5 61.999359 L 40.613204 42.516075 L 46.909239 48.190575"/>
+    <path id="fold-pyramid-cap-tab-1-cut" data-part-id="fold-pyramid-cap" data-contour-role="path" data-panel-id="fold-pyramid-cap-face" data-tab-id="fold-pyramid-cap-tab-1" d="M 179.249312 13 L 182.049312 5 L 211.449312 5 L 214.249312 13"/>
+    <path id="fold-pyramid-cap-tab-2-cut" data-part-id="fold-pyramid-cap" data-contour-role="path" data-panel-id="fold-pyramid-cap-face" data-tab-id="fold-pyramid-cap-tab-2" d="M 214.249312 13 L 222.600781 14.446711 L 226.680146 38.922905 L 219.249312 43"/>
+    <path id="fold-pyramid-cap-tab-3-cut" data-part-id="fold-pyramid-cap" data-contour-role="path" data-panel-id="fold-pyramid-cap-face" data-tab-id="fold-pyramid-cap-tab-3" d="M 219.249312 43 L 216.449312 51 L 187.049312 51 L 184.249312 43"/>
+    <path id="fold-pyramid-cap-tab-4-cut" data-part-id="fold-pyramid-cap" data-contour-role="path" data-panel-id="fold-pyramid-cap-face" data-tab-id="fold-pyramid-cap-tab-4" d="M 184.249312 43 L 175.897843 41.553289 L 171.818478 17.077095 L 179.249312 13"/>
+  </g>
+  <g id="operation-score" data-operation="score" fill="none" stroke="#0000ff" stroke-width="0.1">
+    <path id="fold-pyramid-main-side-1-seam-tab-fold" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-1" data-edge-id="fold-pyramid-main-side-1-seam-tab-base" data-tab-id="fold-pyramid-main-side-1-seam-tab" d="M 99.409239 5.439376 L 116.909239 48.190575"/>
+    <path id="fold-pyramid-main-side-2-seam-tab-fold" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-2" data-edge-id="fold-pyramid-main-side-2-seam-tab-base" data-tab-id="fold-pyramid-main-side-2-seam-tab" d="M 167.435297 86.019565 L 126.909239 108.190575"/>
+    <path id="fold-pyramid-main-side-3-seam-tab-fold" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-3" data-edge-id="fold-pyramid-main-side-3-seam-tab-base" data-tab-id="fold-pyramid-main-side-3-seam-tab" d="M 74.409239 150.941774 L 56.909239 108.190575"/>
+    <path id="fold-pyramid-main-side-4-seam-tab-fold" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-side-4" data-edge-id="fold-pyramid-main-side-4-seam-tab-base" data-tab-id="fold-pyramid-main-side-4-seam-tab" d="M 6.383181 70.361585 L 46.909239 48.190575"/>
+    <path id="fold-pyramid-cap-tab-1-fold" data-part-id="fold-pyramid-cap" data-contour-role="path" data-panel-id="fold-pyramid-cap-face" data-edge-id="fold-pyramid-cap-tab-1-base" data-tab-id="fold-pyramid-cap-tab-1" d="M 179.249312 13 L 214.249312 13"/>
+    <path id="fold-pyramid-cap-tab-2-fold" data-part-id="fold-pyramid-cap" data-contour-role="path" data-panel-id="fold-pyramid-cap-face" data-edge-id="fold-pyramid-cap-tab-2-base" data-tab-id="fold-pyramid-cap-tab-2" d="M 214.249312 13 L 219.249312 43"/>
+    <path id="fold-pyramid-cap-tab-3-fold" data-part-id="fold-pyramid-cap" data-contour-role="path" data-panel-id="fold-pyramid-cap-face" data-edge-id="fold-pyramid-cap-tab-3-base" data-tab-id="fold-pyramid-cap-tab-3" d="M 219.249312 43 L 184.249312 43"/>
+    <path id="fold-pyramid-cap-tab-4-fold" data-part-id="fold-pyramid-cap" data-contour-role="path" data-panel-id="fold-pyramid-cap-face" data-edge-id="fold-pyramid-cap-tab-4-base" data-tab-id="fold-pyramid-cap-tab-4" d="M 184.249312 43 L 179.249312 13"/>
+  </g>
+  <g id="operation-mountain-fold" data-operation="mountain-fold" fill="none" stroke="#8b5cf6" stroke-width="0.1">
+  </g>
+  <g id="operation-valley-fold" data-operation="valley-fold" fill="none" stroke="#14b8a6" stroke-width="0.1">
+    <path id="fold-pyramid-main-side-1-base-fold-fold" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-base" data-edge-id="fold-pyramid-main-side-1-base-fold" d="M 46.909239 48.190575 L 116.909239 48.190575"/>
+    <path id="fold-pyramid-main-side-2-base-fold-fold" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-base" data-edge-id="fold-pyramid-main-side-2-base-fold" d="M 116.909239 48.190575 L 126.909239 108.190575"/>
+    <path id="fold-pyramid-main-side-3-base-fold-fold" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-base" data-edge-id="fold-pyramid-main-side-3-base-fold" d="M 126.909239 108.190575 L 56.909239 108.190575"/>
+    <path id="fold-pyramid-main-side-4-base-fold-fold" data-part-id="fold-pyramid-main" data-contour-role="path" data-panel-id="fold-pyramid-main-base" data-edge-id="fold-pyramid-main-side-4-base-fold" d="M 56.909239 108.190575 L 46.909239 48.190575"/>
+  </g>
+  <g id="operation-perforate" data-operation="perforate" fill="none" stroke="#f59e0b" stroke-width="0.1">
+  </g>
+  <g id="operation-engrave" data-operation="engrave" fill="none" stroke="#000000" stroke-width="0.1">
+    <text id="fold-pyramid-main-base-label" data-part-id="fold-pyramid-main" data-entity-id="fold-pyramid-main-base" x="86.909239" y="78.190575" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Base</text>
+    <text id="fold-pyramid-main-side-1-label" data-part-id="fold-pyramid-main" data-entity-id="fold-pyramid-main-side-1" x="81.909239" y="26.814975" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Side 1</text>
+    <text id="fold-pyramid-main-side-2-label" data-part-id="fold-pyramid-main" data-entity-id="fold-pyramid-main-side-2" x="143.422268" y="74.60507" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Side 2</text>
+    <text id="fold-pyramid-main-side-3-label" data-part-id="fold-pyramid-main" data-entity-id="fold-pyramid-main-side-3" x="91.909239" y="129.566175" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Side 3</text>
+    <text id="fold-pyramid-main-side-4-label" data-part-id="fold-pyramid-main" data-entity-id="fold-pyramid-main-side-4" x="30.39621" y="81.77608" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Side 4</text>
+    <text id="fold-pyramid-cap-face-label" data-part-id="fold-pyramid-cap" data-entity-id="fold-pyramid-cap-face" x="199.249312" y="28" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Top cap</text>
+  </g>
+  <g id="operation-guide" data-operation="guide" fill="none" stroke="#6b7280" stroke-width="0.1">
+  </g>
+  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="3">
+    <text id="label-fold-pyramid-main" x="7" y="9">Frustum net</text>
+    <text id="label-fold-pyramid-cap" x="173.818478" y="9">Frustum top cap</text>
+  </g>
+</svg>

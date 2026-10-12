@@ -1,0 +1,125 @@
+%PDF-1.4
+% MocknSlice vector assembly sheets
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1700.787 1133.858] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 2423 >>
+stream
+q
+1 J 1 j
+0.45 0.45 0.45 RG
+0.283 w
+0.142 0.142 1700.504 1133.575 re S
+1 0 0 RG
+0.283 w
+14.173 1119.685 m
+240.945 1119.685 l
+240.945 949.606 l
+14.173 949.606 l
+14.173 1119.685 l
+h
+S
+249.449 1119.685 m
+252.283 1119.685 l
+479.055 1119.685 l
+481.89 1119.685 l
+481.89 977.953 l
+249.449 977.953 l
+249.449 1119.685 l
+h
+S
+490.394 1119.685 m
+493.228 1119.685 l
+720 1119.685 l
+722.835 1119.685 l
+722.835 977.953 l
+490.394 977.953 l
+490.394 1119.685 l
+h
+S
+731.339 1119.685 m
+901.417 1119.685 l
+901.417 977.953 l
+731.339 977.953 l
+731.339 1119.685 l
+h
+S
+909.921 1119.685 m
+1080 1119.685 l
+1080 977.953 l
+909.921 977.953 l
+909.921 1119.685 l
+h
+S
+0 0 1 RG
+0.283 w
+0.545 0.361 0.965 RG
+0.283 w
+0.078 0.722 0.651 RG
+0.283 w
+0.961 0.62 0.043 RG
+0.283 w
+0 0 0 RG
+0.283 w
+BT /F1 8.504 Tf 1 0 0 1 127.559 1034.646 Tm (BASE) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 127.559 1112.598 Tm (J1) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 127.559 956.693 Tm (J2) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 21.26 1034.646 Tm (J3) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 233.858 1034.646 Tm (J4) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 365.669 1048.819 Tm (FRONT) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 365.669 1112.598 Tm (J1) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 256.535 1048.819 Tm (J5) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 474.803 1048.819 Tm (J6) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 606.614 1048.819 Tm (BACK) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 606.614 1112.598 Tm (J2) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 497.48 1048.819 Tm (J7) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 715.748 1048.819 Tm (J8) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 816.378 1048.819 Tm (LEFT) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 816.378 1112.598 Tm (J3) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 738.425 1048.819 Tm (J5) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 894.331 1048.819 Tm (J7) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 994.961 1048.819 Tm (RIGHT) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 994.961 1112.598 Tm (J4) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 917.008 1048.819 Tm (J6) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 1072.913 1048.819 Tm (J8) Tj ET
+0.42 0.447 0.502 RG
+0.283 w
+0 0 0 rg
+BT /F1 8.504 Tf 1 0 0 1 19.843 1108.346 Tm (BASE) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 255.118 1108.346 Tm (FRONT) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 496.063 1108.346 Tm (BACK) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 737.008 1108.346 Tm (LEFT) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 915.591 1108.346 Tm (RIGHT) Tj ET
+0 0 0 rg
+BT /F1 7.087 Tf 1 0 0 1 14.173 1124.646 Tm (Upgrade baseline: panel-butt - sheet 1 of 1) Tj ET
+BT /F1 5.102 Tf 1 0 0 1 14.173 1116.142 Tm (Operations: cut, engrave) Tj ET
+Q
+endstream
+endobj
+6 0 obj
+<< /Title (Upgrade baseline: panel-butt) /Creator (MocknSlice) /Producer (MocknSlice fabrication output) >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000045 00000 n 
+0000000094 00000 n 
+0000000151 00000 n 
+0000000221 00000 n 
+0000000357 00000 n 
+0000002831 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R /Info 6 0 R >>
+startxref
+2954
+%%EOF

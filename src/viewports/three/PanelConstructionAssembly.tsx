@@ -1,3 +1,4 @@
+import { useDisplayedProjectField } from '../PreviewProject';
 import { Edges } from '@react-three/drei';
 import { useEffect, useMemo } from 'react';
 import { DoubleSide, ExtrudeGeometry, Matrix4, Path, Shape, Vector2, Vector3 } from 'three';
@@ -100,11 +101,11 @@ function ConstructionPanelMesh({
 }
 
 export function PanelConstructionAssembly() {
-  const result = useProjectStore((state) => state.project.panelConstructionResult);
-  const settings = useProjectStore((state) => state.project.modeSettings.panelConstruction);
+  const result = useDisplayedProjectField((project) => project.panelConstructionResult);
+  const settings = useDisplayedProjectField((project) => project.modeSettings.panelConstruction);
   const panels = result?.assembledPreview.panels ?? EMPTY_PANELS;
-  const heightMm = useProjectStore(
-    (state) => state.project.panelConstructionResult?.settings.innerHeightMm ?? 0,
+  const heightMm = useDisplayedProjectField(
+    (project) => project.panelConstructionResult?.settings.innerHeightMm ?? 0,
   );
   const thicknessByPart = useMemo(
     () => new Map(result?.parts.map((part) => [part.id, part.thicknessMm]) ?? []),

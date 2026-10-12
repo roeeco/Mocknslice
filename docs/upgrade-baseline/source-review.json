@@ -1,0 +1,128 @@
+[
+  {
+    "repository": "GIGAJOHUB/OpenDieline",
+    "branch": "main",
+    "path": "LICENSE",
+    "status": 404
+  },
+  {
+    "repository": "GIGAJOHUB/OpenDieline",
+    "branch": "main",
+    "path": "package.json",
+    "status": 200,
+    "sha256": "4ca88cc6fd9b6ba6aabfa6e6842d8ff1bd1d4b9a2e032783237a402b5de25c2e",
+    "bytes": 769
+  },
+  {
+    "repository": "GIGAJOHUB/OpenDieline",
+    "branch": "main",
+    "path": "src/templates/reverseTuckEnd.ts",
+    "status": 200,
+    "sha256": "8837754ca42f12782ddeeded422bad538dffb54f3ac09e814243fe1f0d74f1a7",
+    "bytes": 16237
+  },
+  {
+    "repository": "GIGAJOHUB/OpenDieline",
+    "branch": "main",
+    "path": "src/geometry/topology/cartonTopology.ts",
+    "status": 200,
+    "sha256": "3726a92266d0e88d18d62aeb9d33da3bdd33c288cfeafbef8474b2593e102ece",
+    "bytes": 1325
+  },
+  {
+    "repository": "GIGAJOHUB/OpenDieline",
+    "branch": "main",
+    "path": "src/geometry/constraints/rteValidation.ts",
+    "status": 200,
+    "sha256": "f3f533d13695a811ab8e23a9753386f3b706cb3d94399bb4e6b83c57ee3cf761",
+    "bytes": 1812
+  },
+  {
+    "repository": "GIGAJOHUB/OpenDieline",
+    "branch": "main",
+    "path": "src/exporters/svgExporter.ts",
+    "status": 200,
+    "sha256": "bd8d9e8c740b55a1ddd2520339518a99c4308f02820b38f73c34b51bec59af09",
+    "bytes": 2548
+  },
+  {
+    "repository": "yuyou-dev/OpenBox3D",
+    "branch": "main",
+    "path": "LICENSE",
+    "status": 200,
+    "sha256": "c73e3b167a94a7a1709ec2e971444cecc5aaf9ff2ea865b514115740195cec73",
+    "bytes": 1066
+  },
+  {
+    "repository": "yuyou-dev/OpenBox3D",
+    "branch": "main",
+    "path": "src/dieline/templates.js",
+    "status": 200,
+    "sha256": "3dd03ff9ea6e7b69421b13b2ad341c60402696f3fd3ef7e358eb28e0ded9ba97",
+    "bytes": 13311
+  },
+  {
+    "repository": "yuyou-dev/OpenBox3D",
+    "branch": "main",
+    "path": "src/dieline/geom.js",
+    "status": 200,
+    "sha256": "e7e33fb8a98926f9306a7633e7711877d79465178eafab689b911fd58db88221",
+    "bytes": 5275
+  },
+  {
+    "repository": "yuyou-dev/OpenBox3D",
+    "branch": "main",
+    "path": "src/render3d/fold.js",
+    "status": 200,
+    "sha256": "0aafe428d7a749d13f7a523aec33f64efbe054213f84081f634cd46f55315c7e",
+    "bytes": 18856
+  },
+  {
+    "repository": "yuyou-dev/OpenBox3D",
+    "branch": "main",
+    "path": "scripts/check-template-sync.mjs",
+    "status": 200,
+    "sha256": "cd639ed55fcbcd01d8d1d415b6ee60bee5b50dc0e946d8febf9b1b3e3fce119e",
+    "bytes": 6480
+  },
+  {
+    "repository": "rodrigorc/papercraft",
+    "branch": "master",
+    "path": "LICENSE",
+    "status": 200,
+    "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "bytes": 35149
+  },
+  {
+    "repository": "rodrigorc/papercraft",
+    "branch": "master",
+    "path": "README.md",
+    "status": 200,
+    "sha256": "d59b437152f657ebd678f1860f9b2935b3c88fe84ac0ae66829cb5e244c88692",
+    "bytes": 14106
+  },
+  {
+    "repository": "rodrigorc/papercraft",
+    "branch": "master",
+    "path": "src/paper/craft.rs",
+    "status": 200,
+    "sha256": "93eef4e57ab4e56f5592df94fcecef126f60eccba9564bdbba949739ed7d19cf",
+    "bytes": 87445
+  },
+  {
+    "repository": "rodrigorc/papercraft",
+    "branch": "master",
+    "path": "src/paper/craft/update.rs",
+    "status": 200,
+    "sha256": "1b3a4aee5628c9f8ace96ec6e5df6a9804ac577559ebcd43c8045f26f6332a6e",
+    "bytes": 11408
+  },
+  {
+    "repository": "rodrigorc/papercraft",
+    "branch": "master",
+    "path": "src/printable.rs",
+    "status": 200,
+    "sha256": "c19118c321b806fb1332ae04662c2e52ae1a3887646c74ee343b4e07cc6257a1",
+    "bytes": 43655
+  }
+]

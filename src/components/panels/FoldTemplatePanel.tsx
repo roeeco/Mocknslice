@@ -1,5 +1,6 @@
+import { registeredLegacyKinds } from '../../templates/definitions';
 import type { ChangeEvent } from 'react';
-import { TEMPLATE_KINDS, type ProjectedProfile, type TemplateKind } from '../../domain/folding';
+import { type ProjectedProfile, type TemplateKind } from '../../domain/folding';
 import type { Point2D } from '../../domain/geometry';
 import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
@@ -173,7 +174,7 @@ export function FoldTemplatePanel({
               updateSettings({ templateKind: event.target.value as TemplateKind })
             }
           >
-            {TEMPLATE_KINDS.map((templateKind) => (
+            {registeredLegacyKinds.map((templateKind) => (
               <option value={templateKind} key={templateKind}>
                 {copy.templateNames[templateKind]}
               </option>
@@ -329,7 +330,7 @@ export function FoldTemplatePanel({
               {copy.cancelGeneration}
             </button>
           ) : (
-            <button className="primary-panel-action" type="button" onClick={generate}>
+            <button className="primary-panel-action" type="button" onClick={() => generate()}>
               {status === 'stale' ? 'Regenerate template' : copy.generateTemplate}
             </button>
           )}

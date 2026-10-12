@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600mm" height="400mm" viewBox="0 0 600 400">
+  <metadata>{&quot;application&quot;:&quot;MocknSlice&quot;,&quot;projectFormatVersion&quot;:8,&quot;projectId&quot;:&quot;project-upgrade-baseline&quot;,&quot;mode&quot;:&quot;fold-template&quot;,&quot;units&quot;:&quot;mm&quot;,&quot;sheetId&quot;:&quot;sheet-upgrade-baseline&quot;,&quot;sheetNumber&quot;:1,&quot;kerfMm&quot;:0,&quot;foldLineOutput&quot;:&quot;preserve&quot;}</metadata>
+  <rect id="sheet-boundary" x="0.05" y="0.05" width="599.9" height="399.9" fill="none" stroke="#777777" stroke-width="0.1"/>
+  <g id="operation-cut" data-operation="cut" fill="none" stroke="#ff0000" stroke-width="0.1">
+    <path id="fold-box-base-wall-bottom-boundary-1-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-bottom" data-edge-id="fold-box-base-wall-bottom-boundary-1" d="M 45 5 L 125 5"/>
+    <path id="fold-box-base-wall-bottom-boundary-2-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-bottom" data-edge-id="fold-box-base-wall-bottom-boundary-2" d="M 125 5 L 125 45"/>
+    <path id="fold-box-base-wall-bottom-boundary-4-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-bottom" data-edge-id="fold-box-base-wall-bottom-boundary-4" d="M 45 45 L 45 5"/>
+    <path id="fold-box-base-wall-right-boundary-2-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-right" data-edge-id="fold-box-base-wall-right-boundary-2" d="M 165 45 L 165 105"/>
+    <path id="fold-box-base-wall-top-boundary-2-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-top" data-edge-id="fold-box-base-wall-top-boundary-2" d="M 125 105 L 125 145"/>
+    <path id="fold-box-base-wall-top-boundary-3-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-top" data-edge-id="fold-box-base-wall-top-boundary-3" d="M 125 145 L 45 145"/>
+    <path id="fold-box-base-wall-top-boundary-4-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-top" data-edge-id="fold-box-base-wall-top-boundary-4" d="M 45 145 L 45 105"/>
+    <path id="fold-box-base-wall-left-boundary-4-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-left" data-edge-id="fold-box-base-wall-left-boundary-4" d="M 5 105 L 5 45"/>
+    <path id="fold-box-base-tab-left-bottom-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-left" data-tab-id="fold-box-base-tab-left-bottom" d="M 5 45 L 7.8 37 L 42.2 37 L 45 45"/>
+    <path id="fold-box-base-tab-left-top-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-left" data-tab-id="fold-box-base-tab-left-top" d="M 45 105 L 42.2 113 L 7.8 113 L 5 105"/>
+    <path id="fold-box-base-tab-right-bottom-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-right" data-tab-id="fold-box-base-tab-right-bottom" d="M 125 45 L 127.8 37 L 162.2 37 L 165 45"/>
+    <path id="fold-box-base-tab-right-top-cut" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-right" data-tab-id="fold-box-base-tab-right-top" d="M 165 105 L 162.2 113 L 127.8 113 L 125 105"/>
+    <path id="fold-box-lid-wall-bottom-boundary-1-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-bottom" data-edge-id="fold-box-lid-wall-bottom-boundary-1" d="M 183 5 L 266 5"/>
+    <path id="fold-box-lid-wall-bottom-boundary-2-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-bottom" data-edge-id="fold-box-lid-wall-bottom-boundary-2" d="M 266 5 L 266 20"/>
+    <path id="fold-box-lid-wall-bottom-boundary-4-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-bottom" data-edge-id="fold-box-lid-wall-bottom-boundary-4" d="M 183 20 L 183 5"/>
+    <path id="fold-box-lid-wall-right-boundary-2-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-right" data-edge-id="fold-box-lid-wall-right-boundary-2" d="M 281 20 L 281 83"/>
+    <path id="fold-box-lid-wall-top-boundary-2-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-top" data-edge-id="fold-box-lid-wall-top-boundary-2" d="M 266 83 L 266 98"/>
+    <path id="fold-box-lid-wall-top-boundary-3-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-top" data-edge-id="fold-box-lid-wall-top-boundary-3" d="M 266 98 L 183 98"/>
+    <path id="fold-box-lid-wall-top-boundary-4-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-top" data-edge-id="fold-box-lid-wall-top-boundary-4" d="M 183 98 L 183 83"/>
+    <path id="fold-box-lid-wall-left-boundary-4-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-left" data-edge-id="fold-box-lid-wall-left-boundary-4" d="M 168 83 L 168 20"/>
+    <path id="fold-box-lid-tab-left-bottom-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-left" data-tab-id="fold-box-lid-tab-left-bottom" d="M 168 20 L 169.8375 14.75 L 181.1625 14.75 L 183 20"/>
+    <path id="fold-box-lid-tab-left-top-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-left" data-tab-id="fold-box-lid-tab-left-top" d="M 183 83 L 181.1625 88.25 L 169.8375 88.25 L 168 83"/>
+    <path id="fold-box-lid-tab-right-bottom-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-right" data-tab-id="fold-box-lid-tab-right-bottom" d="M 266 20 L 267.8375 14.75 L 279.1625 14.75 L 281 20"/>
+    <path id="fold-box-lid-tab-right-top-cut" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-right" data-tab-id="fold-box-lid-tab-right-top" d="M 281 83 L 279.1625 88.25 L 267.8375 88.25 L 266 83"/>
+  </g>
+  <g id="operation-score" data-operation="score" fill="none" stroke="#0000ff" stroke-width="0.1">
+    <path id="fold-box-base-tab-left-bottom-fold" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-left" data-edge-id="fold-box-base-tab-left-bottom-base" data-tab-id="fold-box-base-tab-left-bottom" d="M 5 45 L 45 45"/>
+    <path id="fold-box-base-tab-left-top-fold" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-left" data-edge-id="fold-box-base-tab-left-top-base" data-tab-id="fold-box-base-tab-left-top" d="M 45 105 L 5 105"/>
+    <path id="fold-box-base-tab-right-bottom-fold" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-right" data-edge-id="fold-box-base-tab-right-bottom-base" data-tab-id="fold-box-base-tab-right-bottom" d="M 125 45 L 165 45"/>
+    <path id="fold-box-base-tab-right-top-fold" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-wall-right" data-edge-id="fold-box-base-tab-right-top-base" data-tab-id="fold-box-base-tab-right-top" d="M 165 105 L 125 105"/>
+    <path id="fold-box-lid-tab-left-bottom-fold" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-left" data-edge-id="fold-box-lid-tab-left-bottom-base" data-tab-id="fold-box-lid-tab-left-bottom" d="M 168 20 L 183 20"/>
+    <path id="fold-box-lid-tab-left-top-fold" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-left" data-edge-id="fold-box-lid-tab-left-top-base" data-tab-id="fold-box-lid-tab-left-top" d="M 183 83 L 168 83"/>
+    <path id="fold-box-lid-tab-right-bottom-fold" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-right" data-edge-id="fold-box-lid-tab-right-bottom-base" data-tab-id="fold-box-lid-tab-right-bottom" d="M 266 20 L 281 20"/>
+    <path id="fold-box-lid-tab-right-top-fold" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-wall-right" data-edge-id="fold-box-lid-tab-right-top-base" data-tab-id="fold-box-lid-tab-right-top" d="M 281 83 L 266 83"/>
+  </g>
+  <g id="operation-mountain-fold" data-operation="mountain-fold" fill="none" stroke="#8b5cf6" stroke-width="0.1">
+  </g>
+  <g id="operation-valley-fold" data-operation="valley-fold" fill="none" stroke="#14b8a6" stroke-width="0.1">
+    <path id="fold-box-base-fold-bottom-fold" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-base" data-edge-id="fold-box-base-fold-bottom" d="M 45 45 L 125 45"/>
+    <path id="fold-box-base-fold-right-fold" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-base" data-edge-id="fold-box-base-fold-right" d="M 125 45 L 125 105"/>
+    <path id="fold-box-base-fold-top-fold" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-base" data-edge-id="fold-box-base-fold-top" d="M 125 105 L 45 105"/>
+    <path id="fold-box-base-fold-left-fold" data-part-id="fold-box-base" data-contour-role="path" data-panel-id="fold-box-base-base" data-edge-id="fold-box-base-fold-left" d="M 45 105 L 45 45"/>
+    <path id="fold-box-lid-fold-bottom-fold" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-lid" data-edge-id="fold-box-lid-fold-bottom" d="M 183 20 L 266 20"/>
+    <path id="fold-box-lid-fold-right-fold" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-lid" data-edge-id="fold-box-lid-fold-right" d="M 266 20 L 266 83"/>
+    <path id="fold-box-lid-fold-top-fold" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-lid" data-edge-id="fold-box-lid-fold-top" d="M 266 83 L 183 83"/>
+    <path id="fold-box-lid-fold-left-fold" data-part-id="fold-box-lid" data-contour-role="path" data-panel-id="fold-box-lid-lid" data-edge-id="fold-box-lid-fold-left" d="M 183 83 L 183 20"/>
+  </g>
+  <g id="operation-perforate" data-operation="perforate" fill="none" stroke="#f59e0b" stroke-width="0.1">
+  </g>
+  <g id="operation-engrave" data-operation="engrave" fill="none" stroke="#000000" stroke-width="0.1">
+    <text id="fold-box-base-base-label" data-part-id="fold-box-base" data-entity-id="fold-box-base-base" x="85" y="75" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Base</text>
+    <text id="fold-box-base-wall-bottom-label" data-part-id="fold-box-base" data-entity-id="fold-box-base-wall-bottom" x="85" y="25" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Bottom wall</text>
+    <text id="fold-box-base-wall-right-label" data-part-id="fold-box-base" data-entity-id="fold-box-base-wall-right" x="145" y="75" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Right wall</text>
+    <text id="fold-box-base-wall-top-label" data-part-id="fold-box-base" data-entity-id="fold-box-base-wall-top" x="85" y="125" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Top wall</text>
+    <text id="fold-box-base-wall-left-label" data-part-id="fold-box-base" data-entity-id="fold-box-base-wall-left" x="25" y="75" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Left wall</text>
+    <text id="fold-box-lid-lid-label" data-part-id="fold-box-lid" data-entity-id="fold-box-lid-lid" x="224.5" y="51.5" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Lid face</text>
+    <text id="fold-box-lid-wall-bottom-label" data-part-id="fold-box-lid" data-entity-id="fold-box-lid-wall-bottom" x="224.5" y="12.5" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Bottom wall</text>
+    <text id="fold-box-lid-wall-right-label" data-part-id="fold-box-lid" data-entity-id="fold-box-lid-wall-right" x="273.5" y="51.5" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Right wall</text>
+    <text id="fold-box-lid-wall-top-label" data-part-id="fold-box-lid" data-entity-id="fold-box-lid-wall-top" x="224.5" y="90.5" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Top wall</text>
+    <text id="fold-box-lid-wall-left-label" data-part-id="fold-box-lid" data-entity-id="fold-box-lid-wall-left" x="175.5" y="51.5" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Left wall</text>
+  </g>
+  <g id="operation-guide" data-operation="guide" fill="none" stroke="#6b7280" stroke-width="0.1">
+  </g>
+  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="3">
+    <text id="label-fold-box-base" x="7" y="9">Box base net</text>
+    <text id="label-fold-box-lid" x="170" y="9">Box lid net</text>
+  </g>
+</svg>

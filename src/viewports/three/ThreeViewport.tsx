@@ -1,3 +1,4 @@
+import { useDisplayedProjectField } from '../PreviewProject';
 import { Canvas } from '@react-three/fiber';
 import { ViewportErrorBoundary } from '../../components/common/ViewportErrorBoundary';
 import { copy, t } from '../../locales';
@@ -18,17 +19,19 @@ export function ThreeViewport() {
   const fitCamera = useProjectStore((state) => state.fitCamera);
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
-  const modelId = useProjectStore((state) => state.project.model.id);
-  const hasImportedModel = useProjectStore(
-    (state) => state.project.model.source.kind === 'imported',
+  const modelId = useDisplayedProjectField((project) => project.model.id);
+  const hasImportedModel = useDisplayedProjectField(
+    (project) => project.model.source.kind === 'imported',
   );
-  const fabricationMode = useProjectStore((state) => state.project.fabricationMode);
-  const foldingHash = useProjectStore((state) => state.project.foldingResult?.inputHash ?? 'none');
-  const unfoldingHash = useProjectStore(
-    (state) => state.project.unfoldingResult?.inputHash ?? 'none',
+  const fabricationMode = useDisplayedProjectField((project) => project.fabricationMode);
+  const foldingHash = useDisplayedProjectField(
+    (project) => project.foldingResult?.inputHash ?? 'none',
   );
-  const panelHash = useProjectStore(
-    (state) => state.project.panelConstructionResult?.inputHash ?? 'none',
+  const unfoldingHash = useDisplayedProjectField(
+    (project) => project.unfoldingResult?.inputHash ?? 'none',
+  );
+  const panelHash = useDisplayedProjectField(
+    (project) => project.panelConstructionResult?.inputHash ?? 'none',
   );
   const selectedEdgeIsOpen = useProjectStore((state) => {
     const edges =
@@ -68,7 +71,9 @@ export function ThreeViewport() {
           }}
           fallback={
             <div className="webgl-fallback" role="alert">
-              3D preview is unavailable in this browser. Model inspection data is still available.
+              {t(
+                '3D preview is unavailable in this browser. Model inspection data is still available.',
+              )}
             </div>
           }
         >
@@ -79,10 +84,10 @@ export function ThreeViewport() {
         {fabricationMode === 'waffle-slices' ? (
           <>
             <span>
-              <i className="legend-swatch waffle-a-swatch" /> Family A
+              <i className="legend-swatch waffle-a-swatch" /> {t('Family A')}
             </span>
             <span>
-              <i className="legend-swatch waffle-b-swatch" /> Family B
+              <i className="legend-swatch waffle-b-swatch" /> {t('Family B')}
             </span>
           </>
         ) : fabricationMode === 'fold-template' ? (
@@ -92,15 +97,15 @@ export function ThreeViewport() {
         ) : fabricationMode === 'mesh-unfold' ? (
           <>
             <span>
-              <i className="legend-swatch model-swatch" /> Ghosted source
+              <i className="legend-swatch model-swatch" /> {t('Ghosted source')}
             </span>
             <span>
-              <i className="legend-swatch unfold-swatch" /> Fold preview
+              <i className="legend-swatch unfold-swatch" /> {t('Fold preview')}
             </span>
           </>
         ) : fabricationMode === 'panel-construction' ? (
           <span>
-            <i className="legend-swatch construction-swatch" /> Assembled panel kit
+            <i className="legend-swatch construction-swatch" /> {t('Assembled panel kit')}
           </span>
         ) : (
           <span>

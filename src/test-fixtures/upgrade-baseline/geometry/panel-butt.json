@@ -1,0 +1,2687 @@
+{
+  "input": {
+    "mode": "panel-construction",
+    "payload": {
+      "sourceId": "panel-construction",
+      "material": {
+        "id": "card-300gsm",
+        "category": "card",
+        "thicknessMm": 1,
+        "kerfMm": 0.1
+      },
+      "settings": {
+        "innerWidthMm": 80,
+        "innerDepthMm": 60,
+        "innerHeightMm": 50,
+        "jointKind": "butt",
+        "fingerWidthMm": 10,
+        "clearanceMm": 0.15,
+        "includeLid": false,
+        "panelThicknessMm": 1,
+        "dividerThicknessMm": 1,
+        "lidThicknessMm": 1,
+        "widthDividerCount": 0,
+        "depthDividerCount": 0,
+        "connectionOverrides": {},
+        "panelProfiles": {
+          "front": "flat",
+          "back": "flat"
+        },
+        "glueTabDepthMm": 8,
+        "boundaryGlueTabs": [],
+        "features": []
+      }
+    }
+  },
+  "result": {
+    "settings": {
+      "innerWidthMm": 80,
+      "innerDepthMm": 60,
+      "innerHeightMm": 50,
+      "jointKind": "butt",
+      "fingerWidthMm": 10,
+      "clearanceMm": 0.15,
+      "includeLid": false,
+      "panelThicknessMm": 1,
+      "dividerThicknessMm": 1,
+      "lidThicknessMm": 1,
+      "widthDividerCount": 0,
+      "depthDividerCount": 0,
+      "connectionOverrides": {},
+      "panelProfiles": {
+        "front": "flat",
+        "back": "flat"
+      },
+      "glueTabDepthMm": 8,
+      "boundaryGlueTabs": [],
+      "features": []
+    },
+    "material": {
+      "id": "card-300gsm",
+      "category": "card",
+      "thicknessMm": 1,
+      "kerfMm": 0.1
+    },
+    "panels": [
+      {
+        "id": "construction-panel-base",
+        "partId": "construction-part-base",
+        "name": "Base panel",
+        "role": "base",
+        "widthMm": 80,
+        "heightMm": 60,
+        "outline": [
+          {
+            "x": -40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": -30
+          }
+        ],
+        "edgeJointIds": {
+          "bottom": "construction-joint-1",
+          "top": "construction-joint-2",
+          "left": "construction-joint-3",
+          "right": "construction-joint-4"
+        }
+      },
+      {
+        "id": "construction-panel-front",
+        "partId": "construction-part-front",
+        "name": "Front panel",
+        "role": "front",
+        "widthMm": 82,
+        "heightMm": 50,
+        "outline": [
+          {
+            "x": -41,
+            "y": -25
+          },
+          {
+            "x": -40,
+            "y": -25
+          },
+          {
+            "x": 40,
+            "y": -25
+          },
+          {
+            "x": 41,
+            "y": -25
+          },
+          {
+            "x": 41,
+            "y": 25
+          },
+          {
+            "x": -41,
+            "y": 25
+          },
+          {
+            "x": -41,
+            "y": -25
+          }
+        ],
+        "edgeJointIds": {
+          "bottom": "construction-joint-1",
+          "left": "construction-joint-5",
+          "right": "construction-joint-6"
+        }
+      },
+      {
+        "id": "construction-panel-back",
+        "partId": "construction-part-back",
+        "name": "Back panel",
+        "role": "back",
+        "widthMm": 82,
+        "heightMm": 50,
+        "outline": [
+          {
+            "x": -41,
+            "y": -25
+          },
+          {
+            "x": -40,
+            "y": -25
+          },
+          {
+            "x": 40,
+            "y": -25
+          },
+          {
+            "x": 41,
+            "y": -25
+          },
+          {
+            "x": 41,
+            "y": 25
+          },
+          {
+            "x": -41,
+            "y": 25
+          },
+          {
+            "x": -41,
+            "y": -25
+          }
+        ],
+        "edgeJointIds": {
+          "bottom": "construction-joint-2",
+          "left": "construction-joint-7",
+          "right": "construction-joint-8"
+        }
+      },
+      {
+        "id": "construction-panel-left",
+        "partId": "construction-part-left",
+        "name": "Left panel",
+        "role": "left",
+        "widthMm": 60,
+        "heightMm": 50,
+        "outline": [
+          {
+            "x": -30,
+            "y": -25
+          },
+          {
+            "x": 30,
+            "y": -25
+          },
+          {
+            "x": 30,
+            "y": 25
+          },
+          {
+            "x": -30,
+            "y": 25
+          },
+          {
+            "x": -30,
+            "y": -25
+          }
+        ],
+        "edgeJointIds": {
+          "bottom": "construction-joint-3",
+          "left": "construction-joint-5",
+          "right": "construction-joint-7"
+        }
+      },
+      {
+        "id": "construction-panel-right",
+        "partId": "construction-part-right",
+        "name": "Right panel",
+        "role": "right",
+        "widthMm": 60,
+        "heightMm": 50,
+        "outline": [
+          {
+            "x": -30,
+            "y": -25
+          },
+          {
+            "x": 30,
+            "y": -25
+          },
+          {
+            "x": 30,
+            "y": 25
+          },
+          {
+            "x": -30,
+            "y": 25
+          },
+          {
+            "x": -30,
+            "y": -25
+          }
+        ],
+        "edgeJointIds": {
+          "bottom": "construction-joint-4",
+          "left": "construction-joint-6",
+          "right": "construction-joint-8"
+        }
+      }
+    ],
+    "joints": [
+      {
+        "id": "construction-joint-1",
+        "connectionKey": "base-front",
+        "kind": "butt",
+        "panelAId": "construction-panel-base",
+        "panelBId": "construction-panel-front",
+        "edgeA": "bottom",
+        "edgeB": "bottom",
+        "sharedLengthMm": 80,
+        "fingerCount": 0,
+        "clearanceMm": 0.15,
+        "pairLabel": "J1"
+      },
+      {
+        "id": "construction-joint-2",
+        "connectionKey": "base-back",
+        "kind": "butt",
+        "panelAId": "construction-panel-base",
+        "panelBId": "construction-panel-back",
+        "edgeA": "top",
+        "edgeB": "bottom",
+        "sharedLengthMm": 80,
+        "fingerCount": 0,
+        "clearanceMm": 0.15,
+        "pairLabel": "J2"
+      },
+      {
+        "id": "construction-joint-3",
+        "connectionKey": "base-left",
+        "kind": "butt",
+        "panelAId": "construction-panel-base",
+        "panelBId": "construction-panel-left",
+        "edgeA": "left",
+        "edgeB": "bottom",
+        "sharedLengthMm": 60,
+        "fingerCount": 0,
+        "clearanceMm": 0.15,
+        "pairLabel": "J3"
+      },
+      {
+        "id": "construction-joint-4",
+        "connectionKey": "base-right",
+        "kind": "butt",
+        "panelAId": "construction-panel-base",
+        "panelBId": "construction-panel-right",
+        "edgeA": "right",
+        "edgeB": "bottom",
+        "sharedLengthMm": 60,
+        "fingerCount": 0,
+        "clearanceMm": 0.15,
+        "pairLabel": "J4"
+      },
+      {
+        "id": "construction-joint-5",
+        "connectionKey": "front-left",
+        "kind": "butt",
+        "panelAId": "construction-panel-front",
+        "panelBId": "construction-panel-left",
+        "edgeA": "left",
+        "edgeB": "left",
+        "sharedLengthMm": 50,
+        "fingerCount": 0,
+        "clearanceMm": 0.15,
+        "pairLabel": "J5"
+      },
+      {
+        "id": "construction-joint-6",
+        "connectionKey": "front-right",
+        "kind": "butt",
+        "panelAId": "construction-panel-front",
+        "panelBId": "construction-panel-right",
+        "edgeA": "right",
+        "edgeB": "left",
+        "sharedLengthMm": 50,
+        "fingerCount": 0,
+        "clearanceMm": 0.15,
+        "pairLabel": "J6"
+      },
+      {
+        "id": "construction-joint-7",
+        "connectionKey": "back-left",
+        "kind": "butt",
+        "panelAId": "construction-panel-back",
+        "panelBId": "construction-panel-left",
+        "edgeA": "left",
+        "edgeB": "right",
+        "sharedLengthMm": 50,
+        "fingerCount": 0,
+        "clearanceMm": 0.15,
+        "pairLabel": "J7"
+      },
+      {
+        "id": "construction-joint-8",
+        "connectionKey": "back-right",
+        "kind": "butt",
+        "panelAId": "construction-panel-back",
+        "panelBId": "construction-panel-right",
+        "edgeA": "right",
+        "edgeB": "right",
+        "sharedLengthMm": 50,
+        "fingerCount": 0,
+        "clearanceMm": 0.15,
+        "pairLabel": "J8"
+      }
+    ],
+    "parts": [
+      {
+        "id": "construction-part-base",
+        "name": "Base panel",
+        "label": "BASE",
+        "thicknessMm": 1,
+        "sourceReference": "panel-construction",
+        "paths": [
+          {
+            "id": "construction-panel-base-outline",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -40,
+                "y": -30
+              },
+              {
+                "x": 40,
+                "y": -30
+              },
+              {
+                "x": 40,
+                "y": 30
+              },
+              {
+                "x": -40,
+                "y": 30
+              },
+              {
+                "x": -40,
+                "y": -30
+              }
+            ],
+            "panelId": "construction-panel-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "construction-panel-base-label",
+            "text": "BASE",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-panel-base"
+          },
+          {
+            "id": "construction-joint-1-base-label",
+            "text": "J1",
+            "position": {
+              "x": 0,
+              "y": -27.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-1"
+          },
+          {
+            "id": "construction-joint-2-base-label",
+            "text": "J2",
+            "position": {
+              "x": 0,
+              "y": 27.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-2"
+          },
+          {
+            "id": "construction-joint-3-base-label",
+            "text": "J3",
+            "position": {
+              "x": -37.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-3"
+          },
+          {
+            "id": "construction-joint-4-base-label",
+            "text": "J4",
+            "position": {
+              "x": 37.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-4"
+          }
+        ],
+        "construction": {
+          "panelId": "construction-panel-base",
+          "role": "base",
+          "jointIds": [
+            "construction-joint-1",
+            "construction-joint-2",
+            "construction-joint-3",
+            "construction-joint-4"
+          ]
+        }
+      },
+      {
+        "id": "construction-part-front",
+        "name": "Front panel",
+        "label": "FRONT",
+        "thicknessMm": 1,
+        "sourceReference": "panel-construction",
+        "paths": [
+          {
+            "id": "construction-panel-front-outline",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -41,
+                "y": -25
+              },
+              {
+                "x": -40,
+                "y": -25
+              },
+              {
+                "x": 40,
+                "y": -25
+              },
+              {
+                "x": 41,
+                "y": -25
+              },
+              {
+                "x": 41,
+                "y": 25
+              },
+              {
+                "x": -41,
+                "y": 25
+              },
+              {
+                "x": -41,
+                "y": -25
+              }
+            ],
+            "panelId": "construction-panel-front"
+          }
+        ],
+        "labels": [
+          {
+            "id": "construction-panel-front-label",
+            "text": "FRONT",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-panel-front"
+          },
+          {
+            "id": "construction-joint-1-front-label",
+            "text": "J1",
+            "position": {
+              "x": 0,
+              "y": -22.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-1"
+          },
+          {
+            "id": "construction-joint-5-front-label",
+            "text": "J5",
+            "position": {
+              "x": -38.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-5"
+          },
+          {
+            "id": "construction-joint-6-front-label",
+            "text": "J6",
+            "position": {
+              "x": 38.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-6"
+          }
+        ],
+        "construction": {
+          "panelId": "construction-panel-front",
+          "role": "front",
+          "jointIds": ["construction-joint-1", "construction-joint-5", "construction-joint-6"]
+        }
+      },
+      {
+        "id": "construction-part-back",
+        "name": "Back panel",
+        "label": "BACK",
+        "thicknessMm": 1,
+        "sourceReference": "panel-construction",
+        "paths": [
+          {
+            "id": "construction-panel-back-outline",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -41,
+                "y": -25
+              },
+              {
+                "x": -40,
+                "y": -25
+              },
+              {
+                "x": 40,
+                "y": -25
+              },
+              {
+                "x": 41,
+                "y": -25
+              },
+              {
+                "x": 41,
+                "y": 25
+              },
+              {
+                "x": -41,
+                "y": 25
+              },
+              {
+                "x": -41,
+                "y": -25
+              }
+            ],
+            "panelId": "construction-panel-back"
+          }
+        ],
+        "labels": [
+          {
+            "id": "construction-panel-back-label",
+            "text": "BACK",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-panel-back"
+          },
+          {
+            "id": "construction-joint-2-back-label",
+            "text": "J2",
+            "position": {
+              "x": 0,
+              "y": -22.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-2"
+          },
+          {
+            "id": "construction-joint-7-back-label",
+            "text": "J7",
+            "position": {
+              "x": -38.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-7"
+          },
+          {
+            "id": "construction-joint-8-back-label",
+            "text": "J8",
+            "position": {
+              "x": 38.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-8"
+          }
+        ],
+        "construction": {
+          "panelId": "construction-panel-back",
+          "role": "back",
+          "jointIds": ["construction-joint-2", "construction-joint-7", "construction-joint-8"]
+        }
+      },
+      {
+        "id": "construction-part-left",
+        "name": "Left panel",
+        "label": "LEFT",
+        "thicknessMm": 1,
+        "sourceReference": "panel-construction",
+        "paths": [
+          {
+            "id": "construction-panel-left-outline",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -30,
+                "y": -25
+              },
+              {
+                "x": 30,
+                "y": -25
+              },
+              {
+                "x": 30,
+                "y": 25
+              },
+              {
+                "x": -30,
+                "y": 25
+              },
+              {
+                "x": -30,
+                "y": -25
+              }
+            ],
+            "panelId": "construction-panel-left"
+          }
+        ],
+        "labels": [
+          {
+            "id": "construction-panel-left-label",
+            "text": "LEFT",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-panel-left"
+          },
+          {
+            "id": "construction-joint-3-left-label",
+            "text": "J3",
+            "position": {
+              "x": 0,
+              "y": -22.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-3"
+          },
+          {
+            "id": "construction-joint-5-left-label",
+            "text": "J5",
+            "position": {
+              "x": -27.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-5"
+          },
+          {
+            "id": "construction-joint-7-left-label",
+            "text": "J7",
+            "position": {
+              "x": 27.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-7"
+          }
+        ],
+        "construction": {
+          "panelId": "construction-panel-left",
+          "role": "left",
+          "jointIds": ["construction-joint-3", "construction-joint-5", "construction-joint-7"]
+        }
+      },
+      {
+        "id": "construction-part-right",
+        "name": "Right panel",
+        "label": "RIGHT",
+        "thicknessMm": 1,
+        "sourceReference": "panel-construction",
+        "paths": [
+          {
+            "id": "construction-panel-right-outline",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -30,
+                "y": -25
+              },
+              {
+                "x": 30,
+                "y": -25
+              },
+              {
+                "x": 30,
+                "y": 25
+              },
+              {
+                "x": -30,
+                "y": 25
+              },
+              {
+                "x": -30,
+                "y": -25
+              }
+            ],
+            "panelId": "construction-panel-right"
+          }
+        ],
+        "labels": [
+          {
+            "id": "construction-panel-right-label",
+            "text": "RIGHT",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-panel-right"
+          },
+          {
+            "id": "construction-joint-4-right-label",
+            "text": "J4",
+            "position": {
+              "x": 0,
+              "y": -22.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-4"
+          },
+          {
+            "id": "construction-joint-6-right-label",
+            "text": "J6",
+            "position": {
+              "x": -27.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-6"
+          },
+          {
+            "id": "construction-joint-8-right-label",
+            "text": "J8",
+            "position": {
+              "x": 27.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-8"
+          }
+        ],
+        "construction": {
+          "panelId": "construction-panel-right",
+          "role": "right",
+          "jointIds": ["construction-joint-4", "construction-joint-6", "construction-joint-8"]
+        }
+      }
+    ],
+    "tabs": [],
+    "issues": [
+      {
+        "id": "panel-butt-fastener-panel-construction",
+        "severity": "info",
+        "code": "PANEL_BUTT_JOINT_FASTENER_REQUIRED",
+        "message": "Butt-joint panels require adhesive, tape, or external fasteners.",
+        "affectedEntityIds": ["panel-construction"],
+        "suggestedAction": "Plan the assembly method before cutting."
+      }
+    ],
+    "assembledPreview": {
+      "panels": [
+        {
+          "id": "construction-panel-base",
+          "partId": "construction-part-base",
+          "name": "Base panel",
+          "verticesMm": [
+            [-40, 0, -30],
+            [40, 0, -30],
+            [40, 0, 30],
+            [-40, 0, 30],
+            [-40, 0, -30]
+          ]
+        },
+        {
+          "id": "construction-panel-front",
+          "partId": "construction-part-front",
+          "name": "Front panel",
+          "verticesMm": [
+            [-41, 0, -30],
+            [-40, 0, -30],
+            [40, 0, -30],
+            [41, 0, -30],
+            [41, 50, -30],
+            [-41, 50, -30],
+            [-41, 0, -30]
+          ]
+        },
+        {
+          "id": "construction-panel-back",
+          "partId": "construction-part-back",
+          "name": "Back panel",
+          "verticesMm": [
+            [41, 0, 30],
+            [40, 0, 30],
+            [-40, 0, 30],
+            [-41, 0, 30],
+            [-41, 50, 30],
+            [41, 50, 30],
+            [41, 0, 30]
+          ]
+        },
+        {
+          "id": "construction-panel-left",
+          "partId": "construction-part-left",
+          "name": "Left panel",
+          "verticesMm": [
+            [-40, 0, 30],
+            [-40, 0, -30],
+            [-40, 50, -30],
+            [-40, 50, 30],
+            [-40, 0, 30]
+          ]
+        },
+        {
+          "id": "construction-panel-right",
+          "partId": "construction-part-right",
+          "name": "Right panel",
+          "verticesMm": [
+            [40, 0, -30],
+            [40, 0, 30],
+            [40, 50, 30],
+            [40, 50, -30],
+            [40, 0, -30]
+          ]
+        }
+      ]
+    },
+    "editableEdges": [
+      {
+        "id": "back-left",
+        "kind": "connection",
+        "panelAId": "construction-panel-back",
+        "panelBId": "construction-panel-left",
+        "startMm": [41, 50, 30],
+        "endMm": [41, 0, 30],
+        "editable": true
+      },
+      {
+        "id": "back-right",
+        "kind": "connection",
+        "panelAId": "construction-panel-back",
+        "panelBId": "construction-panel-right",
+        "startMm": [-41, 0, 30],
+        "endMm": [-41, 50, 30],
+        "editable": true
+      },
+      {
+        "id": "base-back",
+        "kind": "connection",
+        "panelAId": "construction-panel-base",
+        "panelBId": "construction-panel-back",
+        "startMm": [40, 0, 30],
+        "endMm": [-40, 0, 30],
+        "editable": true
+      },
+      {
+        "id": "base-front",
+        "kind": "connection",
+        "panelAId": "construction-panel-base",
+        "panelBId": "construction-panel-front",
+        "startMm": [-40, 0, -30],
+        "endMm": [40, 0, -30],
+        "editable": true
+      },
+      {
+        "id": "base-left",
+        "kind": "connection",
+        "panelAId": "construction-panel-base",
+        "panelBId": "construction-panel-left",
+        "startMm": [-40, 0, 30],
+        "endMm": [-40, 0, -30],
+        "editable": true
+      },
+      {
+        "id": "base-right",
+        "kind": "connection",
+        "panelAId": "construction-panel-base",
+        "panelBId": "construction-panel-right",
+        "startMm": [40, 0, -30],
+        "endMm": [40, 0, 30],
+        "editable": true
+      },
+      {
+        "id": "construction-panel-back:top",
+        "kind": "boundary",
+        "panelAId": "construction-panel-back",
+        "startMm": [-41, 50, 30],
+        "endMm": [41, 50, 30],
+        "editable": true
+      },
+      {
+        "id": "construction-panel-front:top",
+        "kind": "boundary",
+        "panelAId": "construction-panel-front",
+        "startMm": [41, 50, -30],
+        "endMm": [-41, 50, -30],
+        "editable": true
+      },
+      {
+        "id": "construction-panel-left:top",
+        "kind": "boundary",
+        "panelAId": "construction-panel-left",
+        "startMm": [-40, 50, -30],
+        "endMm": [-40, 50, 30],
+        "editable": true
+      },
+      {
+        "id": "construction-panel-right:top",
+        "kind": "boundary",
+        "panelAId": "construction-panel-right",
+        "startMm": [40, 50, 30],
+        "endMm": [40, 50, -30],
+        "editable": true
+      },
+      {
+        "id": "front-left",
+        "kind": "connection",
+        "panelAId": "construction-panel-front",
+        "panelBId": "construction-panel-left",
+        "startMm": [-41, 50, -30],
+        "endMm": [-41, 0, -30],
+        "editable": true
+      },
+      {
+        "id": "front-right",
+        "kind": "connection",
+        "panelAId": "construction-panel-front",
+        "panelBId": "construction-panel-right",
+        "startMm": [41, 0, -30],
+        "endMm": [41, 50, -30],
+        "editable": true
+      }
+    ],
+    "algorithmVersion": "interlocking-panel-fingers-v8",
+    "inputHash": "sf9-b6c137db"
+  },
+  "project": {
+    "metadata": {
+      "id": "project-upgrade-baseline",
+      "name": "Upgrade baseline: panel-butt",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    "model": {
+      "id": "model-legacy-fixture",
+      "name": "40 mm cube",
+      "source": {
+        "kind": "built-in",
+        "primitive": "cube"
+      },
+      "dimensions": {
+        "widthMm": 40,
+        "heightMm": 40,
+        "depthMm": 40
+      },
+      "transform": {
+        "positionMm": [0, 0, 0],
+        "rotationDeg": [0, 0, 0],
+        "scale": [1, 1, 1]
+      },
+      "mesh": {
+        "positionsMm": [
+          -20, -20, -20, 20, -20, -20, 20, 20, -20, -20, 20, -20, -20, -20, 20, 20, -20, 20, 20, 20,
+          20, -20, 20, 20
+        ],
+        "indices": [
+          0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 3, 7, 6, 3, 6, 2, 0, 4, 7, 0, 7, 3,
+          1, 2, 6, 1, 6, 5
+        ]
+      },
+      "bounds": {
+        "minMm": [-20, -20, -20],
+        "maxMm": [20, 20, 20]
+      },
+      "healthReport": {
+        "triangleCount": 12,
+        "openEdgeCount": 0,
+        "nonManifoldEdgeCount": 0,
+        "disconnectedShellCount": 1,
+        "orientationIssueCount": 0,
+        "weldedVertexCount": 8,
+        "signedVolumeMm3": 64000.00000000001,
+        "likelyInverted": false,
+        "inspected": true
+      }
+    },
+    "fabricationMode": "panel-construction",
+    "materialProfileSnapshot": {
+      "id": "card-300gsm",
+      "name": "300 gsm card",
+      "category": "card",
+      "thicknessMm": 1,
+      "kerfMm": 0.1,
+      "clearanceMm": 0.1,
+      "grainDirection": "none",
+      "scoreAllowanceMm": 0.2,
+      "defaultSheetWidthMm": 210,
+      "defaultSheetHeightMm": 297
+    },
+    "generatedParts": [
+      {
+        "id": "construction-part-base",
+        "name": "Base panel",
+        "label": "BASE",
+        "thicknessMm": 1,
+        "sourceReference": "panel-construction",
+        "paths": [
+          {
+            "id": "construction-panel-base-outline",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -40,
+                "y": -30
+              },
+              {
+                "x": 40,
+                "y": -30
+              },
+              {
+                "x": 40,
+                "y": 30
+              },
+              {
+                "x": -40,
+                "y": 30
+              },
+              {
+                "x": -40,
+                "y": -30
+              }
+            ],
+            "panelId": "construction-panel-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "construction-panel-base-label",
+            "text": "BASE",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-panel-base"
+          },
+          {
+            "id": "construction-joint-1-base-label",
+            "text": "J1",
+            "position": {
+              "x": 0,
+              "y": -27.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-1"
+          },
+          {
+            "id": "construction-joint-2-base-label",
+            "text": "J2",
+            "position": {
+              "x": 0,
+              "y": 27.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-2"
+          },
+          {
+            "id": "construction-joint-3-base-label",
+            "text": "J3",
+            "position": {
+              "x": -37.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-3"
+          },
+          {
+            "id": "construction-joint-4-base-label",
+            "text": "J4",
+            "position": {
+              "x": 37.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-4"
+          }
+        ],
+        "construction": {
+          "panelId": "construction-panel-base",
+          "role": "base",
+          "jointIds": [
+            "construction-joint-1",
+            "construction-joint-2",
+            "construction-joint-3",
+            "construction-joint-4"
+          ]
+        }
+      },
+      {
+        "id": "construction-part-front",
+        "name": "Front panel",
+        "label": "FRONT",
+        "thicknessMm": 1,
+        "sourceReference": "panel-construction",
+        "paths": [
+          {
+            "id": "construction-panel-front-outline",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -41,
+                "y": -25
+              },
+              {
+                "x": -40,
+                "y": -25
+              },
+              {
+                "x": 40,
+                "y": -25
+              },
+              {
+                "x": 41,
+                "y": -25
+              },
+              {
+                "x": 41,
+                "y": 25
+              },
+              {
+                "x": -41,
+                "y": 25
+              },
+              {
+                "x": -41,
+                "y": -25
+              }
+            ],
+            "panelId": "construction-panel-front"
+          }
+        ],
+        "labels": [
+          {
+            "id": "construction-panel-front-label",
+            "text": "FRONT",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-panel-front"
+          },
+          {
+            "id": "construction-joint-1-front-label",
+            "text": "J1",
+            "position": {
+              "x": 0,
+              "y": -22.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-1"
+          },
+          {
+            "id": "construction-joint-5-front-label",
+            "text": "J5",
+            "position": {
+              "x": -38.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-5"
+          },
+          {
+            "id": "construction-joint-6-front-label",
+            "text": "J6",
+            "position": {
+              "x": 38.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-6"
+          }
+        ],
+        "construction": {
+          "panelId": "construction-panel-front",
+          "role": "front",
+          "jointIds": ["construction-joint-1", "construction-joint-5", "construction-joint-6"]
+        }
+      },
+      {
+        "id": "construction-part-back",
+        "name": "Back panel",
+        "label": "BACK",
+        "thicknessMm": 1,
+        "sourceReference": "panel-construction",
+        "paths": [
+          {
+            "id": "construction-panel-back-outline",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -41,
+                "y": -25
+              },
+              {
+                "x": -40,
+                "y": -25
+              },
+              {
+                "x": 40,
+                "y": -25
+              },
+              {
+                "x": 41,
+                "y": -25
+              },
+              {
+                "x": 41,
+                "y": 25
+              },
+              {
+                "x": -41,
+                "y": 25
+              },
+              {
+                "x": -41,
+                "y": -25
+              }
+            ],
+            "panelId": "construction-panel-back"
+          }
+        ],
+        "labels": [
+          {
+            "id": "construction-panel-back-label",
+            "text": "BACK",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-panel-back"
+          },
+          {
+            "id": "construction-joint-2-back-label",
+            "text": "J2",
+            "position": {
+              "x": 0,
+              "y": -22.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-2"
+          },
+          {
+            "id": "construction-joint-7-back-label",
+            "text": "J7",
+            "position": {
+              "x": -38.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-7"
+          },
+          {
+            "id": "construction-joint-8-back-label",
+            "text": "J8",
+            "position": {
+              "x": 38.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-8"
+          }
+        ],
+        "construction": {
+          "panelId": "construction-panel-back",
+          "role": "back",
+          "jointIds": ["construction-joint-2", "construction-joint-7", "construction-joint-8"]
+        }
+      },
+      {
+        "id": "construction-part-left",
+        "name": "Left panel",
+        "label": "LEFT",
+        "thicknessMm": 1,
+        "sourceReference": "panel-construction",
+        "paths": [
+          {
+            "id": "construction-panel-left-outline",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -30,
+                "y": -25
+              },
+              {
+                "x": 30,
+                "y": -25
+              },
+              {
+                "x": 30,
+                "y": 25
+              },
+              {
+                "x": -30,
+                "y": 25
+              },
+              {
+                "x": -30,
+                "y": -25
+              }
+            ],
+            "panelId": "construction-panel-left"
+          }
+        ],
+        "labels": [
+          {
+            "id": "construction-panel-left-label",
+            "text": "LEFT",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-panel-left"
+          },
+          {
+            "id": "construction-joint-3-left-label",
+            "text": "J3",
+            "position": {
+              "x": 0,
+              "y": -22.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-3"
+          },
+          {
+            "id": "construction-joint-5-left-label",
+            "text": "J5",
+            "position": {
+              "x": -27.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-5"
+          },
+          {
+            "id": "construction-joint-7-left-label",
+            "text": "J7",
+            "position": {
+              "x": 27.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-7"
+          }
+        ],
+        "construction": {
+          "panelId": "construction-panel-left",
+          "role": "left",
+          "jointIds": ["construction-joint-3", "construction-joint-5", "construction-joint-7"]
+        }
+      },
+      {
+        "id": "construction-part-right",
+        "name": "Right panel",
+        "label": "RIGHT",
+        "thicknessMm": 1,
+        "sourceReference": "panel-construction",
+        "paths": [
+          {
+            "id": "construction-panel-right-outline",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -30,
+                "y": -25
+              },
+              {
+                "x": 30,
+                "y": -25
+              },
+              {
+                "x": 30,
+                "y": 25
+              },
+              {
+                "x": -30,
+                "y": 25
+              },
+              {
+                "x": -30,
+                "y": -25
+              }
+            ],
+            "panelId": "construction-panel-right"
+          }
+        ],
+        "labels": [
+          {
+            "id": "construction-panel-right-label",
+            "text": "RIGHT",
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-panel-right"
+          },
+          {
+            "id": "construction-joint-4-right-label",
+            "text": "J4",
+            "position": {
+              "x": 0,
+              "y": -22.5
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-4"
+          },
+          {
+            "id": "construction-joint-6-right-label",
+            "text": "J6",
+            "position": {
+              "x": -27.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-6"
+          },
+          {
+            "id": "construction-joint-8-right-label",
+            "text": "J8",
+            "position": {
+              "x": 27.5,
+              "y": 0
+            },
+            "operation": "engrave",
+            "entityId": "construction-joint-8"
+          }
+        ],
+        "construction": {
+          "panelId": "construction-panel-right",
+          "role": "right",
+          "jointIds": ["construction-joint-4", "construction-joint-6", "construction-joint-8"]
+        }
+      }
+    ],
+    "generationIssues": [
+      {
+        "id": "panel-butt-fastener-panel-construction",
+        "severity": "info",
+        "code": "PANEL_BUTT_JOINT_FASTENER_REQUIRED",
+        "message": "Butt-joint panels require adhesive, tape, or external fasteners.",
+        "affectedEntityIds": ["panel-construction"],
+        "suggestedAction": "Plan the assembly method before cutting."
+      }
+    ],
+    "sheetLayouts": [
+      {
+        "id": "sheet-upgrade-baseline",
+        "widthMm": 600,
+        "heightMm": 400,
+        "marginMm": 5,
+        "spacingMm": 3,
+        "placements": [
+          {
+            "partId": "construction-part-base",
+            "x": 45,
+            "y": 35,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "construction-part-front",
+            "x": 129,
+            "y": 30,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "construction-part-back",
+            "x": 214,
+            "y": 30,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "construction-part-left",
+            "x": 288,
+            "y": 30,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "construction-part-right",
+            "x": 351,
+            "y": 30,
+            "rotationDeg": 0
+          }
+        ]
+      }
+    ],
+    "exportSettings": {
+      "includeLabels": true,
+      "includeRegistrationMarks": false,
+      "includeSheetBoundary": true,
+      "operationStyles": [
+        {
+          "operation": "cut",
+          "stroke": "#ff0000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "score",
+          "stroke": "#0000ff",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "mountain-fold",
+          "stroke": "#8b5cf6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "valley-fold",
+          "stroke": "#14b8a6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "perforate",
+          "stroke": "#f59e0b",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "engrave",
+          "stroke": "#000000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "guide",
+          "stroke": "#6b7280",
+          "strokeWidthMm": 0.1
+        }
+      ],
+      "kerfCompensation": "none",
+      "customKerfMm": 0.1,
+      "foldLineOutput": "preserve",
+      "perforationDashMm": 2,
+      "perforationGapMm": 1,
+      "labelFontSizeMm": 3
+    },
+    "acknowledgedWarningIds": [],
+    "modeSettings": {
+      "stackedSlices": {
+        "axis": "z",
+        "spacingMm": 10,
+        "thicknessMm": 1,
+        "contourEpsilonMm": 0.001
+      },
+      "waffleSlices": {
+        "primaryAxis": "x",
+        "secondaryAxis": "y",
+        "primarySpacingMm": 20,
+        "secondarySpacingMm": 20,
+        "thicknessMm": 3,
+        "clearanceMm": 0.15,
+        "contourEpsilonMm": 0.001,
+        "slotPattern": "alternating",
+        "reverseSlots": false
+      },
+      "foldTemplate": {
+        "templateKind": "open-box",
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40,
+        "profileToleranceMm": 1,
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1,
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "meshUnfold": {
+        "strategy": "automatic",
+        "rootFaceIndex": 0,
+        "manualSeamKeys": [],
+        "tabDepthMm": 6,
+        "maximumFaceCount": 200,
+        "searchAttempts": 18
+      },
+      "panelConstruction": {
+        "innerWidthMm": 80,
+        "innerDepthMm": 60,
+        "innerHeightMm": 50,
+        "jointKind": "butt",
+        "fingerWidthMm": 10,
+        "clearanceMm": 0.15,
+        "includeLid": false,
+        "panelThicknessMm": 1,
+        "dividerThicknessMm": 1,
+        "lidThicknessMm": 1,
+        "widthDividerCount": 0,
+        "depthDividerCount": 0,
+        "connectionOverrides": {},
+        "panelProfiles": {
+          "front": "flat",
+          "back": "flat"
+        },
+        "glueTabDepthMm": 8,
+        "boundaryGlueTabs": [],
+        "features": []
+      }
+    },
+    "panelConstructionResult": {
+      "settings": {
+        "innerWidthMm": 80,
+        "innerDepthMm": 60,
+        "innerHeightMm": 50,
+        "jointKind": "butt",
+        "fingerWidthMm": 10,
+        "clearanceMm": 0.15,
+        "includeLid": false,
+        "panelThicknessMm": 1,
+        "dividerThicknessMm": 1,
+        "lidThicknessMm": 1,
+        "widthDividerCount": 0,
+        "depthDividerCount": 0,
+        "connectionOverrides": {},
+        "panelProfiles": {
+          "front": "flat",
+          "back": "flat"
+        },
+        "glueTabDepthMm": 8,
+        "boundaryGlueTabs": [],
+        "features": []
+      },
+      "material": {
+        "id": "card-300gsm",
+        "category": "card",
+        "thicknessMm": 1,
+        "kerfMm": 0.1
+      },
+      "panels": [
+        {
+          "id": "construction-panel-base",
+          "partId": "construction-part-base",
+          "name": "Base panel",
+          "role": "base",
+          "widthMm": 80,
+          "heightMm": 60,
+          "outline": [
+            {
+              "x": -40,
+              "y": -30
+            },
+            {
+              "x": 40,
+              "y": -30
+            },
+            {
+              "x": 40,
+              "y": 30
+            },
+            {
+              "x": -40,
+              "y": 30
+            },
+            {
+              "x": -40,
+              "y": -30
+            }
+          ],
+          "edgeJointIds": {
+            "bottom": "construction-joint-1",
+            "top": "construction-joint-2",
+            "left": "construction-joint-3",
+            "right": "construction-joint-4"
+          }
+        },
+        {
+          "id": "construction-panel-front",
+          "partId": "construction-part-front",
+          "name": "Front panel",
+          "role": "front",
+          "widthMm": 82,
+          "heightMm": 50,
+          "outline": [
+            {
+              "x": -41,
+              "y": -25
+            },
+            {
+              "x": -40,
+              "y": -25
+            },
+            {
+              "x": 40,
+              "y": -25
+            },
+            {
+              "x": 41,
+              "y": -25
+            },
+            {
+              "x": 41,
+              "y": 25
+            },
+            {
+              "x": -41,
+              "y": 25
+            },
+            {
+              "x": -41,
+              "y": -25
+            }
+          ],
+          "edgeJointIds": {
+            "bottom": "construction-joint-1",
+            "left": "construction-joint-5",
+            "right": "construction-joint-6"
+          }
+        },
+        {
+          "id": "construction-panel-back",
+          "partId": "construction-part-back",
+          "name": "Back panel",
+          "role": "back",
+          "widthMm": 82,
+          "heightMm": 50,
+          "outline": [
+            {
+              "x": -41,
+              "y": -25
+            },
+            {
+              "x": -40,
+              "y": -25
+            },
+            {
+              "x": 40,
+              "y": -25
+            },
+            {
+              "x": 41,
+              "y": -25
+            },
+            {
+              "x": 41,
+              "y": 25
+            },
+            {
+              "x": -41,
+              "y": 25
+            },
+            {
+              "x": -41,
+              "y": -25
+            }
+          ],
+          "edgeJointIds": {
+            "bottom": "construction-joint-2",
+            "left": "construction-joint-7",
+            "right": "construction-joint-8"
+          }
+        },
+        {
+          "id": "construction-panel-left",
+          "partId": "construction-part-left",
+          "name": "Left panel",
+          "role": "left",
+          "widthMm": 60,
+          "heightMm": 50,
+          "outline": [
+            {
+              "x": -30,
+              "y": -25
+            },
+            {
+              "x": 30,
+              "y": -25
+            },
+            {
+              "x": 30,
+              "y": 25
+            },
+            {
+              "x": -30,
+              "y": 25
+            },
+            {
+              "x": -30,
+              "y": -25
+            }
+          ],
+          "edgeJointIds": {
+            "bottom": "construction-joint-3",
+            "left": "construction-joint-5",
+            "right": "construction-joint-7"
+          }
+        },
+        {
+          "id": "construction-panel-right",
+          "partId": "construction-part-right",
+          "name": "Right panel",
+          "role": "right",
+          "widthMm": 60,
+          "heightMm": 50,
+          "outline": [
+            {
+              "x": -30,
+              "y": -25
+            },
+            {
+              "x": 30,
+              "y": -25
+            },
+            {
+              "x": 30,
+              "y": 25
+            },
+            {
+              "x": -30,
+              "y": 25
+            },
+            {
+              "x": -30,
+              "y": -25
+            }
+          ],
+          "edgeJointIds": {
+            "bottom": "construction-joint-4",
+            "left": "construction-joint-6",
+            "right": "construction-joint-8"
+          }
+        }
+      ],
+      "joints": [
+        {
+          "id": "construction-joint-1",
+          "connectionKey": "base-front",
+          "kind": "butt",
+          "panelAId": "construction-panel-base",
+          "panelBId": "construction-panel-front",
+          "edgeA": "bottom",
+          "edgeB": "bottom",
+          "sharedLengthMm": 80,
+          "fingerCount": 0,
+          "clearanceMm": 0.15,
+          "pairLabel": "J1"
+        },
+        {
+          "id": "construction-joint-2",
+          "connectionKey": "base-back",
+          "kind": "butt",
+          "panelAId": "construction-panel-base",
+          "panelBId": "construction-panel-back",
+          "edgeA": "top",
+          "edgeB": "bottom",
+          "sharedLengthMm": 80,
+          "fingerCount": 0,
+          "clearanceMm": 0.15,
+          "pairLabel": "J2"
+        },
+        {
+          "id": "construction-joint-3",
+          "connectionKey": "base-left",
+          "kind": "butt",
+          "panelAId": "construction-panel-base",
+          "panelBId": "construction-panel-left",
+          "edgeA": "left",
+          "edgeB": "bottom",
+          "sharedLengthMm": 60,
+          "fingerCount": 0,
+          "clearanceMm": 0.15,
+          "pairLabel": "J3"
+        },
+        {
+          "id": "construction-joint-4",
+          "connectionKey": "base-right",
+          "kind": "butt",
+          "panelAId": "construction-panel-base",
+          "panelBId": "construction-panel-right",
+          "edgeA": "right",
+          "edgeB": "bottom",
+          "sharedLengthMm": 60,
+          "fingerCount": 0,
+          "clearanceMm": 0.15,
+          "pairLabel": "J4"
+        },
+        {
+          "id": "construction-joint-5",
+          "connectionKey": "front-left",
+          "kind": "butt",
+          "panelAId": "construction-panel-front",
+          "panelBId": "construction-panel-left",
+          "edgeA": "left",
+          "edgeB": "left",
+          "sharedLengthMm": 50,
+          "fingerCount": 0,
+          "clearanceMm": 0.15,
+          "pairLabel": "J5"
+        },
+        {
+          "id": "construction-joint-6",
+          "connectionKey": "front-right",
+          "kind": "butt",
+          "panelAId": "construction-panel-front",
+          "panelBId": "construction-panel-right",
+          "edgeA": "right",
+          "edgeB": "left",
+          "sharedLengthMm": 50,
+          "fingerCount": 0,
+          "clearanceMm": 0.15,
+          "pairLabel": "J6"
+        },
+        {
+          "id": "construction-joint-7",
+          "connectionKey": "back-left",
+          "kind": "butt",
+          "panelAId": "construction-panel-back",
+          "panelBId": "construction-panel-left",
+          "edgeA": "left",
+          "edgeB": "right",
+          "sharedLengthMm": 50,
+          "fingerCount": 0,
+          "clearanceMm": 0.15,
+          "pairLabel": "J7"
+        },
+        {
+          "id": "construction-joint-8",
+          "connectionKey": "back-right",
+          "kind": "butt",
+          "panelAId": "construction-panel-back",
+          "panelBId": "construction-panel-right",
+          "edgeA": "right",
+          "edgeB": "right",
+          "sharedLengthMm": 50,
+          "fingerCount": 0,
+          "clearanceMm": 0.15,
+          "pairLabel": "J8"
+        }
+      ],
+      "parts": [
+        {
+          "id": "construction-part-base",
+          "name": "Base panel",
+          "label": "BASE",
+          "thicknessMm": 1,
+          "sourceReference": "panel-construction",
+          "paths": [
+            {
+              "id": "construction-panel-base-outline",
+              "operation": "cut",
+              "closed": true,
+              "contourRole": "outer",
+              "points": [
+                {
+                  "x": -40,
+                  "y": -30
+                },
+                {
+                  "x": 40,
+                  "y": -30
+                },
+                {
+                  "x": 40,
+                  "y": 30
+                },
+                {
+                  "x": -40,
+                  "y": 30
+                },
+                {
+                  "x": -40,
+                  "y": -30
+                }
+              ],
+              "panelId": "construction-panel-base"
+            }
+          ],
+          "labels": [
+            {
+              "id": "construction-panel-base-label",
+              "text": "BASE",
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-panel-base"
+            },
+            {
+              "id": "construction-joint-1-base-label",
+              "text": "J1",
+              "position": {
+                "x": 0,
+                "y": -27.5
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-1"
+            },
+            {
+              "id": "construction-joint-2-base-label",
+              "text": "J2",
+              "position": {
+                "x": 0,
+                "y": 27.5
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-2"
+            },
+            {
+              "id": "construction-joint-3-base-label",
+              "text": "J3",
+              "position": {
+                "x": -37.5,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-3"
+            },
+            {
+              "id": "construction-joint-4-base-label",
+              "text": "J4",
+              "position": {
+                "x": 37.5,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-4"
+            }
+          ],
+          "construction": {
+            "panelId": "construction-panel-base",
+            "role": "base",
+            "jointIds": [
+              "construction-joint-1",
+              "construction-joint-2",
+              "construction-joint-3",
+              "construction-joint-4"
+            ]
+          }
+        },
+        {
+          "id": "construction-part-front",
+          "name": "Front panel",
+          "label": "FRONT",
+          "thicknessMm": 1,
+          "sourceReference": "panel-construction",
+          "paths": [
+            {
+              "id": "construction-panel-front-outline",
+              "operation": "cut",
+              "closed": true,
+              "contourRole": "outer",
+              "points": [
+                {
+                  "x": -41,
+                  "y": -25
+                },
+                {
+                  "x": -40,
+                  "y": -25
+                },
+                {
+                  "x": 40,
+                  "y": -25
+                },
+                {
+                  "x": 41,
+                  "y": -25
+                },
+                {
+                  "x": 41,
+                  "y": 25
+                },
+                {
+                  "x": -41,
+                  "y": 25
+                },
+                {
+                  "x": -41,
+                  "y": -25
+                }
+              ],
+              "panelId": "construction-panel-front"
+            }
+          ],
+          "labels": [
+            {
+              "id": "construction-panel-front-label",
+              "text": "FRONT",
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-panel-front"
+            },
+            {
+              "id": "construction-joint-1-front-label",
+              "text": "J1",
+              "position": {
+                "x": 0,
+                "y": -22.5
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-1"
+            },
+            {
+              "id": "construction-joint-5-front-label",
+              "text": "J5",
+              "position": {
+                "x": -38.5,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-5"
+            },
+            {
+              "id": "construction-joint-6-front-label",
+              "text": "J6",
+              "position": {
+                "x": 38.5,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-6"
+            }
+          ],
+          "construction": {
+            "panelId": "construction-panel-front",
+            "role": "front",
+            "jointIds": ["construction-joint-1", "construction-joint-5", "construction-joint-6"]
+          }
+        },
+        {
+          "id": "construction-part-back",
+          "name": "Back panel",
+          "label": "BACK",
+          "thicknessMm": 1,
+          "sourceReference": "panel-construction",
+          "paths": [
+            {
+              "id": "construction-panel-back-outline",
+              "operation": "cut",
+              "closed": true,
+              "contourRole": "outer",
+              "points": [
+                {
+                  "x": -41,
+                  "y": -25
+                },
+                {
+                  "x": -40,
+                  "y": -25
+                },
+                {
+                  "x": 40,
+                  "y": -25
+                },
+                {
+                  "x": 41,
+                  "y": -25
+                },
+                {
+                  "x": 41,
+                  "y": 25
+                },
+                {
+                  "x": -41,
+                  "y": 25
+                },
+                {
+                  "x": -41,
+                  "y": -25
+                }
+              ],
+              "panelId": "construction-panel-back"
+            }
+          ],
+          "labels": [
+            {
+              "id": "construction-panel-back-label",
+              "text": "BACK",
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-panel-back"
+            },
+            {
+              "id": "construction-joint-2-back-label",
+              "text": "J2",
+              "position": {
+                "x": 0,
+                "y": -22.5
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-2"
+            },
+            {
+              "id": "construction-joint-7-back-label",
+              "text": "J7",
+              "position": {
+                "x": -38.5,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-7"
+            },
+            {
+              "id": "construction-joint-8-back-label",
+              "text": "J8",
+              "position": {
+                "x": 38.5,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-8"
+            }
+          ],
+          "construction": {
+            "panelId": "construction-panel-back",
+            "role": "back",
+            "jointIds": ["construction-joint-2", "construction-joint-7", "construction-joint-8"]
+          }
+        },
+        {
+          "id": "construction-part-left",
+          "name": "Left panel",
+          "label": "LEFT",
+          "thicknessMm": 1,
+          "sourceReference": "panel-construction",
+          "paths": [
+            {
+              "id": "construction-panel-left-outline",
+              "operation": "cut",
+              "closed": true,
+              "contourRole": "outer",
+              "points": [
+                {
+                  "x": -30,
+                  "y": -25
+                },
+                {
+                  "x": 30,
+                  "y": -25
+                },
+                {
+                  "x": 30,
+                  "y": 25
+                },
+                {
+                  "x": -30,
+                  "y": 25
+                },
+                {
+                  "x": -30,
+                  "y": -25
+                }
+              ],
+              "panelId": "construction-panel-left"
+            }
+          ],
+          "labels": [
+            {
+              "id": "construction-panel-left-label",
+              "text": "LEFT",
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-panel-left"
+            },
+            {
+              "id": "construction-joint-3-left-label",
+              "text": "J3",
+              "position": {
+                "x": 0,
+                "y": -22.5
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-3"
+            },
+            {
+              "id": "construction-joint-5-left-label",
+              "text": "J5",
+              "position": {
+                "x": -27.5,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-5"
+            },
+            {
+              "id": "construction-joint-7-left-label",
+              "text": "J7",
+              "position": {
+                "x": 27.5,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-7"
+            }
+          ],
+          "construction": {
+            "panelId": "construction-panel-left",
+            "role": "left",
+            "jointIds": ["construction-joint-3", "construction-joint-5", "construction-joint-7"]
+          }
+        },
+        {
+          "id": "construction-part-right",
+          "name": "Right panel",
+          "label": "RIGHT",
+          "thicknessMm": 1,
+          "sourceReference": "panel-construction",
+          "paths": [
+            {
+              "id": "construction-panel-right-outline",
+              "operation": "cut",
+              "closed": true,
+              "contourRole": "outer",
+              "points": [
+                {
+                  "x": -30,
+                  "y": -25
+                },
+                {
+                  "x": 30,
+                  "y": -25
+                },
+                {
+                  "x": 30,
+                  "y": 25
+                },
+                {
+                  "x": -30,
+                  "y": 25
+                },
+                {
+                  "x": -30,
+                  "y": -25
+                }
+              ],
+              "panelId": "construction-panel-right"
+            }
+          ],
+          "labels": [
+            {
+              "id": "construction-panel-right-label",
+              "text": "RIGHT",
+              "position": {
+                "x": 0,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-panel-right"
+            },
+            {
+              "id": "construction-joint-4-right-label",
+              "text": "J4",
+              "position": {
+                "x": 0,
+                "y": -22.5
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-4"
+            },
+            {
+              "id": "construction-joint-6-right-label",
+              "text": "J6",
+              "position": {
+                "x": -27.5,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-6"
+            },
+            {
+              "id": "construction-joint-8-right-label",
+              "text": "J8",
+              "position": {
+                "x": 27.5,
+                "y": 0
+              },
+              "operation": "engrave",
+              "entityId": "construction-joint-8"
+            }
+          ],
+          "construction": {
+            "panelId": "construction-panel-right",
+            "role": "right",
+            "jointIds": ["construction-joint-4", "construction-joint-6", "construction-joint-8"]
+          }
+        }
+      ],
+      "tabs": [],
+      "issues": [
+        {
+          "id": "panel-butt-fastener-panel-construction",
+          "severity": "info",
+          "code": "PANEL_BUTT_JOINT_FASTENER_REQUIRED",
+          "message": "Butt-joint panels require adhesive, tape, or external fasteners.",
+          "affectedEntityIds": ["panel-construction"],
+          "suggestedAction": "Plan the assembly method before cutting."
+        }
+      ],
+      "assembledPreview": {
+        "panels": [
+          {
+            "id": "construction-panel-base",
+            "partId": "construction-part-base",
+            "name": "Base panel",
+            "verticesMm": [
+              [-40, 0, -30],
+              [40, 0, -30],
+              [40, 0, 30],
+              [-40, 0, 30],
+              [-40, 0, -30]
+            ]
+          },
+          {
+            "id": "construction-panel-front",
+            "partId": "construction-part-front",
+            "name": "Front panel",
+            "verticesMm": [
+              [-41, 0, -30],
+              [-40, 0, -30],
+              [40, 0, -30],
+              [41, 0, -30],
+              [41, 50, -30],
+              [-41, 50, -30],
+              [-41, 0, -30]
+            ]
+          },
+          {
+            "id": "construction-panel-back",
+            "partId": "construction-part-back",
+            "name": "Back panel",
+            "verticesMm": [
+              [41, 0, 30],
+              [40, 0, 30],
+              [-40, 0, 30],
+              [-41, 0, 30],
+              [-41, 50, 30],
+              [41, 50, 30],
+              [41, 0, 30]
+            ]
+          },
+          {
+            "id": "construction-panel-left",
+            "partId": "construction-part-left",
+            "name": "Left panel",
+            "verticesMm": [
+              [-40, 0, 30],
+              [-40, 0, -30],
+              [-40, 50, -30],
+              [-40, 50, 30],
+              [-40, 0, 30]
+            ]
+          },
+          {
+            "id": "construction-panel-right",
+            "partId": "construction-part-right",
+            "name": "Right panel",
+            "verticesMm": [
+              [40, 0, -30],
+              [40, 0, 30],
+              [40, 50, 30],
+              [40, 50, -30],
+              [40, 0, -30]
+            ]
+          }
+        ]
+      },
+      "editableEdges": [
+        {
+          "id": "back-left",
+          "kind": "connection",
+          "panelAId": "construction-panel-back",
+          "panelBId": "construction-panel-left",
+          "startMm": [41, 50, 30],
+          "endMm": [41, 0, 30],
+          "editable": true
+        },
+        {
+          "id": "back-right",
+          "kind": "connection",
+          "panelAId": "construction-panel-back",
+          "panelBId": "construction-panel-right",
+          "startMm": [-41, 0, 30],
+          "endMm": [-41, 50, 30],
+          "editable": true
+        },
+        {
+          "id": "base-back",
+          "kind": "connection",
+          "panelAId": "construction-panel-base",
+          "panelBId": "construction-panel-back",
+          "startMm": [40, 0, 30],
+          "endMm": [-40, 0, 30],
+          "editable": true
+        },
+        {
+          "id": "base-front",
+          "kind": "connection",
+          "panelAId": "construction-panel-base",
+          "panelBId": "construction-panel-front",
+          "startMm": [-40, 0, -30],
+          "endMm": [40, 0, -30],
+          "editable": true
+        },
+        {
+          "id": "base-left",
+          "kind": "connection",
+          "panelAId": "construction-panel-base",
+          "panelBId": "construction-panel-left",
+          "startMm": [-40, 0, 30],
+          "endMm": [-40, 0, -30],
+          "editable": true
+        },
+        {
+          "id": "base-right",
+          "kind": "connection",
+          "panelAId": "construction-panel-base",
+          "panelBId": "construction-panel-right",
+          "startMm": [40, 0, -30],
+          "endMm": [40, 0, 30],
+          "editable": true
+        },
+        {
+          "id": "construction-panel-back:top",
+          "kind": "boundary",
+          "panelAId": "construction-panel-back",
+          "startMm": [-41, 50, 30],
+          "endMm": [41, 50, 30],
+          "editable": true
+        },
+        {
+          "id": "construction-panel-front:top",
+          "kind": "boundary",
+          "panelAId": "construction-panel-front",
+          "startMm": [41, 50, -30],
+          "endMm": [-41, 50, -30],
+          "editable": true
+        },
+        {
+          "id": "construction-panel-left:top",
+          "kind": "boundary",
+          "panelAId": "construction-panel-left",
+          "startMm": [-40, 50, -30],
+          "endMm": [-40, 50, 30],
+          "editable": true
+        },
+        {
+          "id": "construction-panel-right:top",
+          "kind": "boundary",
+          "panelAId": "construction-panel-right",
+          "startMm": [40, 50, 30],
+          "endMm": [40, 50, -30],
+          "editable": true
+        },
+        {
+          "id": "front-left",
+          "kind": "connection",
+          "panelAId": "construction-panel-front",
+          "panelBId": "construction-panel-left",
+          "startMm": [-41, 50, -30],
+          "endMm": [-41, 0, -30],
+          "editable": true
+        },
+        {
+          "id": "front-right",
+          "kind": "connection",
+          "panelAId": "construction-panel-front",
+          "panelBId": "construction-panel-right",
+          "startMm": [41, 0, -30],
+          "endMm": [41, 50, -30],
+          "editable": true
+        }
+      ],
+      "algorithmVersion": "interlocking-panel-fingers-v8",
+      "inputHash": "sf9-b6c137db"
+    },
+    "generationRecord": {
+      "signatureVersion": 2,
+      "mode": "panel-construction",
+      "inputHash": "sf9-60b9018a",
+      "resultHash": "sf9-4199016d",
+      "algorithmVersion": "interlocking-panel-fingers-v8",
+      "generatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

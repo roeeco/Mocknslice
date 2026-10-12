@@ -245,7 +245,10 @@ function overlappingSlotIssues(records: SlotRecord[]): ValidationIssue[] {
   return issues;
 }
 
-export function generateWaffleSlices(input: WaffleSliceInput): WaffleSliceResult {
+export function generateWaffleSlices(
+  input: WaffleSliceInput,
+  options?: { sliceGenerator?: typeof generateStackedSlices },
+): WaffleSliceResult {
   const { mesh, bounds, modelId, settings } = input;
   if (settings.primaryAxis === settings.secondaryAxis)
     throw new Error('Waffle slice axes must be perpendicular.');
@@ -255,7 +258,7 @@ export function generateWaffleSlices(input: WaffleSliceInput): WaffleSliceResult
   if (slotWidthMm <= 0 || !Number.isFinite(slotWidthMm))
     throw new Error('Slot width must be greater than zero.');
 
-  const primary = generateStackedSlices({
+  const primary = (options?.sliceGenerator ?? generateStackedSlices)({
     mesh,
     bounds,
     modelId,
@@ -266,7 +269,7 @@ export function generateWaffleSlices(input: WaffleSliceInput): WaffleSliceResult
       contourEpsilonMm: settings.contourEpsilonMm,
     },
   });
-  const secondary = generateStackedSlices({
+  const secondary = (options?.sliceGenerator ?? generateStackedSlices)({
     mesh,
     bounds,
     modelId,

@@ -1,3 +1,4 @@
+import { t } from '../../locales';
 import { Component, type ErrorInfo, type PropsWithChildren, type ReactNode } from 'react';
 
 interface ViewportErrorBoundaryState {
@@ -33,10 +34,12 @@ export class ViewportErrorBoundary extends Component<
       return (
         <div className="webgl-fallback" role="alert">
           <p>
-            The 3D preview stopped rendering. Model data and inspection controls remain available.
+            {t(
+              'The 3D preview stopped rendering. Model data and inspection controls remain available.',
+            )}
           </p>
           <button type="button" onClick={() => this.setState({ failed: false })}>
-            Retry 3D preview
+            {t('Retry 3D preview')}
           </button>
         </div>
       );

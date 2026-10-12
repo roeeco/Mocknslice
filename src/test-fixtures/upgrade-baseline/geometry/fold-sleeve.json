@@ -1,0 +1,2570 @@
+{
+  "input": {
+    "mode": "fold-template",
+    "payload": {
+      "materialThicknessMm": 1,
+      "settings": {
+        "templateKind": "sleeve",
+        "fitAxis": "y",
+        "clearanceMm": 0,
+        "profileToleranceMm": 1,
+        "sizeMode": "custom",
+        "envelopeDimensions": {
+          "widthMm": 80,
+          "lengthMm": 60,
+          "heightMm": 40
+        },
+        "parameters": {
+          "wallHeightMm": 40,
+          "tabDepthMm": 8,
+          "lidDepthMm": 15,
+          "lidClearanceMm": 0.5,
+          "gussetDepthMm": 40,
+          "closureFlapMm": 12,
+          "prismSides": 6,
+          "prismRotationDeg": 0,
+          "topScale": 0.5,
+          "seamTabMm": 8,
+          "standalone": true,
+          "closureMethod": "glue",
+          "slotClearanceMm": 0.1
+        },
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      }
+    }
+  },
+  "result": {
+    "settings": {
+      "templateKind": "sleeve",
+      "fitAxis": "y",
+      "clearanceMm": 0,
+      "profileToleranceMm": 1,
+      "sizeMode": "custom",
+      "envelopeDimensions": {
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40
+      },
+      "parameters": {
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "standalone": true,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1
+      },
+      "connectionOverrides": [],
+      "boundaryGlueTabs": [],
+      "glueTabDepthMm": 8
+    },
+    "profile": {
+      "sourceModelId": "standalone-template",
+      "fitAxis": "y",
+      "sourceHullPoints": [
+        {
+          "x": -40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": 30
+        },
+        {
+          "x": -40,
+          "y": 30
+        }
+      ],
+      "fittedPoints": [
+        {
+          "x": -40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": 30
+        },
+        {
+          "x": -40,
+          "y": 30
+        }
+      ],
+      "clearanceMm": 0,
+      "simplificationToleranceMm": 1,
+      "axisMinMm": -20,
+      "axisMaxMm": 20,
+      "widthMm": 80,
+      "heightMm": 60,
+      "depthMm": 40
+    },
+    "panels": [
+      {
+        "id": "fold-sleeve-main-band-1",
+        "partId": "fold-sleeve-main",
+        "name": "Band 1",
+        "role": "band",
+        "outline": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 80,
+            "y": 0
+          },
+          {
+            "x": 80,
+            "y": 40
+          },
+          {
+            "x": 0,
+            "y": 40
+          }
+        ]
+      },
+      {
+        "id": "fold-sleeve-main-band-2",
+        "partId": "fold-sleeve-main",
+        "name": "Band 2",
+        "role": "band",
+        "outline": [
+          {
+            "x": 80,
+            "y": 0
+          },
+          {
+            "x": 140,
+            "y": 0
+          },
+          {
+            "x": 140,
+            "y": 40
+          },
+          {
+            "x": 80,
+            "y": 40
+          }
+        ]
+      },
+      {
+        "id": "fold-sleeve-main-band-3",
+        "partId": "fold-sleeve-main",
+        "name": "Band 3",
+        "role": "band",
+        "outline": [
+          {
+            "x": 140,
+            "y": 0
+          },
+          {
+            "x": 220,
+            "y": 0
+          },
+          {
+            "x": 220,
+            "y": 40
+          },
+          {
+            "x": 140,
+            "y": 40
+          }
+        ]
+      },
+      {
+        "id": "fold-sleeve-main-band-4",
+        "partId": "fold-sleeve-main",
+        "name": "Band 4",
+        "role": "band",
+        "outline": [
+          {
+            "x": 220,
+            "y": 0
+          },
+          {
+            "x": 280,
+            "y": 0
+          },
+          {
+            "x": 280,
+            "y": 40
+          },
+          {
+            "x": 220,
+            "y": 40
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "id": "fold-sleeve-main-band-fold-1",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-1",
+        "panelBId": "fold-sleeve-main-band-2",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F1",
+        "start": {
+          "x": 80,
+          "y": 0
+        },
+        "end": {
+          "x": 80,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-sleeve-main-band-fold-2",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-2",
+        "panelBId": "fold-sleeve-main-band-3",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F2",
+        "start": {
+          "x": 140,
+          "y": 0
+        },
+        "end": {
+          "x": 140,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-sleeve-main-band-fold-3",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-3",
+        "panelBId": "fold-sleeve-main-band-4",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F3",
+        "start": {
+          "x": 220,
+          "y": 0
+        },
+        "end": {
+          "x": 220,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-sleeve-main-band-1-boundary-1",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-1",
+        "disposition": "boundary",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 80,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-sleeve-main-band-1-boundary-3",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-1",
+        "disposition": "boundary",
+        "start": {
+          "x": 80,
+          "y": 40
+        },
+        "end": {
+          "x": 0,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-sleeve-main-band-1-boundary-4",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-1",
+        "disposition": "boundary",
+        "start": {
+          "x": 0,
+          "y": 40
+        },
+        "end": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-sleeve-main-band-2-boundary-1",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-2",
+        "disposition": "boundary",
+        "start": {
+          "x": 80,
+          "y": 0
+        },
+        "end": {
+          "x": 140,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-sleeve-main-band-2-boundary-3",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-2",
+        "disposition": "boundary",
+        "start": {
+          "x": 140,
+          "y": 40
+        },
+        "end": {
+          "x": 80,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-sleeve-main-band-3-boundary-1",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-3",
+        "disposition": "boundary",
+        "start": {
+          "x": 140,
+          "y": 0
+        },
+        "end": {
+          "x": 220,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-sleeve-main-band-3-boundary-3",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-3",
+        "disposition": "boundary",
+        "start": {
+          "x": 220,
+          "y": 40
+        },
+        "end": {
+          "x": 140,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-sleeve-main-band-4-boundary-1",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-4",
+        "disposition": "boundary",
+        "start": {
+          "x": 220,
+          "y": 0
+        },
+        "end": {
+          "x": 280,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-sleeve-main-band-4-boundary-3",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-4",
+        "disposition": "boundary",
+        "start": {
+          "x": 280,
+          "y": 40
+        },
+        "end": {
+          "x": 220,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-sleeve-main-seam-tab-base",
+        "partId": "fold-sleeve-main",
+        "panelAId": "fold-sleeve-main-band-4",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T1",
+        "start": {
+          "x": 280,
+          "y": 0
+        },
+        "end": {
+          "x": 280,
+          "y": 40
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "fold-sleeve-main-band-fold-1-connection",
+        "panelAId": "fold-sleeve-main-band-1",
+        "panelBId": "fold-sleeve-main-band-2",
+        "edgeA": {
+          "start": {
+            "x": 80,
+            "y": 0
+          },
+          "end": {
+            "x": 80,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 80,
+            "y": 0
+          },
+          "end": {
+            "x": 80,
+            "y": 40
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-sleeve-main-band-fold-2-connection",
+        "panelAId": "fold-sleeve-main-band-2",
+        "panelBId": "fold-sleeve-main-band-3",
+        "edgeA": {
+          "start": {
+            "x": 140,
+            "y": 0
+          },
+          "end": {
+            "x": 140,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 140,
+            "y": 0
+          },
+          "end": {
+            "x": 140,
+            "y": 40
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-sleeve-main-band-fold-3-connection",
+        "panelAId": "fold-sleeve-main-band-3",
+        "panelBId": "fold-sleeve-main-band-4",
+        "edgeA": {
+          "start": {
+            "x": 220,
+            "y": 0
+          },
+          "end": {
+            "x": 220,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 220,
+            "y": 0
+          },
+          "end": {
+            "x": 220,
+            "y": 40
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-sleeve-main-seam-tab-connection",
+        "panelAId": "fold-sleeve-main-band-4",
+        "panelBId": "fold-sleeve-main-band-1",
+        "edgeA": {
+          "start": {
+            "x": 280,
+            "y": 0
+          },
+          "end": {
+            "x": 280,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 0,
+            "y": 40
+          },
+          "end": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-sleeve-main-seam-tab"]
+      }
+    ],
+    "tabs": [
+      {
+        "id": "fold-sleeve-main-seam-tab",
+        "partId": "fold-sleeve-main",
+        "edgeId": "fold-sleeve-main-seam-tab-base",
+        "ownerPanelId": "fold-sleeve-main-band-4",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 280,
+          "y": 0
+        },
+        "baseEnd": {
+          "x": 280,
+          "y": 40
+        },
+        "outline": [
+          {
+            "x": 280,
+            "y": 0
+          },
+          {
+            "x": 288,
+            "y": 2.8
+          },
+          {
+            "x": 288,
+            "y": 37.2
+          },
+          {
+            "x": 280,
+            "y": 40
+          }
+        ],
+        "receiverPanelId": "fold-sleeve-main-band-1"
+      }
+    ],
+    "parts": [
+      {
+        "id": "fold-sleeve-main",
+        "name": "Sleeve net",
+        "label": "Sleeve net",
+        "paths": [
+          {
+            "id": "fold-sleeve-main-band-1-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 80,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-1",
+            "edgeId": "fold-sleeve-main-band-1-boundary-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-1-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 80,
+                "y": 40
+              },
+              {
+                "x": 0,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-1",
+            "edgeId": "fold-sleeve-main-band-1-boundary-3"
+          },
+          {
+            "id": "fold-sleeve-main-band-1-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 40
+              },
+              {
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-1",
+            "edgeId": "fold-sleeve-main-band-1-boundary-4"
+          },
+          {
+            "id": "fold-sleeve-main-band-2-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 80,
+                "y": 0
+              },
+              {
+                "x": 140,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-2",
+            "edgeId": "fold-sleeve-main-band-2-boundary-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-2-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 140,
+                "y": 40
+              },
+              {
+                "x": 80,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-2",
+            "edgeId": "fold-sleeve-main-band-2-boundary-3"
+          },
+          {
+            "id": "fold-sleeve-main-band-3-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 140,
+                "y": 0
+              },
+              {
+                "x": 220,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-3",
+            "edgeId": "fold-sleeve-main-band-3-boundary-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-3-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 220,
+                "y": 40
+              },
+              {
+                "x": 140,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-3",
+            "edgeId": "fold-sleeve-main-band-3-boundary-3"
+          },
+          {
+            "id": "fold-sleeve-main-band-4-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 220,
+                "y": 0
+              },
+              {
+                "x": 280,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-4",
+            "edgeId": "fold-sleeve-main-band-4-boundary-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-4-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 280,
+                "y": 40
+              },
+              {
+                "x": 220,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-4",
+            "edgeId": "fold-sleeve-main-band-4-boundary-3"
+          },
+          {
+            "id": "fold-sleeve-main-band-fold-1-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 80,
+                "y": 0
+              },
+              {
+                "x": 80,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-1",
+            "edgeId": "fold-sleeve-main-band-fold-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-fold-2-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 140,
+                "y": 0
+              },
+              {
+                "x": 140,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-2",
+            "edgeId": "fold-sleeve-main-band-fold-2"
+          },
+          {
+            "id": "fold-sleeve-main-band-fold-3-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 220,
+                "y": 0
+              },
+              {
+                "x": 220,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-3",
+            "edgeId": "fold-sleeve-main-band-fold-3"
+          },
+          {
+            "id": "fold-sleeve-main-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 280,
+                "y": 0
+              },
+              {
+                "x": 288,
+                "y": 2.8
+              },
+              {
+                "x": 288,
+                "y": 37.2
+              },
+              {
+                "x": 280,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-4",
+            "tabId": "fold-sleeve-main-seam-tab"
+          },
+          {
+            "id": "fold-sleeve-main-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 280,
+                "y": 0
+              },
+              {
+                "x": 280,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-4",
+            "tabId": "fold-sleeve-main-seam-tab",
+            "edgeId": "fold-sleeve-main-seam-tab-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-sleeve-main-band-1-label",
+            "text": "Band 1",
+            "position": {
+              "x": 40,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-sleeve-main-band-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-2-label",
+            "text": "Band 2",
+            "position": {
+              "x": 110,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-sleeve-main-band-2"
+          },
+          {
+            "id": "fold-sleeve-main-band-3-label",
+            "text": "Band 3",
+            "position": {
+              "x": 180,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-sleeve-main-band-3"
+          },
+          {
+            "id": "fold-sleeve-main-band-4-label",
+            "text": "Band 4",
+            "position": {
+              "x": 250,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-sleeve-main-band-4"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "sleeve",
+          "panelIds": [
+            "fold-sleeve-main-band-1",
+            "fold-sleeve-main-band-2",
+            "fold-sleeve-main-band-3",
+            "fold-sleeve-main-band-4"
+          ]
+        }
+      }
+    ],
+    "issues": [],
+    "assembledPreview": {
+      "panels": [
+        {
+          "id": "fold-sleeve-main-band-1",
+          "partId": "fold-sleeve-main",
+          "name": "Band 1",
+          "verticesMm": [
+            [-40, -20, -30],
+            [40, -20, -30],
+            [40, 20, -30],
+            [-40, 20, -30]
+          ]
+        },
+        {
+          "id": "fold-sleeve-main-band-2",
+          "partId": "fold-sleeve-main",
+          "name": "Band 2",
+          "verticesMm": [
+            [40, -20, -30],
+            [40, -20, 30],
+            [40, 20, 30],
+            [40, 20, -30]
+          ]
+        },
+        {
+          "id": "fold-sleeve-main-band-3",
+          "partId": "fold-sleeve-main",
+          "name": "Band 3",
+          "verticesMm": [
+            [40, -20, 30],
+            [-40, -20, 30],
+            [-40, 20, 30],
+            [40, 20, 30]
+          ]
+        },
+        {
+          "id": "fold-sleeve-main-band-4",
+          "partId": "fold-sleeve-main",
+          "name": "Band 4",
+          "verticesMm": [
+            [-40, -20, 30],
+            [-40, -20, -30],
+            [-40, 20, -30],
+            [-40, 20, 30]
+          ]
+        }
+      ]
+    },
+    "editableEdges": [
+      {
+        "id": "fold-sleeve-main-band-1-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-sleeve-main-band-1",
+        "startMm": [-40, -20, -30],
+        "endMm": [40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-band-1-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-sleeve-main-band-1",
+        "startMm": [40, 20, -30],
+        "endMm": [-40, 20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-band-1-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-sleeve-main-band-1",
+        "startMm": [-40, 20, -30],
+        "endMm": [-40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-band-2-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-sleeve-main-band-2",
+        "startMm": [40, -20, -30],
+        "endMm": [40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-band-2-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-sleeve-main-band-2",
+        "startMm": [40, 20, 30],
+        "endMm": [40, 20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-band-3-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-sleeve-main-band-3",
+        "startMm": [40, -20, 30],
+        "endMm": [-40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-band-3-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-sleeve-main-band-3",
+        "startMm": [-40, 20, 30],
+        "endMm": [40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-band-4-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-sleeve-main-band-4",
+        "startMm": [-40, -20, 30],
+        "endMm": [-40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-band-4-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-sleeve-main-band-4",
+        "startMm": [-40, 20, -30],
+        "endMm": [-40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-band-fold-1-connection",
+        "kind": "connection",
+        "panelAId": "fold-sleeve-main-band-1",
+        "panelBId": "fold-sleeve-main-band-2",
+        "startMm": [40, -20, -30],
+        "endMm": [40, 20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-band-fold-2-connection",
+        "kind": "connection",
+        "panelAId": "fold-sleeve-main-band-2",
+        "panelBId": "fold-sleeve-main-band-3",
+        "startMm": [40, -20, 30],
+        "endMm": [40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-band-fold-3-connection",
+        "kind": "connection",
+        "panelAId": "fold-sleeve-main-band-3",
+        "panelBId": "fold-sleeve-main-band-4",
+        "startMm": [-40, -20, 30],
+        "endMm": [-40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-sleeve-main-seam-tab-connection",
+        "kind": "connection",
+        "panelAId": "fold-sleeve-main-band-4",
+        "panelBId": "fold-sleeve-main-band-1",
+        "startMm": [-40, -20, -30],
+        "endMm": [-40, 20, -30],
+        "editable": true
+      }
+    ],
+    "resolvedDimensions": {
+      "widthMm": 80,
+      "lengthMm": 60,
+      "heightMm": 40
+    },
+    "algorithmVersion": "interactive-connections-v8",
+    "inputHash": "sf6-8652d4ec"
+  },
+  "project": {
+    "metadata": {
+      "id": "project-upgrade-baseline",
+      "name": "Upgrade baseline: fold-sleeve",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    "model": {
+      "id": "model-legacy-fixture",
+      "name": "40 mm cube",
+      "source": {
+        "kind": "built-in",
+        "primitive": "cube"
+      },
+      "dimensions": {
+        "widthMm": 40,
+        "heightMm": 40,
+        "depthMm": 40
+      },
+      "transform": {
+        "positionMm": [0, 0, 0],
+        "rotationDeg": [0, 0, 0],
+        "scale": [1, 1, 1]
+      },
+      "mesh": {
+        "positionsMm": [
+          -20, -20, -20, 20, -20, -20, 20, 20, -20, -20, 20, -20, -20, -20, 20, 20, -20, 20, 20, 20,
+          20, -20, 20, 20
+        ],
+        "indices": [
+          0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 3, 7, 6, 3, 6, 2, 0, 4, 7, 0, 7, 3,
+          1, 2, 6, 1, 6, 5
+        ]
+      },
+      "bounds": {
+        "minMm": [-20, -20, -20],
+        "maxMm": [20, 20, 20]
+      },
+      "healthReport": {
+        "triangleCount": 12,
+        "openEdgeCount": 0,
+        "nonManifoldEdgeCount": 0,
+        "disconnectedShellCount": 1,
+        "orientationIssueCount": 0,
+        "weldedVertexCount": 8,
+        "signedVolumeMm3": 64000.00000000001,
+        "likelyInverted": false,
+        "inspected": true
+      }
+    },
+    "fabricationMode": "fold-template",
+    "materialProfileSnapshot": {
+      "id": "card-300gsm",
+      "name": "300 gsm card",
+      "category": "card",
+      "thicknessMm": 1,
+      "kerfMm": 0.1,
+      "clearanceMm": 0.1,
+      "grainDirection": "none",
+      "scoreAllowanceMm": 0.2,
+      "defaultSheetWidthMm": 210,
+      "defaultSheetHeightMm": 297
+    },
+    "generatedParts": [
+      {
+        "id": "fold-sleeve-main",
+        "name": "Sleeve net",
+        "label": "Sleeve net",
+        "paths": [
+          {
+            "id": "fold-sleeve-main-band-1-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 80,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-1",
+            "edgeId": "fold-sleeve-main-band-1-boundary-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-1-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 80,
+                "y": 40
+              },
+              {
+                "x": 0,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-1",
+            "edgeId": "fold-sleeve-main-band-1-boundary-3"
+          },
+          {
+            "id": "fold-sleeve-main-band-1-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 40
+              },
+              {
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-1",
+            "edgeId": "fold-sleeve-main-band-1-boundary-4"
+          },
+          {
+            "id": "fold-sleeve-main-band-2-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 80,
+                "y": 0
+              },
+              {
+                "x": 140,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-2",
+            "edgeId": "fold-sleeve-main-band-2-boundary-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-2-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 140,
+                "y": 40
+              },
+              {
+                "x": 80,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-2",
+            "edgeId": "fold-sleeve-main-band-2-boundary-3"
+          },
+          {
+            "id": "fold-sleeve-main-band-3-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 140,
+                "y": 0
+              },
+              {
+                "x": 220,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-3",
+            "edgeId": "fold-sleeve-main-band-3-boundary-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-3-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 220,
+                "y": 40
+              },
+              {
+                "x": 140,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-3",
+            "edgeId": "fold-sleeve-main-band-3-boundary-3"
+          },
+          {
+            "id": "fold-sleeve-main-band-4-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 220,
+                "y": 0
+              },
+              {
+                "x": 280,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-4",
+            "edgeId": "fold-sleeve-main-band-4-boundary-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-4-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 280,
+                "y": 40
+              },
+              {
+                "x": 220,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-4",
+            "edgeId": "fold-sleeve-main-band-4-boundary-3"
+          },
+          {
+            "id": "fold-sleeve-main-band-fold-1-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 80,
+                "y": 0
+              },
+              {
+                "x": 80,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-1",
+            "edgeId": "fold-sleeve-main-band-fold-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-fold-2-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 140,
+                "y": 0
+              },
+              {
+                "x": 140,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-2",
+            "edgeId": "fold-sleeve-main-band-fold-2"
+          },
+          {
+            "id": "fold-sleeve-main-band-fold-3-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 220,
+                "y": 0
+              },
+              {
+                "x": 220,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-3",
+            "edgeId": "fold-sleeve-main-band-fold-3"
+          },
+          {
+            "id": "fold-sleeve-main-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 280,
+                "y": 0
+              },
+              {
+                "x": 288,
+                "y": 2.8
+              },
+              {
+                "x": 288,
+                "y": 37.2
+              },
+              {
+                "x": 280,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-4",
+            "tabId": "fold-sleeve-main-seam-tab"
+          },
+          {
+            "id": "fold-sleeve-main-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 280,
+                "y": 0
+              },
+              {
+                "x": 280,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-sleeve-main-band-4",
+            "tabId": "fold-sleeve-main-seam-tab",
+            "edgeId": "fold-sleeve-main-seam-tab-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-sleeve-main-band-1-label",
+            "text": "Band 1",
+            "position": {
+              "x": 40,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-sleeve-main-band-1"
+          },
+          {
+            "id": "fold-sleeve-main-band-2-label",
+            "text": "Band 2",
+            "position": {
+              "x": 110,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-sleeve-main-band-2"
+          },
+          {
+            "id": "fold-sleeve-main-band-3-label",
+            "text": "Band 3",
+            "position": {
+              "x": 180,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-sleeve-main-band-3"
+          },
+          {
+            "id": "fold-sleeve-main-band-4-label",
+            "text": "Band 4",
+            "position": {
+              "x": 250,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-sleeve-main-band-4"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "sleeve",
+          "panelIds": [
+            "fold-sleeve-main-band-1",
+            "fold-sleeve-main-band-2",
+            "fold-sleeve-main-band-3",
+            "fold-sleeve-main-band-4"
+          ]
+        }
+      }
+    ],
+    "generationIssues": [],
+    "sheetLayouts": [
+      {
+        "id": "sheet-upgrade-baseline",
+        "widthMm": 600,
+        "heightMm": 400,
+        "marginMm": 5,
+        "spacingMm": 3,
+        "placements": [
+          {
+            "partId": "fold-sleeve-main",
+            "x": 5,
+            "y": 5,
+            "rotationDeg": 0
+          }
+        ]
+      }
+    ],
+    "exportSettings": {
+      "includeLabels": true,
+      "includeRegistrationMarks": false,
+      "includeSheetBoundary": true,
+      "operationStyles": [
+        {
+          "operation": "cut",
+          "stroke": "#ff0000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "score",
+          "stroke": "#0000ff",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "mountain-fold",
+          "stroke": "#8b5cf6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "valley-fold",
+          "stroke": "#14b8a6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "perforate",
+          "stroke": "#f59e0b",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "engrave",
+          "stroke": "#000000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "guide",
+          "stroke": "#6b7280",
+          "strokeWidthMm": 0.1
+        }
+      ],
+      "kerfCompensation": "none",
+      "customKerfMm": 0.1,
+      "foldLineOutput": "preserve",
+      "perforationDashMm": 2,
+      "perforationGapMm": 1,
+      "labelFontSizeMm": 3
+    },
+    "acknowledgedWarningIds": [],
+    "modeSettings": {
+      "stackedSlices": {
+        "axis": "z",
+        "spacingMm": 10,
+        "thicknessMm": 1,
+        "contourEpsilonMm": 0.001
+      },
+      "waffleSlices": {
+        "primaryAxis": "x",
+        "secondaryAxis": "y",
+        "primarySpacingMm": 20,
+        "secondarySpacingMm": 20,
+        "thicknessMm": 3,
+        "clearanceMm": 0.15,
+        "contourEpsilonMm": 0.001,
+        "slotPattern": "alternating",
+        "reverseSlots": false
+      },
+      "foldTemplate": {
+        "templateKind": "sleeve",
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40,
+        "profileToleranceMm": 1,
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1,
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "meshUnfold": {
+        "strategy": "automatic",
+        "rootFaceIndex": 0,
+        "manualSeamKeys": [],
+        "tabDepthMm": 6,
+        "maximumFaceCount": 200,
+        "searchAttempts": 18
+      },
+      "panelConstruction": {
+        "innerWidthMm": 80,
+        "innerDepthMm": 60,
+        "innerHeightMm": 50,
+        "jointKind": "finger",
+        "fingerWidthMm": 10,
+        "clearanceMm": 0.15,
+        "includeLid": false,
+        "panelThicknessMm": 1,
+        "dividerThicknessMm": 1,
+        "lidThicknessMm": 1,
+        "widthDividerCount": 0,
+        "depthDividerCount": 0,
+        "connectionOverrides": {},
+        "panelProfiles": {
+          "front": "flat",
+          "back": "flat"
+        },
+        "glueTabDepthMm": 8,
+        "boundaryGlueTabs": [],
+        "features": []
+      }
+    },
+    "foldingResult": {
+      "settings": {
+        "templateKind": "sleeve",
+        "fitAxis": "y",
+        "clearanceMm": 0,
+        "profileToleranceMm": 1,
+        "sizeMode": "custom",
+        "envelopeDimensions": {
+          "widthMm": 80,
+          "lengthMm": 60,
+          "heightMm": 40
+        },
+        "parameters": {
+          "wallHeightMm": 40,
+          "tabDepthMm": 8,
+          "lidDepthMm": 15,
+          "lidClearanceMm": 0.5,
+          "gussetDepthMm": 40,
+          "closureFlapMm": 12,
+          "prismSides": 6,
+          "prismRotationDeg": 0,
+          "topScale": 0.5,
+          "seamTabMm": 8,
+          "standalone": true,
+          "closureMethod": "glue",
+          "slotClearanceMm": 0.1
+        },
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "profile": {
+        "sourceModelId": "standalone-template",
+        "fitAxis": "y",
+        "sourceHullPoints": [
+          {
+            "x": -40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": 30
+          }
+        ],
+        "fittedPoints": [
+          {
+            "x": -40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": 30
+          }
+        ],
+        "clearanceMm": 0,
+        "simplificationToleranceMm": 1,
+        "axisMinMm": -20,
+        "axisMaxMm": 20,
+        "widthMm": 80,
+        "heightMm": 60,
+        "depthMm": 40
+      },
+      "panels": [
+        {
+          "id": "fold-sleeve-main-band-1",
+          "partId": "fold-sleeve-main",
+          "name": "Band 1",
+          "role": "band",
+          "outline": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 80,
+              "y": 0
+            },
+            {
+              "x": 80,
+              "y": 40
+            },
+            {
+              "x": 0,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "id": "fold-sleeve-main-band-2",
+          "partId": "fold-sleeve-main",
+          "name": "Band 2",
+          "role": "band",
+          "outline": [
+            {
+              "x": 80,
+              "y": 0
+            },
+            {
+              "x": 140,
+              "y": 0
+            },
+            {
+              "x": 140,
+              "y": 40
+            },
+            {
+              "x": 80,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "id": "fold-sleeve-main-band-3",
+          "partId": "fold-sleeve-main",
+          "name": "Band 3",
+          "role": "band",
+          "outline": [
+            {
+              "x": 140,
+              "y": 0
+            },
+            {
+              "x": 220,
+              "y": 0
+            },
+            {
+              "x": 220,
+              "y": 40
+            },
+            {
+              "x": 140,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "id": "fold-sleeve-main-band-4",
+          "partId": "fold-sleeve-main",
+          "name": "Band 4",
+          "role": "band",
+          "outline": [
+            {
+              "x": 220,
+              "y": 0
+            },
+            {
+              "x": 280,
+              "y": 0
+            },
+            {
+              "x": 280,
+              "y": 40
+            },
+            {
+              "x": 220,
+              "y": 40
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "fold-sleeve-main-band-fold-1",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-1",
+          "panelBId": "fold-sleeve-main-band-2",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F1",
+          "start": {
+            "x": 80,
+            "y": 0
+          },
+          "end": {
+            "x": 80,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-sleeve-main-band-fold-2",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-2",
+          "panelBId": "fold-sleeve-main-band-3",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F2",
+          "start": {
+            "x": 140,
+            "y": 0
+          },
+          "end": {
+            "x": 140,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-sleeve-main-band-fold-3",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-3",
+          "panelBId": "fold-sleeve-main-band-4",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F3",
+          "start": {
+            "x": 220,
+            "y": 0
+          },
+          "end": {
+            "x": 220,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-sleeve-main-band-1-boundary-1",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-1",
+          "disposition": "boundary",
+          "start": {
+            "x": 0,
+            "y": 0
+          },
+          "end": {
+            "x": 80,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-sleeve-main-band-1-boundary-3",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-1",
+          "disposition": "boundary",
+          "start": {
+            "x": 80,
+            "y": 40
+          },
+          "end": {
+            "x": 0,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-sleeve-main-band-1-boundary-4",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-1",
+          "disposition": "boundary",
+          "start": {
+            "x": 0,
+            "y": 40
+          },
+          "end": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-sleeve-main-band-2-boundary-1",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-2",
+          "disposition": "boundary",
+          "start": {
+            "x": 80,
+            "y": 0
+          },
+          "end": {
+            "x": 140,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-sleeve-main-band-2-boundary-3",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-2",
+          "disposition": "boundary",
+          "start": {
+            "x": 140,
+            "y": 40
+          },
+          "end": {
+            "x": 80,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-sleeve-main-band-3-boundary-1",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-3",
+          "disposition": "boundary",
+          "start": {
+            "x": 140,
+            "y": 0
+          },
+          "end": {
+            "x": 220,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-sleeve-main-band-3-boundary-3",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-3",
+          "disposition": "boundary",
+          "start": {
+            "x": 220,
+            "y": 40
+          },
+          "end": {
+            "x": 140,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-sleeve-main-band-4-boundary-1",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-4",
+          "disposition": "boundary",
+          "start": {
+            "x": 220,
+            "y": 0
+          },
+          "end": {
+            "x": 280,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-sleeve-main-band-4-boundary-3",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-4",
+          "disposition": "boundary",
+          "start": {
+            "x": 280,
+            "y": 40
+          },
+          "end": {
+            "x": 220,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-sleeve-main-seam-tab-base",
+          "partId": "fold-sleeve-main",
+          "panelAId": "fold-sleeve-main-band-4",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T1",
+          "start": {
+            "x": 280,
+            "y": 0
+          },
+          "end": {
+            "x": 280,
+            "y": 40
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "fold-sleeve-main-band-fold-1-connection",
+          "panelAId": "fold-sleeve-main-band-1",
+          "panelBId": "fold-sleeve-main-band-2",
+          "edgeA": {
+            "start": {
+              "x": 80,
+              "y": 0
+            },
+            "end": {
+              "x": 80,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 80,
+              "y": 0
+            },
+            "end": {
+              "x": 80,
+              "y": 40
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-sleeve-main-band-fold-2-connection",
+          "panelAId": "fold-sleeve-main-band-2",
+          "panelBId": "fold-sleeve-main-band-3",
+          "edgeA": {
+            "start": {
+              "x": 140,
+              "y": 0
+            },
+            "end": {
+              "x": 140,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 140,
+              "y": 0
+            },
+            "end": {
+              "x": 140,
+              "y": 40
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-sleeve-main-band-fold-3-connection",
+          "panelAId": "fold-sleeve-main-band-3",
+          "panelBId": "fold-sleeve-main-band-4",
+          "edgeA": {
+            "start": {
+              "x": 220,
+              "y": 0
+            },
+            "end": {
+              "x": 220,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 220,
+              "y": 0
+            },
+            "end": {
+              "x": 220,
+              "y": 40
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-sleeve-main-seam-tab-connection",
+          "panelAId": "fold-sleeve-main-band-4",
+          "panelBId": "fold-sleeve-main-band-1",
+          "edgeA": {
+            "start": {
+              "x": 280,
+              "y": 0
+            },
+            "end": {
+              "x": 280,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 0,
+              "y": 40
+            },
+            "end": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-sleeve-main-seam-tab"]
+        }
+      ],
+      "tabs": [
+        {
+          "id": "fold-sleeve-main-seam-tab",
+          "partId": "fold-sleeve-main",
+          "edgeId": "fold-sleeve-main-seam-tab-base",
+          "ownerPanelId": "fold-sleeve-main-band-4",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 280,
+            "y": 0
+          },
+          "baseEnd": {
+            "x": 280,
+            "y": 40
+          },
+          "outline": [
+            {
+              "x": 280,
+              "y": 0
+            },
+            {
+              "x": 288,
+              "y": 2.8
+            },
+            {
+              "x": 288,
+              "y": 37.2
+            },
+            {
+              "x": 280,
+              "y": 40
+            }
+          ],
+          "receiverPanelId": "fold-sleeve-main-band-1"
+        }
+      ],
+      "parts": [
+        {
+          "id": "fold-sleeve-main",
+          "name": "Sleeve net",
+          "label": "Sleeve net",
+          "paths": [
+            {
+              "id": "fold-sleeve-main-band-1-boundary-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 80,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-1",
+              "edgeId": "fold-sleeve-main-band-1-boundary-1"
+            },
+            {
+              "id": "fold-sleeve-main-band-1-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 80,
+                  "y": 40
+                },
+                {
+                  "x": 0,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-1",
+              "edgeId": "fold-sleeve-main-band-1-boundary-3"
+            },
+            {
+              "id": "fold-sleeve-main-band-1-boundary-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 0,
+                  "y": 40
+                },
+                {
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-1",
+              "edgeId": "fold-sleeve-main-band-1-boundary-4"
+            },
+            {
+              "id": "fold-sleeve-main-band-2-boundary-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 80,
+                  "y": 0
+                },
+                {
+                  "x": 140,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-2",
+              "edgeId": "fold-sleeve-main-band-2-boundary-1"
+            },
+            {
+              "id": "fold-sleeve-main-band-2-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 140,
+                  "y": 40
+                },
+                {
+                  "x": 80,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-2",
+              "edgeId": "fold-sleeve-main-band-2-boundary-3"
+            },
+            {
+              "id": "fold-sleeve-main-band-3-boundary-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 140,
+                  "y": 0
+                },
+                {
+                  "x": 220,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-3",
+              "edgeId": "fold-sleeve-main-band-3-boundary-1"
+            },
+            {
+              "id": "fold-sleeve-main-band-3-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 220,
+                  "y": 40
+                },
+                {
+                  "x": 140,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-3",
+              "edgeId": "fold-sleeve-main-band-3-boundary-3"
+            },
+            {
+              "id": "fold-sleeve-main-band-4-boundary-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 220,
+                  "y": 0
+                },
+                {
+                  "x": 280,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-4",
+              "edgeId": "fold-sleeve-main-band-4-boundary-1"
+            },
+            {
+              "id": "fold-sleeve-main-band-4-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 280,
+                  "y": 40
+                },
+                {
+                  "x": 220,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-4",
+              "edgeId": "fold-sleeve-main-band-4-boundary-3"
+            },
+            {
+              "id": "fold-sleeve-main-band-fold-1-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 80,
+                  "y": 0
+                },
+                {
+                  "x": 80,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-1",
+              "edgeId": "fold-sleeve-main-band-fold-1"
+            },
+            {
+              "id": "fold-sleeve-main-band-fold-2-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 140,
+                  "y": 0
+                },
+                {
+                  "x": 140,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-2",
+              "edgeId": "fold-sleeve-main-band-fold-2"
+            },
+            {
+              "id": "fold-sleeve-main-band-fold-3-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 220,
+                  "y": 0
+                },
+                {
+                  "x": 220,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-3",
+              "edgeId": "fold-sleeve-main-band-fold-3"
+            },
+            {
+              "id": "fold-sleeve-main-seam-tab-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 280,
+                  "y": 0
+                },
+                {
+                  "x": 288,
+                  "y": 2.8
+                },
+                {
+                  "x": 288,
+                  "y": 37.2
+                },
+                {
+                  "x": 280,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-4",
+              "tabId": "fold-sleeve-main-seam-tab"
+            },
+            {
+              "id": "fold-sleeve-main-seam-tab-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 280,
+                  "y": 0
+                },
+                {
+                  "x": 280,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-sleeve-main-band-4",
+              "tabId": "fold-sleeve-main-seam-tab",
+              "edgeId": "fold-sleeve-main-seam-tab-base"
+            }
+          ],
+          "labels": [
+            {
+              "id": "fold-sleeve-main-band-1-label",
+              "text": "Band 1",
+              "position": {
+                "x": 40,
+                "y": 20
+              },
+              "operation": "engrave",
+              "entityId": "fold-sleeve-main-band-1"
+            },
+            {
+              "id": "fold-sleeve-main-band-2-label",
+              "text": "Band 2",
+              "position": {
+                "x": 110,
+                "y": 20
+              },
+              "operation": "engrave",
+              "entityId": "fold-sleeve-main-band-2"
+            },
+            {
+              "id": "fold-sleeve-main-band-3-label",
+              "text": "Band 3",
+              "position": {
+                "x": 180,
+                "y": 20
+              },
+              "operation": "engrave",
+              "entityId": "fold-sleeve-main-band-3"
+            },
+            {
+              "id": "fold-sleeve-main-band-4-label",
+              "text": "Band 4",
+              "position": {
+                "x": 250,
+                "y": 20
+              },
+              "operation": "engrave",
+              "entityId": "fold-sleeve-main-band-4"
+            }
+          ],
+          "thicknessMm": 1,
+          "folding": {
+            "templateKind": "sleeve",
+            "panelIds": [
+              "fold-sleeve-main-band-1",
+              "fold-sleeve-main-band-2",
+              "fold-sleeve-main-band-3",
+              "fold-sleeve-main-band-4"
+            ]
+          }
+        }
+      ],
+      "issues": [],
+      "assembledPreview": {
+        "panels": [
+          {
+            "id": "fold-sleeve-main-band-1",
+            "partId": "fold-sleeve-main",
+            "name": "Band 1",
+            "verticesMm": [
+              [-40, -20, -30],
+              [40, -20, -30],
+              [40, 20, -30],
+              [-40, 20, -30]
+            ]
+          },
+          {
+            "id": "fold-sleeve-main-band-2",
+            "partId": "fold-sleeve-main",
+            "name": "Band 2",
+            "verticesMm": [
+              [40, -20, -30],
+              [40, -20, 30],
+              [40, 20, 30],
+              [40, 20, -30]
+            ]
+          },
+          {
+            "id": "fold-sleeve-main-band-3",
+            "partId": "fold-sleeve-main",
+            "name": "Band 3",
+            "verticesMm": [
+              [40, -20, 30],
+              [-40, -20, 30],
+              [-40, 20, 30],
+              [40, 20, 30]
+            ]
+          },
+          {
+            "id": "fold-sleeve-main-band-4",
+            "partId": "fold-sleeve-main",
+            "name": "Band 4",
+            "verticesMm": [
+              [-40, -20, 30],
+              [-40, -20, -30],
+              [-40, 20, -30],
+              [-40, 20, 30]
+            ]
+          }
+        ]
+      },
+      "editableEdges": [
+        {
+          "id": "fold-sleeve-main-band-1-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-sleeve-main-band-1",
+          "startMm": [-40, -20, -30],
+          "endMm": [40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-band-1-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-sleeve-main-band-1",
+          "startMm": [40, 20, -30],
+          "endMm": [-40, 20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-band-1-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-sleeve-main-band-1",
+          "startMm": [-40, 20, -30],
+          "endMm": [-40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-band-2-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-sleeve-main-band-2",
+          "startMm": [40, -20, -30],
+          "endMm": [40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-band-2-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-sleeve-main-band-2",
+          "startMm": [40, 20, 30],
+          "endMm": [40, 20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-band-3-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-sleeve-main-band-3",
+          "startMm": [40, -20, 30],
+          "endMm": [-40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-band-3-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-sleeve-main-band-3",
+          "startMm": [-40, 20, 30],
+          "endMm": [40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-band-4-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-sleeve-main-band-4",
+          "startMm": [-40, -20, 30],
+          "endMm": [-40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-band-4-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-sleeve-main-band-4",
+          "startMm": [-40, 20, -30],
+          "endMm": [-40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-band-fold-1-connection",
+          "kind": "connection",
+          "panelAId": "fold-sleeve-main-band-1",
+          "panelBId": "fold-sleeve-main-band-2",
+          "startMm": [40, -20, -30],
+          "endMm": [40, 20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-band-fold-2-connection",
+          "kind": "connection",
+          "panelAId": "fold-sleeve-main-band-2",
+          "panelBId": "fold-sleeve-main-band-3",
+          "startMm": [40, -20, 30],
+          "endMm": [40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-band-fold-3-connection",
+          "kind": "connection",
+          "panelAId": "fold-sleeve-main-band-3",
+          "panelBId": "fold-sleeve-main-band-4",
+          "startMm": [-40, -20, 30],
+          "endMm": [-40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-sleeve-main-seam-tab-connection",
+          "kind": "connection",
+          "panelAId": "fold-sleeve-main-band-4",
+          "panelBId": "fold-sleeve-main-band-1",
+          "startMm": [-40, -20, -30],
+          "endMm": [-40, 20, -30],
+          "editable": true
+        }
+      ],
+      "resolvedDimensions": {
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40
+      },
+      "algorithmVersion": "interactive-connections-v8",
+      "inputHash": "sf6-8652d4ec"
+    },
+    "generationRecord": {
+      "signatureVersion": 2,
+      "mode": "fold-template",
+      "inputHash": "sf9-d3cc3f5b",
+      "resultHash": "sf9-3eb0b47b",
+      "algorithmVersion": "interactive-connections-v8",
+      "generatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

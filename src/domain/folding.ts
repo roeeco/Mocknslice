@@ -1,3 +1,4 @@
+import type { FabricationDesignGraph } from './designGraph';
 import type { FabricationPart, SliceAxis } from './fabrication';
 import type { Millimetres, Point2D, Vector3Mm } from './geometry';
 import type { ValidationIssue } from './validation';
@@ -120,6 +121,7 @@ export interface AssembledFoldPanel {
 }
 
 export interface TemplateGenerationResult {
+  graph?: FabricationDesignGraph | undefined;
   settings: TemplateFitSettings;
   profile: ProjectedProfile;
   panels: FoldPanel[];

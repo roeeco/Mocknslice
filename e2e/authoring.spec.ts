@@ -1,0 +1,56 @@
+import type { UserTemplateDefinition } from '../src/templates/authoring/types';
+import { expect, test } from '@playwright/test';
+test('authors a cross tray, preserves features through sizes, exports definitions and reloads', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'New template', exact: true }).click();
+  const editor = page.getByLabel('Bounded geometry definition (JSON)');
+  const definition = JSON.parse(await editor.inputValue()) as UserTemplateDefinition;
+  definition.names = { en: 'My cross tray', he: 'המגש שלי' };
+  await editor.fill(JSON.stringify(definition));
+  await page.getByRole('button', { name: 'Validate and apply' }).click();
+  await expect(page.getByRole('heading', { name: 'My cross tray' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Regenerate', exact: true })).toBeVisible();
+  await page.getByRole('spinbutton', { name: 'Width', exact: true }).fill('100');
+  await page.getByRole('spinbutton', { name: 'Width', exact: true }).press('Enter');
+  await page.getByRole('button', { name: 'Add base hole' }).click();
+  await page.getByRole('button', { name: 'Validate and apply' }).click();
+  await page.getByRole('button', { name: 'Add front glue tab' }).click();
+  await page.getByRole('button', { name: 'Validate and apply' }).click();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(page.locator('canvas')).toBeVisible();
+  await page.getByRole('button', { name: '2D parts', exact: true }).click();
+  await expect(page.locator('path[data-contour-role="hole"]')).not.toHaveCount(0);
+  await expect(page.locator('path[data-operation="score"][data-tab-id]')).not.toHaveCount(0);
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export definition', exact: true }).click();
+  const download = await downloadPromise;
+  const stream = await download.createReadStream();
+  const chunks: Uint8Array[] = [];
+  for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
+  const file = JSON.parse(Buffer.concat(chunks).toString('utf8')) as {
+    definition: Extract<UserTemplateDefinition, { kind: 'custom' }>;
+  };
+  expect(file.definition.version).toBe(3);
+  expect(file.definition.tabs).toHaveLength(1);
+  await page.getByRole('button', { name: 'Alternative size (+10%)' }).click();
+  await expect(page.getByRole('spinbutton', { name: 'Width', exact: true })).toHaveValue('110');
+  await page.getByRole('button', { name: 'Reset parameters', exact: true }).click();
+  await expect(page.getByRole('spinbutton', { name: 'Width', exact: true })).toHaveValue('80');
+  await expect(page.getByText('Saved locally', { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole('heading', { name: 'My cross tray' })).toBeVisible();
+  await expect(page.getByRole('spinbutton', { name: 'Width', exact: true })).toHaveValue('80');
+  await page.getByRole('spinbutton', { name: 'Width', exact: true }).fill('120');
+  await page.getByRole('spinbutton', { name: 'Width', exact: true }).press('Enter');
+  await page.getByRole('button', { name: '2D parts', exact: true }).click();
+  await expect(page.locator('path[data-contour-role="hole"]')).not.toHaveCount(0);
+  await page.getByRole('button', { name: 'Manufacture', exact: true }).click();
+  const acknowledge = page.getByRole('checkbox', { name: /reviewed/i });
+  if (await acknowledge.count()) await acknowledge.check();
+  await expect(page.getByRole('button', { name: 'Export cutting SVG', exact: true })).toBeEnabled();
+  const svgPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export cutting SVG', exact: true }).click();
+  expect((await svgPromise).suggestedFilename()).toMatch(/\.svg$/);
+});

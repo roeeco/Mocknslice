@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600mm" height="400mm" viewBox="0 0 600 400">
+  <metadata>{&quot;application&quot;:&quot;MocknSlice&quot;,&quot;projectFormatVersion&quot;:8,&quot;projectId&quot;:&quot;project-upgrade-baseline&quot;,&quot;mode&quot;:&quot;fold-template&quot;,&quot;units&quot;:&quot;mm&quot;,&quot;sheetId&quot;:&quot;sheet-upgrade-baseline&quot;,&quot;sheetNumber&quot;:1,&quot;kerfMm&quot;:0,&quot;foldLineOutput&quot;:&quot;preserve&quot;}</metadata>
+  <rect id="sheet-boundary" x="0.05" y="0.05" width="599.9" height="399.9" fill="none" stroke="#777777" stroke-width="0.1"/>
+  <g id="operation-cut" data-operation="cut" fill="none" stroke="#ff0000" stroke-width="0.1">
+    <path id="fold-prism-main-band-1-boundary-4-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-1" data-edge-id="fold-prism-main-band-1-boundary-4" d="M 33.660254 144.282032 L 33.660254 104.282032"/>
+    <path id="fold-prism-main-band-2-boundary-1-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-2" data-edge-id="fold-prism-main-band-2-boundary-1" d="M 90.980762 104.282032 L 148.30127 104.282032"/>
+    <path id="fold-prism-main-band-2-boundary-3-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-2" data-edge-id="fold-prism-main-band-2-boundary-3" d="M 148.30127 144.282032 L 90.980762 144.282032"/>
+    <path id="fold-prism-main-band-3-boundary-1-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-3" data-edge-id="fold-prism-main-band-3-boundary-1" d="M 148.30127 104.282032 L 205.621778 104.282032"/>
+    <path id="fold-prism-main-band-3-boundary-3-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-3" data-edge-id="fold-prism-main-band-3-boundary-3" d="M 205.621778 144.282032 L 148.30127 144.282032"/>
+    <path id="fold-prism-main-band-4-boundary-1-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-4" data-edge-id="fold-prism-main-band-4-boundary-1" d="M 205.621778 104.282032 L 262.942286 104.282032"/>
+    <path id="fold-prism-main-band-4-boundary-3-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-4" data-edge-id="fold-prism-main-band-4-boundary-3" d="M 262.942286 144.282032 L 205.621778 144.282032"/>
+    <path id="fold-prism-main-band-5-boundary-1-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-5" data-edge-id="fold-prism-main-band-5-boundary-1" d="M 262.942286 104.282032 L 320.262794 104.282032"/>
+    <path id="fold-prism-main-band-5-boundary-3-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-5" data-edge-id="fold-prism-main-band-5-boundary-3" d="M 320.262794 144.282032 L 262.942286 144.282032"/>
+    <path id="fold-prism-main-band-6-boundary-1-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-6" data-edge-id="fold-prism-main-band-6-boundary-1" d="M 320.262794 104.282032 L 377.583302 104.282032"/>
+    <path id="fold-prism-main-band-6-boundary-3-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-6" data-edge-id="fold-prism-main-band-6-boundary-3" d="M 377.583302 144.282032 L 320.262794 144.282032"/>
+    <path id="fold-prism-main-face-a-boundary-2-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-face-a" data-edge-id="fold-prism-main-face-a-boundary-2" d="M 90.980762 104.282032 L 119.641016 54.641016"/>
+    <path id="fold-prism-main-face-a-boundary-3-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-face-a" data-edge-id="fold-prism-main-face-a-boundary-3" d="M 119.641016 54.641016 L 90.980762 5"/>
+    <path id="fold-prism-main-face-a-boundary-4-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-face-a" data-edge-id="fold-prism-main-face-a-boundary-4" d="M 90.980762 5 L 33.660254 5"/>
+    <path id="fold-prism-main-face-a-boundary-5-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-face-a" data-edge-id="fold-prism-main-face-a-boundary-5" d="M 33.660254 5 L 5 54.641016"/>
+    <path id="fold-prism-main-face-a-boundary-6-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-face-a" data-edge-id="fold-prism-main-face-a-boundary-6" d="M 5 54.641016 L 33.660254 104.282032"/>
+    <path id="fold-prism-main-face-b-boundary-2-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-face-b" data-edge-id="fold-prism-main-face-b-boundary-2" d="M 90.980762 144.282032 L 119.641016 193.923048"/>
+    <path id="fold-prism-main-face-b-boundary-3-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-face-b" data-edge-id="fold-prism-main-face-b-boundary-3" d="M 119.641016 193.923048 L 90.980762 243.564064"/>
+    <path id="fold-prism-main-face-b-boundary-4-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-face-b" data-edge-id="fold-prism-main-face-b-boundary-4" d="M 90.980762 243.564064 L 33.660254 243.564064"/>
+    <path id="fold-prism-main-face-b-boundary-5-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-face-b" data-edge-id="fold-prism-main-face-b-boundary-5" d="M 33.660254 243.564064 L 5 193.923048"/>
+    <path id="fold-prism-main-face-b-boundary-6-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-face-b" data-edge-id="fold-prism-main-face-b-boundary-6" d="M 5 193.923048 L 33.660254 144.282032"/>
+    <path id="fold-prism-main-seam-tab-cut" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-6" data-tab-id="fold-prism-main-seam-tab" d="M 377.583302 104.282032 L 385.583302 107.082032 L 385.583302 141.482032 L 377.583302 144.282032"/>
+  </g>
+  <g id="operation-score" data-operation="score" fill="none" stroke="#0000ff" stroke-width="0.1">
+    <path id="fold-prism-main-seam-tab-fold" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-6" data-edge-id="fold-prism-main-seam-tab-base" data-tab-id="fold-prism-main-seam-tab" d="M 377.583302 104.282032 L 377.583302 144.282032"/>
+  </g>
+  <g id="operation-mountain-fold" data-operation="mountain-fold" fill="none" stroke="#8b5cf6" stroke-width="0.1">
+  </g>
+  <g id="operation-valley-fold" data-operation="valley-fold" fill="none" stroke="#14b8a6" stroke-width="0.1">
+    <path id="fold-prism-main-band-fold-1-fold" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-1" data-edge-id="fold-prism-main-band-fold-1" d="M 90.980762 104.282032 L 90.980762 144.282032"/>
+    <path id="fold-prism-main-band-fold-2-fold" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-2" data-edge-id="fold-prism-main-band-fold-2" d="M 148.30127 104.282032 L 148.30127 144.282032"/>
+    <path id="fold-prism-main-band-fold-3-fold" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-3" data-edge-id="fold-prism-main-band-fold-3" d="M 205.621778 104.282032 L 205.621778 144.282032"/>
+    <path id="fold-prism-main-band-fold-4-fold" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-4" data-edge-id="fold-prism-main-band-fold-4" d="M 262.942286 104.282032 L 262.942286 144.282032"/>
+    <path id="fold-prism-main-band-fold-5-fold" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-5" data-edge-id="fold-prism-main-band-fold-5" d="M 320.262794 104.282032 L 320.262794 144.282032"/>
+    <path id="fold-prism-main-face-a-fold-fold" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-1" data-edge-id="fold-prism-main-face-a-fold" d="M 33.660254 104.282032 L 90.980762 104.282032"/>
+    <path id="fold-prism-main-face-b-fold-fold" data-part-id="fold-prism-main" data-contour-role="path" data-panel-id="fold-prism-main-band-1" data-edge-id="fold-prism-main-face-b-fold" d="M 90.980762 144.282032 L 33.660254 144.282032"/>
+  </g>
+  <g id="operation-perforate" data-operation="perforate" fill="none" stroke="#f59e0b" stroke-width="0.1">
+  </g>
+  <g id="operation-engrave" data-operation="engrave" fill="none" stroke="#000000" stroke-width="0.1">
+    <text id="fold-prism-main-band-1-label" data-part-id="fold-prism-main" data-entity-id="fold-prism-main-band-1" x="62.320508" y="124.282032" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Band 1</text>
+    <text id="fold-prism-main-band-2-label" data-part-id="fold-prism-main" data-entity-id="fold-prism-main-band-2" x="119.641016" y="124.282032" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Band 2</text>
+    <text id="fold-prism-main-band-3-label" data-part-id="fold-prism-main" data-entity-id="fold-prism-main-band-3" x="176.961524" y="124.282032" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Band 3</text>
+    <text id="fold-prism-main-band-4-label" data-part-id="fold-prism-main" data-entity-id="fold-prism-main-band-4" x="234.282032" y="124.282032" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Band 4</text>
+    <text id="fold-prism-main-band-5-label" data-part-id="fold-prism-main" data-entity-id="fold-prism-main-band-5" x="291.60254" y="124.282032" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Band 5</text>
+    <text id="fold-prism-main-band-6-label" data-part-id="fold-prism-main" data-entity-id="fold-prism-main-band-6" x="348.923048" y="124.282032" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Band 6</text>
+    <text id="fold-prism-main-face-a-label" data-part-id="fold-prism-main" data-entity-id="fold-prism-main-face-a" x="62.320508" y="54.641016" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Front face</text>
+    <text id="fold-prism-main-face-b-label" data-part-id="fold-prism-main" data-entity-id="fold-prism-main-face-b" x="62.320508" y="193.923048" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Back face</text>
+  </g>
+  <g id="operation-guide" data-operation="guide" fill="none" stroke="#6b7280" stroke-width="0.1">
+  </g>
+  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="3">
+    <text id="label-fold-prism-main" x="7" y="9">6-sided prism net</text>
+  </g>
+</svg>

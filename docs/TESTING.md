@@ -78,6 +78,10 @@ Phase 5 geometry tests cover X/Y, X/Z, and Y/Z cube families, deterministic comp
 
 ## Known build warnings
 
+Registry tests preserve all seven old family results and canonical signatures, exercise the extracted open-box builder at three shape ratios and two stocks, and reject duplicate definitions/parameters, unsafe thumbnails, unavailable generators/versions, invalid bounds and uninspected verified status. Complete instances retain their resolved values independently of future defaults. No golden update is required by the extraction.
+
+MocknSlice 2.0 PR 0 adds 27 frozen result/vector/historical-project checks. PR 1 adds design-graph tests for exact open-box/sleeve and butt-enclosure projection, rigid assembled correspondence, selection identity, three dimension ratios × two stocks, invalid identity/references/finiteness/stock/pose/ownership/cycles/cuts, explicit unsupported joints, and deterministic concave-polygon intersection. The adapter flag remains false. Golden expectations remain unchanged, including the recorded invalid frustum case; a compatibility pass is not production or physical certification.
+
 - The Three.js-enabled production chunk remains above Vite's 500 KB warning threshold. Bundle splitting remains a performance follow-up.
 - React Three Fiber currently triggers Three.js's `Clock` deprecation warning in development. It originates in the current upstream rendering stack; recheck on dependency upgrades. No application console errors were observed.
 

@@ -1,0 +1,2 @@
+# Literal exporter fixtures contain fixed-width PDF xref records with spaces.
+src/test-fixtures/upgrade-baseline/geometry/*.pdf binary

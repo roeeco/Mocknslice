@@ -1,0 +1,5215 @@
+{
+  "input": {
+    "mode": "fold-template",
+    "payload": {
+      "materialThicknessMm": 1,
+      "settings": {
+        "templateKind": "pyramid-frustum",
+        "fitAxis": "y",
+        "clearanceMm": 0,
+        "profileToleranceMm": 1,
+        "sizeMode": "custom",
+        "envelopeDimensions": {
+          "widthMm": 80,
+          "lengthMm": 60,
+          "heightMm": 40
+        },
+        "parameters": {
+          "wallHeightMm": 40,
+          "tabDepthMm": 8,
+          "lidDepthMm": 15,
+          "lidClearanceMm": 0.5,
+          "gussetDepthMm": 40,
+          "closureFlapMm": 12,
+          "prismSides": 6,
+          "prismRotationDeg": 0,
+          "topScale": 0.5,
+          "seamTabMm": 8,
+          "standalone": true,
+          "closureMethod": "glue",
+          "slotClearanceMm": 0.1
+        },
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      }
+    }
+  },
+  "result": {
+    "settings": {
+      "templateKind": "pyramid-frustum",
+      "fitAxis": "y",
+      "clearanceMm": 0,
+      "profileToleranceMm": 1,
+      "sizeMode": "custom",
+      "envelopeDimensions": {
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40
+      },
+      "parameters": {
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "standalone": true,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1
+      },
+      "connectionOverrides": [],
+      "boundaryGlueTabs": [],
+      "glueTabDepthMm": 8
+    },
+    "profile": {
+      "sourceModelId": "standalone-template",
+      "fitAxis": "y",
+      "sourceHullPoints": [
+        {
+          "x": -40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": 30
+        },
+        {
+          "x": -40,
+          "y": 30
+        }
+      ],
+      "fittedPoints": [
+        {
+          "x": -40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": 30
+        },
+        {
+          "x": -40,
+          "y": 30
+        }
+      ],
+      "clearanceMm": 0,
+      "simplificationToleranceMm": 1,
+      "axisMinMm": -20,
+      "axisMaxMm": 20,
+      "widthMm": 80,
+      "heightMm": 60,
+      "depthMm": 40
+    },
+    "panels": [
+      {
+        "id": "fold-pyramid-main-base",
+        "partId": "fold-pyramid-main",
+        "name": "Base",
+        "role": "base",
+        "outline": [
+          {
+            "x": 52,
+            "y": 52
+          },
+          {
+            "x": 122,
+            "y": 52
+          },
+          {
+            "x": 132,
+            "y": 112
+          },
+          {
+            "x": 62,
+            "y": 112
+          }
+        ]
+      },
+      {
+        "id": "fold-pyramid-main-side-1",
+        "partId": "fold-pyramid-main",
+        "name": "Side 1",
+        "role": "side",
+        "outline": [
+          {
+            "x": 122,
+            "y": 52
+          },
+          {
+            "x": 52,
+            "y": 52
+          },
+          {
+            "x": 69.5,
+            "y": 9.248800684133371
+          },
+          {
+            "x": 104.5,
+            "y": 9.248800684133371
+          }
+        ]
+      },
+      {
+        "id": "fold-pyramid-main-side-2",
+        "partId": "fold-pyramid-main",
+        "name": "Side 2",
+        "role": "side",
+        "outline": [
+          {
+            "x": 132,
+            "y": 112
+          },
+          {
+            "x": 122,
+            "y": 52
+          },
+          {
+            "x": 167.52605795800844,
+            "y": 59.82899034033193
+          },
+          {
+            "x": 172.52605795800844,
+            "y": 89.82899034033193
+          }
+        ]
+      },
+      {
+        "id": "fold-pyramid-main-side-3",
+        "partId": "fold-pyramid-main",
+        "name": "Side 3",
+        "role": "side",
+        "outline": [
+          {
+            "x": 62,
+            "y": 112
+          },
+          {
+            "x": 132,
+            "y": 112
+          },
+          {
+            "x": 114.5,
+            "y": 154.75119931586664
+          },
+          {
+            "x": 79.5,
+            "y": 154.75119931586664
+          }
+        ]
+      },
+      {
+        "id": "fold-pyramid-main-side-4",
+        "partId": "fold-pyramid-main",
+        "name": "Side 4",
+        "role": "side",
+        "outline": [
+          {
+            "x": 52,
+            "y": 52
+          },
+          {
+            "x": 62,
+            "y": 112
+          },
+          {
+            "x": 16.47394204199155,
+            "y": 104.17100965966807
+          },
+          {
+            "x": 11.473942041991549,
+            "y": 74.17100965966807
+          }
+        ]
+      },
+      {
+        "id": "fold-pyramid-cap-face",
+        "partId": "fold-pyramid-cap",
+        "name": "Top cap",
+        "role": "lid",
+        "outline": [
+          {
+            "x": 10,
+            "y": 10
+          },
+          {
+            "x": 45,
+            "y": 10
+          },
+          {
+            "x": 50,
+            "y": 40
+          },
+          {
+            "x": 15,
+            "y": 40
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "id": "fold-pyramid-main-side-1-base-fold",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-1",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 75,
+        "pairLabel": "F1",
+        "start": {
+          "x": 52,
+          "y": 52
+        },
+        "end": {
+          "x": 122,
+          "y": 52
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-2-base-fold",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-2",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 75,
+        "pairLabel": "F2",
+        "start": {
+          "x": 122,
+          "y": 52
+        },
+        "end": {
+          "x": 132,
+          "y": 112
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-3-base-fold",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-3",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 75,
+        "pairLabel": "F3",
+        "start": {
+          "x": 132,
+          "y": 112
+        },
+        "end": {
+          "x": 62,
+          "y": 112
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-4-base-fold",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-4",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 75,
+        "pairLabel": "F4",
+        "start": {
+          "x": 62,
+          "y": 112
+        },
+        "end": {
+          "x": 52,
+          "y": 52
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-1-boundary-2",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-1",
+        "disposition": "boundary",
+        "start": {
+          "x": 52,
+          "y": 52
+        },
+        "end": {
+          "x": 69.5,
+          "y": 9.248801
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-1-boundary-3",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-1",
+        "disposition": "boundary",
+        "start": {
+          "x": 69.5,
+          "y": 9.248801
+        },
+        "end": {
+          "x": 104.5,
+          "y": 9.248801
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-2-boundary-2",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-2",
+        "disposition": "boundary",
+        "start": {
+          "x": 122,
+          "y": 52
+        },
+        "end": {
+          "x": 167.526058,
+          "y": 59.82899
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-2-boundary-3",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-2",
+        "disposition": "boundary",
+        "start": {
+          "x": 167.526058,
+          "y": 59.82899
+        },
+        "end": {
+          "x": 172.526058,
+          "y": 89.82899
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-3-boundary-2",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-3",
+        "disposition": "boundary",
+        "start": {
+          "x": 132,
+          "y": 112
+        },
+        "end": {
+          "x": 114.5,
+          "y": 154.751199
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-3-boundary-3",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-3",
+        "disposition": "boundary",
+        "start": {
+          "x": 114.5,
+          "y": 154.751199
+        },
+        "end": {
+          "x": 79.5,
+          "y": 154.751199
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-4-boundary-2",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-4",
+        "disposition": "boundary",
+        "start": {
+          "x": 62,
+          "y": 112
+        },
+        "end": {
+          "x": 16.473942,
+          "y": 104.17101
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-4-boundary-3",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-4",
+        "disposition": "boundary",
+        "start": {
+          "x": 16.473942,
+          "y": 104.17101
+        },
+        "end": {
+          "x": 11.473942,
+          "y": 74.17101
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-1-seam-tab-base",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-1",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T1",
+        "start": {
+          "x": 104.5,
+          "y": 9.248801
+        },
+        "end": {
+          "x": 122,
+          "y": 52
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-2-seam-tab-base",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-2",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T2",
+        "start": {
+          "x": 172.526058,
+          "y": 89.82899
+        },
+        "end": {
+          "x": 132,
+          "y": 112
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-3-seam-tab-base",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-3",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T3",
+        "start": {
+          "x": 79.5,
+          "y": 154.751199
+        },
+        "end": {
+          "x": 62,
+          "y": 112
+        }
+      },
+      {
+        "id": "fold-pyramid-main-side-4-seam-tab-base",
+        "partId": "fold-pyramid-main",
+        "panelAId": "fold-pyramid-main-side-4",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T4",
+        "start": {
+          "x": 11.473942,
+          "y": 74.17101
+        },
+        "end": {
+          "x": 52,
+          "y": 52
+        }
+      },
+      {
+        "id": "fold-pyramid-cap-tab-1-base",
+        "partId": "fold-pyramid-cap",
+        "panelAId": "fold-pyramid-cap-face",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T1",
+        "start": {
+          "x": 10,
+          "y": 10
+        },
+        "end": {
+          "x": 45,
+          "y": 10
+        }
+      },
+      {
+        "id": "fold-pyramid-cap-tab-2-base",
+        "partId": "fold-pyramid-cap",
+        "panelAId": "fold-pyramid-cap-face",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T2",
+        "start": {
+          "x": 45,
+          "y": 10
+        },
+        "end": {
+          "x": 50,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-pyramid-cap-tab-3-base",
+        "partId": "fold-pyramid-cap",
+        "panelAId": "fold-pyramid-cap-face",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T3",
+        "start": {
+          "x": 50,
+          "y": 40
+        },
+        "end": {
+          "x": 15,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-pyramid-cap-tab-4-base",
+        "partId": "fold-pyramid-cap",
+        "panelAId": "fold-pyramid-cap-face",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T4",
+        "start": {
+          "x": 15,
+          "y": 40
+        },
+        "end": {
+          "x": 10,
+          "y": 10
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "fold-pyramid-main-side-1-base-fold-connection",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-1",
+        "edgeA": {
+          "start": {
+            "x": 52,
+            "y": 52
+          },
+          "end": {
+            "x": 122,
+            "y": 52
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 52,
+            "y": 52
+          },
+          "end": {
+            "x": 122,
+            "y": 52
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-pyramid-main-side-2-base-fold-connection",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-2",
+        "edgeA": {
+          "start": {
+            "x": 122,
+            "y": 52
+          },
+          "end": {
+            "x": 132,
+            "y": 112
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 122,
+            "y": 52
+          },
+          "end": {
+            "x": 132,
+            "y": 112
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-pyramid-main-side-3-base-fold-connection",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-3",
+        "edgeA": {
+          "start": {
+            "x": 132,
+            "y": 112
+          },
+          "end": {
+            "x": 62,
+            "y": 112
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 132,
+            "y": 112
+          },
+          "end": {
+            "x": 62,
+            "y": 112
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-pyramid-main-side-4-base-fold-connection",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-4",
+        "edgeA": {
+          "start": {
+            "x": 62,
+            "y": 112
+          },
+          "end": {
+            "x": 52,
+            "y": 52
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 62,
+            "y": 112
+          },
+          "end": {
+            "x": 52,
+            "y": 52
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-pyramid-main-side-1-seam-tab-connection",
+        "panelAId": "fold-pyramid-main-side-1",
+        "panelBId": "fold-pyramid-main-side-2",
+        "edgeA": {
+          "start": {
+            "x": 104.5,
+            "y": 9.248801
+          },
+          "end": {
+            "x": 122,
+            "y": 52
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 122,
+            "y": 52
+          },
+          "end": {
+            "x": 167.52605795800844,
+            "y": 59.82899034033193
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-pyramid-main-side-1-seam-tab"]
+      },
+      {
+        "id": "fold-pyramid-main-side-2-seam-tab-connection",
+        "panelAId": "fold-pyramid-main-side-2",
+        "panelBId": "fold-pyramid-main-side-3",
+        "edgeA": {
+          "start": {
+            "x": 172.526058,
+            "y": 89.82899
+          },
+          "end": {
+            "x": 132,
+            "y": 112
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 132,
+            "y": 112
+          },
+          "end": {
+            "x": 114.5,
+            "y": 154.75119931586664
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-pyramid-main-side-2-seam-tab"]
+      },
+      {
+        "id": "fold-pyramid-main-side-3-seam-tab-connection",
+        "panelAId": "fold-pyramid-main-side-3",
+        "panelBId": "fold-pyramid-main-side-4",
+        "edgeA": {
+          "start": {
+            "x": 79.5,
+            "y": 154.751199
+          },
+          "end": {
+            "x": 62,
+            "y": 112
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 62,
+            "y": 112
+          },
+          "end": {
+            "x": 16.47394204199155,
+            "y": 104.17100965966807
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-pyramid-main-side-3-seam-tab"]
+      },
+      {
+        "id": "fold-pyramid-main-side-4-seam-tab-connection",
+        "panelAId": "fold-pyramid-main-side-4",
+        "panelBId": "fold-pyramid-main-side-1",
+        "edgeA": {
+          "start": {
+            "x": 11.473942,
+            "y": 74.17101
+          },
+          "end": {
+            "x": 52,
+            "y": 52
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 52,
+            "y": 52
+          },
+          "end": {
+            "x": 69.5,
+            "y": 9.248800684133371
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-pyramid-main-side-4-seam-tab"]
+      },
+      {
+        "id": "fold-pyramid-cap-tab-1-connection",
+        "panelAId": "fold-pyramid-cap-face",
+        "panelBId": "fold-pyramid-main-side-1",
+        "edgeA": {
+          "start": {
+            "x": 10,
+            "y": 10
+          },
+          "end": {
+            "x": 45,
+            "y": 10
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 69.5,
+            "y": 9.248800684133371
+          },
+          "end": {
+            "x": 104.5,
+            "y": 9.248800684133371
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-pyramid-cap-tab-1"]
+      },
+      {
+        "id": "fold-pyramid-cap-tab-2-connection",
+        "panelAId": "fold-pyramid-cap-face",
+        "panelBId": "fold-pyramid-main-side-2",
+        "edgeA": {
+          "start": {
+            "x": 45,
+            "y": 10
+          },
+          "end": {
+            "x": 50,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 167.52605795800844,
+            "y": 59.82899034033193
+          },
+          "end": {
+            "x": 172.52605795800844,
+            "y": 89.82899034033193
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-pyramid-cap-tab-2"]
+      },
+      {
+        "id": "fold-pyramid-cap-tab-3-connection",
+        "panelAId": "fold-pyramid-cap-face",
+        "panelBId": "fold-pyramid-main-side-3",
+        "edgeA": {
+          "start": {
+            "x": 50,
+            "y": 40
+          },
+          "end": {
+            "x": 15,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 114.5,
+            "y": 154.75119931586664
+          },
+          "end": {
+            "x": 79.5,
+            "y": 154.75119931586664
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-pyramid-cap-tab-3"]
+      },
+      {
+        "id": "fold-pyramid-cap-tab-4-connection",
+        "panelAId": "fold-pyramid-cap-face",
+        "panelBId": "fold-pyramid-main-side-4",
+        "edgeA": {
+          "start": {
+            "x": 15,
+            "y": 40
+          },
+          "end": {
+            "x": 10,
+            "y": 10
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 16.47394204199155,
+            "y": 104.17100965966807
+          },
+          "end": {
+            "x": 11.473942041991549,
+            "y": 74.17100965966807
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-pyramid-cap-tab-4"]
+      }
+    ],
+    "tabs": [
+      {
+        "id": "fold-pyramid-main-side-1-seam-tab",
+        "partId": "fold-pyramid-main",
+        "edgeId": "fold-pyramid-main-side-1-seam-tab-base",
+        "ownerPanelId": "fold-pyramid-main-side-1",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 104.5,
+          "y": 9.248801
+        },
+        "baseEnd": {
+          "x": 122,
+          "y": 52
+        },
+        "outline": [
+          {
+            "x": 104.5,
+            "y": 9.248801
+          },
+          {
+            "x": 112.964452,
+            "y": 8.809425
+          },
+          {
+            "x": 128.342979,
+            "y": 46.378024
+          },
+          {
+            "x": 122,
+            "y": 52
+          }
+        ],
+        "receiverPanelId": "fold-pyramid-main-side-2"
+      },
+      {
+        "id": "fold-pyramid-main-side-2-seam-tab",
+        "partId": "fold-pyramid-main",
+        "edgeId": "fold-pyramid-main-side-2-seam-tab-base",
+        "ownerPanelId": "fold-pyramid-main-side-2",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 172.526058,
+          "y": 89.82899
+        },
+        "baseEnd": {
+          "x": 132,
+          "y": 112
+        },
+        "outline": [
+          {
+            "x": 172.526058,
+            "y": 89.82899
+          },
+          {
+            "x": 173.909239,
+            "y": 98.191216
+          },
+          {
+            "x": 138.296035,
+            "y": 117.6745
+          },
+          {
+            "x": 132,
+            "y": 112
+          }
+        ],
+        "receiverPanelId": "fold-pyramid-main-side-3"
+      },
+      {
+        "id": "fold-pyramid-main-side-3-seam-tab",
+        "partId": "fold-pyramid-main",
+        "edgeId": "fold-pyramid-main-side-3-seam-tab-base",
+        "ownerPanelId": "fold-pyramid-main-side-3",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 79.5,
+          "y": 154.751199
+        },
+        "baseEnd": {
+          "x": 62,
+          "y": 112
+        },
+        "outline": [
+          {
+            "x": 79.5,
+            "y": 154.751199
+          },
+          {
+            "x": 71.035548,
+            "y": 155.190575
+          },
+          {
+            "x": 55.657021,
+            "y": 117.621976
+          },
+          {
+            "x": 62,
+            "y": 112
+          }
+        ],
+        "receiverPanelId": "fold-pyramid-main-side-4"
+      },
+      {
+        "id": "fold-pyramid-main-side-4-seam-tab",
+        "partId": "fold-pyramid-main",
+        "edgeId": "fold-pyramid-main-side-4-seam-tab-base",
+        "ownerPanelId": "fold-pyramid-main-side-4",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 11.473942,
+          "y": 74.17101
+        },
+        "baseEnd": {
+          "x": 52,
+          "y": 52
+        },
+        "outline": [
+          {
+            "x": 11.473942,
+            "y": 74.17101
+          },
+          {
+            "x": 10.090761,
+            "y": 65.808784
+          },
+          {
+            "x": 45.703965,
+            "y": 46.3255
+          },
+          {
+            "x": 52,
+            "y": 52
+          }
+        ],
+        "receiverPanelId": "fold-pyramid-main-side-1"
+      },
+      {
+        "id": "fold-pyramid-cap-tab-1",
+        "partId": "fold-pyramid-cap",
+        "edgeId": "fold-pyramid-cap-tab-1-base",
+        "ownerPanelId": "fold-pyramid-cap-face",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 10,
+          "y": 10
+        },
+        "baseEnd": {
+          "x": 45,
+          "y": 10
+        },
+        "outline": [
+          {
+            "x": 10,
+            "y": 10
+          },
+          {
+            "x": 12.8,
+            "y": 2
+          },
+          {
+            "x": 42.2,
+            "y": 2
+          },
+          {
+            "x": 45,
+            "y": 10
+          }
+        ],
+        "receiverPanelId": "fold-pyramid-main-side-1"
+      },
+      {
+        "id": "fold-pyramid-cap-tab-2",
+        "partId": "fold-pyramid-cap",
+        "edgeId": "fold-pyramid-cap-tab-2-base",
+        "ownerPanelId": "fold-pyramid-cap-face",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 45,
+          "y": 10
+        },
+        "baseEnd": {
+          "x": 50,
+          "y": 40
+        },
+        "outline": [
+          {
+            "x": 45,
+            "y": 10
+          },
+          {
+            "x": 53.351469,
+            "y": 11.446711
+          },
+          {
+            "x": 57.430834,
+            "y": 35.922905
+          },
+          {
+            "x": 50,
+            "y": 40
+          }
+        ],
+        "receiverPanelId": "fold-pyramid-main-side-2"
+      },
+      {
+        "id": "fold-pyramid-cap-tab-3",
+        "partId": "fold-pyramid-cap",
+        "edgeId": "fold-pyramid-cap-tab-3-base",
+        "ownerPanelId": "fold-pyramid-cap-face",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 50,
+          "y": 40
+        },
+        "baseEnd": {
+          "x": 15,
+          "y": 40
+        },
+        "outline": [
+          {
+            "x": 50,
+            "y": 40
+          },
+          {
+            "x": 47.2,
+            "y": 48
+          },
+          {
+            "x": 17.8,
+            "y": 48
+          },
+          {
+            "x": 15,
+            "y": 40
+          }
+        ],
+        "receiverPanelId": "fold-pyramid-main-side-3"
+      },
+      {
+        "id": "fold-pyramid-cap-tab-4",
+        "partId": "fold-pyramid-cap",
+        "edgeId": "fold-pyramid-cap-tab-4-base",
+        "ownerPanelId": "fold-pyramid-cap-face",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 15,
+          "y": 40
+        },
+        "baseEnd": {
+          "x": 10,
+          "y": 10
+        },
+        "outline": [
+          {
+            "x": 15,
+            "y": 40
+          },
+          {
+            "x": 6.648531,
+            "y": 38.553289
+          },
+          {
+            "x": 2.569166,
+            "y": 14.077095
+          },
+          {
+            "x": 10,
+            "y": 10
+          }
+        ],
+        "receiverPanelId": "fold-pyramid-main-side-4"
+      }
+    ],
+    "parts": [
+      {
+        "id": "fold-pyramid-main",
+        "name": "Frustum net",
+        "label": "Frustum net",
+        "paths": [
+          {
+            "id": "fold-pyramid-main-side-1-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 52,
+                "y": 52
+              },
+              {
+                "x": 69.5,
+                "y": 9.248801
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-1",
+            "edgeId": "fold-pyramid-main-side-1-boundary-2"
+          },
+          {
+            "id": "fold-pyramid-main-side-1-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 69.5,
+                "y": 9.248801
+              },
+              {
+                "x": 104.5,
+                "y": 9.248801
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-1",
+            "edgeId": "fold-pyramid-main-side-1-boundary-3"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 122,
+                "y": 52
+              },
+              {
+                "x": 167.526058,
+                "y": 59.82899
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-2",
+            "edgeId": "fold-pyramid-main-side-2-boundary-2"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 167.526058,
+                "y": 59.82899
+              },
+              {
+                "x": 172.526058,
+                "y": 89.82899
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-2",
+            "edgeId": "fold-pyramid-main-side-2-boundary-3"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 132,
+                "y": 112
+              },
+              {
+                "x": 114.5,
+                "y": 154.751199
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-3",
+            "edgeId": "fold-pyramid-main-side-3-boundary-2"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 114.5,
+                "y": 154.751199
+              },
+              {
+                "x": 79.5,
+                "y": 154.751199
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-3",
+            "edgeId": "fold-pyramid-main-side-3-boundary-3"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 62,
+                "y": 112
+              },
+              {
+                "x": 16.473942,
+                "y": 104.17101
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-4",
+            "edgeId": "fold-pyramid-main-side-4-boundary-2"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 16.473942,
+                "y": 104.17101
+              },
+              {
+                "x": 11.473942,
+                "y": 74.17101
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-4",
+            "edgeId": "fold-pyramid-main-side-4-boundary-3"
+          },
+          {
+            "id": "fold-pyramid-main-side-1-base-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 52,
+                "y": 52
+              },
+              {
+                "x": 122,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-base",
+            "edgeId": "fold-pyramid-main-side-1-base-fold"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-base-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 122,
+                "y": 52
+              },
+              {
+                "x": 132,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-base",
+            "edgeId": "fold-pyramid-main-side-2-base-fold"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-base-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 132,
+                "y": 112
+              },
+              {
+                "x": 62,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-base",
+            "edgeId": "fold-pyramid-main-side-3-base-fold"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-base-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 62,
+                "y": 112
+              },
+              {
+                "x": 52,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-base",
+            "edgeId": "fold-pyramid-main-side-4-base-fold"
+          },
+          {
+            "id": "fold-pyramid-main-side-1-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 104.5,
+                "y": 9.248801
+              },
+              {
+                "x": 112.964452,
+                "y": 8.809425
+              },
+              {
+                "x": 128.342979,
+                "y": 46.378024
+              },
+              {
+                "x": 122,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-1",
+            "tabId": "fold-pyramid-main-side-1-seam-tab"
+          },
+          {
+            "id": "fold-pyramid-main-side-1-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 104.5,
+                "y": 9.248801
+              },
+              {
+                "x": 122,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-1",
+            "tabId": "fold-pyramid-main-side-1-seam-tab",
+            "edgeId": "fold-pyramid-main-side-1-seam-tab-base"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 172.526058,
+                "y": 89.82899
+              },
+              {
+                "x": 173.909239,
+                "y": 98.191216
+              },
+              {
+                "x": 138.296035,
+                "y": 117.6745
+              },
+              {
+                "x": 132,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-2",
+            "tabId": "fold-pyramid-main-side-2-seam-tab"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 172.526058,
+                "y": 89.82899
+              },
+              {
+                "x": 132,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-2",
+            "tabId": "fold-pyramid-main-side-2-seam-tab",
+            "edgeId": "fold-pyramid-main-side-2-seam-tab-base"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 79.5,
+                "y": 154.751199
+              },
+              {
+                "x": 71.035548,
+                "y": 155.190575
+              },
+              {
+                "x": 55.657021,
+                "y": 117.621976
+              },
+              {
+                "x": 62,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-3",
+            "tabId": "fold-pyramid-main-side-3-seam-tab"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 79.5,
+                "y": 154.751199
+              },
+              {
+                "x": 62,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-3",
+            "tabId": "fold-pyramid-main-side-3-seam-tab",
+            "edgeId": "fold-pyramid-main-side-3-seam-tab-base"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 11.473942,
+                "y": 74.17101
+              },
+              {
+                "x": 10.090761,
+                "y": 65.808784
+              },
+              {
+                "x": 45.703965,
+                "y": 46.3255
+              },
+              {
+                "x": 52,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-4",
+            "tabId": "fold-pyramid-main-side-4-seam-tab"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 11.473942,
+                "y": 74.17101
+              },
+              {
+                "x": 52,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-4",
+            "tabId": "fold-pyramid-main-side-4-seam-tab",
+            "edgeId": "fold-pyramid-main-side-4-seam-tab-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-pyramid-main-base-label",
+            "text": "Base",
+            "position": {
+              "x": 92,
+              "y": 82
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-main-base"
+          },
+          {
+            "id": "fold-pyramid-main-side-1-label",
+            "text": "Side 1",
+            "position": {
+              "x": 87,
+              "y": 30.6244
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-main-side-1"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-label",
+            "text": "Side 2",
+            "position": {
+              "x": 148.513029,
+              "y": 78.414495
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-main-side-2"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-label",
+            "text": "Side 3",
+            "position": {
+              "x": 97,
+              "y": 133.3756
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-main-side-3"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-label",
+            "text": "Side 4",
+            "position": {
+              "x": 35.486971,
+              "y": 85.585505
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-main-side-4"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "pyramid-frustum",
+          "panelIds": [
+            "fold-pyramid-main-base",
+            "fold-pyramid-main-side-1",
+            "fold-pyramid-main-side-2",
+            "fold-pyramid-main-side-3",
+            "fold-pyramid-main-side-4"
+          ]
+        }
+      },
+      {
+        "id": "fold-pyramid-cap",
+        "name": "Frustum top cap",
+        "label": "Frustum top cap",
+        "paths": [
+          {
+            "id": "fold-pyramid-cap-tab-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 10
+              },
+              {
+                "x": 12.8,
+                "y": 2
+              },
+              {
+                "x": 42.2,
+                "y": 2
+              },
+              {
+                "x": 45,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-1"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-1-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 10
+              },
+              {
+                "x": 45,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-1",
+            "edgeId": "fold-pyramid-cap-tab-1-base"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 45,
+                "y": 10
+              },
+              {
+                "x": 53.351469,
+                "y": 11.446711
+              },
+              {
+                "x": 57.430834,
+                "y": 35.922905
+              },
+              {
+                "x": 50,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-2"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-2-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 45,
+                "y": 10
+              },
+              {
+                "x": 50,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-2",
+            "edgeId": "fold-pyramid-cap-tab-2-base"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 40
+              },
+              {
+                "x": 47.2,
+                "y": 48
+              },
+              {
+                "x": 17.8,
+                "y": 48
+              },
+              {
+                "x": 15,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-3"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-3-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 40
+              },
+              {
+                "x": 15,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-3",
+            "edgeId": "fold-pyramid-cap-tab-3-base"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 15,
+                "y": 40
+              },
+              {
+                "x": 6.648531,
+                "y": 38.553289
+              },
+              {
+                "x": 2.569166,
+                "y": 14.077095
+              },
+              {
+                "x": 10,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-4"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-4-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 15,
+                "y": 40
+              },
+              {
+                "x": 10,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-4",
+            "edgeId": "fold-pyramid-cap-tab-4-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-pyramid-cap-face-label",
+            "text": "Top cap",
+            "position": {
+              "x": 30,
+              "y": 25
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-cap-face"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "pyramid-frustum",
+          "panelIds": ["fold-pyramid-cap-face"]
+        }
+      }
+    ],
+    "issues": [
+      {
+        "id": "fold-pyramid-cap-tab-1-connection-panel-missing",
+        "severity": "error",
+        "code": "FOLD_CONNECTION_PANEL_MISSING",
+        "message": "Connection fold-pyramid-cap-tab-1-connection references a missing panel.",
+        "affectedEntityIds": [
+          "fold-pyramid-cap-tab-1-connection",
+          "fold-pyramid-cap-face",
+          "fold-pyramid-main-side-1"
+        ]
+      },
+      {
+        "id": "fold-pyramid-cap-tab-2-connection-panel-missing",
+        "severity": "error",
+        "code": "FOLD_CONNECTION_PANEL_MISSING",
+        "message": "Connection fold-pyramid-cap-tab-2-connection references a missing panel.",
+        "affectedEntityIds": [
+          "fold-pyramid-cap-tab-2-connection",
+          "fold-pyramid-cap-face",
+          "fold-pyramid-main-side-2"
+        ]
+      },
+      {
+        "id": "fold-pyramid-cap-tab-3-connection-panel-missing",
+        "severity": "error",
+        "code": "FOLD_CONNECTION_PANEL_MISSING",
+        "message": "Connection fold-pyramid-cap-tab-3-connection references a missing panel.",
+        "affectedEntityIds": [
+          "fold-pyramid-cap-tab-3-connection",
+          "fold-pyramid-cap-face",
+          "fold-pyramid-main-side-3"
+        ]
+      },
+      {
+        "id": "fold-pyramid-cap-tab-4-connection-panel-missing",
+        "severity": "error",
+        "code": "FOLD_CONNECTION_PANEL_MISSING",
+        "message": "Connection fold-pyramid-cap-tab-4-connection references a missing panel.",
+        "affectedEntityIds": [
+          "fold-pyramid-cap-tab-4-connection",
+          "fold-pyramid-cap-face",
+          "fold-pyramid-main-side-4"
+        ]
+      }
+    ],
+    "assembledPreview": {
+      "panels": [
+        {
+          "id": "fold-pyramid-main-base",
+          "partId": "fold-pyramid-main",
+          "name": "Base",
+          "verticesMm": [
+            [-40, -20, -30],
+            [30, -20, -30],
+            [40, -20, 30],
+            [-30, -20, 30]
+          ]
+        },
+        {
+          "id": "fold-pyramid-main-side-1",
+          "partId": "fold-pyramid-main",
+          "name": "Side 1",
+          "verticesMm": [
+            [-40, -20, -30],
+            [30, -20, -30],
+            [15, 20, -15],
+            [-20, 20, -15]
+          ]
+        },
+        {
+          "id": "fold-pyramid-main-side-2",
+          "partId": "fold-pyramid-main",
+          "name": "Side 2",
+          "verticesMm": [
+            [30, -20, -30],
+            [40, -20, 30],
+            [20, 20, 15],
+            [15, 20, -15]
+          ]
+        },
+        {
+          "id": "fold-pyramid-main-side-3",
+          "partId": "fold-pyramid-main",
+          "name": "Side 3",
+          "verticesMm": [
+            [40, -20, 30],
+            [-30, -20, 30],
+            [-15, 20, 15],
+            [20, 20, 15]
+          ]
+        },
+        {
+          "id": "fold-pyramid-main-side-4",
+          "partId": "fold-pyramid-main",
+          "name": "Side 4",
+          "verticesMm": [
+            [-30, -20, 30],
+            [-40, -20, -30],
+            [-20, 20, -15],
+            [-15, 20, 15]
+          ]
+        },
+        {
+          "id": "fold-pyramid-cap-face",
+          "partId": "fold-pyramid-cap",
+          "name": "Top cap",
+          "verticesMm": [
+            [-20, 20, -15],
+            [15, 20, -15],
+            [20, 20, 15],
+            [-15, 20, 15]
+          ]
+        }
+      ]
+    },
+    "editableEdges": [
+      {
+        "id": "fold-pyramid-cap-tab-1-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-cap-face",
+        "panelBId": "fold-pyramid-main-side-1",
+        "startMm": [-20, 20, -15],
+        "endMm": [15, 20, -15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-cap-tab-2-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-cap-face",
+        "panelBId": "fold-pyramid-main-side-2",
+        "startMm": [15, 20, -15],
+        "endMm": [20, 20, 15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-cap-tab-3-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-cap-face",
+        "panelBId": "fold-pyramid-main-side-3",
+        "startMm": [20, 20, 15],
+        "endMm": [-15, 20, 15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-cap-tab-4-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-cap-face",
+        "panelBId": "fold-pyramid-main-side-4",
+        "startMm": [-15, 20, 15],
+        "endMm": [-20, 20, -15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-1-base-fold-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-1",
+        "startMm": [-40, -20, -30],
+        "endMm": [30, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-1-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-pyramid-main-side-1",
+        "startMm": [30, -20, -30],
+        "endMm": [15, 20, -15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-1-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-pyramid-main-side-1",
+        "startMm": [15, 20, -15],
+        "endMm": [-20, 20, -15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-1-seam-tab-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-main-side-1",
+        "panelBId": "fold-pyramid-main-side-2",
+        "startMm": [-20, 20, -15],
+        "endMm": [-40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-2-base-fold-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-2",
+        "startMm": [30, -20, -30],
+        "endMm": [40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-2-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-pyramid-main-side-2",
+        "startMm": [40, -20, 30],
+        "endMm": [20, 20, 15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-2-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-pyramid-main-side-2",
+        "startMm": [20, 20, 15],
+        "endMm": [15, 20, -15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-2-seam-tab-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-main-side-2",
+        "panelBId": "fold-pyramid-main-side-3",
+        "startMm": [15, 20, -15],
+        "endMm": [30, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-3-base-fold-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-3",
+        "startMm": [40, -20, 30],
+        "endMm": [-30, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-3-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-pyramid-main-side-3",
+        "startMm": [-30, -20, 30],
+        "endMm": [-15, 20, 15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-3-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-pyramid-main-side-3",
+        "startMm": [-15, 20, 15],
+        "endMm": [20, 20, 15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-3-seam-tab-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-main-side-3",
+        "panelBId": "fold-pyramid-main-side-4",
+        "startMm": [20, 20, 15],
+        "endMm": [40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-4-base-fold-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-main-base",
+        "panelBId": "fold-pyramid-main-side-4",
+        "startMm": [-30, -20, 30],
+        "endMm": [-40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-4-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-pyramid-main-side-4",
+        "startMm": [-40, -20, -30],
+        "endMm": [-20, 20, -15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-4-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-pyramid-main-side-4",
+        "startMm": [-20, 20, -15],
+        "endMm": [-15, 20, 15],
+        "editable": true
+      },
+      {
+        "id": "fold-pyramid-main-side-4-seam-tab-connection",
+        "kind": "connection",
+        "panelAId": "fold-pyramid-main-side-4",
+        "panelBId": "fold-pyramid-main-side-1",
+        "startMm": [-15, 20, 15],
+        "endMm": [-30, -20, 30],
+        "editable": true
+      }
+    ],
+    "resolvedDimensions": {
+      "widthMm": 80,
+      "lengthMm": 60,
+      "heightMm": 40
+    },
+    "algorithmVersion": "interactive-connections-v8",
+    "inputHash": "sf6-f74dc885"
+  },
+  "project": {
+    "metadata": {
+      "id": "project-upgrade-baseline",
+      "name": "Upgrade baseline: fold-pyramid-frustum",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    "model": {
+      "id": "model-legacy-fixture",
+      "name": "40 mm cube",
+      "source": {
+        "kind": "built-in",
+        "primitive": "cube"
+      },
+      "dimensions": {
+        "widthMm": 40,
+        "heightMm": 40,
+        "depthMm": 40
+      },
+      "transform": {
+        "positionMm": [0, 0, 0],
+        "rotationDeg": [0, 0, 0],
+        "scale": [1, 1, 1]
+      },
+      "mesh": {
+        "positionsMm": [
+          -20, -20, -20, 20, -20, -20, 20, 20, -20, -20, 20, -20, -20, -20, 20, 20, -20, 20, 20, 20,
+          20, -20, 20, 20
+        ],
+        "indices": [
+          0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 3, 7, 6, 3, 6, 2, 0, 4, 7, 0, 7, 3,
+          1, 2, 6, 1, 6, 5
+        ]
+      },
+      "bounds": {
+        "minMm": [-20, -20, -20],
+        "maxMm": [20, 20, 20]
+      },
+      "healthReport": {
+        "triangleCount": 12,
+        "openEdgeCount": 0,
+        "nonManifoldEdgeCount": 0,
+        "disconnectedShellCount": 1,
+        "orientationIssueCount": 0,
+        "weldedVertexCount": 8,
+        "signedVolumeMm3": 64000.00000000001,
+        "likelyInverted": false,
+        "inspected": true
+      }
+    },
+    "fabricationMode": "fold-template",
+    "materialProfileSnapshot": {
+      "id": "card-300gsm",
+      "name": "300 gsm card",
+      "category": "card",
+      "thicknessMm": 1,
+      "kerfMm": 0.1,
+      "clearanceMm": 0.1,
+      "grainDirection": "none",
+      "scoreAllowanceMm": 0.2,
+      "defaultSheetWidthMm": 210,
+      "defaultSheetHeightMm": 297
+    },
+    "generatedParts": [
+      {
+        "id": "fold-pyramid-main",
+        "name": "Frustum net",
+        "label": "Frustum net",
+        "paths": [
+          {
+            "id": "fold-pyramid-main-side-1-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 52,
+                "y": 52
+              },
+              {
+                "x": 69.5,
+                "y": 9.248801
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-1",
+            "edgeId": "fold-pyramid-main-side-1-boundary-2"
+          },
+          {
+            "id": "fold-pyramid-main-side-1-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 69.5,
+                "y": 9.248801
+              },
+              {
+                "x": 104.5,
+                "y": 9.248801
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-1",
+            "edgeId": "fold-pyramid-main-side-1-boundary-3"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 122,
+                "y": 52
+              },
+              {
+                "x": 167.526058,
+                "y": 59.82899
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-2",
+            "edgeId": "fold-pyramid-main-side-2-boundary-2"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 167.526058,
+                "y": 59.82899
+              },
+              {
+                "x": 172.526058,
+                "y": 89.82899
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-2",
+            "edgeId": "fold-pyramid-main-side-2-boundary-3"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 132,
+                "y": 112
+              },
+              {
+                "x": 114.5,
+                "y": 154.751199
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-3",
+            "edgeId": "fold-pyramid-main-side-3-boundary-2"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 114.5,
+                "y": 154.751199
+              },
+              {
+                "x": 79.5,
+                "y": 154.751199
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-3",
+            "edgeId": "fold-pyramid-main-side-3-boundary-3"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 62,
+                "y": 112
+              },
+              {
+                "x": 16.473942,
+                "y": 104.17101
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-4",
+            "edgeId": "fold-pyramid-main-side-4-boundary-2"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 16.473942,
+                "y": 104.17101
+              },
+              {
+                "x": 11.473942,
+                "y": 74.17101
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-4",
+            "edgeId": "fold-pyramid-main-side-4-boundary-3"
+          },
+          {
+            "id": "fold-pyramid-main-side-1-base-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 52,
+                "y": 52
+              },
+              {
+                "x": 122,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-base",
+            "edgeId": "fold-pyramid-main-side-1-base-fold"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-base-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 122,
+                "y": 52
+              },
+              {
+                "x": 132,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-base",
+            "edgeId": "fold-pyramid-main-side-2-base-fold"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-base-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 132,
+                "y": 112
+              },
+              {
+                "x": 62,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-base",
+            "edgeId": "fold-pyramid-main-side-3-base-fold"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-base-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 62,
+                "y": 112
+              },
+              {
+                "x": 52,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-base",
+            "edgeId": "fold-pyramid-main-side-4-base-fold"
+          },
+          {
+            "id": "fold-pyramid-main-side-1-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 104.5,
+                "y": 9.248801
+              },
+              {
+                "x": 112.964452,
+                "y": 8.809425
+              },
+              {
+                "x": 128.342979,
+                "y": 46.378024
+              },
+              {
+                "x": 122,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-1",
+            "tabId": "fold-pyramid-main-side-1-seam-tab"
+          },
+          {
+            "id": "fold-pyramid-main-side-1-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 104.5,
+                "y": 9.248801
+              },
+              {
+                "x": 122,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-1",
+            "tabId": "fold-pyramid-main-side-1-seam-tab",
+            "edgeId": "fold-pyramid-main-side-1-seam-tab-base"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 172.526058,
+                "y": 89.82899
+              },
+              {
+                "x": 173.909239,
+                "y": 98.191216
+              },
+              {
+                "x": 138.296035,
+                "y": 117.6745
+              },
+              {
+                "x": 132,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-2",
+            "tabId": "fold-pyramid-main-side-2-seam-tab"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 172.526058,
+                "y": 89.82899
+              },
+              {
+                "x": 132,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-2",
+            "tabId": "fold-pyramid-main-side-2-seam-tab",
+            "edgeId": "fold-pyramid-main-side-2-seam-tab-base"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 79.5,
+                "y": 154.751199
+              },
+              {
+                "x": 71.035548,
+                "y": 155.190575
+              },
+              {
+                "x": 55.657021,
+                "y": 117.621976
+              },
+              {
+                "x": 62,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-3",
+            "tabId": "fold-pyramid-main-side-3-seam-tab"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 79.5,
+                "y": 154.751199
+              },
+              {
+                "x": 62,
+                "y": 112
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-3",
+            "tabId": "fold-pyramid-main-side-3-seam-tab",
+            "edgeId": "fold-pyramid-main-side-3-seam-tab-base"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 11.473942,
+                "y": 74.17101
+              },
+              {
+                "x": 10.090761,
+                "y": 65.808784
+              },
+              {
+                "x": 45.703965,
+                "y": 46.3255
+              },
+              {
+                "x": 52,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-4",
+            "tabId": "fold-pyramid-main-side-4-seam-tab"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 11.473942,
+                "y": 74.17101
+              },
+              {
+                "x": 52,
+                "y": 52
+              }
+            ],
+            "panelId": "fold-pyramid-main-side-4",
+            "tabId": "fold-pyramid-main-side-4-seam-tab",
+            "edgeId": "fold-pyramid-main-side-4-seam-tab-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-pyramid-main-base-label",
+            "text": "Base",
+            "position": {
+              "x": 92,
+              "y": 82
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-main-base"
+          },
+          {
+            "id": "fold-pyramid-main-side-1-label",
+            "text": "Side 1",
+            "position": {
+              "x": 87,
+              "y": 30.6244
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-main-side-1"
+          },
+          {
+            "id": "fold-pyramid-main-side-2-label",
+            "text": "Side 2",
+            "position": {
+              "x": 148.513029,
+              "y": 78.414495
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-main-side-2"
+          },
+          {
+            "id": "fold-pyramid-main-side-3-label",
+            "text": "Side 3",
+            "position": {
+              "x": 97,
+              "y": 133.3756
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-main-side-3"
+          },
+          {
+            "id": "fold-pyramid-main-side-4-label",
+            "text": "Side 4",
+            "position": {
+              "x": 35.486971,
+              "y": 85.585505
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-main-side-4"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "pyramid-frustum",
+          "panelIds": [
+            "fold-pyramid-main-base",
+            "fold-pyramid-main-side-1",
+            "fold-pyramid-main-side-2",
+            "fold-pyramid-main-side-3",
+            "fold-pyramid-main-side-4"
+          ]
+        }
+      },
+      {
+        "id": "fold-pyramid-cap",
+        "name": "Frustum top cap",
+        "label": "Frustum top cap",
+        "paths": [
+          {
+            "id": "fold-pyramid-cap-tab-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 10
+              },
+              {
+                "x": 12.8,
+                "y": 2
+              },
+              {
+                "x": 42.2,
+                "y": 2
+              },
+              {
+                "x": 45,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-1"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-1-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 10
+              },
+              {
+                "x": 45,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-1",
+            "edgeId": "fold-pyramid-cap-tab-1-base"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 45,
+                "y": 10
+              },
+              {
+                "x": 53.351469,
+                "y": 11.446711
+              },
+              {
+                "x": 57.430834,
+                "y": 35.922905
+              },
+              {
+                "x": 50,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-2"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-2-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 45,
+                "y": 10
+              },
+              {
+                "x": 50,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-2",
+            "edgeId": "fold-pyramid-cap-tab-2-base"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 40
+              },
+              {
+                "x": 47.2,
+                "y": 48
+              },
+              {
+                "x": 17.8,
+                "y": 48
+              },
+              {
+                "x": 15,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-3"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-3-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 40
+              },
+              {
+                "x": 15,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-3",
+            "edgeId": "fold-pyramid-cap-tab-3-base"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 15,
+                "y": 40
+              },
+              {
+                "x": 6.648531,
+                "y": 38.553289
+              },
+              {
+                "x": 2.569166,
+                "y": 14.077095
+              },
+              {
+                "x": 10,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-4"
+          },
+          {
+            "id": "fold-pyramid-cap-tab-4-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 15,
+                "y": 40
+              },
+              {
+                "x": 10,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-pyramid-cap-face",
+            "tabId": "fold-pyramid-cap-tab-4",
+            "edgeId": "fold-pyramid-cap-tab-4-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-pyramid-cap-face-label",
+            "text": "Top cap",
+            "position": {
+              "x": 30,
+              "y": 25
+            },
+            "operation": "engrave",
+            "entityId": "fold-pyramid-cap-face"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "pyramid-frustum",
+          "panelIds": ["fold-pyramid-cap-face"]
+        }
+      }
+    ],
+    "generationIssues": [
+      {
+        "id": "fold-pyramid-cap-tab-1-connection-panel-missing",
+        "severity": "error",
+        "code": "FOLD_CONNECTION_PANEL_MISSING",
+        "message": "Connection fold-pyramid-cap-tab-1-connection references a missing panel.",
+        "affectedEntityIds": [
+          "fold-pyramid-cap-tab-1-connection",
+          "fold-pyramid-cap-face",
+          "fold-pyramid-main-side-1"
+        ]
+      },
+      {
+        "id": "fold-pyramid-cap-tab-2-connection-panel-missing",
+        "severity": "error",
+        "code": "FOLD_CONNECTION_PANEL_MISSING",
+        "message": "Connection fold-pyramid-cap-tab-2-connection references a missing panel.",
+        "affectedEntityIds": [
+          "fold-pyramid-cap-tab-2-connection",
+          "fold-pyramid-cap-face",
+          "fold-pyramid-main-side-2"
+        ]
+      },
+      {
+        "id": "fold-pyramid-cap-tab-3-connection-panel-missing",
+        "severity": "error",
+        "code": "FOLD_CONNECTION_PANEL_MISSING",
+        "message": "Connection fold-pyramid-cap-tab-3-connection references a missing panel.",
+        "affectedEntityIds": [
+          "fold-pyramid-cap-tab-3-connection",
+          "fold-pyramid-cap-face",
+          "fold-pyramid-main-side-3"
+        ]
+      },
+      {
+        "id": "fold-pyramid-cap-tab-4-connection-panel-missing",
+        "severity": "error",
+        "code": "FOLD_CONNECTION_PANEL_MISSING",
+        "message": "Connection fold-pyramid-cap-tab-4-connection references a missing panel.",
+        "affectedEntityIds": [
+          "fold-pyramid-cap-tab-4-connection",
+          "fold-pyramid-cap-face",
+          "fold-pyramid-main-side-4"
+        ]
+      }
+    ],
+    "sheetLayouts": [
+      {
+        "id": "sheet-upgrade-baseline",
+        "widthMm": 600,
+        "heightMm": 400,
+        "marginMm": 5,
+        "spacingMm": 3,
+        "placements": [
+          {
+            "partId": "fold-pyramid-main",
+            "x": -5.0907610000000005,
+            "y": -3.809424999999999,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "fold-pyramid-cap",
+            "x": 169.24931200000003,
+            "y": 3,
+            "rotationDeg": 0
+          }
+        ]
+      }
+    ],
+    "exportSettings": {
+      "includeLabels": true,
+      "includeRegistrationMarks": false,
+      "includeSheetBoundary": true,
+      "operationStyles": [
+        {
+          "operation": "cut",
+          "stroke": "#ff0000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "score",
+          "stroke": "#0000ff",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "mountain-fold",
+          "stroke": "#8b5cf6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "valley-fold",
+          "stroke": "#14b8a6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "perforate",
+          "stroke": "#f59e0b",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "engrave",
+          "stroke": "#000000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "guide",
+          "stroke": "#6b7280",
+          "strokeWidthMm": 0.1
+        }
+      ],
+      "kerfCompensation": "none",
+      "customKerfMm": 0.1,
+      "foldLineOutput": "preserve",
+      "perforationDashMm": 2,
+      "perforationGapMm": 1,
+      "labelFontSizeMm": 3
+    },
+    "acknowledgedWarningIds": [],
+    "modeSettings": {
+      "stackedSlices": {
+        "axis": "z",
+        "spacingMm": 10,
+        "thicknessMm": 1,
+        "contourEpsilonMm": 0.001
+      },
+      "waffleSlices": {
+        "primaryAxis": "x",
+        "secondaryAxis": "y",
+        "primarySpacingMm": 20,
+        "secondarySpacingMm": 20,
+        "thicknessMm": 3,
+        "clearanceMm": 0.15,
+        "contourEpsilonMm": 0.001,
+        "slotPattern": "alternating",
+        "reverseSlots": false
+      },
+      "foldTemplate": {
+        "templateKind": "pyramid-frustum",
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40,
+        "profileToleranceMm": 1,
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1,
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "meshUnfold": {
+        "strategy": "automatic",
+        "rootFaceIndex": 0,
+        "manualSeamKeys": [],
+        "tabDepthMm": 6,
+        "maximumFaceCount": 200,
+        "searchAttempts": 18
+      },
+      "panelConstruction": {
+        "innerWidthMm": 80,
+        "innerDepthMm": 60,
+        "innerHeightMm": 50,
+        "jointKind": "finger",
+        "fingerWidthMm": 10,
+        "clearanceMm": 0.15,
+        "includeLid": false,
+        "panelThicknessMm": 1,
+        "dividerThicknessMm": 1,
+        "lidThicknessMm": 1,
+        "widthDividerCount": 0,
+        "depthDividerCount": 0,
+        "connectionOverrides": {},
+        "panelProfiles": {
+          "front": "flat",
+          "back": "flat"
+        },
+        "glueTabDepthMm": 8,
+        "boundaryGlueTabs": [],
+        "features": []
+      }
+    },
+    "foldingResult": {
+      "settings": {
+        "templateKind": "pyramid-frustum",
+        "fitAxis": "y",
+        "clearanceMm": 0,
+        "profileToleranceMm": 1,
+        "sizeMode": "custom",
+        "envelopeDimensions": {
+          "widthMm": 80,
+          "lengthMm": 60,
+          "heightMm": 40
+        },
+        "parameters": {
+          "wallHeightMm": 40,
+          "tabDepthMm": 8,
+          "lidDepthMm": 15,
+          "lidClearanceMm": 0.5,
+          "gussetDepthMm": 40,
+          "closureFlapMm": 12,
+          "prismSides": 6,
+          "prismRotationDeg": 0,
+          "topScale": 0.5,
+          "seamTabMm": 8,
+          "standalone": true,
+          "closureMethod": "glue",
+          "slotClearanceMm": 0.1
+        },
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "profile": {
+        "sourceModelId": "standalone-template",
+        "fitAxis": "y",
+        "sourceHullPoints": [
+          {
+            "x": -40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": 30
+          }
+        ],
+        "fittedPoints": [
+          {
+            "x": -40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": 30
+          }
+        ],
+        "clearanceMm": 0,
+        "simplificationToleranceMm": 1,
+        "axisMinMm": -20,
+        "axisMaxMm": 20,
+        "widthMm": 80,
+        "heightMm": 60,
+        "depthMm": 40
+      },
+      "panels": [
+        {
+          "id": "fold-pyramid-main-base",
+          "partId": "fold-pyramid-main",
+          "name": "Base",
+          "role": "base",
+          "outline": [
+            {
+              "x": 52,
+              "y": 52
+            },
+            {
+              "x": 122,
+              "y": 52
+            },
+            {
+              "x": 132,
+              "y": 112
+            },
+            {
+              "x": 62,
+              "y": 112
+            }
+          ]
+        },
+        {
+          "id": "fold-pyramid-main-side-1",
+          "partId": "fold-pyramid-main",
+          "name": "Side 1",
+          "role": "side",
+          "outline": [
+            {
+              "x": 122,
+              "y": 52
+            },
+            {
+              "x": 52,
+              "y": 52
+            },
+            {
+              "x": 69.5,
+              "y": 9.248800684133371
+            },
+            {
+              "x": 104.5,
+              "y": 9.248800684133371
+            }
+          ]
+        },
+        {
+          "id": "fold-pyramid-main-side-2",
+          "partId": "fold-pyramid-main",
+          "name": "Side 2",
+          "role": "side",
+          "outline": [
+            {
+              "x": 132,
+              "y": 112
+            },
+            {
+              "x": 122,
+              "y": 52
+            },
+            {
+              "x": 167.52605795800844,
+              "y": 59.82899034033193
+            },
+            {
+              "x": 172.52605795800844,
+              "y": 89.82899034033193
+            }
+          ]
+        },
+        {
+          "id": "fold-pyramid-main-side-3",
+          "partId": "fold-pyramid-main",
+          "name": "Side 3",
+          "role": "side",
+          "outline": [
+            {
+              "x": 62,
+              "y": 112
+            },
+            {
+              "x": 132,
+              "y": 112
+            },
+            {
+              "x": 114.5,
+              "y": 154.75119931586664
+            },
+            {
+              "x": 79.5,
+              "y": 154.75119931586664
+            }
+          ]
+        },
+        {
+          "id": "fold-pyramid-main-side-4",
+          "partId": "fold-pyramid-main",
+          "name": "Side 4",
+          "role": "side",
+          "outline": [
+            {
+              "x": 52,
+              "y": 52
+            },
+            {
+              "x": 62,
+              "y": 112
+            },
+            {
+              "x": 16.47394204199155,
+              "y": 104.17100965966807
+            },
+            {
+              "x": 11.473942041991549,
+              "y": 74.17100965966807
+            }
+          ]
+        },
+        {
+          "id": "fold-pyramid-cap-face",
+          "partId": "fold-pyramid-cap",
+          "name": "Top cap",
+          "role": "lid",
+          "outline": [
+            {
+              "x": 10,
+              "y": 10
+            },
+            {
+              "x": 45,
+              "y": 10
+            },
+            {
+              "x": 50,
+              "y": 40
+            },
+            {
+              "x": 15,
+              "y": 40
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "fold-pyramid-main-side-1-base-fold",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-1",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 75,
+          "pairLabel": "F1",
+          "start": {
+            "x": 52,
+            "y": 52
+          },
+          "end": {
+            "x": 122,
+            "y": 52
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-2-base-fold",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-2",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 75,
+          "pairLabel": "F2",
+          "start": {
+            "x": 122,
+            "y": 52
+          },
+          "end": {
+            "x": 132,
+            "y": 112
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-3-base-fold",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-3",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 75,
+          "pairLabel": "F3",
+          "start": {
+            "x": 132,
+            "y": 112
+          },
+          "end": {
+            "x": 62,
+            "y": 112
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-4-base-fold",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-4",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 75,
+          "pairLabel": "F4",
+          "start": {
+            "x": 62,
+            "y": 112
+          },
+          "end": {
+            "x": 52,
+            "y": 52
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-1-boundary-2",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-1",
+          "disposition": "boundary",
+          "start": {
+            "x": 52,
+            "y": 52
+          },
+          "end": {
+            "x": 69.5,
+            "y": 9.248801
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-1-boundary-3",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-1",
+          "disposition": "boundary",
+          "start": {
+            "x": 69.5,
+            "y": 9.248801
+          },
+          "end": {
+            "x": 104.5,
+            "y": 9.248801
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-2-boundary-2",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-2",
+          "disposition": "boundary",
+          "start": {
+            "x": 122,
+            "y": 52
+          },
+          "end": {
+            "x": 167.526058,
+            "y": 59.82899
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-2-boundary-3",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-2",
+          "disposition": "boundary",
+          "start": {
+            "x": 167.526058,
+            "y": 59.82899
+          },
+          "end": {
+            "x": 172.526058,
+            "y": 89.82899
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-3-boundary-2",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-3",
+          "disposition": "boundary",
+          "start": {
+            "x": 132,
+            "y": 112
+          },
+          "end": {
+            "x": 114.5,
+            "y": 154.751199
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-3-boundary-3",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-3",
+          "disposition": "boundary",
+          "start": {
+            "x": 114.5,
+            "y": 154.751199
+          },
+          "end": {
+            "x": 79.5,
+            "y": 154.751199
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-4-boundary-2",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-4",
+          "disposition": "boundary",
+          "start": {
+            "x": 62,
+            "y": 112
+          },
+          "end": {
+            "x": 16.473942,
+            "y": 104.17101
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-4-boundary-3",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-4",
+          "disposition": "boundary",
+          "start": {
+            "x": 16.473942,
+            "y": 104.17101
+          },
+          "end": {
+            "x": 11.473942,
+            "y": 74.17101
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-1-seam-tab-base",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-1",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T1",
+          "start": {
+            "x": 104.5,
+            "y": 9.248801
+          },
+          "end": {
+            "x": 122,
+            "y": 52
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-2-seam-tab-base",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-2",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T2",
+          "start": {
+            "x": 172.526058,
+            "y": 89.82899
+          },
+          "end": {
+            "x": 132,
+            "y": 112
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-3-seam-tab-base",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-3",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T3",
+          "start": {
+            "x": 79.5,
+            "y": 154.751199
+          },
+          "end": {
+            "x": 62,
+            "y": 112
+          }
+        },
+        {
+          "id": "fold-pyramid-main-side-4-seam-tab-base",
+          "partId": "fold-pyramid-main",
+          "panelAId": "fold-pyramid-main-side-4",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T4",
+          "start": {
+            "x": 11.473942,
+            "y": 74.17101
+          },
+          "end": {
+            "x": 52,
+            "y": 52
+          }
+        },
+        {
+          "id": "fold-pyramid-cap-tab-1-base",
+          "partId": "fold-pyramid-cap",
+          "panelAId": "fold-pyramid-cap-face",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T1",
+          "start": {
+            "x": 10,
+            "y": 10
+          },
+          "end": {
+            "x": 45,
+            "y": 10
+          }
+        },
+        {
+          "id": "fold-pyramid-cap-tab-2-base",
+          "partId": "fold-pyramid-cap",
+          "panelAId": "fold-pyramid-cap-face",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T2",
+          "start": {
+            "x": 45,
+            "y": 10
+          },
+          "end": {
+            "x": 50,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-pyramid-cap-tab-3-base",
+          "partId": "fold-pyramid-cap",
+          "panelAId": "fold-pyramid-cap-face",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T3",
+          "start": {
+            "x": 50,
+            "y": 40
+          },
+          "end": {
+            "x": 15,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-pyramid-cap-tab-4-base",
+          "partId": "fold-pyramid-cap",
+          "panelAId": "fold-pyramid-cap-face",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T4",
+          "start": {
+            "x": 15,
+            "y": 40
+          },
+          "end": {
+            "x": 10,
+            "y": 10
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "fold-pyramid-main-side-1-base-fold-connection",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-1",
+          "edgeA": {
+            "start": {
+              "x": 52,
+              "y": 52
+            },
+            "end": {
+              "x": 122,
+              "y": 52
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 52,
+              "y": 52
+            },
+            "end": {
+              "x": 122,
+              "y": 52
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-pyramid-main-side-2-base-fold-connection",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-2",
+          "edgeA": {
+            "start": {
+              "x": 122,
+              "y": 52
+            },
+            "end": {
+              "x": 132,
+              "y": 112
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 122,
+              "y": 52
+            },
+            "end": {
+              "x": 132,
+              "y": 112
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-pyramid-main-side-3-base-fold-connection",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-3",
+          "edgeA": {
+            "start": {
+              "x": 132,
+              "y": 112
+            },
+            "end": {
+              "x": 62,
+              "y": 112
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 132,
+              "y": 112
+            },
+            "end": {
+              "x": 62,
+              "y": 112
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-pyramid-main-side-4-base-fold-connection",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-4",
+          "edgeA": {
+            "start": {
+              "x": 62,
+              "y": 112
+            },
+            "end": {
+              "x": 52,
+              "y": 52
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 62,
+              "y": 112
+            },
+            "end": {
+              "x": 52,
+              "y": 52
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-pyramid-main-side-1-seam-tab-connection",
+          "panelAId": "fold-pyramid-main-side-1",
+          "panelBId": "fold-pyramid-main-side-2",
+          "edgeA": {
+            "start": {
+              "x": 104.5,
+              "y": 9.248801
+            },
+            "end": {
+              "x": 122,
+              "y": 52
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 122,
+              "y": 52
+            },
+            "end": {
+              "x": 167.52605795800844,
+              "y": 59.82899034033193
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-pyramid-main-side-1-seam-tab"]
+        },
+        {
+          "id": "fold-pyramid-main-side-2-seam-tab-connection",
+          "panelAId": "fold-pyramid-main-side-2",
+          "panelBId": "fold-pyramid-main-side-3",
+          "edgeA": {
+            "start": {
+              "x": 172.526058,
+              "y": 89.82899
+            },
+            "end": {
+              "x": 132,
+              "y": 112
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 132,
+              "y": 112
+            },
+            "end": {
+              "x": 114.5,
+              "y": 154.75119931586664
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-pyramid-main-side-2-seam-tab"]
+        },
+        {
+          "id": "fold-pyramid-main-side-3-seam-tab-connection",
+          "panelAId": "fold-pyramid-main-side-3",
+          "panelBId": "fold-pyramid-main-side-4",
+          "edgeA": {
+            "start": {
+              "x": 79.5,
+              "y": 154.751199
+            },
+            "end": {
+              "x": 62,
+              "y": 112
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 62,
+              "y": 112
+            },
+            "end": {
+              "x": 16.47394204199155,
+              "y": 104.17100965966807
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-pyramid-main-side-3-seam-tab"]
+        },
+        {
+          "id": "fold-pyramid-main-side-4-seam-tab-connection",
+          "panelAId": "fold-pyramid-main-side-4",
+          "panelBId": "fold-pyramid-main-side-1",
+          "edgeA": {
+            "start": {
+              "x": 11.473942,
+              "y": 74.17101
+            },
+            "end": {
+              "x": 52,
+              "y": 52
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 52,
+              "y": 52
+            },
+            "end": {
+              "x": 69.5,
+              "y": 9.248800684133371
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-pyramid-main-side-4-seam-tab"]
+        },
+        {
+          "id": "fold-pyramid-cap-tab-1-connection",
+          "panelAId": "fold-pyramid-cap-face",
+          "panelBId": "fold-pyramid-main-side-1",
+          "edgeA": {
+            "start": {
+              "x": 10,
+              "y": 10
+            },
+            "end": {
+              "x": 45,
+              "y": 10
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 69.5,
+              "y": 9.248800684133371
+            },
+            "end": {
+              "x": 104.5,
+              "y": 9.248800684133371
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-pyramid-cap-tab-1"]
+        },
+        {
+          "id": "fold-pyramid-cap-tab-2-connection",
+          "panelAId": "fold-pyramid-cap-face",
+          "panelBId": "fold-pyramid-main-side-2",
+          "edgeA": {
+            "start": {
+              "x": 45,
+              "y": 10
+            },
+            "end": {
+              "x": 50,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 167.52605795800844,
+              "y": 59.82899034033193
+            },
+            "end": {
+              "x": 172.52605795800844,
+              "y": 89.82899034033193
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-pyramid-cap-tab-2"]
+        },
+        {
+          "id": "fold-pyramid-cap-tab-3-connection",
+          "panelAId": "fold-pyramid-cap-face",
+          "panelBId": "fold-pyramid-main-side-3",
+          "edgeA": {
+            "start": {
+              "x": 50,
+              "y": 40
+            },
+            "end": {
+              "x": 15,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 114.5,
+              "y": 154.75119931586664
+            },
+            "end": {
+              "x": 79.5,
+              "y": 154.75119931586664
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-pyramid-cap-tab-3"]
+        },
+        {
+          "id": "fold-pyramid-cap-tab-4-connection",
+          "panelAId": "fold-pyramid-cap-face",
+          "panelBId": "fold-pyramid-main-side-4",
+          "edgeA": {
+            "start": {
+              "x": 15,
+              "y": 40
+            },
+            "end": {
+              "x": 10,
+              "y": 10
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 16.47394204199155,
+              "y": 104.17100965966807
+            },
+            "end": {
+              "x": 11.473942041991549,
+              "y": 74.17100965966807
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-pyramid-cap-tab-4"]
+        }
+      ],
+      "tabs": [
+        {
+          "id": "fold-pyramid-main-side-1-seam-tab",
+          "partId": "fold-pyramid-main",
+          "edgeId": "fold-pyramid-main-side-1-seam-tab-base",
+          "ownerPanelId": "fold-pyramid-main-side-1",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 104.5,
+            "y": 9.248801
+          },
+          "baseEnd": {
+            "x": 122,
+            "y": 52
+          },
+          "outline": [
+            {
+              "x": 104.5,
+              "y": 9.248801
+            },
+            {
+              "x": 112.964452,
+              "y": 8.809425
+            },
+            {
+              "x": 128.342979,
+              "y": 46.378024
+            },
+            {
+              "x": 122,
+              "y": 52
+            }
+          ],
+          "receiverPanelId": "fold-pyramid-main-side-2"
+        },
+        {
+          "id": "fold-pyramid-main-side-2-seam-tab",
+          "partId": "fold-pyramid-main",
+          "edgeId": "fold-pyramid-main-side-2-seam-tab-base",
+          "ownerPanelId": "fold-pyramid-main-side-2",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 172.526058,
+            "y": 89.82899
+          },
+          "baseEnd": {
+            "x": 132,
+            "y": 112
+          },
+          "outline": [
+            {
+              "x": 172.526058,
+              "y": 89.82899
+            },
+            {
+              "x": 173.909239,
+              "y": 98.191216
+            },
+            {
+              "x": 138.296035,
+              "y": 117.6745
+            },
+            {
+              "x": 132,
+              "y": 112
+            }
+          ],
+          "receiverPanelId": "fold-pyramid-main-side-3"
+        },
+        {
+          "id": "fold-pyramid-main-side-3-seam-tab",
+          "partId": "fold-pyramid-main",
+          "edgeId": "fold-pyramid-main-side-3-seam-tab-base",
+          "ownerPanelId": "fold-pyramid-main-side-3",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 79.5,
+            "y": 154.751199
+          },
+          "baseEnd": {
+            "x": 62,
+            "y": 112
+          },
+          "outline": [
+            {
+              "x": 79.5,
+              "y": 154.751199
+            },
+            {
+              "x": 71.035548,
+              "y": 155.190575
+            },
+            {
+              "x": 55.657021,
+              "y": 117.621976
+            },
+            {
+              "x": 62,
+              "y": 112
+            }
+          ],
+          "receiverPanelId": "fold-pyramid-main-side-4"
+        },
+        {
+          "id": "fold-pyramid-main-side-4-seam-tab",
+          "partId": "fold-pyramid-main",
+          "edgeId": "fold-pyramid-main-side-4-seam-tab-base",
+          "ownerPanelId": "fold-pyramid-main-side-4",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 11.473942,
+            "y": 74.17101
+          },
+          "baseEnd": {
+            "x": 52,
+            "y": 52
+          },
+          "outline": [
+            {
+              "x": 11.473942,
+              "y": 74.17101
+            },
+            {
+              "x": 10.090761,
+              "y": 65.808784
+            },
+            {
+              "x": 45.703965,
+              "y": 46.3255
+            },
+            {
+              "x": 52,
+              "y": 52
+            }
+          ],
+          "receiverPanelId": "fold-pyramid-main-side-1"
+        },
+        {
+          "id": "fold-pyramid-cap-tab-1",
+          "partId": "fold-pyramid-cap",
+          "edgeId": "fold-pyramid-cap-tab-1-base",
+          "ownerPanelId": "fold-pyramid-cap-face",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 10,
+            "y": 10
+          },
+          "baseEnd": {
+            "x": 45,
+            "y": 10
+          },
+          "outline": [
+            {
+              "x": 10,
+              "y": 10
+            },
+            {
+              "x": 12.8,
+              "y": 2
+            },
+            {
+              "x": 42.2,
+              "y": 2
+            },
+            {
+              "x": 45,
+              "y": 10
+            }
+          ],
+          "receiverPanelId": "fold-pyramid-main-side-1"
+        },
+        {
+          "id": "fold-pyramid-cap-tab-2",
+          "partId": "fold-pyramid-cap",
+          "edgeId": "fold-pyramid-cap-tab-2-base",
+          "ownerPanelId": "fold-pyramid-cap-face",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 45,
+            "y": 10
+          },
+          "baseEnd": {
+            "x": 50,
+            "y": 40
+          },
+          "outline": [
+            {
+              "x": 45,
+              "y": 10
+            },
+            {
+              "x": 53.351469,
+              "y": 11.446711
+            },
+            {
+              "x": 57.430834,
+              "y": 35.922905
+            },
+            {
+              "x": 50,
+              "y": 40
+            }
+          ],
+          "receiverPanelId": "fold-pyramid-main-side-2"
+        },
+        {
+          "id": "fold-pyramid-cap-tab-3",
+          "partId": "fold-pyramid-cap",
+          "edgeId": "fold-pyramid-cap-tab-3-base",
+          "ownerPanelId": "fold-pyramid-cap-face",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 50,
+            "y": 40
+          },
+          "baseEnd": {
+            "x": 15,
+            "y": 40
+          },
+          "outline": [
+            {
+              "x": 50,
+              "y": 40
+            },
+            {
+              "x": 47.2,
+              "y": 48
+            },
+            {
+              "x": 17.8,
+              "y": 48
+            },
+            {
+              "x": 15,
+              "y": 40
+            }
+          ],
+          "receiverPanelId": "fold-pyramid-main-side-3"
+        },
+        {
+          "id": "fold-pyramid-cap-tab-4",
+          "partId": "fold-pyramid-cap",
+          "edgeId": "fold-pyramid-cap-tab-4-base",
+          "ownerPanelId": "fold-pyramid-cap-face",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 15,
+            "y": 40
+          },
+          "baseEnd": {
+            "x": 10,
+            "y": 10
+          },
+          "outline": [
+            {
+              "x": 15,
+              "y": 40
+            },
+            {
+              "x": 6.648531,
+              "y": 38.553289
+            },
+            {
+              "x": 2.569166,
+              "y": 14.077095
+            },
+            {
+              "x": 10,
+              "y": 10
+            }
+          ],
+          "receiverPanelId": "fold-pyramid-main-side-4"
+        }
+      ],
+      "parts": [
+        {
+          "id": "fold-pyramid-main",
+          "name": "Frustum net",
+          "label": "Frustum net",
+          "paths": [
+            {
+              "id": "fold-pyramid-main-side-1-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 52,
+                  "y": 52
+                },
+                {
+                  "x": 69.5,
+                  "y": 9.248801
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-1",
+              "edgeId": "fold-pyramid-main-side-1-boundary-2"
+            },
+            {
+              "id": "fold-pyramid-main-side-1-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 69.5,
+                  "y": 9.248801
+                },
+                {
+                  "x": 104.5,
+                  "y": 9.248801
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-1",
+              "edgeId": "fold-pyramid-main-side-1-boundary-3"
+            },
+            {
+              "id": "fold-pyramid-main-side-2-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 122,
+                  "y": 52
+                },
+                {
+                  "x": 167.526058,
+                  "y": 59.82899
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-2",
+              "edgeId": "fold-pyramid-main-side-2-boundary-2"
+            },
+            {
+              "id": "fold-pyramid-main-side-2-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 167.526058,
+                  "y": 59.82899
+                },
+                {
+                  "x": 172.526058,
+                  "y": 89.82899
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-2",
+              "edgeId": "fold-pyramid-main-side-2-boundary-3"
+            },
+            {
+              "id": "fold-pyramid-main-side-3-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 132,
+                  "y": 112
+                },
+                {
+                  "x": 114.5,
+                  "y": 154.751199
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-3",
+              "edgeId": "fold-pyramid-main-side-3-boundary-2"
+            },
+            {
+              "id": "fold-pyramid-main-side-3-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 114.5,
+                  "y": 154.751199
+                },
+                {
+                  "x": 79.5,
+                  "y": 154.751199
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-3",
+              "edgeId": "fold-pyramid-main-side-3-boundary-3"
+            },
+            {
+              "id": "fold-pyramid-main-side-4-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 62,
+                  "y": 112
+                },
+                {
+                  "x": 16.473942,
+                  "y": 104.17101
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-4",
+              "edgeId": "fold-pyramid-main-side-4-boundary-2"
+            },
+            {
+              "id": "fold-pyramid-main-side-4-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 16.473942,
+                  "y": 104.17101
+                },
+                {
+                  "x": 11.473942,
+                  "y": 74.17101
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-4",
+              "edgeId": "fold-pyramid-main-side-4-boundary-3"
+            },
+            {
+              "id": "fold-pyramid-main-side-1-base-fold-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 52,
+                  "y": 52
+                },
+                {
+                  "x": 122,
+                  "y": 52
+                }
+              ],
+              "panelId": "fold-pyramid-main-base",
+              "edgeId": "fold-pyramid-main-side-1-base-fold"
+            },
+            {
+              "id": "fold-pyramid-main-side-2-base-fold-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 122,
+                  "y": 52
+                },
+                {
+                  "x": 132,
+                  "y": 112
+                }
+              ],
+              "panelId": "fold-pyramid-main-base",
+              "edgeId": "fold-pyramid-main-side-2-base-fold"
+            },
+            {
+              "id": "fold-pyramid-main-side-3-base-fold-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 132,
+                  "y": 112
+                },
+                {
+                  "x": 62,
+                  "y": 112
+                }
+              ],
+              "panelId": "fold-pyramid-main-base",
+              "edgeId": "fold-pyramid-main-side-3-base-fold"
+            },
+            {
+              "id": "fold-pyramid-main-side-4-base-fold-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 62,
+                  "y": 112
+                },
+                {
+                  "x": 52,
+                  "y": 52
+                }
+              ],
+              "panelId": "fold-pyramid-main-base",
+              "edgeId": "fold-pyramid-main-side-4-base-fold"
+            },
+            {
+              "id": "fold-pyramid-main-side-1-seam-tab-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 104.5,
+                  "y": 9.248801
+                },
+                {
+                  "x": 112.964452,
+                  "y": 8.809425
+                },
+                {
+                  "x": 128.342979,
+                  "y": 46.378024
+                },
+                {
+                  "x": 122,
+                  "y": 52
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-1",
+              "tabId": "fold-pyramid-main-side-1-seam-tab"
+            },
+            {
+              "id": "fold-pyramid-main-side-1-seam-tab-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 104.5,
+                  "y": 9.248801
+                },
+                {
+                  "x": 122,
+                  "y": 52
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-1",
+              "tabId": "fold-pyramid-main-side-1-seam-tab",
+              "edgeId": "fold-pyramid-main-side-1-seam-tab-base"
+            },
+            {
+              "id": "fold-pyramid-main-side-2-seam-tab-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 172.526058,
+                  "y": 89.82899
+                },
+                {
+                  "x": 173.909239,
+                  "y": 98.191216
+                },
+                {
+                  "x": 138.296035,
+                  "y": 117.6745
+                },
+                {
+                  "x": 132,
+                  "y": 112
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-2",
+              "tabId": "fold-pyramid-main-side-2-seam-tab"
+            },
+            {
+              "id": "fold-pyramid-main-side-2-seam-tab-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 172.526058,
+                  "y": 89.82899
+                },
+                {
+                  "x": 132,
+                  "y": 112
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-2",
+              "tabId": "fold-pyramid-main-side-2-seam-tab",
+              "edgeId": "fold-pyramid-main-side-2-seam-tab-base"
+            },
+            {
+              "id": "fold-pyramid-main-side-3-seam-tab-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 79.5,
+                  "y": 154.751199
+                },
+                {
+                  "x": 71.035548,
+                  "y": 155.190575
+                },
+                {
+                  "x": 55.657021,
+                  "y": 117.621976
+                },
+                {
+                  "x": 62,
+                  "y": 112
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-3",
+              "tabId": "fold-pyramid-main-side-3-seam-tab"
+            },
+            {
+              "id": "fold-pyramid-main-side-3-seam-tab-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 79.5,
+                  "y": 154.751199
+                },
+                {
+                  "x": 62,
+                  "y": 112
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-3",
+              "tabId": "fold-pyramid-main-side-3-seam-tab",
+              "edgeId": "fold-pyramid-main-side-3-seam-tab-base"
+            },
+            {
+              "id": "fold-pyramid-main-side-4-seam-tab-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 11.473942,
+                  "y": 74.17101
+                },
+                {
+                  "x": 10.090761,
+                  "y": 65.808784
+                },
+                {
+                  "x": 45.703965,
+                  "y": 46.3255
+                },
+                {
+                  "x": 52,
+                  "y": 52
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-4",
+              "tabId": "fold-pyramid-main-side-4-seam-tab"
+            },
+            {
+              "id": "fold-pyramid-main-side-4-seam-tab-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 11.473942,
+                  "y": 74.17101
+                },
+                {
+                  "x": 52,
+                  "y": 52
+                }
+              ],
+              "panelId": "fold-pyramid-main-side-4",
+              "tabId": "fold-pyramid-main-side-4-seam-tab",
+              "edgeId": "fold-pyramid-main-side-4-seam-tab-base"
+            }
+          ],
+          "labels": [
+            {
+              "id": "fold-pyramid-main-base-label",
+              "text": "Base",
+              "position": {
+                "x": 92,
+                "y": 82
+              },
+              "operation": "engrave",
+              "entityId": "fold-pyramid-main-base"
+            },
+            {
+              "id": "fold-pyramid-main-side-1-label",
+              "text": "Side 1",
+              "position": {
+                "x": 87,
+                "y": 30.6244
+              },
+              "operation": "engrave",
+              "entityId": "fold-pyramid-main-side-1"
+            },
+            {
+              "id": "fold-pyramid-main-side-2-label",
+              "text": "Side 2",
+              "position": {
+                "x": 148.513029,
+                "y": 78.414495
+              },
+              "operation": "engrave",
+              "entityId": "fold-pyramid-main-side-2"
+            },
+            {
+              "id": "fold-pyramid-main-side-3-label",
+              "text": "Side 3",
+              "position": {
+                "x": 97,
+                "y": 133.3756
+              },
+              "operation": "engrave",
+              "entityId": "fold-pyramid-main-side-3"
+            },
+            {
+              "id": "fold-pyramid-main-side-4-label",
+              "text": "Side 4",
+              "position": {
+                "x": 35.486971,
+                "y": 85.585505
+              },
+              "operation": "engrave",
+              "entityId": "fold-pyramid-main-side-4"
+            }
+          ],
+          "thicknessMm": 1,
+          "folding": {
+            "templateKind": "pyramid-frustum",
+            "panelIds": [
+              "fold-pyramid-main-base",
+              "fold-pyramid-main-side-1",
+              "fold-pyramid-main-side-2",
+              "fold-pyramid-main-side-3",
+              "fold-pyramid-main-side-4"
+            ]
+          }
+        },
+        {
+          "id": "fold-pyramid-cap",
+          "name": "Frustum top cap",
+          "label": "Frustum top cap",
+          "paths": [
+            {
+              "id": "fold-pyramid-cap-tab-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 10,
+                  "y": 10
+                },
+                {
+                  "x": 12.8,
+                  "y": 2
+                },
+                {
+                  "x": 42.2,
+                  "y": 2
+                },
+                {
+                  "x": 45,
+                  "y": 10
+                }
+              ],
+              "panelId": "fold-pyramid-cap-face",
+              "tabId": "fold-pyramid-cap-tab-1"
+            },
+            {
+              "id": "fold-pyramid-cap-tab-1-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 10,
+                  "y": 10
+                },
+                {
+                  "x": 45,
+                  "y": 10
+                }
+              ],
+              "panelId": "fold-pyramid-cap-face",
+              "tabId": "fold-pyramid-cap-tab-1",
+              "edgeId": "fold-pyramid-cap-tab-1-base"
+            },
+            {
+              "id": "fold-pyramid-cap-tab-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 45,
+                  "y": 10
+                },
+                {
+                  "x": 53.351469,
+                  "y": 11.446711
+                },
+                {
+                  "x": 57.430834,
+                  "y": 35.922905
+                },
+                {
+                  "x": 50,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-pyramid-cap-face",
+              "tabId": "fold-pyramid-cap-tab-2"
+            },
+            {
+              "id": "fold-pyramid-cap-tab-2-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 45,
+                  "y": 10
+                },
+                {
+                  "x": 50,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-pyramid-cap-face",
+              "tabId": "fold-pyramid-cap-tab-2",
+              "edgeId": "fold-pyramid-cap-tab-2-base"
+            },
+            {
+              "id": "fold-pyramid-cap-tab-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 50,
+                  "y": 40
+                },
+                {
+                  "x": 47.2,
+                  "y": 48
+                },
+                {
+                  "x": 17.8,
+                  "y": 48
+                },
+                {
+                  "x": 15,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-pyramid-cap-face",
+              "tabId": "fold-pyramid-cap-tab-3"
+            },
+            {
+              "id": "fold-pyramid-cap-tab-3-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 50,
+                  "y": 40
+                },
+                {
+                  "x": 15,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-pyramid-cap-face",
+              "tabId": "fold-pyramid-cap-tab-3",
+              "edgeId": "fold-pyramid-cap-tab-3-base"
+            },
+            {
+              "id": "fold-pyramid-cap-tab-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 15,
+                  "y": 40
+                },
+                {
+                  "x": 6.648531,
+                  "y": 38.553289
+                },
+                {
+                  "x": 2.569166,
+                  "y": 14.077095
+                },
+                {
+                  "x": 10,
+                  "y": 10
+                }
+              ],
+              "panelId": "fold-pyramid-cap-face",
+              "tabId": "fold-pyramid-cap-tab-4"
+            },
+            {
+              "id": "fold-pyramid-cap-tab-4-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 15,
+                  "y": 40
+                },
+                {
+                  "x": 10,
+                  "y": 10
+                }
+              ],
+              "panelId": "fold-pyramid-cap-face",
+              "tabId": "fold-pyramid-cap-tab-4",
+              "edgeId": "fold-pyramid-cap-tab-4-base"
+            }
+          ],
+          "labels": [
+            {
+              "id": "fold-pyramid-cap-face-label",
+              "text": "Top cap",
+              "position": {
+                "x": 30,
+                "y": 25
+              },
+              "operation": "engrave",
+              "entityId": "fold-pyramid-cap-face"
+            }
+          ],
+          "thicknessMm": 1,
+          "folding": {
+            "templateKind": "pyramid-frustum",
+            "panelIds": ["fold-pyramid-cap-face"]
+          }
+        }
+      ],
+      "issues": [
+        {
+          "id": "fold-pyramid-cap-tab-1-connection-panel-missing",
+          "severity": "error",
+          "code": "FOLD_CONNECTION_PANEL_MISSING",
+          "message": "Connection fold-pyramid-cap-tab-1-connection references a missing panel.",
+          "affectedEntityIds": [
+            "fold-pyramid-cap-tab-1-connection",
+            "fold-pyramid-cap-face",
+            "fold-pyramid-main-side-1"
+          ]
+        },
+        {
+          "id": "fold-pyramid-cap-tab-2-connection-panel-missing",
+          "severity": "error",
+          "code": "FOLD_CONNECTION_PANEL_MISSING",
+          "message": "Connection fold-pyramid-cap-tab-2-connection references a missing panel.",
+          "affectedEntityIds": [
+            "fold-pyramid-cap-tab-2-connection",
+            "fold-pyramid-cap-face",
+            "fold-pyramid-main-side-2"
+          ]
+        },
+        {
+          "id": "fold-pyramid-cap-tab-3-connection-panel-missing",
+          "severity": "error",
+          "code": "FOLD_CONNECTION_PANEL_MISSING",
+          "message": "Connection fold-pyramid-cap-tab-3-connection references a missing panel.",
+          "affectedEntityIds": [
+            "fold-pyramid-cap-tab-3-connection",
+            "fold-pyramid-cap-face",
+            "fold-pyramid-main-side-3"
+          ]
+        },
+        {
+          "id": "fold-pyramid-cap-tab-4-connection-panel-missing",
+          "severity": "error",
+          "code": "FOLD_CONNECTION_PANEL_MISSING",
+          "message": "Connection fold-pyramid-cap-tab-4-connection references a missing panel.",
+          "affectedEntityIds": [
+            "fold-pyramid-cap-tab-4-connection",
+            "fold-pyramid-cap-face",
+            "fold-pyramid-main-side-4"
+          ]
+        }
+      ],
+      "assembledPreview": {
+        "panels": [
+          {
+            "id": "fold-pyramid-main-base",
+            "partId": "fold-pyramid-main",
+            "name": "Base",
+            "verticesMm": [
+              [-40, -20, -30],
+              [30, -20, -30],
+              [40, -20, 30],
+              [-30, -20, 30]
+            ]
+          },
+          {
+            "id": "fold-pyramid-main-side-1",
+            "partId": "fold-pyramid-main",
+            "name": "Side 1",
+            "verticesMm": [
+              [-40, -20, -30],
+              [30, -20, -30],
+              [15, 20, -15],
+              [-20, 20, -15]
+            ]
+          },
+          {
+            "id": "fold-pyramid-main-side-2",
+            "partId": "fold-pyramid-main",
+            "name": "Side 2",
+            "verticesMm": [
+              [30, -20, -30],
+              [40, -20, 30],
+              [20, 20, 15],
+              [15, 20, -15]
+            ]
+          },
+          {
+            "id": "fold-pyramid-main-side-3",
+            "partId": "fold-pyramid-main",
+            "name": "Side 3",
+            "verticesMm": [
+              [40, -20, 30],
+              [-30, -20, 30],
+              [-15, 20, 15],
+              [20, 20, 15]
+            ]
+          },
+          {
+            "id": "fold-pyramid-main-side-4",
+            "partId": "fold-pyramid-main",
+            "name": "Side 4",
+            "verticesMm": [
+              [-30, -20, 30],
+              [-40, -20, -30],
+              [-20, 20, -15],
+              [-15, 20, 15]
+            ]
+          },
+          {
+            "id": "fold-pyramid-cap-face",
+            "partId": "fold-pyramid-cap",
+            "name": "Top cap",
+            "verticesMm": [
+              [-20, 20, -15],
+              [15, 20, -15],
+              [20, 20, 15],
+              [-15, 20, 15]
+            ]
+          }
+        ]
+      },
+      "editableEdges": [
+        {
+          "id": "fold-pyramid-cap-tab-1-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-cap-face",
+          "panelBId": "fold-pyramid-main-side-1",
+          "startMm": [-20, 20, -15],
+          "endMm": [15, 20, -15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-cap-tab-2-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-cap-face",
+          "panelBId": "fold-pyramid-main-side-2",
+          "startMm": [15, 20, -15],
+          "endMm": [20, 20, 15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-cap-tab-3-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-cap-face",
+          "panelBId": "fold-pyramid-main-side-3",
+          "startMm": [20, 20, 15],
+          "endMm": [-15, 20, 15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-cap-tab-4-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-cap-face",
+          "panelBId": "fold-pyramid-main-side-4",
+          "startMm": [-15, 20, 15],
+          "endMm": [-20, 20, -15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-1-base-fold-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-1",
+          "startMm": [-40, -20, -30],
+          "endMm": [30, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-1-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-pyramid-main-side-1",
+          "startMm": [30, -20, -30],
+          "endMm": [15, 20, -15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-1-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-pyramid-main-side-1",
+          "startMm": [15, 20, -15],
+          "endMm": [-20, 20, -15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-1-seam-tab-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-main-side-1",
+          "panelBId": "fold-pyramid-main-side-2",
+          "startMm": [-20, 20, -15],
+          "endMm": [-40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-2-base-fold-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-2",
+          "startMm": [30, -20, -30],
+          "endMm": [40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-2-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-pyramid-main-side-2",
+          "startMm": [40, -20, 30],
+          "endMm": [20, 20, 15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-2-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-pyramid-main-side-2",
+          "startMm": [20, 20, 15],
+          "endMm": [15, 20, -15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-2-seam-tab-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-main-side-2",
+          "panelBId": "fold-pyramid-main-side-3",
+          "startMm": [15, 20, -15],
+          "endMm": [30, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-3-base-fold-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-3",
+          "startMm": [40, -20, 30],
+          "endMm": [-30, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-3-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-pyramid-main-side-3",
+          "startMm": [-30, -20, 30],
+          "endMm": [-15, 20, 15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-3-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-pyramid-main-side-3",
+          "startMm": [-15, 20, 15],
+          "endMm": [20, 20, 15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-3-seam-tab-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-main-side-3",
+          "panelBId": "fold-pyramid-main-side-4",
+          "startMm": [20, 20, 15],
+          "endMm": [40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-4-base-fold-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-main-base",
+          "panelBId": "fold-pyramid-main-side-4",
+          "startMm": [-30, -20, 30],
+          "endMm": [-40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-4-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-pyramid-main-side-4",
+          "startMm": [-40, -20, -30],
+          "endMm": [-20, 20, -15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-4-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-pyramid-main-side-4",
+          "startMm": [-20, 20, -15],
+          "endMm": [-15, 20, 15],
+          "editable": true
+        },
+        {
+          "id": "fold-pyramid-main-side-4-seam-tab-connection",
+          "kind": "connection",
+          "panelAId": "fold-pyramid-main-side-4",
+          "panelBId": "fold-pyramid-main-side-1",
+          "startMm": [-15, 20, 15],
+          "endMm": [-30, -20, 30],
+          "editable": true
+        }
+      ],
+      "resolvedDimensions": {
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40
+      },
+      "algorithmVersion": "interactive-connections-v8",
+      "inputHash": "sf6-f74dc885"
+    },
+    "generationRecord": {
+      "signatureVersion": 2,
+      "mode": "fold-template",
+      "inputHash": "sf9-b9fd79e8",
+      "resultHash": "sf9-150d3724",
+      "algorithmVersion": "interactive-connections-v8",
+      "generatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

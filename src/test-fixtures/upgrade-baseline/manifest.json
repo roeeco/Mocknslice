@@ -1,0 +1,207 @@
+{
+  "baselineCommit": "de26e1bb44536c4ea243cd285569e3fecc3d9c74",
+  "cases": [
+    {
+      "id": "stacked-z",
+      "mode": "stacked-slices",
+      "parts": 4,
+      "sheets": 1,
+      "issues": [],
+      "pdfSha256": "31527997560fdccae5e45b8a41b854b4c736e231a6624b4aa7c6823011c05f38"
+    },
+    {
+      "id": "waffle-xy",
+      "mode": "waffle-slices",
+      "parts": 4,
+      "sheets": 1,
+      "issues": [],
+      "pdfSha256": "0fd003837dd00a1468f9b95b989692214ecfcc4e067edd03f9cb004f6bd3f932"
+    },
+    {
+      "id": "fold-open-box",
+      "mode": "fold-template",
+      "parts": 1,
+      "sheets": 1,
+      "issues": [],
+      "pdfSha256": "16f87afd7d1aedeccb3f838adf016e1400a5264ef893450624d5a2e8aef05ddc"
+    },
+    {
+      "id": "fold-box-with-lid",
+      "mode": "fold-template",
+      "parts": 2,
+      "sheets": 1,
+      "issues": [
+        {
+          "code": "TAB_DEPTH_CLAMPED",
+          "severity": "warning"
+        },
+        {
+          "code": "TAB_DEPTH_CLAMPED",
+          "severity": "warning"
+        },
+        {
+          "code": "TAB_DEPTH_CLAMPED",
+          "severity": "warning"
+        },
+        {
+          "code": "TAB_DEPTH_CLAMPED",
+          "severity": "warning"
+        }
+      ],
+      "pdfSha256": "2d13fe69c035bcad8a8e155259107173084fbfb71e64119cd8828ad38abea219"
+    },
+    {
+      "id": "fold-tray",
+      "mode": "fold-template",
+      "parts": 1,
+      "sheets": 1,
+      "issues": [],
+      "pdfSha256": "342bb9e3f44d72a776a5548ca76f7b0fdaf916885a26f381fff844326244e109"
+    },
+    {
+      "id": "fold-sleeve",
+      "mode": "fold-template",
+      "parts": 1,
+      "sheets": 1,
+      "issues": [],
+      "pdfSha256": "3a69fa6522533bebcc21c6e9a7ebafd566d379bd1f52f1fe39bedf23ca9ecf8d"
+    },
+    {
+      "id": "fold-envelope",
+      "mode": "fold-template",
+      "parts": 1,
+      "sheets": 1,
+      "issues": [],
+      "pdfSha256": "0817bc6ad2fa9fb0073da56812238d9a5824f02bf84a1a97c4e2f56451220342"
+    },
+    {
+      "id": "fold-regular-prism",
+      "mode": "fold-template",
+      "parts": 1,
+      "sheets": 1,
+      "issues": [],
+      "pdfSha256": "ed4738f123c0320c6517493bc86d5d97d3eb34c70d0e0b4bc0ac558dfa5306e0"
+    },
+    {
+      "id": "fold-pyramid-frustum",
+      "mode": "fold-template",
+      "parts": 2,
+      "sheets": 1,
+      "issues": [
+        {
+          "code": "FOLD_CONNECTION_PANEL_MISSING",
+          "severity": "error"
+        },
+        {
+          "code": "FOLD_CONNECTION_PANEL_MISSING",
+          "severity": "error"
+        },
+        {
+          "code": "FOLD_CONNECTION_PANEL_MISSING",
+          "severity": "error"
+        },
+        {
+          "code": "FOLD_CONNECTION_PANEL_MISSING",
+          "severity": "error"
+        }
+      ],
+      "pdfSha256": "bebf9800be3793155ed67d08c1abaa0e20b6cba5df5a9b873b35938728027ca1"
+    },
+    {
+      "id": "unfold-cube",
+      "mode": "mesh-unfold",
+      "parts": 1,
+      "sheets": 1,
+      "issues": [],
+      "pdfSha256": "25f5fb7e151edefcb1677fce265a5d89e4b57dd7f0bb68e2eef02fce1d92476f"
+    },
+    {
+      "id": "panel-butt",
+      "mode": "panel-construction",
+      "parts": 5,
+      "sheets": 1,
+      "issues": [
+        {
+          "code": "PANEL_BUTT_JOINT_FASTENER_REQUIRED",
+          "severity": "info"
+        }
+      ],
+      "pdfSha256": "0b90698d4d7f992f4876dc70ee58f3fd1ddb7b553900a13db29735349686abde"
+    },
+    {
+      "id": "panel-finger-lid",
+      "mode": "panel-construction",
+      "parts": 6,
+      "sheets": 1,
+      "issues": [
+        {
+          "code": "PANEL_CLOSED_ASSEMBLY_REVIEW",
+          "severity": "warning"
+        }
+      ],
+      "pdfSha256": "d95085fbfbf969cf650cc3f74f94a698ab16311fce84f6bb38e559faa496a33b"
+    },
+    {
+      "id": "panel-width-divider",
+      "mode": "panel-construction",
+      "parts": 6,
+      "sheets": 1,
+      "issues": [],
+      "pdfSha256": "5e97fbff751783c25b9eb7d3ec9a5ed3b82f46029d35d64549f957d33478ddee"
+    },
+    {
+      "id": "panel-depth-divider",
+      "mode": "panel-construction",
+      "parts": 6,
+      "sheets": 1,
+      "issues": [],
+      "pdfSha256": "b2333441af096a67ec49138b896e80067a52660ecd7e21c6eec71491a7040dd8"
+    },
+    {
+      "id": "panel-mixed-stock",
+      "mode": "panel-construction",
+      "parts": 8,
+      "sheets": 1,
+      "issues": [
+        {
+          "code": "PANEL_CLOSED_ASSEMBLY_REVIEW",
+          "severity": "warning"
+        }
+      ],
+      "pdfSha256": "cb08a4723844546c1e6e1b44ef502a3b8b5552f9a6278675e1643898938e16f3"
+    },
+    {
+      "id": "panel-edited-v8",
+      "mode": "panel-construction",
+      "parts": 4,
+      "sheets": 1,
+      "issues": [
+        {
+          "code": "PANEL_BUTT_JOINT_FASTENER_REQUIRED",
+          "severity": "info"
+        },
+        {
+          "code": "PANEL_FEATURE_EDGE_CLEARANCE",
+          "severity": "warning"
+        },
+        {
+          "code": "PANEL_FEATURE_EDGE_CLEARANCE",
+          "severity": "warning"
+        },
+        {
+          "code": "CARDBOARD_FIT_UNVERIFIED",
+          "severity": "warning"
+        }
+      ],
+      "pdfSha256": "197698d718da602fb061a664eac728b95e06df9579e9d5fccad6c64ae13024db"
+    },
+    {
+      "id": "fold-edited-v8",
+      "mode": "fold-template",
+      "parts": 2,
+      "sheets": 1,
+      "issues": [],
+      "pdfSha256": "b256ce5be2b4973d724e2d678c91ce9e159080eb9c3f84bd7418f9daf3824797"
+    }
+  ]
+}

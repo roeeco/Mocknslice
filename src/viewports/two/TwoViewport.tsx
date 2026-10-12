@@ -1,21 +1,13 @@
-import {
-  useMemo,
-  useRef,
-  useState,
-  type KeyboardEvent,
-  type PointerEvent,
-  type WheelEvent,
-} from 'react';
+import { usePreparedOutput } from '../../geometry/output/PreparedOutputContext';
+import { PapercraftNetCanvas } from '../../components/papercraft/PapercraftNetCanvas';
+import { useDisplayedProjectField } from '../PreviewProject';
+import { useRef, useState, type KeyboardEvent, type PointerEvent, type WheelEvent } from 'react';
 import type { FabricationPart, SheetPlacement } from '../../domain/fabrication';
 import type { Point2D } from '../../domain/geometry';
 import type { OperationStyle } from '../../domain/operations';
 import { assemblySelectionPanelIds } from '../../domain/assembly';
 import { transformPoint, transformedBoundsForPart } from '../../geometry/layout/partPlacement';
-import { deriveTightOutputLayout } from '../../geometry/layout/deriveTightOutputLayout';
-import {
-  createRegistrationMarkPaths,
-  prepareFabricationOutput,
-} from '../../geometry/output/prepareFabricationOutput';
+import { createRegistrationMarkPaths } from '../../geometry/output/prepareFabricationOutput';
 import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 
@@ -93,6 +85,13 @@ function PartOnSheet({
   relatedPanelIds: ReadonlySet<string>;
   onSelectEntity: (id: string, ownerPartId?: string) => void;
 }) {
+  const locked = useProjectStore(
+    (s) =>
+      s.project.sheetLayouts.flatMap((sheet) => sheet.placements).find((p) => p.partId === part.id)
+        ?.layoutLocked ??
+      s.project.papercraft?.settings.islandEdits.find((i) => i.id === part.id)?.layoutLocked ??
+      false,
+  );
   const bounds = transformedBoundsForPart(part, placement);
   const handleKeyDown = (event: KeyboardEvent<SVGGElement>) => {
     if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -108,7 +107,7 @@ function PartOnSheet({
       aria-label={`${part.name} on sheet`}
       aria-pressed={selected}
       data-part-id={part.id}
-      onPointerDown={onPointerDown}
+      onPointerDown={locked ? undefined : onPointerDown}
       onKeyDown={handleKeyDown}
       onClick={onSelect}
     >
@@ -203,6 +202,7 @@ function PartOnSheet({
             );
           })
         : null}
+      <PapercraftNetCanvas partId={part.id} placement={placement} />
     </g>
   );
 }
@@ -211,7 +211,7 @@ export function TwoViewport() {
   const svgRef = useRef<SVGSVGElement>(null);
   const [drag, setDrag] = useState<DragState>();
   const [storedView, setStoredView] = useState<ViewState>();
-  const project = useProjectStore((state) => state.project);
+  const project = useDisplayedProjectField((project) => project);
   const experienceMode = useProjectStore((state) => state.experienceMode);
   const activeSheetId = useProjectStore((state) => state.activeSheetId);
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
@@ -220,14 +220,12 @@ export function TwoViewport() {
   const selectedPartId = useProjectStore((state) => state.selectedPartId);
   const setActiveSheet = useProjectStore((state) => state.setActiveSheet);
   const updatePartPlacement = useProjectStore((state) => state.updatePartPlacement);
-  const preparedParts = useMemo(() => prepareFabricationOutput(project).parts, [project]);
-  const layouts = useMemo(
-    () =>
-      experienceMode === 'standard'
-        ? [deriveTightOutputLayout(preparedParts)]
-        : project.sheetLayouts,
-    [experienceMode, preparedParts, project.sheetLayouts],
-  );
+  const readiness = usePreparedOutput(project),
+    preparedParts = readiness.preparedParts,
+    layouts = readiness.effectiveLayouts;
+  const interactiveLayout =
+    experienceMode === 'advanced' ||
+    (project.fabricationMode === 'mesh-unfold' && !!project.papercraft);
   const relatedPanelIds = assemblySelectionPanelIds(project, selectedEntityId);
   const sheet = layouts.find((candidate) => candidate.id === activeSheetId) ?? layouts[0];
 
@@ -245,7 +243,7 @@ export function TwoViewport() {
 
   const partsById = new Map(preparedParts.map((part) => [part.id, part]));
   const invalidIds = new Set(
-    experienceMode === 'standard'
+    !interactiveLayout
       ? []
       : validationIssues
           .filter((issue) =>
@@ -265,7 +263,7 @@ export function TwoViewport() {
   });
 
   const beginDrag = (event: PointerEvent<SVGGElement>, placement: SheetPlacement) => {
-    if (experienceMode === 'standard' || event.button !== 0) return;
+    if (!interactiveLayout || event.button !== 0) return;
     const svg = svgRef.current;
     if (!svg) return;
     const start = screenPoint(svg, event.clientX, event.clientY);
@@ -307,7 +305,7 @@ export function TwoViewport() {
     setZoom(zoom * Math.exp(-delta * 0.002));
   };
   const continuePointerInteraction = (event: PointerEvent<SVGSVGElement>) => {
-    if (experienceMode === 'advanced' && drag && event.pointerId === drag.pointerId) {
+    if (interactiveLayout && drag && event.pointerId === drag.pointerId) {
       const point = screenPoint(event.currentTarget, event.clientX, event.clientY);
       if (!point) return;
       setDrag({
@@ -318,7 +316,7 @@ export function TwoViewport() {
     }
   };
   const finishPointerInteraction = (event: PointerEvent<SVGSVGElement>) => {
-    if (experienceMode === 'advanced' && drag && event.pointerId === drag.pointerId) {
+    if (interactiveLayout && drag && event.pointerId === drag.pointerId) {
       updatePartPlacement(sheet.id, drag.partId, { x: drag.x, y: drag.y });
       setDrag(undefined);
     }
@@ -335,7 +333,7 @@ export function TwoViewport() {
             type="button"
             className={candidate.id === sheet.id ? 'is-selected' : undefined}
             aria-pressed={candidate.id === sheet.id}
-            onClick={() => experienceMode === 'advanced' && setActiveSheet(candidate.id)}
+            onClick={() => setActiveSheet(candidate.id)}
             key={candidate.id}
           >
             Sheet {index + 1}

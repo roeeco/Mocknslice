@@ -49,6 +49,8 @@ export interface PanelBoundaryGlueTab {
 }
 
 export interface PanelConstructionSettings {
+  roleKerfMm?: { panel: number; divider: number; lid: number };
+  roleClearanceMm?: { panel: number; divider: number; lid: number };
   innerWidthMm: Millimetres;
   innerDepthMm: Millimetres;
   innerHeightMm: Millimetres;

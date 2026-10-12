@@ -1,0 +1,13 @@
+# ADR 0031: Persistent papercraft editing and v9 records
+
+Status: accepted for PR 6; export readiness and broad v9 hardening follow in PR 7.
+
+The studio offers an explicit collision-safe unfolding action and keeps the legacy unfolding controls accessible. Direct SVG and Three.js edge targets share stable source edge keys and select the same connection. Accessible net targets include keyboard activation; S/J/F/H edit split/join/tab owner/suppression and R rotates the selected unlocked island. There is no long seam checkbox list in the new editor. The existing shared fold progress state drives both the toolbar and rigid preview.
+
+Project `papercraft` embeds versioned settings, explicit simplification acceptance and the last valid result. Edits persist intent; resolved edge state lives in the result. A successful worker calculation merges with its originating input edit only if that history boundary is still current, giving one undo operation. Failed constraints retain the edited intent, last valid parts, previous net and selection; cutting currentness becomes stale. Cancellation terminates the task and ignores any later completion. Progress and error selection are runtime state.
+
+Generated island identities hash sorted source face IDs. Unchanged IDs retain placements through regeneration. Island translation/rotation/lock edits persist alongside sheet placements as source relinking intent; current sheet placements drive layout and do not alter the geometry signature. Locked islands cannot be dragged, rotated or moved through generic layout controls. Explicit row arrangement retains locked placements and puts other islands on fresh sheets; PR 8 replaces this conservative behavior with packing. Changed geometry can therefore expose placement conflicts instead of silently moving a locked layout.
+
+Native projects use JSON and IndexedDB storage version 9; legacy projects continue using v8 serialization in this phase, and v1–v8 migration outputs and historical SVG/PDF baselines are unchanged. The original database name, schema version, metadata key and last-autosave pointer are retained. Native generation records use canonical signature version 3. Layout-only edits and UI state are excluded. Bounded structural validation and graph/net validation protect restored native results, including compatibility artifacts; stale source edits remain saveable.
+
+Triangle preview GPU geometry and wire buffers are allocated by face ID and updated in place during folding, with disposal on unmount. Renderer resources do not enter project persistence. Physical assembly is not inferred from this preview.

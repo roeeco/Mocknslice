@@ -1,13 +1,15 @@
-import { useMemo, type ChangeEvent } from 'react';
+import { useMemo, useState, type ChangeEvent } from 'react';
 import type { FoldLineOutput, KerfCompensationMode } from '../../domain/exports';
 import type { OperationStyle } from '../../domain/operations';
-import { createAssemblyPdfDownload } from '../../exporters/exportPdf';
-import { createSheetSvgDownload } from '../../exporters/exportSvg';
 import {
-  calculateMaterialUsage,
-  prepareFabricationOutput,
-} from '../../geometry/output/prepareFabricationOutput';
-import { deriveTightOutputLayout } from '../../geometry/layout/deriveTightOutputLayout';
+  downloadPreparedArtifacts,
+  writePreparedSvg,
+  writePreparedPdf,
+} from '../../exporters/writePreparedOutput';
+import { usePreparedOutput } from '../../geometry/output/PreparedOutputContext';
+import { outputCopy, outputIssueMessage } from '../../locales/outputCopy';
+import type { FabricationProfile } from '../../geometry/output/fabricationProfiles';
+import { calculateMaterialUsage } from '../../geometry/output/prepareFabricationOutput';
 import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 import { deriveGenerationState } from '../../domain/generation';
@@ -31,17 +33,19 @@ function areaLabel(areaMm2: number): string {
 
 export function FabricationOutputPanel() {
   const project = useProjectStore((state) => state.project);
-  const experienceMode = useProjectStore((state) => state.experienceMode);
+  const experienceMode = useProjectStore((s) => s.experienceMode);
   const activeSheetId = useProjectStore((state) => state.activeSheetId);
   const updateExportSettings = useProjectStore((state) => state.updateExportSettings);
-  const prepared = useMemo(() => prepareFabricationOutput(project), [project]);
-  const layouts = useMemo(
-    () =>
-      experienceMode === 'standard'
-        ? [deriveTightOutputLayout(prepared.parts)]
-        : project.sheetLayouts,
-    [experienceMode, prepared.parts, project.sheetLayouts],
-  );
+  const locale = useProjectStore((s) => s.locale),
+    profile = useProjectStore((s) => s.fabricationProfile),
+    setProfile = useProjectStore((s) => s.setFabricationProfile),
+    acknowledge = useProjectStore((s) => s.acknowledgeFabricationWarnings),
+    status = useProjectStore((s) => s.sliceGenerationStatus);
+  const c = outputCopy(locale),
+    [outputFailed, setOutputFailed] = useState(false),
+    readiness = usePreparedOutput(project),
+    prepared = readiness.prepared,
+    layouts = readiness.effectiveLayouts;
   const usage = useMemo(
     () => calculateMaterialUsage(project, prepared.parts, layouts),
     [layouts, prepared.parts, project],
@@ -49,9 +53,22 @@ export function FabricationOutputPanel() {
   const activeSheet = layouts.find((sheet) => sheet.id === activeSheetId) ?? layouts[0];
   const settings = project.exportSettings;
   const hasPlacedParts = usage.usedSheetCount > 0;
-  const hasOutputErrors = prepared.issues.some((issue) => issue.severity === 'error');
+  const canDraft = readiness.status !== 'blocked' && status !== 'processing';
   const generationState = deriveGenerationState(project);
-  const exportBlocked = generationState !== 'ready';
+  const exportBlocked = readiness.status !== 'ready' || status === 'processing';
+  const write = (draft: boolean, all = false, pdf = false) => {
+    try {
+      const files = pdf
+        ? [writePreparedPdf(readiness, { draft })]
+        : writePreparedSvg(readiness, {
+            draft,
+            ...(all ? {} : { sheetId: activeSheet?.id ?? '' }),
+          });
+      void downloadPreparedArtifacts(files).catch(() => setOutputFailed(true));
+    } catch {
+      setOutputFailed(true);
+    }
+  };
 
   const updateNumber =
     (
@@ -285,32 +302,112 @@ export function FabricationOutputPanel() {
         </p>
       </div>
 
-      <div className="output-actions">
-        <button
-          type="button"
-          disabled={
-            !activeSheet || activeSheet.placements.length === 0 || hasOutputErrors || exportBlocked
+      <label className="field-stack">
+        <span>{c.profile}</span>
+        <select
+          aria-label={c.profile}
+          value={profile}
+          onChange={(event) => setProfile(event.target.value as FabricationProfile)}
+        >
+          <option value="laser-svg">{c.laser}</option>
+          <option value="assembly-pdf">{c.assembly}</option>
+          <option value="inspection-svg">{c.inspection}</option>
+        </select>
+      </label>
+      <p role="status" data-export-readiness={readiness.status}>
+        {readiness.status === 'ready'
+          ? c.ready
+          : readiness.status === 'draft'
+            ? c.draftStatus
+            : c.blocked}
+      </p>
+      <details>
+        <summary>
+          {c.blocking}: {readiness.blockingIssues.length} · {c.warnings}:{' '}
+          {readiness.warnings.length}
+        </summary>
+        {readiness.blockingIssues.map((issue) => (
+          <p key={issue.id}>
+            {outputIssueMessage(issue, locale)}
+            <br />
+            <span dir="ltr">{issue.affectedEntityIds.join(', ')}</span>
+          </p>
+        ))}
+        {readiness.warnings.map((issue) => (
+          <p key={issue.id}>
+            {outputIssueMessage(issue, locale)}
+            <br />
+            <span dir="ltr">{issue.affectedEntityIds.join(', ')}</span>
+          </p>
+        ))}
+      </details>
+      <label className="checkbox-field">
+        <input
+          type="checkbox"
+          checked={readiness.warnings.every((i) => project.acknowledgedWarningIds.includes(i.id))}
+          onChange={(event) =>
+            acknowledge(
+              readiness.warnings.map((i) => i.id),
+              event.target.checked,
+            )
           }
-          onClick={() => activeSheet && createSheetSvgDownload(project, activeSheet.id, layouts)}
-        >
-          Download active sheet SVG
-        </button>
-        <button
-          className="primary-panel-action"
-          type="button"
-          disabled={!hasPlacedParts || hasOutputErrors || exportBlocked}
-          onClick={() => createAssemblyPdfDownload(project, layouts)}
-        >
-          {copy.exportPdf}
-        </button>
+        />
+        {c.review}
+      </label>
+      <div className="output-actions">
+        {profile === 'assembly-pdf' ? (
+          <>
+            <button
+              type="button"
+              disabled={!hasPlacedParts || !canDraft}
+              onClick={() => write(true, false, true)}
+            >
+              {c.draftPdf}
+            </button>
+            <button
+              type="button"
+              disabled={!hasPlacedParts || exportBlocked}
+              onClick={() => write(false, false, true)}
+            >
+              {copy.exportPdf}
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              disabled={!activeSheet?.placements.length || !canDraft}
+              onClick={() => write(true)}
+            >
+              {c.draft}
+            </button>
+            <button
+              type="button"
+              disabled={!activeSheet?.placements.length || exportBlocked}
+              onClick={() => write(false)}
+            >
+              {c.production}
+            </button>
+            <button
+              type="button"
+              disabled={!hasPlacedParts || exportBlocked}
+              onClick={() => write(false, true)}
+            >
+              {c.all}
+            </button>
+          </>
+        )}
       </div>
+      <p className="field-help">{c.draftNotice}</p>
+      <p className="field-help">{c.multiple}</p>
+      {outputFailed ? <p role="alert">{c.error}</p> : null}
       {prepared.issues.length > 0 ? (
         <p className="field-help output-issue-summary">
           {prepared.issues.length} output preparation notice
           {prepared.issues.length === 1 ? '' : 's'}. Review them in Inspect before exporting.
         </p>
       ) : null}
-      {exportBlocked ? (
+      {exportBlocked && generationState !== 'ready' ? (
         <p className="field-help" role="status">
           {t('Export is disabled because generation is')} {copy.generationState[generationState]}.
         </p>

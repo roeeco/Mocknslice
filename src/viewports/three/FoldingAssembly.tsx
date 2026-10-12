@@ -1,3 +1,4 @@
+import { useDisplayedProjectField } from '../PreviewProject';
 import { useEffect, useMemo } from 'react';
 import { BufferGeometry, DoubleSide, Float32BufferAttribute } from 'three';
 import type { AssembledFoldPanel } from '../../domain/folding';
@@ -64,9 +65,9 @@ function PanelMesh({
 }
 
 export function FoldingAssembly() {
-  const result = useProjectStore((state) => state.project.foldingResult);
+  const result = useDisplayedProjectField((project) => project.foldingResult);
   const panels = result?.assembledPreview.panels ?? EMPTY_PANELS;
-  const project = useProjectStore((state) => state.project);
+  const project = useDisplayedProjectField((project) => project);
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const relatedPanelIds = assemblySelectionPanelIds(project, selectedEntityId);
   return (

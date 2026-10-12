@@ -5,6 +5,7 @@ import type { EditableAssemblyEdge } from '../../domain/connections';
 import { copy } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 import { ConnectionFloatingEditor } from './ConnectionFloatingEditor';
+import { useIsDraftPreview } from '../PreviewProject';
 
 export interface ConnectionAppearance {
   treatment: 'finger' | 'butt' | 'crease' | 'cut' | 'boundary';
@@ -25,6 +26,8 @@ export function ConnectionEdgeTargets({
 }) {
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
+  const draft = useIsDraftPreview();
+  if (draft) return null;
   return (
     <>
       {edges.map((edge) => (

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600mm" height="400mm" viewBox="0 0 600 400">
+  <metadata>{&quot;application&quot;:&quot;MocknSlice&quot;,&quot;projectFormatVersion&quot;:8,&quot;projectId&quot;:&quot;project-upgrade-baseline&quot;,&quot;mode&quot;:&quot;fold-template&quot;,&quot;units&quot;:&quot;mm&quot;,&quot;sheetId&quot;:&quot;sheet-upgrade-baseline&quot;,&quot;sheetNumber&quot;:1,&quot;kerfMm&quot;:0,&quot;foldLineOutput&quot;:&quot;preserve&quot;}</metadata>
+  <rect id="sheet-boundary" x="0.05" y="0.05" width="599.9" height="399.9" fill="none" stroke="#777777" stroke-width="0.1"/>
+  <g id="operation-cut" data-operation="cut" fill="none" stroke="#ff0000" stroke-width="0.1">
+    <path id="fold-sleeve-main-band-1-boundary-1-cut" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-1" data-edge-id="fold-sleeve-main-band-1-boundary-1" d="M 5 5 L 85 5"/>
+    <path id="fold-sleeve-main-band-1-boundary-3-cut" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-1" data-edge-id="fold-sleeve-main-band-1-boundary-3" d="M 85 45 L 5 45"/>
+    <path id="fold-sleeve-main-band-1-boundary-4-cut" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-1" data-edge-id="fold-sleeve-main-band-1-boundary-4" d="M 5 45 L 5 5"/>
+    <path id="fold-sleeve-main-band-2-boundary-1-cut" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-2" data-edge-id="fold-sleeve-main-band-2-boundary-1" d="M 85 5 L 145 5"/>
+    <path id="fold-sleeve-main-band-2-boundary-3-cut" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-2" data-edge-id="fold-sleeve-main-band-2-boundary-3" d="M 145 45 L 85 45"/>
+    <path id="fold-sleeve-main-band-3-boundary-1-cut" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-3" data-edge-id="fold-sleeve-main-band-3-boundary-1" d="M 145 5 L 225 5"/>
+    <path id="fold-sleeve-main-band-3-boundary-3-cut" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-3" data-edge-id="fold-sleeve-main-band-3-boundary-3" d="M 225 45 L 145 45"/>
+    <path id="fold-sleeve-main-band-4-boundary-1-cut" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-4" data-edge-id="fold-sleeve-main-band-4-boundary-1" d="M 225 5 L 285 5"/>
+    <path id="fold-sleeve-main-band-4-boundary-3-cut" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-4" data-edge-id="fold-sleeve-main-band-4-boundary-3" d="M 285 45 L 225 45"/>
+    <path id="fold-sleeve-main-seam-tab-cut" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-4" data-tab-id="fold-sleeve-main-seam-tab" d="M 285 5 L 293 7.8 L 293 42.2 L 285 45"/>
+  </g>
+  <g id="operation-score" data-operation="score" fill="none" stroke="#0000ff" stroke-width="0.1">
+    <path id="fold-sleeve-main-seam-tab-fold" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-4" data-edge-id="fold-sleeve-main-seam-tab-base" data-tab-id="fold-sleeve-main-seam-tab" d="M 285 5 L 285 45"/>
+  </g>
+  <g id="operation-mountain-fold" data-operation="mountain-fold" fill="none" stroke="#8b5cf6" stroke-width="0.1">
+  </g>
+  <g id="operation-valley-fold" data-operation="valley-fold" fill="none" stroke="#14b8a6" stroke-width="0.1">
+    <path id="fold-sleeve-main-band-fold-1-fold" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-1" data-edge-id="fold-sleeve-main-band-fold-1" d="M 85 5 L 85 45"/>
+    <path id="fold-sleeve-main-band-fold-2-fold" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-2" data-edge-id="fold-sleeve-main-band-fold-2" d="M 145 5 L 145 45"/>
+    <path id="fold-sleeve-main-band-fold-3-fold" data-part-id="fold-sleeve-main" data-contour-role="path" data-panel-id="fold-sleeve-main-band-3" data-edge-id="fold-sleeve-main-band-fold-3" d="M 225 5 L 225 45"/>
+  </g>
+  <g id="operation-perforate" data-operation="perforate" fill="none" stroke="#f59e0b" stroke-width="0.1">
+  </g>
+  <g id="operation-engrave" data-operation="engrave" fill="none" stroke="#000000" stroke-width="0.1">
+    <text id="fold-sleeve-main-band-1-label" data-part-id="fold-sleeve-main" data-entity-id="fold-sleeve-main-band-1" x="45" y="25" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Band 1</text>
+    <text id="fold-sleeve-main-band-2-label" data-part-id="fold-sleeve-main" data-entity-id="fold-sleeve-main-band-2" x="115" y="25" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Band 2</text>
+    <text id="fold-sleeve-main-band-3-label" data-part-id="fold-sleeve-main" data-entity-id="fold-sleeve-main-band-3" x="185" y="25" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Band 3</text>
+    <text id="fold-sleeve-main-band-4-label" data-part-id="fold-sleeve-main" data-entity-id="fold-sleeve-main-band-4" x="255" y="25" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Band 4</text>
+  </g>
+  <g id="operation-guide" data-operation="guide" fill="none" stroke="#6b7280" stroke-width="0.1">
+  </g>
+  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="3">
+    <text id="label-fold-sleeve-main" x="7" y="9">Sleeve net</text>
+  </g>
+</svg>

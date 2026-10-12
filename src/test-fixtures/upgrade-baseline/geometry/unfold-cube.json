@@ -1,0 +1,5939 @@
+{
+  "input": {
+    "mode": "mesh-unfold",
+    "payload": {
+      "mesh": {
+        "positionsMm": [
+          -20, -20, -20, 20, -20, -20, 20, 20, -20, -20, 20, -20, -20, -20, 20, 20, -20, 20, 20, 20,
+          20, -20, 20, 20
+        ],
+        "indices": [
+          0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 3, 7, 6, 3, 6, 2, 0, 4, 7, 0, 7, 3,
+          1, 2, 6, 1, 6, 5
+        ]
+      },
+      "modelId": "model-legacy-fixture",
+      "materialThicknessMm": 1,
+      "settings": {
+        "strategy": "automatic",
+        "rootFaceIndex": 0,
+        "manualSeamKeys": [],
+        "tabDepthMm": 6,
+        "maximumFaceCount": 200,
+        "searchAttempts": 18
+      }
+    }
+  },
+  "result": {
+    "settings": {
+      "strategy": "automatic",
+      "rootFaceIndex": 0,
+      "manualSeamKeys": [],
+      "tabDepthMm": 6,
+      "maximumFaceCount": 200,
+      "searchAttempts": 18
+    },
+    "faces": [
+      {
+        "id": "unfold-face-1",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 0,
+        "sourceVertexIndices": [0, 2, 1],
+        "points2D": [
+          {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          {
+            "x": 84.852814,
+            "y": 84.852814
+          },
+          {
+            "x": 56.568542,
+            "y": 113.137085
+          }
+        ],
+        "flatVerticesMm": [
+          [28.284271, 84.852814, 0],
+          [84.852814, 84.852814, 0],
+          [56.568542, 113.137085, 0]
+        ],
+        "sourceVerticesMm": [
+          [-20, -20, -20],
+          [20, 20, -20],
+          [20, -20, -20]
+        ]
+      },
+      {
+        "id": "unfold-face-2",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 1,
+        "sourceVertexIndices": [0, 3, 2],
+        "points2D": [
+          {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          {
+            "x": 56.568542,
+            "y": 56.568542
+          },
+          {
+            "x": 84.852814,
+            "y": 84.852814
+          }
+        ],
+        "flatVerticesMm": [
+          [28.284271, 84.852814, 0],
+          [56.568542, 56.568542, 0],
+          [84.852814, 84.852814, 0]
+        ],
+        "sourceVerticesMm": [
+          [-20, -20, -20],
+          [-20, 20, -20],
+          [20, 20, -20]
+        ]
+      },
+      {
+        "id": "unfold-face-3",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 2,
+        "sourceVertexIndices": [4, 5, 6],
+        "points2D": [
+          {
+            "x": 0,
+            "y": 113.137085
+          },
+          {
+            "x": 28.284271,
+            "y": 141.421356
+          },
+          {
+            "x": 0,
+            "y": 169.705627
+          }
+        ],
+        "flatVerticesMm": [
+          [0, 113.137085, 0],
+          [28.284271, 141.421356, 0],
+          [0, 169.705627, 0]
+        ],
+        "sourceVerticesMm": [
+          [-20, -20, 20],
+          [20, -20, 20],
+          [20, 20, 20]
+        ]
+      },
+      {
+        "id": "unfold-face-4",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 3,
+        "sourceVertexIndices": [4, 6, 7],
+        "points2D": [
+          {
+            "x": 113.137085,
+            "y": 0
+          },
+          {
+            "x": 113.137085,
+            "y": 56.568542
+          },
+          {
+            "x": 84.852814,
+            "y": 28.284271
+          }
+        ],
+        "flatVerticesMm": [
+          [113.137085, 0, 0],
+          [113.137085, 56.568542, 0],
+          [84.852814, 28.284271, 0]
+        ],
+        "sourceVerticesMm": [
+          [-20, -20, 20],
+          [20, 20, 20],
+          [-20, 20, 20]
+        ]
+      },
+      {
+        "id": "unfold-face-5",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 4,
+        "sourceVertexIndices": [0, 1, 5],
+        "points2D": [
+          {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          {
+            "x": 56.568542,
+            "y": 113.137085
+          },
+          {
+            "x": 28.284271,
+            "y": 141.421356
+          }
+        ],
+        "flatVerticesMm": [
+          [28.284271, 84.852814, 0],
+          [56.568542, 113.137085, 0],
+          [28.284271, 141.421356, 0]
+        ],
+        "sourceVerticesMm": [
+          [-20, -20, -20],
+          [20, -20, -20],
+          [20, -20, 20]
+        ]
+      },
+      {
+        "id": "unfold-face-6",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 5,
+        "sourceVertexIndices": [0, 5, 4],
+        "points2D": [
+          {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          {
+            "x": 28.284271,
+            "y": 141.421356
+          },
+          {
+            "x": 0,
+            "y": 113.137085
+          }
+        ],
+        "flatVerticesMm": [
+          [28.284271, 84.852814, 0],
+          [28.284271, 141.421356, 0],
+          [0, 113.137085, 0]
+        ],
+        "sourceVerticesMm": [
+          [-20, -20, -20],
+          [20, -20, 20],
+          [-20, -20, 20]
+        ]
+      },
+      {
+        "id": "unfold-face-7",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 6,
+        "sourceVertexIndices": [3, 7, 6],
+        "points2D": [
+          {
+            "x": 56.568542,
+            "y": 56.568542
+          },
+          {
+            "x": 84.852814,
+            "y": 28.284271
+          },
+          {
+            "x": 113.137085,
+            "y": 56.568542
+          }
+        ],
+        "flatVerticesMm": [
+          [56.568542, 56.568542, 0],
+          [84.852814, 28.284271, 0],
+          [113.137085, 56.568542, 0]
+        ],
+        "sourceVerticesMm": [
+          [-20, 20, -20],
+          [-20, 20, 20],
+          [20, 20, 20]
+        ]
+      },
+      {
+        "id": "unfold-face-8",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 7,
+        "sourceVertexIndices": [3, 6, 2],
+        "points2D": [
+          {
+            "x": 56.568542,
+            "y": 56.568542
+          },
+          {
+            "x": 113.137085,
+            "y": 56.568542
+          },
+          {
+            "x": 84.852814,
+            "y": 84.852814
+          }
+        ],
+        "flatVerticesMm": [
+          [56.568542, 56.568542, 0],
+          [113.137085, 56.568542, 0],
+          [84.852814, 84.852814, 0]
+        ],
+        "sourceVerticesMm": [
+          [-20, 20, -20],
+          [20, 20, 20],
+          [20, 20, -20]
+        ]
+      },
+      {
+        "id": "unfold-face-9",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 8,
+        "sourceVertexIndices": [0, 4, 7],
+        "points2D": [
+          {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          {
+            "x": 0,
+            "y": 56.568542
+          },
+          {
+            "x": 28.284271,
+            "y": 28.284271
+          }
+        ],
+        "flatVerticesMm": [
+          [28.284271, 84.852814, 0],
+          [0, 56.568542, 0],
+          [28.284271, 28.284271, 0]
+        ],
+        "sourceVerticesMm": [
+          [-20, -20, -20],
+          [-20, -20, 20],
+          [-20, 20, 20]
+        ]
+      },
+      {
+        "id": "unfold-face-10",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 9,
+        "sourceVertexIndices": [0, 7, 3],
+        "points2D": [
+          {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          {
+            "x": 28.284271,
+            "y": 28.284271
+          },
+          {
+            "x": 56.568542,
+            "y": 56.568542
+          }
+        ],
+        "flatVerticesMm": [
+          [28.284271, 84.852814, 0],
+          [28.284271, 28.284271, 0],
+          [56.568542, 56.568542, 0]
+        ],
+        "sourceVerticesMm": [
+          [-20, -20, -20],
+          [-20, 20, 20],
+          [-20, 20, -20]
+        ]
+      },
+      {
+        "id": "unfold-face-11",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 10,
+        "sourceVertexIndices": [1, 2, 6],
+        "points2D": [
+          {
+            "x": 56.568542,
+            "y": 113.137085
+          },
+          {
+            "x": 84.852814,
+            "y": 84.852814
+          },
+          {
+            "x": 113.137085,
+            "y": 113.137085
+          }
+        ],
+        "flatVerticesMm": [
+          [56.568542, 113.137085, 0],
+          [84.852814, 84.852814, 0],
+          [113.137085, 113.137085, 0]
+        ],
+        "sourceVerticesMm": [
+          [20, -20, -20],
+          [20, 20, -20],
+          [20, 20, 20]
+        ]
+      },
+      {
+        "id": "unfold-face-12",
+        "partId": "unfold-island-1",
+        "islandIndex": 0,
+        "faceIndex": 11,
+        "sourceVertexIndices": [1, 6, 5],
+        "points2D": [
+          {
+            "x": 56.568542,
+            "y": 113.137085
+          },
+          {
+            "x": 56.568542,
+            "y": 169.705627
+          },
+          {
+            "x": 28.284271,
+            "y": 141.421356
+          }
+        ],
+        "flatVerticesMm": [
+          [56.568542, 113.137085, 0],
+          [56.568542, 169.705627, 0],
+          [28.284271, 141.421356, 0]
+        ],
+        "sourceVerticesMm": [
+          [20, -20, -20],
+          [20, 20, 20],
+          [20, -20, 20]
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "id": "unfold-edge-0:1",
+        "key": "0:1",
+        "vertexA": 0,
+        "vertexB": 1,
+        "faceAIndex": 0,
+        "faceBIndex": 4,
+        "disposition": "hinge",
+        "foldDirection": "mountain",
+        "dihedralDeg": 90,
+        "pairLabel": "F1"
+      },
+      {
+        "id": "unfold-edge-0:2",
+        "key": "0:2",
+        "vertexA": 0,
+        "vertexB": 2,
+        "faceAIndex": 0,
+        "faceBIndex": 1,
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "dihedralDeg": 0,
+        "pairLabel": "F2"
+      },
+      {
+        "id": "unfold-edge-0:3",
+        "key": "0:3",
+        "vertexA": 0,
+        "vertexB": 3,
+        "faceAIndex": 1,
+        "faceBIndex": 9,
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "dihedralDeg": 90,
+        "pairLabel": "F3"
+      },
+      {
+        "id": "unfold-edge-0:4",
+        "key": "0:4",
+        "vertexA": 0,
+        "vertexB": 4,
+        "faceAIndex": 5,
+        "faceBIndex": 8,
+        "disposition": "seam",
+        "dihedralDeg": 90,
+        "pairLabel": "S1"
+      },
+      {
+        "id": "unfold-edge-0:5",
+        "key": "0:5",
+        "vertexA": 0,
+        "vertexB": 5,
+        "faceAIndex": 4,
+        "faceBIndex": 5,
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "dihedralDeg": 0,
+        "pairLabel": "F4"
+      },
+      {
+        "id": "unfold-edge-0:7",
+        "key": "0:7",
+        "vertexA": 0,
+        "vertexB": 7,
+        "faceAIndex": 8,
+        "faceBIndex": 9,
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "dihedralDeg": 0,
+        "pairLabel": "F5"
+      },
+      {
+        "id": "unfold-edge-1:2",
+        "key": "1:2",
+        "vertexA": 1,
+        "vertexB": 2,
+        "faceAIndex": 0,
+        "faceBIndex": 10,
+        "disposition": "hinge",
+        "foldDirection": "mountain",
+        "dihedralDeg": 90,
+        "pairLabel": "F6"
+      },
+      {
+        "id": "unfold-edge-1:5",
+        "key": "1:5",
+        "vertexA": 1,
+        "vertexB": 5,
+        "faceAIndex": 4,
+        "faceBIndex": 11,
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "dihedralDeg": 90,
+        "pairLabel": "F7"
+      },
+      {
+        "id": "unfold-edge-1:6",
+        "key": "1:6",
+        "vertexA": 1,
+        "vertexB": 6,
+        "faceAIndex": 10,
+        "faceBIndex": 11,
+        "disposition": "seam",
+        "dihedralDeg": 0,
+        "pairLabel": "S2"
+      },
+      {
+        "id": "unfold-edge-2:3",
+        "key": "2:3",
+        "vertexA": 2,
+        "vertexB": 3,
+        "faceAIndex": 1,
+        "faceBIndex": 7,
+        "disposition": "hinge",
+        "foldDirection": "mountain",
+        "dihedralDeg": 90,
+        "pairLabel": "F8"
+      },
+      {
+        "id": "unfold-edge-2:6",
+        "key": "2:6",
+        "vertexA": 2,
+        "vertexB": 6,
+        "faceAIndex": 7,
+        "faceBIndex": 10,
+        "disposition": "seam",
+        "dihedralDeg": 90,
+        "pairLabel": "S3"
+      },
+      {
+        "id": "unfold-edge-3:6",
+        "key": "3:6",
+        "vertexA": 3,
+        "vertexB": 6,
+        "faceAIndex": 6,
+        "faceBIndex": 7,
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "dihedralDeg": 0,
+        "pairLabel": "F9"
+      },
+      {
+        "id": "unfold-edge-3:7",
+        "key": "3:7",
+        "vertexA": 3,
+        "vertexB": 7,
+        "faceAIndex": 6,
+        "faceBIndex": 9,
+        "disposition": "seam",
+        "dihedralDeg": 90,
+        "pairLabel": "S4"
+      },
+      {
+        "id": "unfold-edge-4:5",
+        "key": "4:5",
+        "vertexA": 4,
+        "vertexB": 5,
+        "faceAIndex": 2,
+        "faceBIndex": 5,
+        "disposition": "hinge",
+        "foldDirection": "mountain",
+        "dihedralDeg": 90,
+        "pairLabel": "F10"
+      },
+      {
+        "id": "unfold-edge-4:6",
+        "key": "4:6",
+        "vertexA": 4,
+        "vertexB": 6,
+        "faceAIndex": 2,
+        "faceBIndex": 3,
+        "disposition": "seam",
+        "dihedralDeg": 0,
+        "pairLabel": "S5"
+      },
+      {
+        "id": "unfold-edge-4:7",
+        "key": "4:7",
+        "vertexA": 4,
+        "vertexB": 7,
+        "faceAIndex": 3,
+        "faceBIndex": 8,
+        "disposition": "seam",
+        "dihedralDeg": 90,
+        "pairLabel": "S6"
+      },
+      {
+        "id": "unfold-edge-5:6",
+        "key": "5:6",
+        "vertexA": 5,
+        "vertexB": 6,
+        "faceAIndex": 2,
+        "faceBIndex": 11,
+        "disposition": "seam",
+        "dihedralDeg": 90,
+        "pairLabel": "S7"
+      },
+      {
+        "id": "unfold-edge-6:7",
+        "key": "6:7",
+        "vertexA": 6,
+        "vertexB": 7,
+        "faceAIndex": 3,
+        "faceBIndex": 6,
+        "disposition": "hinge",
+        "foldDirection": "mountain",
+        "dihedralDeg": 90,
+        "pairLabel": "F11"
+      }
+    ],
+    "connections": [
+      {
+        "id": "unfold-edge-0:1-connection",
+        "panelAId": "unfold-face-1",
+        "panelBId": "unfold-face-5",
+        "edgeA": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 56.568542,
+            "y": 113.137085
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 56.568542,
+            "y": 113.137085
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "unfold-edge-0:2-connection",
+        "panelAId": "unfold-face-1",
+        "panelBId": "unfold-face-2",
+        "edgeA": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 84.852814,
+            "y": 84.852814
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 84.852814,
+            "y": 84.852814
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "unfold-edge-0:3-connection",
+        "panelAId": "unfold-face-2",
+        "panelBId": "unfold-face-10",
+        "edgeA": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 56.568542,
+            "y": 56.568542
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 56.568542,
+            "y": 56.568542
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "unfold-edge-0:4-connection",
+        "panelAId": "unfold-face-6",
+        "panelBId": "unfold-face-9",
+        "edgeA": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 0,
+            "y": 113.137085
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 0,
+            "y": 56.568542
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["unfold-tab-0:4"]
+      },
+      {
+        "id": "unfold-edge-0:5-connection",
+        "panelAId": "unfold-face-5",
+        "panelBId": "unfold-face-6",
+        "edgeA": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 28.284271,
+            "y": 141.421356
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 28.284271,
+            "y": 141.421356
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "unfold-edge-0:7-connection",
+        "panelAId": "unfold-face-9",
+        "panelBId": "unfold-face-10",
+        "edgeA": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 28.284271,
+            "y": 28.284271
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 28.284271,
+            "y": 28.284271
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "unfold-edge-1:2-connection",
+        "panelAId": "unfold-face-1",
+        "panelBId": "unfold-face-11",
+        "edgeA": {
+          "start": {
+            "x": 56.568542,
+            "y": 113.137085
+          },
+          "end": {
+            "x": 84.852814,
+            "y": 84.852814
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 56.568542,
+            "y": 113.137085
+          },
+          "end": {
+            "x": 84.852814,
+            "y": 84.852814
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "unfold-edge-1:5-connection",
+        "panelAId": "unfold-face-5",
+        "panelBId": "unfold-face-12",
+        "edgeA": {
+          "start": {
+            "x": 56.568542,
+            "y": 113.137085
+          },
+          "end": {
+            "x": 28.284271,
+            "y": 141.421356
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 56.568542,
+            "y": 113.137085
+          },
+          "end": {
+            "x": 28.284271,
+            "y": 141.421356
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "unfold-edge-1:6-connection",
+        "panelAId": "unfold-face-11",
+        "panelBId": "unfold-face-12",
+        "edgeA": {
+          "start": {
+            "x": 56.568542,
+            "y": 113.137085
+          },
+          "end": {
+            "x": 113.137085,
+            "y": 113.137085
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 56.568542,
+            "y": 113.137085
+          },
+          "end": {
+            "x": 56.568542,
+            "y": 169.705627
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["unfold-tab-1:6"]
+      },
+      {
+        "id": "unfold-edge-2:3-connection",
+        "panelAId": "unfold-face-2",
+        "panelBId": "unfold-face-8",
+        "edgeA": {
+          "start": {
+            "x": 84.852814,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 56.568542,
+            "y": 56.568542
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 84.852814,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 56.568542,
+            "y": 56.568542
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "unfold-edge-2:6-connection",
+        "panelAId": "unfold-face-8",
+        "panelBId": "unfold-face-11",
+        "edgeA": {
+          "start": {
+            "x": 84.852814,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 113.137085,
+            "y": 56.568542
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 84.852814,
+            "y": 84.852814
+          },
+          "end": {
+            "x": 113.137085,
+            "y": 113.137085
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["unfold-tab-2:6"]
+      },
+      {
+        "id": "unfold-edge-3:6-connection",
+        "panelAId": "unfold-face-7",
+        "panelBId": "unfold-face-8",
+        "edgeA": {
+          "start": {
+            "x": 56.568542,
+            "y": 56.568542
+          },
+          "end": {
+            "x": 113.137085,
+            "y": 56.568542
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 56.568542,
+            "y": 56.568542
+          },
+          "end": {
+            "x": 113.137085,
+            "y": 56.568542
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "unfold-edge-3:7-connection",
+        "panelAId": "unfold-face-7",
+        "panelBId": "unfold-face-10",
+        "edgeA": {
+          "start": {
+            "x": 56.568542,
+            "y": 56.568542
+          },
+          "end": {
+            "x": 84.852814,
+            "y": 28.284271
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 56.568542,
+            "y": 56.568542
+          },
+          "end": {
+            "x": 28.284271,
+            "y": 28.284271
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["unfold-tab-3:7"]
+      },
+      {
+        "id": "unfold-edge-4:5-connection",
+        "panelAId": "unfold-face-3",
+        "panelBId": "unfold-face-6",
+        "edgeA": {
+          "start": {
+            "x": 0,
+            "y": 113.137085
+          },
+          "end": {
+            "x": 28.284271,
+            "y": 141.421356
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 0,
+            "y": 113.137085
+          },
+          "end": {
+            "x": 28.284271,
+            "y": 141.421356
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "unfold-edge-4:6-connection",
+        "panelAId": "unfold-face-3",
+        "panelBId": "unfold-face-4",
+        "edgeA": {
+          "start": {
+            "x": 0,
+            "y": 113.137085
+          },
+          "end": {
+            "x": 0,
+            "y": 169.705627
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 113.137085,
+            "y": 0
+          },
+          "end": {
+            "x": 113.137085,
+            "y": 56.568542
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["unfold-tab-4:6"]
+      },
+      {
+        "id": "unfold-edge-4:7-connection",
+        "panelAId": "unfold-face-4",
+        "panelBId": "unfold-face-9",
+        "edgeA": {
+          "start": {
+            "x": 113.137085,
+            "y": 0
+          },
+          "end": {
+            "x": 84.852814,
+            "y": 28.284271
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 0,
+            "y": 56.568542
+          },
+          "end": {
+            "x": 28.284271,
+            "y": 28.284271
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["unfold-tab-4:7"]
+      },
+      {
+        "id": "unfold-edge-5:6-connection",
+        "panelAId": "unfold-face-3",
+        "panelBId": "unfold-face-12",
+        "edgeA": {
+          "start": {
+            "x": 28.284271,
+            "y": 141.421356
+          },
+          "end": {
+            "x": 0,
+            "y": 169.705627
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 28.284271,
+            "y": 141.421356
+          },
+          "end": {
+            "x": 56.568542,
+            "y": 169.705627
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["unfold-tab-5:6"]
+      },
+      {
+        "id": "unfold-edge-6:7-connection",
+        "panelAId": "unfold-face-4",
+        "panelBId": "unfold-face-7",
+        "edgeA": {
+          "start": {
+            "x": 113.137085,
+            "y": 56.568542
+          },
+          "end": {
+            "x": 84.852814,
+            "y": 28.284271
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 113.137085,
+            "y": 56.568542
+          },
+          "end": {
+            "x": 84.852814,
+            "y": 28.284271
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      }
+    ],
+    "tabs": [
+      {
+        "id": "unfold-tab-5:6",
+        "partId": "unfold-island-1",
+        "edgeId": "unfold-edge-5:6",
+        "ownerPanelId": "unfold-face-3",
+        "style": "glue",
+        "depthMm": 6,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 28.284271,
+          "y": 141.421356
+        },
+        "baseEnd": {
+          "x": 0,
+          "y": 169.705627
+        },
+        "outline": [
+          {
+            "x": 28.284271,
+            "y": 141.421356
+          },
+          {
+            "x": 31.041987,
+            "y": 147.148921
+          },
+          {
+            "x": 5.727565,
+            "y": 172.463343
+          },
+          {
+            "x": 0,
+            "y": 169.705627
+          }
+        ],
+        "receiverPanelId": "unfold-face-12"
+      },
+      {
+        "id": "unfold-tab-4:6",
+        "partId": "unfold-island-1",
+        "edgeId": "unfold-edge-4:6",
+        "ownerPanelId": "unfold-face-3",
+        "style": "glue",
+        "depthMm": 6,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 0,
+          "y": 169.705627
+        },
+        "baseEnd": {
+          "x": 0,
+          "y": 113.137085
+        },
+        "outline": [
+          {
+            "x": 0,
+            "y": 169.705627
+          },
+          {
+            "x": -6,
+            "y": 167.605627
+          },
+          {
+            "x": -6,
+            "y": 115.237085
+          },
+          {
+            "x": 0,
+            "y": 113.137085
+          }
+        ],
+        "receiverPanelId": "unfold-face-4"
+      },
+      {
+        "id": "unfold-tab-4:7",
+        "partId": "unfold-island-1",
+        "edgeId": "unfold-edge-4:7",
+        "ownerPanelId": "unfold-face-4",
+        "style": "glue",
+        "depthMm": 6,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 84.852814,
+          "y": 28.284271
+        },
+        "baseEnd": {
+          "x": 113.137085,
+          "y": 0
+        },
+        "outline": [
+          {
+            "x": 84.852814,
+            "y": 28.284271
+          },
+          {
+            "x": 82.095098,
+            "y": 22.556706
+          },
+          {
+            "x": 107.40952,
+            "y": -2.757716
+          },
+          {
+            "x": 113.137085,
+            "y": 0
+          }
+        ],
+        "receiverPanelId": "unfold-face-9"
+      },
+      {
+        "id": "unfold-tab-0:4",
+        "partId": "unfold-island-1",
+        "edgeId": "unfold-edge-0:4",
+        "ownerPanelId": "unfold-face-6",
+        "style": "glue",
+        "depthMm": 6,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 0,
+          "y": 113.137085
+        },
+        "baseEnd": {
+          "x": 28.284271,
+          "y": 84.852814
+        },
+        "outline": [
+          {
+            "x": 0,
+            "y": 113.137085
+          },
+          {
+            "x": -2.757716,
+            "y": 107.40952
+          },
+          {
+            "x": 22.556706,
+            "y": 82.095098
+          },
+          {
+            "x": 28.284271,
+            "y": 84.852814
+          }
+        ],
+        "receiverPanelId": "unfold-face-9"
+      },
+      {
+        "id": "unfold-tab-3:7",
+        "partId": "unfold-island-1",
+        "edgeId": "unfold-edge-3:7",
+        "ownerPanelId": "unfold-face-7",
+        "style": "glue",
+        "depthMm": 6,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 56.568542,
+          "y": 56.568542
+        },
+        "baseEnd": {
+          "x": 84.852814,
+          "y": 28.284271
+        },
+        "outline": [
+          {
+            "x": 56.568542,
+            "y": 56.568542
+          },
+          {
+            "x": 53.810826,
+            "y": 50.840977
+          },
+          {
+            "x": 79.125249,
+            "y": 25.526554
+          },
+          {
+            "x": 84.852814,
+            "y": 28.284271
+          }
+        ],
+        "receiverPanelId": "unfold-face-10"
+      },
+      {
+        "id": "unfold-tab-2:6",
+        "partId": "unfold-island-1",
+        "edgeId": "unfold-edge-2:6",
+        "ownerPanelId": "unfold-face-8",
+        "style": "glue",
+        "depthMm": 6,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 113.137085,
+          "y": 56.568542
+        },
+        "baseEnd": {
+          "x": 84.852814,
+          "y": 84.852814
+        },
+        "outline": [
+          {
+            "x": 113.137085,
+            "y": 56.568542
+          },
+          {
+            "x": 115.894802,
+            "y": 62.296107
+          },
+          {
+            "x": 90.580379,
+            "y": 87.61053
+          },
+          {
+            "x": 84.852814,
+            "y": 84.852814
+          }
+        ],
+        "receiverPanelId": "unfold-face-11"
+      },
+      {
+        "id": "unfold-tab-1:6",
+        "partId": "unfold-island-1",
+        "edgeId": "unfold-edge-1:6",
+        "ownerPanelId": "unfold-face-11",
+        "style": "glue",
+        "depthMm": 6,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 113.137085,
+          "y": 113.137085
+        },
+        "baseEnd": {
+          "x": 56.568542,
+          "y": 113.137085
+        },
+        "outline": [
+          {
+            "x": 113.137085,
+            "y": 113.137085
+          },
+          {
+            "x": 111.037085,
+            "y": 119.137085
+          },
+          {
+            "x": 58.668542,
+            "y": 119.137085
+          },
+          {
+            "x": 56.568542,
+            "y": 113.137085
+          }
+        ],
+        "receiverPanelId": "unfold-face-12"
+      }
+    ],
+    "hinges": [
+      {
+        "id": "unfold-hinge-0:2",
+        "parentFaceId": "unfold-face-1",
+        "childFaceId": "unfold-face-2",
+        "vertexA": 0,
+        "vertexB": 2,
+        "foldAngleDeg": 0
+      },
+      {
+        "id": "unfold-hinge-0:1",
+        "parentFaceId": "unfold-face-1",
+        "childFaceId": "unfold-face-5",
+        "vertexA": 0,
+        "vertexB": 1,
+        "foldAngleDeg": -90
+      },
+      {
+        "id": "unfold-hinge-1:2",
+        "parentFaceId": "unfold-face-1",
+        "childFaceId": "unfold-face-11",
+        "vertexA": 1,
+        "vertexB": 2,
+        "foldAngleDeg": -90
+      },
+      {
+        "id": "unfold-hinge-2:3",
+        "parentFaceId": "unfold-face-2",
+        "childFaceId": "unfold-face-8",
+        "vertexA": 2,
+        "vertexB": 3,
+        "foldAngleDeg": -90
+      },
+      {
+        "id": "unfold-hinge-0:3",
+        "parentFaceId": "unfold-face-2",
+        "childFaceId": "unfold-face-10",
+        "vertexA": 0,
+        "vertexB": 3,
+        "foldAngleDeg": 90
+      },
+      {
+        "id": "unfold-hinge-0:5",
+        "parentFaceId": "unfold-face-5",
+        "childFaceId": "unfold-face-6",
+        "vertexA": 0,
+        "vertexB": 5,
+        "foldAngleDeg": 0
+      },
+      {
+        "id": "unfold-hinge-1:5",
+        "parentFaceId": "unfold-face-5",
+        "childFaceId": "unfold-face-12",
+        "vertexA": 1,
+        "vertexB": 5,
+        "foldAngleDeg": 90
+      },
+      {
+        "id": "unfold-hinge-3:6",
+        "parentFaceId": "unfold-face-8",
+        "childFaceId": "unfold-face-7",
+        "vertexA": 3,
+        "vertexB": 6,
+        "foldAngleDeg": 0
+      },
+      {
+        "id": "unfold-hinge-0:7",
+        "parentFaceId": "unfold-face-10",
+        "childFaceId": "unfold-face-9",
+        "vertexA": 0,
+        "vertexB": 7,
+        "foldAngleDeg": 0
+      },
+      {
+        "id": "unfold-hinge-4:5",
+        "parentFaceId": "unfold-face-6",
+        "childFaceId": "unfold-face-3",
+        "vertexA": 4,
+        "vertexB": 5,
+        "foldAngleDeg": -90
+      },
+      {
+        "id": "unfold-hinge-6:7",
+        "parentFaceId": "unfold-face-7",
+        "childFaceId": "unfold-face-4",
+        "vertexA": 6,
+        "vertexB": 7,
+        "foldAngleDeg": -90
+      }
+    ],
+    "islands": [
+      {
+        "id": "unfold-island-definition-1",
+        "index": 0,
+        "partId": "unfold-island-1",
+        "faceIds": [
+          "unfold-face-1",
+          "unfold-face-2",
+          "unfold-face-3",
+          "unfold-face-4",
+          "unfold-face-5",
+          "unfold-face-6",
+          "unfold-face-7",
+          "unfold-face-8",
+          "unfold-face-9",
+          "unfold-face-10",
+          "unfold-face-11",
+          "unfold-face-12"
+        ]
+      }
+    ],
+    "overlapPairs": [],
+    "parts": [
+      {
+        "id": "unfold-island-1",
+        "name": "Unfolded net 1",
+        "label": "Net 1",
+        "paths": [
+          {
+            "id": "unfold-edge-0:2-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              },
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-1",
+            "edgeId": "unfold-edge-0:2"
+          },
+          {
+            "id": "unfold-edge-1:2-fold",
+            "operation": "mountain-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              },
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-1",
+            "edgeId": "unfold-edge-1:2"
+          },
+          {
+            "id": "unfold-edge-0:1-fold",
+            "operation": "mountain-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              },
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-1",
+            "edgeId": "unfold-edge-0:1"
+          },
+          {
+            "id": "unfold-edge-0:3-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              },
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-2",
+            "edgeId": "unfold-edge-0:3"
+          },
+          {
+            "id": "unfold-edge-2:3-fold",
+            "operation": "mountain-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              },
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-2",
+            "edgeId": "unfold-edge-2:3"
+          },
+          {
+            "id": "unfold-tab-5:6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              },
+              {
+                "x": 31.041987,
+                "y": 147.148921
+              },
+              {
+                "x": 5.727565,
+                "y": 172.463343
+              },
+              {
+                "x": 0,
+                "y": 169.705627
+              }
+            ],
+            "panelId": "unfold-face-3",
+            "edgeId": "unfold-edge-5:6",
+            "tabId": "unfold-tab-5:6"
+          },
+          {
+            "id": "unfold-tab-5:6-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              },
+              {
+                "x": 0,
+                "y": 169.705627
+              }
+            ],
+            "panelId": "unfold-face-3",
+            "edgeId": "unfold-edge-5:6",
+            "tabId": "unfold-tab-5:6"
+          },
+          {
+            "id": "unfold-tab-4:6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 169.705627
+              },
+              {
+                "x": -6,
+                "y": 167.605627
+              },
+              {
+                "x": -6,
+                "y": 115.237085
+              },
+              {
+                "x": 0,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-3",
+            "edgeId": "unfold-edge-4:6",
+            "tabId": "unfold-tab-4:6"
+          },
+          {
+            "id": "unfold-tab-4:6-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 169.705627
+              },
+              {
+                "x": 0,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-3",
+            "edgeId": "unfold-edge-4:6",
+            "tabId": "unfold-tab-4:6"
+          },
+          {
+            "id": "unfold-edge-4:6-unfold-face-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 113.137085,
+                "y": 0
+              },
+              {
+                "x": 113.137085,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-4",
+            "edgeId": "unfold-edge-4:6"
+          },
+          {
+            "id": "unfold-tab-4:7-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 84.852814,
+                "y": 28.284271
+              },
+              {
+                "x": 82.095098,
+                "y": 22.556706
+              },
+              {
+                "x": 107.40952,
+                "y": -2.757716
+              },
+              {
+                "x": 113.137085,
+                "y": 0
+              }
+            ],
+            "panelId": "unfold-face-4",
+            "edgeId": "unfold-edge-4:7",
+            "tabId": "unfold-tab-4:7"
+          },
+          {
+            "id": "unfold-tab-4:7-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 84.852814,
+                "y": 28.284271
+              },
+              {
+                "x": 113.137085,
+                "y": 0
+              }
+            ],
+            "panelId": "unfold-face-4",
+            "edgeId": "unfold-edge-4:7",
+            "tabId": "unfold-tab-4:7"
+          },
+          {
+            "id": "unfold-edge-1:5-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              },
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              }
+            ],
+            "panelId": "unfold-face-5",
+            "edgeId": "unfold-edge-1:5"
+          },
+          {
+            "id": "unfold-edge-0:5-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              },
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-5",
+            "edgeId": "unfold-edge-0:5"
+          },
+          {
+            "id": "unfold-edge-4:5-fold",
+            "operation": "mountain-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              },
+              {
+                "x": 0,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-6",
+            "edgeId": "unfold-edge-4:5"
+          },
+          {
+            "id": "unfold-tab-0:4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 113.137085
+              },
+              {
+                "x": -2.757716,
+                "y": 107.40952
+              },
+              {
+                "x": 22.556706,
+                "y": 82.095098
+              },
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-6",
+            "edgeId": "unfold-edge-0:4",
+            "tabId": "unfold-tab-0:4"
+          },
+          {
+            "id": "unfold-tab-0:4-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 113.137085
+              },
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-6",
+            "edgeId": "unfold-edge-0:4",
+            "tabId": "unfold-tab-0:4"
+          },
+          {
+            "id": "unfold-tab-3:7-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              },
+              {
+                "x": 53.810826,
+                "y": 50.840977
+              },
+              {
+                "x": 79.125249,
+                "y": 25.526554
+              },
+              {
+                "x": 84.852814,
+                "y": 28.284271
+              }
+            ],
+            "panelId": "unfold-face-7",
+            "edgeId": "unfold-edge-3:7",
+            "tabId": "unfold-tab-3:7"
+          },
+          {
+            "id": "unfold-tab-3:7-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              },
+              {
+                "x": 84.852814,
+                "y": 28.284271
+              }
+            ],
+            "panelId": "unfold-face-7",
+            "edgeId": "unfold-edge-3:7",
+            "tabId": "unfold-tab-3:7"
+          },
+          {
+            "id": "unfold-edge-6:7-fold",
+            "operation": "mountain-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 84.852814,
+                "y": 28.284271
+              },
+              {
+                "x": 113.137085,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-7",
+            "edgeId": "unfold-edge-6:7"
+          },
+          {
+            "id": "unfold-edge-3:6-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              },
+              {
+                "x": 113.137085,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-8",
+            "edgeId": "unfold-edge-3:6"
+          },
+          {
+            "id": "unfold-tab-2:6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 113.137085,
+                "y": 56.568542
+              },
+              {
+                "x": 115.894802,
+                "y": 62.296107
+              },
+              {
+                "x": 90.580379,
+                "y": 87.61053
+              },
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-8",
+            "edgeId": "unfold-edge-2:6",
+            "tabId": "unfold-tab-2:6"
+          },
+          {
+            "id": "unfold-tab-2:6-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 113.137085,
+                "y": 56.568542
+              },
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-8",
+            "edgeId": "unfold-edge-2:6",
+            "tabId": "unfold-tab-2:6"
+          },
+          {
+            "id": "unfold-edge-0:4-unfold-face-9-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              },
+              {
+                "x": 0,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-9",
+            "edgeId": "unfold-edge-0:4"
+          },
+          {
+            "id": "unfold-edge-4:7-unfold-face-9-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 56.568542
+              },
+              {
+                "x": 28.284271,
+                "y": 28.284271
+              }
+            ],
+            "panelId": "unfold-face-9",
+            "edgeId": "unfold-edge-4:7"
+          },
+          {
+            "id": "unfold-edge-0:7-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              },
+              {
+                "x": 28.284271,
+                "y": 28.284271
+              }
+            ],
+            "panelId": "unfold-face-10",
+            "edgeId": "unfold-edge-0:7"
+          },
+          {
+            "id": "unfold-edge-3:7-unfold-face-10-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 28.284271
+              },
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-10",
+            "edgeId": "unfold-edge-3:7"
+          },
+          {
+            "id": "unfold-edge-2:6-unfold-face-11-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              },
+              {
+                "x": 113.137085,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-11",
+            "edgeId": "unfold-edge-2:6"
+          },
+          {
+            "id": "unfold-tab-1:6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 113.137085,
+                "y": 113.137085
+              },
+              {
+                "x": 111.037085,
+                "y": 119.137085
+              },
+              {
+                "x": 58.668542,
+                "y": 119.137085
+              },
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-11",
+            "edgeId": "unfold-edge-1:6",
+            "tabId": "unfold-tab-1:6"
+          },
+          {
+            "id": "unfold-tab-1:6-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 113.137085,
+                "y": 113.137085
+              },
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-11",
+            "edgeId": "unfold-edge-1:6",
+            "tabId": "unfold-tab-1:6"
+          },
+          {
+            "id": "unfold-edge-1:6-unfold-face-12-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              },
+              {
+                "x": 56.568542,
+                "y": 169.705627
+              }
+            ],
+            "panelId": "unfold-face-12",
+            "edgeId": "unfold-edge-1:6"
+          },
+          {
+            "id": "unfold-edge-5:6-unfold-face-12-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 169.705627
+              },
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              }
+            ],
+            "panelId": "unfold-face-12",
+            "edgeId": "unfold-edge-5:6"
+          }
+        ],
+        "labels": [
+          {
+            "id": "unfold-face-1-label",
+            "text": "T1",
+            "position": {
+              "x": 56.568542,
+              "y": 94.280904
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-1"
+          },
+          {
+            "id": "unfold-face-2-label",
+            "text": "T2",
+            "position": {
+              "x": 56.568542,
+              "y": 75.424723
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-2"
+          },
+          {
+            "id": "unfold-face-3-label",
+            "text": "T3",
+            "position": {
+              "x": 9.42809,
+              "y": 141.421356
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-3"
+          },
+          {
+            "id": "unfold-face-4-label",
+            "text": "T4",
+            "position": {
+              "x": 103.708995,
+              "y": 28.284271
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-4"
+          },
+          {
+            "id": "unfold-face-5-label",
+            "text": "T5",
+            "position": {
+              "x": 37.712361,
+              "y": 113.137085
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-5"
+          },
+          {
+            "id": "unfold-face-6-label",
+            "text": "T6",
+            "position": {
+              "x": 18.856181,
+              "y": 113.137085
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-6"
+          },
+          {
+            "id": "unfold-face-7-label",
+            "text": "T7",
+            "position": {
+              "x": 84.852814,
+              "y": 47.140452
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-7"
+          },
+          {
+            "id": "unfold-face-8-label",
+            "text": "T8",
+            "position": {
+              "x": 84.852814,
+              "y": 65.996633
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-8"
+          },
+          {
+            "id": "unfold-face-9-label",
+            "text": "T9",
+            "position": {
+              "x": 18.856181,
+              "y": 56.568542
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-9"
+          },
+          {
+            "id": "unfold-face-10-label",
+            "text": "T10",
+            "position": {
+              "x": 37.712361,
+              "y": 56.568542
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-10"
+          },
+          {
+            "id": "unfold-face-11-label",
+            "text": "T11",
+            "position": {
+              "x": 84.852814,
+              "y": 103.708995
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-11"
+          },
+          {
+            "id": "unfold-face-12-label",
+            "text": "T12",
+            "position": {
+              "x": 47.140452,
+              "y": 141.421356
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-12"
+          },
+          {
+            "id": "unfold-edge-5:6-unfold-face-3-label",
+            "text": "S7",
+            "position": {
+              "x": 13.50968,
+              "y": 153.666125
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-5:6"
+          },
+          {
+            "id": "unfold-edge-4:6-unfold-face-3-label",
+            "text": "S5",
+            "position": {
+              "x": 2,
+              "y": 141.421356
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-4:6"
+          },
+          {
+            "id": "unfold-edge-4:6-unfold-face-4-label",
+            "text": "S5",
+            "position": {
+              "x": 111.137085,
+              "y": 28.284271
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-4:6"
+          },
+          {
+            "id": "unfold-edge-4:7-unfold-face-4-label",
+            "text": "S6",
+            "position": {
+              "x": 99.627405,
+              "y": 16.039502
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-4:7"
+          },
+          {
+            "id": "unfold-edge-0:4-unfold-face-6-label",
+            "text": "S1",
+            "position": {
+              "x": 14.774591,
+              "y": 100.892316
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-0:4"
+          },
+          {
+            "id": "unfold-edge-3:7-unfold-face-7-label",
+            "text": "S4",
+            "position": {
+              "x": 72.608045,
+              "y": 43.058862
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-3:7"
+          },
+          {
+            "id": "unfold-edge-2:6-unfold-face-8-label",
+            "text": "S3",
+            "position": {
+              "x": 97.097583,
+              "y": 70.078222
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-2:6"
+          },
+          {
+            "id": "unfold-edge-0:4-unfold-face-9-label",
+            "text": "S1",
+            "position": {
+              "x": 14.774591,
+              "y": 68.813311
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-0:4"
+          },
+          {
+            "id": "unfold-edge-4:7-unfold-face-9-label",
+            "text": "S6",
+            "position": {
+              "x": 14.774591,
+              "y": 44.323773
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-4:7"
+          },
+          {
+            "id": "unfold-edge-3:7-unfold-face-10-label",
+            "text": "S4",
+            "position": {
+              "x": 41.793951,
+              "y": 44.323773
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-3:7"
+          },
+          {
+            "id": "unfold-edge-2:6-unfold-face-11-label",
+            "text": "S3",
+            "position": {
+              "x": 97.097583,
+              "y": 99.627405
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-2:6"
+          },
+          {
+            "id": "unfold-edge-1:6-unfold-face-11-label",
+            "text": "S2",
+            "position": {
+              "x": 84.852814,
+              "y": 111.137085
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-1:6"
+          },
+          {
+            "id": "unfold-edge-1:6-unfold-face-12-label",
+            "text": "S2",
+            "position": {
+              "x": 54.568542,
+              "y": 141.421356
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-1:6"
+          },
+          {
+            "id": "unfold-edge-5:6-unfold-face-12-label",
+            "text": "S7",
+            "position": {
+              "x": 43.058862,
+              "y": 153.666125
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-5:6"
+          }
+        ],
+        "thicknessMm": 1,
+        "sourceReference": "model-legacy-fixture",
+        "unfolding": {
+          "islandIndex": 0,
+          "faceIds": [
+            "unfold-face-1",
+            "unfold-face-2",
+            "unfold-face-3",
+            "unfold-face-4",
+            "unfold-face-5",
+            "unfold-face-6",
+            "unfold-face-7",
+            "unfold-face-8",
+            "unfold-face-9",
+            "unfold-face-10",
+            "unfold-face-11",
+            "unfold-face-12"
+          ]
+        }
+      }
+    ],
+    "issues": [],
+    "algorithmVersion": "triangle-tree-v1",
+    "inputHash": "sf8-744b30c7"
+  },
+  "project": {
+    "metadata": {
+      "id": "project-upgrade-baseline",
+      "name": "Upgrade baseline: unfold-cube",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    "model": {
+      "id": "model-legacy-fixture",
+      "name": "40 mm cube",
+      "source": {
+        "kind": "built-in",
+        "primitive": "cube"
+      },
+      "dimensions": {
+        "widthMm": 40,
+        "heightMm": 40,
+        "depthMm": 40
+      },
+      "transform": {
+        "positionMm": [0, 0, 0],
+        "rotationDeg": [0, 0, 0],
+        "scale": [1, 1, 1]
+      },
+      "mesh": {
+        "positionsMm": [
+          -20, -20, -20, 20, -20, -20, 20, 20, -20, -20, 20, -20, -20, -20, 20, 20, -20, 20, 20, 20,
+          20, -20, 20, 20
+        ],
+        "indices": [
+          0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 3, 7, 6, 3, 6, 2, 0, 4, 7, 0, 7, 3,
+          1, 2, 6, 1, 6, 5
+        ]
+      },
+      "bounds": {
+        "minMm": [-20, -20, -20],
+        "maxMm": [20, 20, 20]
+      },
+      "healthReport": {
+        "triangleCount": 12,
+        "openEdgeCount": 0,
+        "nonManifoldEdgeCount": 0,
+        "disconnectedShellCount": 1,
+        "orientationIssueCount": 0,
+        "weldedVertexCount": 8,
+        "signedVolumeMm3": 64000.00000000001,
+        "likelyInverted": false,
+        "inspected": true
+      }
+    },
+    "fabricationMode": "mesh-unfold",
+    "materialProfileSnapshot": {
+      "id": "card-300gsm",
+      "name": "300 gsm card",
+      "category": "card",
+      "thicknessMm": 1,
+      "kerfMm": 0.1,
+      "clearanceMm": 0.1,
+      "grainDirection": "none",
+      "scoreAllowanceMm": 0.2,
+      "defaultSheetWidthMm": 210,
+      "defaultSheetHeightMm": 297
+    },
+    "generatedParts": [
+      {
+        "id": "unfold-island-1",
+        "name": "Unfolded net 1",
+        "label": "Net 1",
+        "paths": [
+          {
+            "id": "unfold-edge-0:2-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              },
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-1",
+            "edgeId": "unfold-edge-0:2"
+          },
+          {
+            "id": "unfold-edge-1:2-fold",
+            "operation": "mountain-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              },
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-1",
+            "edgeId": "unfold-edge-1:2"
+          },
+          {
+            "id": "unfold-edge-0:1-fold",
+            "operation": "mountain-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              },
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-1",
+            "edgeId": "unfold-edge-0:1"
+          },
+          {
+            "id": "unfold-edge-0:3-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              },
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-2",
+            "edgeId": "unfold-edge-0:3"
+          },
+          {
+            "id": "unfold-edge-2:3-fold",
+            "operation": "mountain-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              },
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-2",
+            "edgeId": "unfold-edge-2:3"
+          },
+          {
+            "id": "unfold-tab-5:6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              },
+              {
+                "x": 31.041987,
+                "y": 147.148921
+              },
+              {
+                "x": 5.727565,
+                "y": 172.463343
+              },
+              {
+                "x": 0,
+                "y": 169.705627
+              }
+            ],
+            "panelId": "unfold-face-3",
+            "edgeId": "unfold-edge-5:6",
+            "tabId": "unfold-tab-5:6"
+          },
+          {
+            "id": "unfold-tab-5:6-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              },
+              {
+                "x": 0,
+                "y": 169.705627
+              }
+            ],
+            "panelId": "unfold-face-3",
+            "edgeId": "unfold-edge-5:6",
+            "tabId": "unfold-tab-5:6"
+          },
+          {
+            "id": "unfold-tab-4:6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 169.705627
+              },
+              {
+                "x": -6,
+                "y": 167.605627
+              },
+              {
+                "x": -6,
+                "y": 115.237085
+              },
+              {
+                "x": 0,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-3",
+            "edgeId": "unfold-edge-4:6",
+            "tabId": "unfold-tab-4:6"
+          },
+          {
+            "id": "unfold-tab-4:6-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 169.705627
+              },
+              {
+                "x": 0,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-3",
+            "edgeId": "unfold-edge-4:6",
+            "tabId": "unfold-tab-4:6"
+          },
+          {
+            "id": "unfold-edge-4:6-unfold-face-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 113.137085,
+                "y": 0
+              },
+              {
+                "x": 113.137085,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-4",
+            "edgeId": "unfold-edge-4:6"
+          },
+          {
+            "id": "unfold-tab-4:7-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 84.852814,
+                "y": 28.284271
+              },
+              {
+                "x": 82.095098,
+                "y": 22.556706
+              },
+              {
+                "x": 107.40952,
+                "y": -2.757716
+              },
+              {
+                "x": 113.137085,
+                "y": 0
+              }
+            ],
+            "panelId": "unfold-face-4",
+            "edgeId": "unfold-edge-4:7",
+            "tabId": "unfold-tab-4:7"
+          },
+          {
+            "id": "unfold-tab-4:7-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 84.852814,
+                "y": 28.284271
+              },
+              {
+                "x": 113.137085,
+                "y": 0
+              }
+            ],
+            "panelId": "unfold-face-4",
+            "edgeId": "unfold-edge-4:7",
+            "tabId": "unfold-tab-4:7"
+          },
+          {
+            "id": "unfold-edge-1:5-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              },
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              }
+            ],
+            "panelId": "unfold-face-5",
+            "edgeId": "unfold-edge-1:5"
+          },
+          {
+            "id": "unfold-edge-0:5-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              },
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-5",
+            "edgeId": "unfold-edge-0:5"
+          },
+          {
+            "id": "unfold-edge-4:5-fold",
+            "operation": "mountain-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              },
+              {
+                "x": 0,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-6",
+            "edgeId": "unfold-edge-4:5"
+          },
+          {
+            "id": "unfold-tab-0:4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 113.137085
+              },
+              {
+                "x": -2.757716,
+                "y": 107.40952
+              },
+              {
+                "x": 22.556706,
+                "y": 82.095098
+              },
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-6",
+            "edgeId": "unfold-edge-0:4",
+            "tabId": "unfold-tab-0:4"
+          },
+          {
+            "id": "unfold-tab-0:4-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 113.137085
+              },
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-6",
+            "edgeId": "unfold-edge-0:4",
+            "tabId": "unfold-tab-0:4"
+          },
+          {
+            "id": "unfold-tab-3:7-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              },
+              {
+                "x": 53.810826,
+                "y": 50.840977
+              },
+              {
+                "x": 79.125249,
+                "y": 25.526554
+              },
+              {
+                "x": 84.852814,
+                "y": 28.284271
+              }
+            ],
+            "panelId": "unfold-face-7",
+            "edgeId": "unfold-edge-3:7",
+            "tabId": "unfold-tab-3:7"
+          },
+          {
+            "id": "unfold-tab-3:7-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              },
+              {
+                "x": 84.852814,
+                "y": 28.284271
+              }
+            ],
+            "panelId": "unfold-face-7",
+            "edgeId": "unfold-edge-3:7",
+            "tabId": "unfold-tab-3:7"
+          },
+          {
+            "id": "unfold-edge-6:7-fold",
+            "operation": "mountain-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 84.852814,
+                "y": 28.284271
+              },
+              {
+                "x": 113.137085,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-7",
+            "edgeId": "unfold-edge-6:7"
+          },
+          {
+            "id": "unfold-edge-3:6-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              },
+              {
+                "x": 113.137085,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-8",
+            "edgeId": "unfold-edge-3:6"
+          },
+          {
+            "id": "unfold-tab-2:6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 113.137085,
+                "y": 56.568542
+              },
+              {
+                "x": 115.894802,
+                "y": 62.296107
+              },
+              {
+                "x": 90.580379,
+                "y": 87.61053
+              },
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-8",
+            "edgeId": "unfold-edge-2:6",
+            "tabId": "unfold-tab-2:6"
+          },
+          {
+            "id": "unfold-tab-2:6-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 113.137085,
+                "y": 56.568542
+              },
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              }
+            ],
+            "panelId": "unfold-face-8",
+            "edgeId": "unfold-edge-2:6",
+            "tabId": "unfold-tab-2:6"
+          },
+          {
+            "id": "unfold-edge-0:4-unfold-face-9-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              },
+              {
+                "x": 0,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-9",
+            "edgeId": "unfold-edge-0:4"
+          },
+          {
+            "id": "unfold-edge-4:7-unfold-face-9-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 56.568542
+              },
+              {
+                "x": 28.284271,
+                "y": 28.284271
+              }
+            ],
+            "panelId": "unfold-face-9",
+            "edgeId": "unfold-edge-4:7"
+          },
+          {
+            "id": "unfold-edge-0:7-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 84.852814
+              },
+              {
+                "x": 28.284271,
+                "y": 28.284271
+              }
+            ],
+            "panelId": "unfold-face-10",
+            "edgeId": "unfold-edge-0:7"
+          },
+          {
+            "id": "unfold-edge-3:7-unfold-face-10-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 28.284271,
+                "y": 28.284271
+              },
+              {
+                "x": 56.568542,
+                "y": 56.568542
+              }
+            ],
+            "panelId": "unfold-face-10",
+            "edgeId": "unfold-edge-3:7"
+          },
+          {
+            "id": "unfold-edge-2:6-unfold-face-11-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 84.852814,
+                "y": 84.852814
+              },
+              {
+                "x": 113.137085,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-11",
+            "edgeId": "unfold-edge-2:6"
+          },
+          {
+            "id": "unfold-tab-1:6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 113.137085,
+                "y": 113.137085
+              },
+              {
+                "x": 111.037085,
+                "y": 119.137085
+              },
+              {
+                "x": 58.668542,
+                "y": 119.137085
+              },
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-11",
+            "edgeId": "unfold-edge-1:6",
+            "tabId": "unfold-tab-1:6"
+          },
+          {
+            "id": "unfold-tab-1:6-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 113.137085,
+                "y": 113.137085
+              },
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              }
+            ],
+            "panelId": "unfold-face-11",
+            "edgeId": "unfold-edge-1:6",
+            "tabId": "unfold-tab-1:6"
+          },
+          {
+            "id": "unfold-edge-1:6-unfold-face-12-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 113.137085
+              },
+              {
+                "x": 56.568542,
+                "y": 169.705627
+              }
+            ],
+            "panelId": "unfold-face-12",
+            "edgeId": "unfold-edge-1:6"
+          },
+          {
+            "id": "unfold-edge-5:6-unfold-face-12-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 56.568542,
+                "y": 169.705627
+              },
+              {
+                "x": 28.284271,
+                "y": 141.421356
+              }
+            ],
+            "panelId": "unfold-face-12",
+            "edgeId": "unfold-edge-5:6"
+          }
+        ],
+        "labels": [
+          {
+            "id": "unfold-face-1-label",
+            "text": "T1",
+            "position": {
+              "x": 56.568542,
+              "y": 94.280904
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-1"
+          },
+          {
+            "id": "unfold-face-2-label",
+            "text": "T2",
+            "position": {
+              "x": 56.568542,
+              "y": 75.424723
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-2"
+          },
+          {
+            "id": "unfold-face-3-label",
+            "text": "T3",
+            "position": {
+              "x": 9.42809,
+              "y": 141.421356
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-3"
+          },
+          {
+            "id": "unfold-face-4-label",
+            "text": "T4",
+            "position": {
+              "x": 103.708995,
+              "y": 28.284271
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-4"
+          },
+          {
+            "id": "unfold-face-5-label",
+            "text": "T5",
+            "position": {
+              "x": 37.712361,
+              "y": 113.137085
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-5"
+          },
+          {
+            "id": "unfold-face-6-label",
+            "text": "T6",
+            "position": {
+              "x": 18.856181,
+              "y": 113.137085
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-6"
+          },
+          {
+            "id": "unfold-face-7-label",
+            "text": "T7",
+            "position": {
+              "x": 84.852814,
+              "y": 47.140452
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-7"
+          },
+          {
+            "id": "unfold-face-8-label",
+            "text": "T8",
+            "position": {
+              "x": 84.852814,
+              "y": 65.996633
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-8"
+          },
+          {
+            "id": "unfold-face-9-label",
+            "text": "T9",
+            "position": {
+              "x": 18.856181,
+              "y": 56.568542
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-9"
+          },
+          {
+            "id": "unfold-face-10-label",
+            "text": "T10",
+            "position": {
+              "x": 37.712361,
+              "y": 56.568542
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-10"
+          },
+          {
+            "id": "unfold-face-11-label",
+            "text": "T11",
+            "position": {
+              "x": 84.852814,
+              "y": 103.708995
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-11"
+          },
+          {
+            "id": "unfold-face-12-label",
+            "text": "T12",
+            "position": {
+              "x": 47.140452,
+              "y": 141.421356
+            },
+            "operation": "engrave",
+            "entityId": "unfold-face-12"
+          },
+          {
+            "id": "unfold-edge-5:6-unfold-face-3-label",
+            "text": "S7",
+            "position": {
+              "x": 13.50968,
+              "y": 153.666125
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-5:6"
+          },
+          {
+            "id": "unfold-edge-4:6-unfold-face-3-label",
+            "text": "S5",
+            "position": {
+              "x": 2,
+              "y": 141.421356
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-4:6"
+          },
+          {
+            "id": "unfold-edge-4:6-unfold-face-4-label",
+            "text": "S5",
+            "position": {
+              "x": 111.137085,
+              "y": 28.284271
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-4:6"
+          },
+          {
+            "id": "unfold-edge-4:7-unfold-face-4-label",
+            "text": "S6",
+            "position": {
+              "x": 99.627405,
+              "y": 16.039502
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-4:7"
+          },
+          {
+            "id": "unfold-edge-0:4-unfold-face-6-label",
+            "text": "S1",
+            "position": {
+              "x": 14.774591,
+              "y": 100.892316
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-0:4"
+          },
+          {
+            "id": "unfold-edge-3:7-unfold-face-7-label",
+            "text": "S4",
+            "position": {
+              "x": 72.608045,
+              "y": 43.058862
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-3:7"
+          },
+          {
+            "id": "unfold-edge-2:6-unfold-face-8-label",
+            "text": "S3",
+            "position": {
+              "x": 97.097583,
+              "y": 70.078222
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-2:6"
+          },
+          {
+            "id": "unfold-edge-0:4-unfold-face-9-label",
+            "text": "S1",
+            "position": {
+              "x": 14.774591,
+              "y": 68.813311
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-0:4"
+          },
+          {
+            "id": "unfold-edge-4:7-unfold-face-9-label",
+            "text": "S6",
+            "position": {
+              "x": 14.774591,
+              "y": 44.323773
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-4:7"
+          },
+          {
+            "id": "unfold-edge-3:7-unfold-face-10-label",
+            "text": "S4",
+            "position": {
+              "x": 41.793951,
+              "y": 44.323773
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-3:7"
+          },
+          {
+            "id": "unfold-edge-2:6-unfold-face-11-label",
+            "text": "S3",
+            "position": {
+              "x": 97.097583,
+              "y": 99.627405
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-2:6"
+          },
+          {
+            "id": "unfold-edge-1:6-unfold-face-11-label",
+            "text": "S2",
+            "position": {
+              "x": 84.852814,
+              "y": 111.137085
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-1:6"
+          },
+          {
+            "id": "unfold-edge-1:6-unfold-face-12-label",
+            "text": "S2",
+            "position": {
+              "x": 54.568542,
+              "y": 141.421356
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-1:6"
+          },
+          {
+            "id": "unfold-edge-5:6-unfold-face-12-label",
+            "text": "S7",
+            "position": {
+              "x": 43.058862,
+              "y": 153.666125
+            },
+            "operation": "engrave",
+            "entityId": "unfold-edge-5:6"
+          }
+        ],
+        "thicknessMm": 1,
+        "sourceReference": "model-legacy-fixture",
+        "unfolding": {
+          "islandIndex": 0,
+          "faceIds": [
+            "unfold-face-1",
+            "unfold-face-2",
+            "unfold-face-3",
+            "unfold-face-4",
+            "unfold-face-5",
+            "unfold-face-6",
+            "unfold-face-7",
+            "unfold-face-8",
+            "unfold-face-9",
+            "unfold-face-10",
+            "unfold-face-11",
+            "unfold-face-12"
+          ]
+        }
+      }
+    ],
+    "generationIssues": [],
+    "sheetLayouts": [
+      {
+        "id": "sheet-upgrade-baseline",
+        "widthMm": 600,
+        "heightMm": 400,
+        "marginMm": 5,
+        "spacingMm": 3,
+        "placements": [
+          {
+            "partId": "unfold-island-1",
+            "x": 11,
+            "y": 7.757716,
+            "rotationDeg": 0
+          }
+        ]
+      }
+    ],
+    "exportSettings": {
+      "includeLabels": true,
+      "includeRegistrationMarks": false,
+      "includeSheetBoundary": true,
+      "operationStyles": [
+        {
+          "operation": "cut",
+          "stroke": "#ff0000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "score",
+          "stroke": "#0000ff",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "mountain-fold",
+          "stroke": "#8b5cf6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "valley-fold",
+          "stroke": "#14b8a6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "perforate",
+          "stroke": "#f59e0b",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "engrave",
+          "stroke": "#000000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "guide",
+          "stroke": "#6b7280",
+          "strokeWidthMm": 0.1
+        }
+      ],
+      "kerfCompensation": "none",
+      "customKerfMm": 0.1,
+      "foldLineOutput": "preserve",
+      "perforationDashMm": 2,
+      "perforationGapMm": 1,
+      "labelFontSizeMm": 3
+    },
+    "acknowledgedWarningIds": [],
+    "modeSettings": {
+      "stackedSlices": {
+        "axis": "z",
+        "spacingMm": 10,
+        "thicknessMm": 1,
+        "contourEpsilonMm": 0.001
+      },
+      "waffleSlices": {
+        "primaryAxis": "x",
+        "secondaryAxis": "y",
+        "primarySpacingMm": 20,
+        "secondarySpacingMm": 20,
+        "thicknessMm": 3,
+        "clearanceMm": 0.15,
+        "contourEpsilonMm": 0.001,
+        "slotPattern": "alternating",
+        "reverseSlots": false
+      },
+      "foldTemplate": {
+        "templateKind": "open-box",
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40,
+        "profileToleranceMm": 1,
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1,
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "meshUnfold": {
+        "strategy": "automatic",
+        "rootFaceIndex": 0,
+        "manualSeamKeys": [],
+        "tabDepthMm": 6,
+        "maximumFaceCount": 200,
+        "searchAttempts": 18
+      },
+      "panelConstruction": {
+        "innerWidthMm": 80,
+        "innerDepthMm": 60,
+        "innerHeightMm": 50,
+        "jointKind": "finger",
+        "fingerWidthMm": 10,
+        "clearanceMm": 0.15,
+        "includeLid": false,
+        "panelThicknessMm": 1,
+        "dividerThicknessMm": 1,
+        "lidThicknessMm": 1,
+        "widthDividerCount": 0,
+        "depthDividerCount": 0,
+        "connectionOverrides": {},
+        "panelProfiles": {
+          "front": "flat",
+          "back": "flat"
+        },
+        "glueTabDepthMm": 8,
+        "boundaryGlueTabs": [],
+        "features": []
+      }
+    },
+    "unfoldingResult": {
+      "settings": {
+        "strategy": "automatic",
+        "rootFaceIndex": 0,
+        "manualSeamKeys": [],
+        "tabDepthMm": 6,
+        "maximumFaceCount": 200,
+        "searchAttempts": 18
+      },
+      "faces": [
+        {
+          "id": "unfold-face-1",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 0,
+          "sourceVertexIndices": [0, 2, 1],
+          "points2D": [
+            {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            {
+              "x": 84.852814,
+              "y": 84.852814
+            },
+            {
+              "x": 56.568542,
+              "y": 113.137085
+            }
+          ],
+          "flatVerticesMm": [
+            [28.284271, 84.852814, 0],
+            [84.852814, 84.852814, 0],
+            [56.568542, 113.137085, 0]
+          ],
+          "sourceVerticesMm": [
+            [-20, -20, -20],
+            [20, 20, -20],
+            [20, -20, -20]
+          ]
+        },
+        {
+          "id": "unfold-face-2",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 1,
+          "sourceVertexIndices": [0, 3, 2],
+          "points2D": [
+            {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            {
+              "x": 56.568542,
+              "y": 56.568542
+            },
+            {
+              "x": 84.852814,
+              "y": 84.852814
+            }
+          ],
+          "flatVerticesMm": [
+            [28.284271, 84.852814, 0],
+            [56.568542, 56.568542, 0],
+            [84.852814, 84.852814, 0]
+          ],
+          "sourceVerticesMm": [
+            [-20, -20, -20],
+            [-20, 20, -20],
+            [20, 20, -20]
+          ]
+        },
+        {
+          "id": "unfold-face-3",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 2,
+          "sourceVertexIndices": [4, 5, 6],
+          "points2D": [
+            {
+              "x": 0,
+              "y": 113.137085
+            },
+            {
+              "x": 28.284271,
+              "y": 141.421356
+            },
+            {
+              "x": 0,
+              "y": 169.705627
+            }
+          ],
+          "flatVerticesMm": [
+            [0, 113.137085, 0],
+            [28.284271, 141.421356, 0],
+            [0, 169.705627, 0]
+          ],
+          "sourceVerticesMm": [
+            [-20, -20, 20],
+            [20, -20, 20],
+            [20, 20, 20]
+          ]
+        },
+        {
+          "id": "unfold-face-4",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 3,
+          "sourceVertexIndices": [4, 6, 7],
+          "points2D": [
+            {
+              "x": 113.137085,
+              "y": 0
+            },
+            {
+              "x": 113.137085,
+              "y": 56.568542
+            },
+            {
+              "x": 84.852814,
+              "y": 28.284271
+            }
+          ],
+          "flatVerticesMm": [
+            [113.137085, 0, 0],
+            [113.137085, 56.568542, 0],
+            [84.852814, 28.284271, 0]
+          ],
+          "sourceVerticesMm": [
+            [-20, -20, 20],
+            [20, 20, 20],
+            [-20, 20, 20]
+          ]
+        },
+        {
+          "id": "unfold-face-5",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 4,
+          "sourceVertexIndices": [0, 1, 5],
+          "points2D": [
+            {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            {
+              "x": 56.568542,
+              "y": 113.137085
+            },
+            {
+              "x": 28.284271,
+              "y": 141.421356
+            }
+          ],
+          "flatVerticesMm": [
+            [28.284271, 84.852814, 0],
+            [56.568542, 113.137085, 0],
+            [28.284271, 141.421356, 0]
+          ],
+          "sourceVerticesMm": [
+            [-20, -20, -20],
+            [20, -20, -20],
+            [20, -20, 20]
+          ]
+        },
+        {
+          "id": "unfold-face-6",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 5,
+          "sourceVertexIndices": [0, 5, 4],
+          "points2D": [
+            {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            {
+              "x": 28.284271,
+              "y": 141.421356
+            },
+            {
+              "x": 0,
+              "y": 113.137085
+            }
+          ],
+          "flatVerticesMm": [
+            [28.284271, 84.852814, 0],
+            [28.284271, 141.421356, 0],
+            [0, 113.137085, 0]
+          ],
+          "sourceVerticesMm": [
+            [-20, -20, -20],
+            [20, -20, 20],
+            [-20, -20, 20]
+          ]
+        },
+        {
+          "id": "unfold-face-7",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 6,
+          "sourceVertexIndices": [3, 7, 6],
+          "points2D": [
+            {
+              "x": 56.568542,
+              "y": 56.568542
+            },
+            {
+              "x": 84.852814,
+              "y": 28.284271
+            },
+            {
+              "x": 113.137085,
+              "y": 56.568542
+            }
+          ],
+          "flatVerticesMm": [
+            [56.568542, 56.568542, 0],
+            [84.852814, 28.284271, 0],
+            [113.137085, 56.568542, 0]
+          ],
+          "sourceVerticesMm": [
+            [-20, 20, -20],
+            [-20, 20, 20],
+            [20, 20, 20]
+          ]
+        },
+        {
+          "id": "unfold-face-8",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 7,
+          "sourceVertexIndices": [3, 6, 2],
+          "points2D": [
+            {
+              "x": 56.568542,
+              "y": 56.568542
+            },
+            {
+              "x": 113.137085,
+              "y": 56.568542
+            },
+            {
+              "x": 84.852814,
+              "y": 84.852814
+            }
+          ],
+          "flatVerticesMm": [
+            [56.568542, 56.568542, 0],
+            [113.137085, 56.568542, 0],
+            [84.852814, 84.852814, 0]
+          ],
+          "sourceVerticesMm": [
+            [-20, 20, -20],
+            [20, 20, 20],
+            [20, 20, -20]
+          ]
+        },
+        {
+          "id": "unfold-face-9",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 8,
+          "sourceVertexIndices": [0, 4, 7],
+          "points2D": [
+            {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            {
+              "x": 0,
+              "y": 56.568542
+            },
+            {
+              "x": 28.284271,
+              "y": 28.284271
+            }
+          ],
+          "flatVerticesMm": [
+            [28.284271, 84.852814, 0],
+            [0, 56.568542, 0],
+            [28.284271, 28.284271, 0]
+          ],
+          "sourceVerticesMm": [
+            [-20, -20, -20],
+            [-20, -20, 20],
+            [-20, 20, 20]
+          ]
+        },
+        {
+          "id": "unfold-face-10",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 9,
+          "sourceVertexIndices": [0, 7, 3],
+          "points2D": [
+            {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            {
+              "x": 28.284271,
+              "y": 28.284271
+            },
+            {
+              "x": 56.568542,
+              "y": 56.568542
+            }
+          ],
+          "flatVerticesMm": [
+            [28.284271, 84.852814, 0],
+            [28.284271, 28.284271, 0],
+            [56.568542, 56.568542, 0]
+          ],
+          "sourceVerticesMm": [
+            [-20, -20, -20],
+            [-20, 20, 20],
+            [-20, 20, -20]
+          ]
+        },
+        {
+          "id": "unfold-face-11",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 10,
+          "sourceVertexIndices": [1, 2, 6],
+          "points2D": [
+            {
+              "x": 56.568542,
+              "y": 113.137085
+            },
+            {
+              "x": 84.852814,
+              "y": 84.852814
+            },
+            {
+              "x": 113.137085,
+              "y": 113.137085
+            }
+          ],
+          "flatVerticesMm": [
+            [56.568542, 113.137085, 0],
+            [84.852814, 84.852814, 0],
+            [113.137085, 113.137085, 0]
+          ],
+          "sourceVerticesMm": [
+            [20, -20, -20],
+            [20, 20, -20],
+            [20, 20, 20]
+          ]
+        },
+        {
+          "id": "unfold-face-12",
+          "partId": "unfold-island-1",
+          "islandIndex": 0,
+          "faceIndex": 11,
+          "sourceVertexIndices": [1, 6, 5],
+          "points2D": [
+            {
+              "x": 56.568542,
+              "y": 113.137085
+            },
+            {
+              "x": 56.568542,
+              "y": 169.705627
+            },
+            {
+              "x": 28.284271,
+              "y": 141.421356
+            }
+          ],
+          "flatVerticesMm": [
+            [56.568542, 113.137085, 0],
+            [56.568542, 169.705627, 0],
+            [28.284271, 141.421356, 0]
+          ],
+          "sourceVerticesMm": [
+            [20, -20, -20],
+            [20, 20, 20],
+            [20, -20, 20]
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "unfold-edge-0:1",
+          "key": "0:1",
+          "vertexA": 0,
+          "vertexB": 1,
+          "faceAIndex": 0,
+          "faceBIndex": 4,
+          "disposition": "hinge",
+          "foldDirection": "mountain",
+          "dihedralDeg": 90,
+          "pairLabel": "F1"
+        },
+        {
+          "id": "unfold-edge-0:2",
+          "key": "0:2",
+          "vertexA": 0,
+          "vertexB": 2,
+          "faceAIndex": 0,
+          "faceBIndex": 1,
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "dihedralDeg": 0,
+          "pairLabel": "F2"
+        },
+        {
+          "id": "unfold-edge-0:3",
+          "key": "0:3",
+          "vertexA": 0,
+          "vertexB": 3,
+          "faceAIndex": 1,
+          "faceBIndex": 9,
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "dihedralDeg": 90,
+          "pairLabel": "F3"
+        },
+        {
+          "id": "unfold-edge-0:4",
+          "key": "0:4",
+          "vertexA": 0,
+          "vertexB": 4,
+          "faceAIndex": 5,
+          "faceBIndex": 8,
+          "disposition": "seam",
+          "dihedralDeg": 90,
+          "pairLabel": "S1"
+        },
+        {
+          "id": "unfold-edge-0:5",
+          "key": "0:5",
+          "vertexA": 0,
+          "vertexB": 5,
+          "faceAIndex": 4,
+          "faceBIndex": 5,
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "dihedralDeg": 0,
+          "pairLabel": "F4"
+        },
+        {
+          "id": "unfold-edge-0:7",
+          "key": "0:7",
+          "vertexA": 0,
+          "vertexB": 7,
+          "faceAIndex": 8,
+          "faceBIndex": 9,
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "dihedralDeg": 0,
+          "pairLabel": "F5"
+        },
+        {
+          "id": "unfold-edge-1:2",
+          "key": "1:2",
+          "vertexA": 1,
+          "vertexB": 2,
+          "faceAIndex": 0,
+          "faceBIndex": 10,
+          "disposition": "hinge",
+          "foldDirection": "mountain",
+          "dihedralDeg": 90,
+          "pairLabel": "F6"
+        },
+        {
+          "id": "unfold-edge-1:5",
+          "key": "1:5",
+          "vertexA": 1,
+          "vertexB": 5,
+          "faceAIndex": 4,
+          "faceBIndex": 11,
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "dihedralDeg": 90,
+          "pairLabel": "F7"
+        },
+        {
+          "id": "unfold-edge-1:6",
+          "key": "1:6",
+          "vertexA": 1,
+          "vertexB": 6,
+          "faceAIndex": 10,
+          "faceBIndex": 11,
+          "disposition": "seam",
+          "dihedralDeg": 0,
+          "pairLabel": "S2"
+        },
+        {
+          "id": "unfold-edge-2:3",
+          "key": "2:3",
+          "vertexA": 2,
+          "vertexB": 3,
+          "faceAIndex": 1,
+          "faceBIndex": 7,
+          "disposition": "hinge",
+          "foldDirection": "mountain",
+          "dihedralDeg": 90,
+          "pairLabel": "F8"
+        },
+        {
+          "id": "unfold-edge-2:6",
+          "key": "2:6",
+          "vertexA": 2,
+          "vertexB": 6,
+          "faceAIndex": 7,
+          "faceBIndex": 10,
+          "disposition": "seam",
+          "dihedralDeg": 90,
+          "pairLabel": "S3"
+        },
+        {
+          "id": "unfold-edge-3:6",
+          "key": "3:6",
+          "vertexA": 3,
+          "vertexB": 6,
+          "faceAIndex": 6,
+          "faceBIndex": 7,
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "dihedralDeg": 0,
+          "pairLabel": "F9"
+        },
+        {
+          "id": "unfold-edge-3:7",
+          "key": "3:7",
+          "vertexA": 3,
+          "vertexB": 7,
+          "faceAIndex": 6,
+          "faceBIndex": 9,
+          "disposition": "seam",
+          "dihedralDeg": 90,
+          "pairLabel": "S4"
+        },
+        {
+          "id": "unfold-edge-4:5",
+          "key": "4:5",
+          "vertexA": 4,
+          "vertexB": 5,
+          "faceAIndex": 2,
+          "faceBIndex": 5,
+          "disposition": "hinge",
+          "foldDirection": "mountain",
+          "dihedralDeg": 90,
+          "pairLabel": "F10"
+        },
+        {
+          "id": "unfold-edge-4:6",
+          "key": "4:6",
+          "vertexA": 4,
+          "vertexB": 6,
+          "faceAIndex": 2,
+          "faceBIndex": 3,
+          "disposition": "seam",
+          "dihedralDeg": 0,
+          "pairLabel": "S5"
+        },
+        {
+          "id": "unfold-edge-4:7",
+          "key": "4:7",
+          "vertexA": 4,
+          "vertexB": 7,
+          "faceAIndex": 3,
+          "faceBIndex": 8,
+          "disposition": "seam",
+          "dihedralDeg": 90,
+          "pairLabel": "S6"
+        },
+        {
+          "id": "unfold-edge-5:6",
+          "key": "5:6",
+          "vertexA": 5,
+          "vertexB": 6,
+          "faceAIndex": 2,
+          "faceBIndex": 11,
+          "disposition": "seam",
+          "dihedralDeg": 90,
+          "pairLabel": "S7"
+        },
+        {
+          "id": "unfold-edge-6:7",
+          "key": "6:7",
+          "vertexA": 6,
+          "vertexB": 7,
+          "faceAIndex": 3,
+          "faceBIndex": 6,
+          "disposition": "hinge",
+          "foldDirection": "mountain",
+          "dihedralDeg": 90,
+          "pairLabel": "F11"
+        }
+      ],
+      "connections": [
+        {
+          "id": "unfold-edge-0:1-connection",
+          "panelAId": "unfold-face-1",
+          "panelBId": "unfold-face-5",
+          "edgeA": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 56.568542,
+              "y": 113.137085
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 56.568542,
+              "y": 113.137085
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "unfold-edge-0:2-connection",
+          "panelAId": "unfold-face-1",
+          "panelBId": "unfold-face-2",
+          "edgeA": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 84.852814,
+              "y": 84.852814
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 84.852814,
+              "y": 84.852814
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "unfold-edge-0:3-connection",
+          "panelAId": "unfold-face-2",
+          "panelBId": "unfold-face-10",
+          "edgeA": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 56.568542,
+              "y": 56.568542
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 56.568542,
+              "y": 56.568542
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "unfold-edge-0:4-connection",
+          "panelAId": "unfold-face-6",
+          "panelBId": "unfold-face-9",
+          "edgeA": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 0,
+              "y": 113.137085
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 0,
+              "y": 56.568542
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["unfold-tab-0:4"]
+        },
+        {
+          "id": "unfold-edge-0:5-connection",
+          "panelAId": "unfold-face-5",
+          "panelBId": "unfold-face-6",
+          "edgeA": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 28.284271,
+              "y": 141.421356
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 28.284271,
+              "y": 141.421356
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "unfold-edge-0:7-connection",
+          "panelAId": "unfold-face-9",
+          "panelBId": "unfold-face-10",
+          "edgeA": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 28.284271,
+              "y": 28.284271
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 28.284271,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 28.284271,
+              "y": 28.284271
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "unfold-edge-1:2-connection",
+          "panelAId": "unfold-face-1",
+          "panelBId": "unfold-face-11",
+          "edgeA": {
+            "start": {
+              "x": 56.568542,
+              "y": 113.137085
+            },
+            "end": {
+              "x": 84.852814,
+              "y": 84.852814
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 56.568542,
+              "y": 113.137085
+            },
+            "end": {
+              "x": 84.852814,
+              "y": 84.852814
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "unfold-edge-1:5-connection",
+          "panelAId": "unfold-face-5",
+          "panelBId": "unfold-face-12",
+          "edgeA": {
+            "start": {
+              "x": 56.568542,
+              "y": 113.137085
+            },
+            "end": {
+              "x": 28.284271,
+              "y": 141.421356
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 56.568542,
+              "y": 113.137085
+            },
+            "end": {
+              "x": 28.284271,
+              "y": 141.421356
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "unfold-edge-1:6-connection",
+          "panelAId": "unfold-face-11",
+          "panelBId": "unfold-face-12",
+          "edgeA": {
+            "start": {
+              "x": 56.568542,
+              "y": 113.137085
+            },
+            "end": {
+              "x": 113.137085,
+              "y": 113.137085
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 56.568542,
+              "y": 113.137085
+            },
+            "end": {
+              "x": 56.568542,
+              "y": 169.705627
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["unfold-tab-1:6"]
+        },
+        {
+          "id": "unfold-edge-2:3-connection",
+          "panelAId": "unfold-face-2",
+          "panelBId": "unfold-face-8",
+          "edgeA": {
+            "start": {
+              "x": 84.852814,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 56.568542,
+              "y": 56.568542
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 84.852814,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 56.568542,
+              "y": 56.568542
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "unfold-edge-2:6-connection",
+          "panelAId": "unfold-face-8",
+          "panelBId": "unfold-face-11",
+          "edgeA": {
+            "start": {
+              "x": 84.852814,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 113.137085,
+              "y": 56.568542
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 84.852814,
+              "y": 84.852814
+            },
+            "end": {
+              "x": 113.137085,
+              "y": 113.137085
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["unfold-tab-2:6"]
+        },
+        {
+          "id": "unfold-edge-3:6-connection",
+          "panelAId": "unfold-face-7",
+          "panelBId": "unfold-face-8",
+          "edgeA": {
+            "start": {
+              "x": 56.568542,
+              "y": 56.568542
+            },
+            "end": {
+              "x": 113.137085,
+              "y": 56.568542
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 56.568542,
+              "y": 56.568542
+            },
+            "end": {
+              "x": 113.137085,
+              "y": 56.568542
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "unfold-edge-3:7-connection",
+          "panelAId": "unfold-face-7",
+          "panelBId": "unfold-face-10",
+          "edgeA": {
+            "start": {
+              "x": 56.568542,
+              "y": 56.568542
+            },
+            "end": {
+              "x": 84.852814,
+              "y": 28.284271
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 56.568542,
+              "y": 56.568542
+            },
+            "end": {
+              "x": 28.284271,
+              "y": 28.284271
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["unfold-tab-3:7"]
+        },
+        {
+          "id": "unfold-edge-4:5-connection",
+          "panelAId": "unfold-face-3",
+          "panelBId": "unfold-face-6",
+          "edgeA": {
+            "start": {
+              "x": 0,
+              "y": 113.137085
+            },
+            "end": {
+              "x": 28.284271,
+              "y": 141.421356
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 0,
+              "y": 113.137085
+            },
+            "end": {
+              "x": 28.284271,
+              "y": 141.421356
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "unfold-edge-4:6-connection",
+          "panelAId": "unfold-face-3",
+          "panelBId": "unfold-face-4",
+          "edgeA": {
+            "start": {
+              "x": 0,
+              "y": 113.137085
+            },
+            "end": {
+              "x": 0,
+              "y": 169.705627
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 113.137085,
+              "y": 0
+            },
+            "end": {
+              "x": 113.137085,
+              "y": 56.568542
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["unfold-tab-4:6"]
+        },
+        {
+          "id": "unfold-edge-4:7-connection",
+          "panelAId": "unfold-face-4",
+          "panelBId": "unfold-face-9",
+          "edgeA": {
+            "start": {
+              "x": 113.137085,
+              "y": 0
+            },
+            "end": {
+              "x": 84.852814,
+              "y": 28.284271
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 0,
+              "y": 56.568542
+            },
+            "end": {
+              "x": 28.284271,
+              "y": 28.284271
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["unfold-tab-4:7"]
+        },
+        {
+          "id": "unfold-edge-5:6-connection",
+          "panelAId": "unfold-face-3",
+          "panelBId": "unfold-face-12",
+          "edgeA": {
+            "start": {
+              "x": 28.284271,
+              "y": 141.421356
+            },
+            "end": {
+              "x": 0,
+              "y": 169.705627
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 28.284271,
+              "y": 141.421356
+            },
+            "end": {
+              "x": 56.568542,
+              "y": 169.705627
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["unfold-tab-5:6"]
+        },
+        {
+          "id": "unfold-edge-6:7-connection",
+          "panelAId": "unfold-face-4",
+          "panelBId": "unfold-face-7",
+          "edgeA": {
+            "start": {
+              "x": 113.137085,
+              "y": 56.568542
+            },
+            "end": {
+              "x": 84.852814,
+              "y": 28.284271
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 113.137085,
+              "y": 56.568542
+            },
+            "end": {
+              "x": 84.852814,
+              "y": 28.284271
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        }
+      ],
+      "tabs": [
+        {
+          "id": "unfold-tab-5:6",
+          "partId": "unfold-island-1",
+          "edgeId": "unfold-edge-5:6",
+          "ownerPanelId": "unfold-face-3",
+          "style": "glue",
+          "depthMm": 6,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 28.284271,
+            "y": 141.421356
+          },
+          "baseEnd": {
+            "x": 0,
+            "y": 169.705627
+          },
+          "outline": [
+            {
+              "x": 28.284271,
+              "y": 141.421356
+            },
+            {
+              "x": 31.041987,
+              "y": 147.148921
+            },
+            {
+              "x": 5.727565,
+              "y": 172.463343
+            },
+            {
+              "x": 0,
+              "y": 169.705627
+            }
+          ],
+          "receiverPanelId": "unfold-face-12"
+        },
+        {
+          "id": "unfold-tab-4:6",
+          "partId": "unfold-island-1",
+          "edgeId": "unfold-edge-4:6",
+          "ownerPanelId": "unfold-face-3",
+          "style": "glue",
+          "depthMm": 6,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 0,
+            "y": 169.705627
+          },
+          "baseEnd": {
+            "x": 0,
+            "y": 113.137085
+          },
+          "outline": [
+            {
+              "x": 0,
+              "y": 169.705627
+            },
+            {
+              "x": -6,
+              "y": 167.605627
+            },
+            {
+              "x": -6,
+              "y": 115.237085
+            },
+            {
+              "x": 0,
+              "y": 113.137085
+            }
+          ],
+          "receiverPanelId": "unfold-face-4"
+        },
+        {
+          "id": "unfold-tab-4:7",
+          "partId": "unfold-island-1",
+          "edgeId": "unfold-edge-4:7",
+          "ownerPanelId": "unfold-face-4",
+          "style": "glue",
+          "depthMm": 6,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 84.852814,
+            "y": 28.284271
+          },
+          "baseEnd": {
+            "x": 113.137085,
+            "y": 0
+          },
+          "outline": [
+            {
+              "x": 84.852814,
+              "y": 28.284271
+            },
+            {
+              "x": 82.095098,
+              "y": 22.556706
+            },
+            {
+              "x": 107.40952,
+              "y": -2.757716
+            },
+            {
+              "x": 113.137085,
+              "y": 0
+            }
+          ],
+          "receiverPanelId": "unfold-face-9"
+        },
+        {
+          "id": "unfold-tab-0:4",
+          "partId": "unfold-island-1",
+          "edgeId": "unfold-edge-0:4",
+          "ownerPanelId": "unfold-face-6",
+          "style": "glue",
+          "depthMm": 6,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 0,
+            "y": 113.137085
+          },
+          "baseEnd": {
+            "x": 28.284271,
+            "y": 84.852814
+          },
+          "outline": [
+            {
+              "x": 0,
+              "y": 113.137085
+            },
+            {
+              "x": -2.757716,
+              "y": 107.40952
+            },
+            {
+              "x": 22.556706,
+              "y": 82.095098
+            },
+            {
+              "x": 28.284271,
+              "y": 84.852814
+            }
+          ],
+          "receiverPanelId": "unfold-face-9"
+        },
+        {
+          "id": "unfold-tab-3:7",
+          "partId": "unfold-island-1",
+          "edgeId": "unfold-edge-3:7",
+          "ownerPanelId": "unfold-face-7",
+          "style": "glue",
+          "depthMm": 6,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 56.568542,
+            "y": 56.568542
+          },
+          "baseEnd": {
+            "x": 84.852814,
+            "y": 28.284271
+          },
+          "outline": [
+            {
+              "x": 56.568542,
+              "y": 56.568542
+            },
+            {
+              "x": 53.810826,
+              "y": 50.840977
+            },
+            {
+              "x": 79.125249,
+              "y": 25.526554
+            },
+            {
+              "x": 84.852814,
+              "y": 28.284271
+            }
+          ],
+          "receiverPanelId": "unfold-face-10"
+        },
+        {
+          "id": "unfold-tab-2:6",
+          "partId": "unfold-island-1",
+          "edgeId": "unfold-edge-2:6",
+          "ownerPanelId": "unfold-face-8",
+          "style": "glue",
+          "depthMm": 6,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 113.137085,
+            "y": 56.568542
+          },
+          "baseEnd": {
+            "x": 84.852814,
+            "y": 84.852814
+          },
+          "outline": [
+            {
+              "x": 113.137085,
+              "y": 56.568542
+            },
+            {
+              "x": 115.894802,
+              "y": 62.296107
+            },
+            {
+              "x": 90.580379,
+              "y": 87.61053
+            },
+            {
+              "x": 84.852814,
+              "y": 84.852814
+            }
+          ],
+          "receiverPanelId": "unfold-face-11"
+        },
+        {
+          "id": "unfold-tab-1:6",
+          "partId": "unfold-island-1",
+          "edgeId": "unfold-edge-1:6",
+          "ownerPanelId": "unfold-face-11",
+          "style": "glue",
+          "depthMm": 6,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 113.137085,
+            "y": 113.137085
+          },
+          "baseEnd": {
+            "x": 56.568542,
+            "y": 113.137085
+          },
+          "outline": [
+            {
+              "x": 113.137085,
+              "y": 113.137085
+            },
+            {
+              "x": 111.037085,
+              "y": 119.137085
+            },
+            {
+              "x": 58.668542,
+              "y": 119.137085
+            },
+            {
+              "x": 56.568542,
+              "y": 113.137085
+            }
+          ],
+          "receiverPanelId": "unfold-face-12"
+        }
+      ],
+      "hinges": [
+        {
+          "id": "unfold-hinge-0:2",
+          "parentFaceId": "unfold-face-1",
+          "childFaceId": "unfold-face-2",
+          "vertexA": 0,
+          "vertexB": 2,
+          "foldAngleDeg": 0
+        },
+        {
+          "id": "unfold-hinge-0:1",
+          "parentFaceId": "unfold-face-1",
+          "childFaceId": "unfold-face-5",
+          "vertexA": 0,
+          "vertexB": 1,
+          "foldAngleDeg": -90
+        },
+        {
+          "id": "unfold-hinge-1:2",
+          "parentFaceId": "unfold-face-1",
+          "childFaceId": "unfold-face-11",
+          "vertexA": 1,
+          "vertexB": 2,
+          "foldAngleDeg": -90
+        },
+        {
+          "id": "unfold-hinge-2:3",
+          "parentFaceId": "unfold-face-2",
+          "childFaceId": "unfold-face-8",
+          "vertexA": 2,
+          "vertexB": 3,
+          "foldAngleDeg": -90
+        },
+        {
+          "id": "unfold-hinge-0:3",
+          "parentFaceId": "unfold-face-2",
+          "childFaceId": "unfold-face-10",
+          "vertexA": 0,
+          "vertexB": 3,
+          "foldAngleDeg": 90
+        },
+        {
+          "id": "unfold-hinge-0:5",
+          "parentFaceId": "unfold-face-5",
+          "childFaceId": "unfold-face-6",
+          "vertexA": 0,
+          "vertexB": 5,
+          "foldAngleDeg": 0
+        },
+        {
+          "id": "unfold-hinge-1:5",
+          "parentFaceId": "unfold-face-5",
+          "childFaceId": "unfold-face-12",
+          "vertexA": 1,
+          "vertexB": 5,
+          "foldAngleDeg": 90
+        },
+        {
+          "id": "unfold-hinge-3:6",
+          "parentFaceId": "unfold-face-8",
+          "childFaceId": "unfold-face-7",
+          "vertexA": 3,
+          "vertexB": 6,
+          "foldAngleDeg": 0
+        },
+        {
+          "id": "unfold-hinge-0:7",
+          "parentFaceId": "unfold-face-10",
+          "childFaceId": "unfold-face-9",
+          "vertexA": 0,
+          "vertexB": 7,
+          "foldAngleDeg": 0
+        },
+        {
+          "id": "unfold-hinge-4:5",
+          "parentFaceId": "unfold-face-6",
+          "childFaceId": "unfold-face-3",
+          "vertexA": 4,
+          "vertexB": 5,
+          "foldAngleDeg": -90
+        },
+        {
+          "id": "unfold-hinge-6:7",
+          "parentFaceId": "unfold-face-7",
+          "childFaceId": "unfold-face-4",
+          "vertexA": 6,
+          "vertexB": 7,
+          "foldAngleDeg": -90
+        }
+      ],
+      "islands": [
+        {
+          "id": "unfold-island-definition-1",
+          "index": 0,
+          "partId": "unfold-island-1",
+          "faceIds": [
+            "unfold-face-1",
+            "unfold-face-2",
+            "unfold-face-3",
+            "unfold-face-4",
+            "unfold-face-5",
+            "unfold-face-6",
+            "unfold-face-7",
+            "unfold-face-8",
+            "unfold-face-9",
+            "unfold-face-10",
+            "unfold-face-11",
+            "unfold-face-12"
+          ]
+        }
+      ],
+      "overlapPairs": [],
+      "parts": [
+        {
+          "id": "unfold-island-1",
+          "name": "Unfolded net 1",
+          "label": "Net 1",
+          "paths": [
+            {
+              "id": "unfold-edge-0:2-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 28.284271,
+                  "y": 84.852814
+                },
+                {
+                  "x": 84.852814,
+                  "y": 84.852814
+                }
+              ],
+              "panelId": "unfold-face-1",
+              "edgeId": "unfold-edge-0:2"
+            },
+            {
+              "id": "unfold-edge-1:2-fold",
+              "operation": "mountain-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 84.852814,
+                  "y": 84.852814
+                },
+                {
+                  "x": 56.568542,
+                  "y": 113.137085
+                }
+              ],
+              "panelId": "unfold-face-1",
+              "edgeId": "unfold-edge-1:2"
+            },
+            {
+              "id": "unfold-edge-0:1-fold",
+              "operation": "mountain-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 56.568542,
+                  "y": 113.137085
+                },
+                {
+                  "x": 28.284271,
+                  "y": 84.852814
+                }
+              ],
+              "panelId": "unfold-face-1",
+              "edgeId": "unfold-edge-0:1"
+            },
+            {
+              "id": "unfold-edge-0:3-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 28.284271,
+                  "y": 84.852814
+                },
+                {
+                  "x": 56.568542,
+                  "y": 56.568542
+                }
+              ],
+              "panelId": "unfold-face-2",
+              "edgeId": "unfold-edge-0:3"
+            },
+            {
+              "id": "unfold-edge-2:3-fold",
+              "operation": "mountain-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 56.568542,
+                  "y": 56.568542
+                },
+                {
+                  "x": 84.852814,
+                  "y": 84.852814
+                }
+              ],
+              "panelId": "unfold-face-2",
+              "edgeId": "unfold-edge-2:3"
+            },
+            {
+              "id": "unfold-tab-5:6-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 28.284271,
+                  "y": 141.421356
+                },
+                {
+                  "x": 31.041987,
+                  "y": 147.148921
+                },
+                {
+                  "x": 5.727565,
+                  "y": 172.463343
+                },
+                {
+                  "x": 0,
+                  "y": 169.705627
+                }
+              ],
+              "panelId": "unfold-face-3",
+              "edgeId": "unfold-edge-5:6",
+              "tabId": "unfold-tab-5:6"
+            },
+            {
+              "id": "unfold-tab-5:6-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 28.284271,
+                  "y": 141.421356
+                },
+                {
+                  "x": 0,
+                  "y": 169.705627
+                }
+              ],
+              "panelId": "unfold-face-3",
+              "edgeId": "unfold-edge-5:6",
+              "tabId": "unfold-tab-5:6"
+            },
+            {
+              "id": "unfold-tab-4:6-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 0,
+                  "y": 169.705627
+                },
+                {
+                  "x": -6,
+                  "y": 167.605627
+                },
+                {
+                  "x": -6,
+                  "y": 115.237085
+                },
+                {
+                  "x": 0,
+                  "y": 113.137085
+                }
+              ],
+              "panelId": "unfold-face-3",
+              "edgeId": "unfold-edge-4:6",
+              "tabId": "unfold-tab-4:6"
+            },
+            {
+              "id": "unfold-tab-4:6-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 0,
+                  "y": 169.705627
+                },
+                {
+                  "x": 0,
+                  "y": 113.137085
+                }
+              ],
+              "panelId": "unfold-face-3",
+              "edgeId": "unfold-edge-4:6",
+              "tabId": "unfold-tab-4:6"
+            },
+            {
+              "id": "unfold-edge-4:6-unfold-face-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 113.137085,
+                  "y": 0
+                },
+                {
+                  "x": 113.137085,
+                  "y": 56.568542
+                }
+              ],
+              "panelId": "unfold-face-4",
+              "edgeId": "unfold-edge-4:6"
+            },
+            {
+              "id": "unfold-tab-4:7-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 84.852814,
+                  "y": 28.284271
+                },
+                {
+                  "x": 82.095098,
+                  "y": 22.556706
+                },
+                {
+                  "x": 107.40952,
+                  "y": -2.757716
+                },
+                {
+                  "x": 113.137085,
+                  "y": 0
+                }
+              ],
+              "panelId": "unfold-face-4",
+              "edgeId": "unfold-edge-4:7",
+              "tabId": "unfold-tab-4:7"
+            },
+            {
+              "id": "unfold-tab-4:7-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 84.852814,
+                  "y": 28.284271
+                },
+                {
+                  "x": 113.137085,
+                  "y": 0
+                }
+              ],
+              "panelId": "unfold-face-4",
+              "edgeId": "unfold-edge-4:7",
+              "tabId": "unfold-tab-4:7"
+            },
+            {
+              "id": "unfold-edge-1:5-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 56.568542,
+                  "y": 113.137085
+                },
+                {
+                  "x": 28.284271,
+                  "y": 141.421356
+                }
+              ],
+              "panelId": "unfold-face-5",
+              "edgeId": "unfold-edge-1:5"
+            },
+            {
+              "id": "unfold-edge-0:5-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 28.284271,
+                  "y": 141.421356
+                },
+                {
+                  "x": 28.284271,
+                  "y": 84.852814
+                }
+              ],
+              "panelId": "unfold-face-5",
+              "edgeId": "unfold-edge-0:5"
+            },
+            {
+              "id": "unfold-edge-4:5-fold",
+              "operation": "mountain-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 28.284271,
+                  "y": 141.421356
+                },
+                {
+                  "x": 0,
+                  "y": 113.137085
+                }
+              ],
+              "panelId": "unfold-face-6",
+              "edgeId": "unfold-edge-4:5"
+            },
+            {
+              "id": "unfold-tab-0:4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 0,
+                  "y": 113.137085
+                },
+                {
+                  "x": -2.757716,
+                  "y": 107.40952
+                },
+                {
+                  "x": 22.556706,
+                  "y": 82.095098
+                },
+                {
+                  "x": 28.284271,
+                  "y": 84.852814
+                }
+              ],
+              "panelId": "unfold-face-6",
+              "edgeId": "unfold-edge-0:4",
+              "tabId": "unfold-tab-0:4"
+            },
+            {
+              "id": "unfold-tab-0:4-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 0,
+                  "y": 113.137085
+                },
+                {
+                  "x": 28.284271,
+                  "y": 84.852814
+                }
+              ],
+              "panelId": "unfold-face-6",
+              "edgeId": "unfold-edge-0:4",
+              "tabId": "unfold-tab-0:4"
+            },
+            {
+              "id": "unfold-tab-3:7-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 56.568542,
+                  "y": 56.568542
+                },
+                {
+                  "x": 53.810826,
+                  "y": 50.840977
+                },
+                {
+                  "x": 79.125249,
+                  "y": 25.526554
+                },
+                {
+                  "x": 84.852814,
+                  "y": 28.284271
+                }
+              ],
+              "panelId": "unfold-face-7",
+              "edgeId": "unfold-edge-3:7",
+              "tabId": "unfold-tab-3:7"
+            },
+            {
+              "id": "unfold-tab-3:7-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 56.568542,
+                  "y": 56.568542
+                },
+                {
+                  "x": 84.852814,
+                  "y": 28.284271
+                }
+              ],
+              "panelId": "unfold-face-7",
+              "edgeId": "unfold-edge-3:7",
+              "tabId": "unfold-tab-3:7"
+            },
+            {
+              "id": "unfold-edge-6:7-fold",
+              "operation": "mountain-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 84.852814,
+                  "y": 28.284271
+                },
+                {
+                  "x": 113.137085,
+                  "y": 56.568542
+                }
+              ],
+              "panelId": "unfold-face-7",
+              "edgeId": "unfold-edge-6:7"
+            },
+            {
+              "id": "unfold-edge-3:6-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 56.568542,
+                  "y": 56.568542
+                },
+                {
+                  "x": 113.137085,
+                  "y": 56.568542
+                }
+              ],
+              "panelId": "unfold-face-8",
+              "edgeId": "unfold-edge-3:6"
+            },
+            {
+              "id": "unfold-tab-2:6-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 113.137085,
+                  "y": 56.568542
+                },
+                {
+                  "x": 115.894802,
+                  "y": 62.296107
+                },
+                {
+                  "x": 90.580379,
+                  "y": 87.61053
+                },
+                {
+                  "x": 84.852814,
+                  "y": 84.852814
+                }
+              ],
+              "panelId": "unfold-face-8",
+              "edgeId": "unfold-edge-2:6",
+              "tabId": "unfold-tab-2:6"
+            },
+            {
+              "id": "unfold-tab-2:6-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 113.137085,
+                  "y": 56.568542
+                },
+                {
+                  "x": 84.852814,
+                  "y": 84.852814
+                }
+              ],
+              "panelId": "unfold-face-8",
+              "edgeId": "unfold-edge-2:6",
+              "tabId": "unfold-tab-2:6"
+            },
+            {
+              "id": "unfold-edge-0:4-unfold-face-9-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 28.284271,
+                  "y": 84.852814
+                },
+                {
+                  "x": 0,
+                  "y": 56.568542
+                }
+              ],
+              "panelId": "unfold-face-9",
+              "edgeId": "unfold-edge-0:4"
+            },
+            {
+              "id": "unfold-edge-4:7-unfold-face-9-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 0,
+                  "y": 56.568542
+                },
+                {
+                  "x": 28.284271,
+                  "y": 28.284271
+                }
+              ],
+              "panelId": "unfold-face-9",
+              "edgeId": "unfold-edge-4:7"
+            },
+            {
+              "id": "unfold-edge-0:7-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 28.284271,
+                  "y": 84.852814
+                },
+                {
+                  "x": 28.284271,
+                  "y": 28.284271
+                }
+              ],
+              "panelId": "unfold-face-10",
+              "edgeId": "unfold-edge-0:7"
+            },
+            {
+              "id": "unfold-edge-3:7-unfold-face-10-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 28.284271,
+                  "y": 28.284271
+                },
+                {
+                  "x": 56.568542,
+                  "y": 56.568542
+                }
+              ],
+              "panelId": "unfold-face-10",
+              "edgeId": "unfold-edge-3:7"
+            },
+            {
+              "id": "unfold-edge-2:6-unfold-face-11-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 84.852814,
+                  "y": 84.852814
+                },
+                {
+                  "x": 113.137085,
+                  "y": 113.137085
+                }
+              ],
+              "panelId": "unfold-face-11",
+              "edgeId": "unfold-edge-2:6"
+            },
+            {
+              "id": "unfold-tab-1:6-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 113.137085,
+                  "y": 113.137085
+                },
+                {
+                  "x": 111.037085,
+                  "y": 119.137085
+                },
+                {
+                  "x": 58.668542,
+                  "y": 119.137085
+                },
+                {
+                  "x": 56.568542,
+                  "y": 113.137085
+                }
+              ],
+              "panelId": "unfold-face-11",
+              "edgeId": "unfold-edge-1:6",
+              "tabId": "unfold-tab-1:6"
+            },
+            {
+              "id": "unfold-tab-1:6-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 113.137085,
+                  "y": 113.137085
+                },
+                {
+                  "x": 56.568542,
+                  "y": 113.137085
+                }
+              ],
+              "panelId": "unfold-face-11",
+              "edgeId": "unfold-edge-1:6",
+              "tabId": "unfold-tab-1:6"
+            },
+            {
+              "id": "unfold-edge-1:6-unfold-face-12-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 56.568542,
+                  "y": 113.137085
+                },
+                {
+                  "x": 56.568542,
+                  "y": 169.705627
+                }
+              ],
+              "panelId": "unfold-face-12",
+              "edgeId": "unfold-edge-1:6"
+            },
+            {
+              "id": "unfold-edge-5:6-unfold-face-12-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 56.568542,
+                  "y": 169.705627
+                },
+                {
+                  "x": 28.284271,
+                  "y": 141.421356
+                }
+              ],
+              "panelId": "unfold-face-12",
+              "edgeId": "unfold-edge-5:6"
+            }
+          ],
+          "labels": [
+            {
+              "id": "unfold-face-1-label",
+              "text": "T1",
+              "position": {
+                "x": 56.568542,
+                "y": 94.280904
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-1"
+            },
+            {
+              "id": "unfold-face-2-label",
+              "text": "T2",
+              "position": {
+                "x": 56.568542,
+                "y": 75.424723
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-2"
+            },
+            {
+              "id": "unfold-face-3-label",
+              "text": "T3",
+              "position": {
+                "x": 9.42809,
+                "y": 141.421356
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-3"
+            },
+            {
+              "id": "unfold-face-4-label",
+              "text": "T4",
+              "position": {
+                "x": 103.708995,
+                "y": 28.284271
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-4"
+            },
+            {
+              "id": "unfold-face-5-label",
+              "text": "T5",
+              "position": {
+                "x": 37.712361,
+                "y": 113.137085
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-5"
+            },
+            {
+              "id": "unfold-face-6-label",
+              "text": "T6",
+              "position": {
+                "x": 18.856181,
+                "y": 113.137085
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-6"
+            },
+            {
+              "id": "unfold-face-7-label",
+              "text": "T7",
+              "position": {
+                "x": 84.852814,
+                "y": 47.140452
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-7"
+            },
+            {
+              "id": "unfold-face-8-label",
+              "text": "T8",
+              "position": {
+                "x": 84.852814,
+                "y": 65.996633
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-8"
+            },
+            {
+              "id": "unfold-face-9-label",
+              "text": "T9",
+              "position": {
+                "x": 18.856181,
+                "y": 56.568542
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-9"
+            },
+            {
+              "id": "unfold-face-10-label",
+              "text": "T10",
+              "position": {
+                "x": 37.712361,
+                "y": 56.568542
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-10"
+            },
+            {
+              "id": "unfold-face-11-label",
+              "text": "T11",
+              "position": {
+                "x": 84.852814,
+                "y": 103.708995
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-11"
+            },
+            {
+              "id": "unfold-face-12-label",
+              "text": "T12",
+              "position": {
+                "x": 47.140452,
+                "y": 141.421356
+              },
+              "operation": "engrave",
+              "entityId": "unfold-face-12"
+            },
+            {
+              "id": "unfold-edge-5:6-unfold-face-3-label",
+              "text": "S7",
+              "position": {
+                "x": 13.50968,
+                "y": 153.666125
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-5:6"
+            },
+            {
+              "id": "unfold-edge-4:6-unfold-face-3-label",
+              "text": "S5",
+              "position": {
+                "x": 2,
+                "y": 141.421356
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-4:6"
+            },
+            {
+              "id": "unfold-edge-4:6-unfold-face-4-label",
+              "text": "S5",
+              "position": {
+                "x": 111.137085,
+                "y": 28.284271
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-4:6"
+            },
+            {
+              "id": "unfold-edge-4:7-unfold-face-4-label",
+              "text": "S6",
+              "position": {
+                "x": 99.627405,
+                "y": 16.039502
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-4:7"
+            },
+            {
+              "id": "unfold-edge-0:4-unfold-face-6-label",
+              "text": "S1",
+              "position": {
+                "x": 14.774591,
+                "y": 100.892316
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-0:4"
+            },
+            {
+              "id": "unfold-edge-3:7-unfold-face-7-label",
+              "text": "S4",
+              "position": {
+                "x": 72.608045,
+                "y": 43.058862
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-3:7"
+            },
+            {
+              "id": "unfold-edge-2:6-unfold-face-8-label",
+              "text": "S3",
+              "position": {
+                "x": 97.097583,
+                "y": 70.078222
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-2:6"
+            },
+            {
+              "id": "unfold-edge-0:4-unfold-face-9-label",
+              "text": "S1",
+              "position": {
+                "x": 14.774591,
+                "y": 68.813311
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-0:4"
+            },
+            {
+              "id": "unfold-edge-4:7-unfold-face-9-label",
+              "text": "S6",
+              "position": {
+                "x": 14.774591,
+                "y": 44.323773
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-4:7"
+            },
+            {
+              "id": "unfold-edge-3:7-unfold-face-10-label",
+              "text": "S4",
+              "position": {
+                "x": 41.793951,
+                "y": 44.323773
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-3:7"
+            },
+            {
+              "id": "unfold-edge-2:6-unfold-face-11-label",
+              "text": "S3",
+              "position": {
+                "x": 97.097583,
+                "y": 99.627405
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-2:6"
+            },
+            {
+              "id": "unfold-edge-1:6-unfold-face-11-label",
+              "text": "S2",
+              "position": {
+                "x": 84.852814,
+                "y": 111.137085
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-1:6"
+            },
+            {
+              "id": "unfold-edge-1:6-unfold-face-12-label",
+              "text": "S2",
+              "position": {
+                "x": 54.568542,
+                "y": 141.421356
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-1:6"
+            },
+            {
+              "id": "unfold-edge-5:6-unfold-face-12-label",
+              "text": "S7",
+              "position": {
+                "x": 43.058862,
+                "y": 153.666125
+              },
+              "operation": "engrave",
+              "entityId": "unfold-edge-5:6"
+            }
+          ],
+          "thicknessMm": 1,
+          "sourceReference": "model-legacy-fixture",
+          "unfolding": {
+            "islandIndex": 0,
+            "faceIds": [
+              "unfold-face-1",
+              "unfold-face-2",
+              "unfold-face-3",
+              "unfold-face-4",
+              "unfold-face-5",
+              "unfold-face-6",
+              "unfold-face-7",
+              "unfold-face-8",
+              "unfold-face-9",
+              "unfold-face-10",
+              "unfold-face-11",
+              "unfold-face-12"
+            ]
+          }
+        }
+      ],
+      "issues": [],
+      "algorithmVersion": "triangle-tree-v1",
+      "inputHash": "sf8-744b30c7"
+    },
+    "generationRecord": {
+      "signatureVersion": 2,
+      "mode": "mesh-unfold",
+      "inputHash": "sf9-064e1ff6",
+      "resultHash": "sf9-68d471c0",
+      "algorithmVersion": "triangle-tree-v1",
+      "generatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

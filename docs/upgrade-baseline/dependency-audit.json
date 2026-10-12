@@ -1,0 +1,572 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@asamuzakjp/dom-selector": {
+      "name": "@asamuzakjp/dom-selector",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["css-tree"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@asamuzakjp/dom-selector"],
+      "fixAvailable": true
+    },
+    "@bramus/specificity": {
+      "name": "@bramus/specificity",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["css-tree"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@bramus/specificity"],
+      "fixAvailable": true
+    },
+    "@csstools/css-syntax-patches-for-csstree": {
+      "name": "@csstools/css-syntax-patches-for-csstree",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["css-tree"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@csstools/css-syntax-patches-for-csstree"],
+      "fixAvailable": true
+    },
+    "@eslint-community/eslint-utils": {
+      "name": "@eslint-community/eslint-utils",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["eslint"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@eslint-community/eslint-utils"],
+      "fixAvailable": true
+    },
+    "@eslint/config-array": {
+      "name": "@eslint/config-array",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["minimatch"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@eslint/config-array"],
+      "fixAvailable": true
+    },
+    "@eslint/js": {
+      "name": "@eslint/js",
+      "severity": "high",
+      "isDirect": true,
+      "via": ["eslint"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@eslint/js"],
+      "fixAvailable": false
+    },
+    "@typescript-eslint/eslint-plugin": {
+      "name": "@typescript-eslint/eslint-plugin",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@typescript-eslint/parser",
+        "@typescript-eslint/type-utils",
+        "@typescript-eslint/utils",
+        "eslint"
+      ],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@typescript-eslint/eslint-plugin"],
+      "fixAvailable": true
+    },
+    "@typescript-eslint/parser": {
+      "name": "@typescript-eslint/parser",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["@typescript-eslint/typescript-estree", "eslint"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@typescript-eslint/parser"],
+      "fixAvailable": true
+    },
+    "@typescript-eslint/type-utils": {
+      "name": "@typescript-eslint/type-utils",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["@typescript-eslint/typescript-estree", "@typescript-eslint/utils", "eslint"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@typescript-eslint/type-utils"],
+      "fixAvailable": true
+    },
+    "@typescript-eslint/typescript-estree": {
+      "name": "@typescript-eslint/typescript-estree",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["minimatch"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@typescript-eslint/typescript-estree"],
+      "fixAvailable": true
+    },
+    "@typescript-eslint/utils": {
+      "name": "@typescript-eslint/utils",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["@eslint-community/eslint-utils", "@typescript-eslint/typescript-estree", "eslint"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@typescript-eslint/utils"],
+      "fixAvailable": true
+    },
+    "@vitejs/plugin-react": {
+      "name": "@vitejs/plugin-react",
+      "severity": "high",
+      "isDirect": true,
+      "via": ["vite"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/@vitejs/plugin-react"],
+      "fixAvailable": false
+    },
+    "@vitest/mocker": {
+      "name": "@vitest/mocker",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1193684,
+          "name": "@vitest/mocker",
+          "dependency": "@vitest/mocker",
+          "title": "Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock",
+          "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+          "severity": "moderate",
+          "cwe": ["CWE-22"],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+          },
+          "range": ">=2.1.0 <4.1.11"
+        },
+        "vite"
+      ],
+      "effects": ["vitest"],
+      "range": "",
+      "nodes": ["node_modules/@vitest/mocker"],
+      "fixAvailable": false
+    },
+    "brace-expansion": {
+      "name": "brace-expansion",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1240103,
+          "name": "brace-expansion",
+          "dependency": "brace-expansion",
+          "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+          "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+          "severity": "moderate",
+          "cwe": ["CWE-400", "CWE-407"],
+          "cvss": {
+            "score": 5.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+          },
+          "range": ">=4.0.0 <5.0.12"
+        },
+        {
+          "source": 1240107,
+          "name": "brace-expansion",
+          "dependency": "brace-expansion",
+          "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+          "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+          "severity": "high",
+          "cwe": ["CWE-400", "CWE-674"],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=4.0.0 <5.0.11"
+        },
+        {
+          "source": 1240111,
+          "name": "brace-expansion",
+          "dependency": "brace-expansion",
+          "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+          "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+          "severity": "high",
+          "cwe": ["CWE-400", "CWE-674"],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=4.0.0 <5.0.10"
+        }
+      ],
+      "effects": ["minimatch"],
+      "range": "",
+      "nodes": ["node_modules/brace-expansion"],
+      "fixAvailable": false
+    },
+    "css-tree": {
+      "name": "css-tree",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["source-map-js"],
+      "effects": [
+        "@asamuzakjp/dom-selector",
+        "@bramus/specificity",
+        "@csstools/css-syntax-patches-for-csstree"
+      ],
+      "range": "",
+      "nodes": ["node_modules/css-tree"],
+      "fixAvailable": true
+    },
+    "eslint": {
+      "name": "eslint",
+      "severity": "high",
+      "isDirect": true,
+      "via": ["@eslint-community/eslint-utils", "@eslint/config-array", "minimatch"],
+      "effects": [
+        "@eslint-community/eslint-utils",
+        "@eslint/js",
+        "@typescript-eslint/eslint-plugin",
+        "@typescript-eslint/parser",
+        "@typescript-eslint/type-utils",
+        "@typescript-eslint/utils",
+        "eslint-plugin-react-hooks",
+        "eslint-plugin-react-refresh",
+        "typescript-eslint"
+      ],
+      "range": "",
+      "nodes": ["node_modules/eslint"],
+      "fixAvailable": false
+    },
+    "eslint-plugin-react-hooks": {
+      "name": "eslint-plugin-react-hooks",
+      "severity": "high",
+      "isDirect": true,
+      "via": ["eslint"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/eslint-plugin-react-hooks"],
+      "fixAvailable": false
+    },
+    "eslint-plugin-react-refresh": {
+      "name": "eslint-plugin-react-refresh",
+      "severity": "high",
+      "isDirect": true,
+      "via": ["eslint"],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/eslint-plugin-react-refresh"],
+      "fixAvailable": false
+    },
+    "jsdom": {
+      "name": "jsdom",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@asamuzakjp/dom-selector",
+        "@bramus/specificity",
+        "@csstools/css-syntax-patches-for-csstree",
+        "css-tree",
+        "undici"
+      ],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/jsdom"],
+      "fixAvailable": false
+    },
+    "minimatch": {
+      "name": "minimatch",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["brace-expansion"],
+      "effects": ["@eslint/config-array", "@typescript-eslint/typescript-estree", "eslint"],
+      "range": "",
+      "nodes": ["node_modules/minimatch"],
+      "fixAvailable": false
+    },
+    "nanoid": {
+      "name": "nanoid",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1139427,
+          "name": "nanoid",
+          "dependency": "nanoid",
+          "title": "nanoid: custom generators can loop indefinitely when size is zero",
+          "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+          "severity": "high",
+          "cwe": ["CWE-835"],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": "<3.3.18"
+        }
+      ],
+      "effects": ["postcss"],
+      "range": "",
+      "nodes": ["node_modules/nanoid"],
+      "fixAvailable": false
+    },
+    "postcss": {
+      "name": "postcss",
+      "severity": "high",
+      "isDirect": false,
+      "via": ["nanoid", "source-map-js"],
+      "effects": ["vite"],
+      "range": "",
+      "nodes": ["node_modules/postcss"],
+      "fixAvailable": false
+    },
+    "source-map-js": {
+      "name": "source-map-js",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1241209,
+          "name": "source-map-js",
+          "dependency": "source-map-js",
+          "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+          "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+          "severity": "high",
+          "cwe": ["CWE-1284"],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=1.0.0 <1.2.2"
+        }
+      ],
+      "effects": ["css-tree"],
+      "range": "",
+      "nodes": ["node_modules/source-map-js"],
+      "fixAvailable": true
+    },
+    "typescript-eslint": {
+      "name": "typescript-eslint",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@typescript-eslint/eslint-plugin",
+        "@typescript-eslint/parser",
+        "@typescript-eslint/typescript-estree",
+        "@typescript-eslint/utils",
+        "eslint"
+      ],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/typescript-eslint"],
+      "fixAvailable": false
+    },
+    "undici": {
+      "name": "undici",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1239932,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+          "url": "https://github.com/advisories/GHSA-3wwx-pv8p-q78v",
+          "severity": "moderate",
+          "cwe": ["CWE-248"],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=8.1.0 <8.10.2"
+        },
+        {
+          "source": 1240035,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "undici vulnerable to Denial of Service via orphaned RetryHandler response body",
+          "url": "https://github.com/advisories/GHSA-pmjh-fq2x-6v4x",
+          "severity": "moderate",
+          "cwe": ["CWE-772"],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=8.0.0 <8.10.2"
+        },
+        {
+          "source": 1240037,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "undici vulnerable to downstream response splitting via retry interceptor",
+          "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+          "severity": "low",
+          "cwe": ["CWE-444"],
+          "cvss": {
+            "score": 3.7,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": ">=8.0.0 <8.10.2"
+        },
+        {
+          "source": 1240040,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+          "url": "https://github.com/advisories/GHSA-rfgv-xxqx-mfg5",
+          "severity": "high",
+          "cwe": ["CWE-248", "CWE-252"],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=8.0.0 <8.10.2"
+        },
+        {
+          "source": 1240043,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "undici vulnerable to Denial of Service via unbounded decompression of compressed responses",
+          "url": "https://github.com/advisories/GHSA-3xpg-4rpp-hhhm",
+          "severity": "moderate",
+          "cwe": ["CWE-770"],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=8.0.0 <8.10.2"
+        },
+        {
+          "source": 1240045,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "undici vulnerable to cross-user cookie disclosure via Set-Cookie caching in shared caches",
+          "url": "https://github.com/advisories/GHSA-2jfj-6hjv-fm6j",
+          "severity": "moderate",
+          "cwe": ["CWE-200", "CWE-524"],
+          "cvss": {
+            "score": 6.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:N"
+          },
+          "range": ">=8.0.0 <8.10.2"
+        },
+        {
+          "source": 1240047,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "undici vulnerable to response truncation via oversized chunked responses in the dump interceptor",
+          "url": "https://github.com/advisories/GHSA-2gqq-gqf2-x968",
+          "severity": "low",
+          "cwe": ["CWE-20", "CWE-248"],
+          "cvss": {
+            "score": 3.7,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": ">=8.0.0 <8.10.2"
+        },
+        {
+          "source": 1240049,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "undici vulnerable to TLS certificate validation bypass via dropped connect options in BalancedPool",
+          "url": "https://github.com/advisories/GHSA-w293-vg96-wgc3",
+          "severity": "high",
+          "cwe": ["CWE-295"],
+          "cvss": {
+            "score": 7.4,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+          },
+          "range": ">=8.0.0 <8.10.2"
+        },
+        {
+          "source": 1240051,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "undici vulnerable to caching and replay of unsafe HTTP method responses",
+          "url": "https://github.com/advisories/GHSA-8436-99hf-9mmv",
+          "severity": "low",
+          "cwe": ["CWE-345"],
+          "cvss": {
+            "score": 3.7,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": ">=8.0.0 <8.10.2"
+        },
+        {
+          "source": 1240054,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "undici vulnerable to Denial of Service via WebSocketStream unclean close",
+          "url": "https://github.com/advisories/GHSA-rx4f-c7p8-82vq",
+          "severity": "moderate",
+          "cwe": ["CWE-248", "CWE-754"],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=8.0.0 <8.10.2"
+        }
+      ],
+      "effects": ["jsdom"],
+      "range": "",
+      "nodes": ["node_modules/undici"],
+      "fixAvailable": false
+    },
+    "vite": {
+      "name": "vite",
+      "severity": "high",
+      "isDirect": true,
+      "via": ["postcss"],
+      "effects": ["@vitejs/plugin-react", "@vitest/mocker"],
+      "range": "",
+      "nodes": ["node_modules/vite"],
+      "fixAvailable": false
+    },
+    "vitest": {
+      "name": "vitest",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@vitest/mocker",
+        {
+          "source": 1193683,
+          "name": "vitest",
+          "dependency": "vitest",
+          "title": "Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock",
+          "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9",
+          "severity": "moderate",
+          "cwe": ["CWE-22"],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+          },
+          "range": ">=2.1.0 <4.1.11"
+        },
+        "jsdom",
+        "vite"
+      ],
+      "effects": [],
+      "range": "",
+      "nodes": ["node_modules/vitest"],
+      "fixAvailable": false
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 27,
+      "critical": 0,
+      "total": 27
+    },
+    "dependencies": {
+      "prod": 70,
+      "dev": 261,
+      "optional": 34,
+      "peer": 8,
+      "peerOptional": 0,
+      "total": 330
+    }
+  }
+}

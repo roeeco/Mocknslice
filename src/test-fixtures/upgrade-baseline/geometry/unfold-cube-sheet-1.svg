@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600mm" height="400mm" viewBox="0 0 600 400">
+  <metadata>{&quot;application&quot;:&quot;MocknSlice&quot;,&quot;projectFormatVersion&quot;:8,&quot;projectId&quot;:&quot;project-upgrade-baseline&quot;,&quot;mode&quot;:&quot;mesh-unfold&quot;,&quot;units&quot;:&quot;mm&quot;,&quot;sheetId&quot;:&quot;sheet-upgrade-baseline&quot;,&quot;sheetNumber&quot;:1,&quot;kerfMm&quot;:0,&quot;foldLineOutput&quot;:&quot;preserve&quot;}</metadata>
+  <rect id="sheet-boundary" x="0.05" y="0.05" width="599.9" height="399.9" fill="none" stroke="#777777" stroke-width="0.1"/>
+  <g id="operation-cut" data-operation="cut" fill="none" stroke="#ff0000" stroke-width="0.1">
+    <path id="unfold-tab-5:6-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-3" data-edge-id="unfold-edge-5:6" data-tab-id="unfold-tab-5:6" d="M 39.284271 149.179072 L 42.041987 154.906637 L 16.727565 180.221059 L 11 177.463343"/>
+    <path id="unfold-tab-4:6-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-3" data-edge-id="unfold-edge-4:6" data-tab-id="unfold-tab-4:6" d="M 11 177.463343 L 5 175.363343 L 5 122.994801 L 11 120.894801"/>
+    <path id="unfold-edge-4:6-unfold-face-4-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-4" data-edge-id="unfold-edge-4:6" d="M 124.137085 7.757716 L 124.137085 64.326258"/>
+    <path id="unfold-tab-4:7-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-4" data-edge-id="unfold-edge-4:7" data-tab-id="unfold-tab-4:7" d="M 95.852814 36.041987 L 93.095098 30.314422 L 118.40952 5 L 124.137085 7.757716"/>
+    <path id="unfold-tab-0:4-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-6" data-edge-id="unfold-edge-0:4" data-tab-id="unfold-tab-0:4" d="M 11 120.894801 L 8.242284 115.167236 L 33.556706 89.852814 L 39.284271 92.61053"/>
+    <path id="unfold-tab-3:7-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-7" data-edge-id="unfold-edge-3:7" data-tab-id="unfold-tab-3:7" d="M 67.568542 64.326258 L 64.810826 58.598693 L 90.125249 33.28427 L 95.852814 36.041987"/>
+    <path id="unfold-tab-2:6-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-8" data-edge-id="unfold-edge-2:6" data-tab-id="unfold-tab-2:6" d="M 124.137085 64.326258 L 126.894802 70.053823 L 101.580379 95.368246 L 95.852814 92.61053"/>
+    <path id="unfold-edge-0:4-unfold-face-9-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-9" data-edge-id="unfold-edge-0:4" d="M 39.284271 92.61053 L 11 64.326258"/>
+    <path id="unfold-edge-4:7-unfold-face-9-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-9" data-edge-id="unfold-edge-4:7" d="M 11 64.326258 L 39.284271 36.041987"/>
+    <path id="unfold-edge-3:7-unfold-face-10-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-10" data-edge-id="unfold-edge-3:7" d="M 39.284271 36.041987 L 67.568542 64.326258"/>
+    <path id="unfold-edge-2:6-unfold-face-11-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-11" data-edge-id="unfold-edge-2:6" d="M 95.852814 92.61053 L 124.137085 120.894801"/>
+    <path id="unfold-tab-1:6-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-11" data-edge-id="unfold-edge-1:6" data-tab-id="unfold-tab-1:6" d="M 124.137085 120.894801 L 122.037085 126.894801 L 69.668542 126.894801 L 67.568542 120.894801"/>
+    <path id="unfold-edge-1:6-unfold-face-12-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-12" data-edge-id="unfold-edge-1:6" d="M 67.568542 120.894801 L 67.568542 177.463343"/>
+    <path id="unfold-edge-5:6-unfold-face-12-cut" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-12" data-edge-id="unfold-edge-5:6" d="M 67.568542 177.463343 L 39.284271 149.179072"/>
+  </g>
+  <g id="operation-score" data-operation="score" fill="none" stroke="#0000ff" stroke-width="0.1">
+    <path id="unfold-tab-5:6-score" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-3" data-edge-id="unfold-edge-5:6" data-tab-id="unfold-tab-5:6" d="M 39.284271 149.179072 L 11 177.463343"/>
+    <path id="unfold-tab-4:6-score" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-3" data-edge-id="unfold-edge-4:6" data-tab-id="unfold-tab-4:6" d="M 11 177.463343 L 11 120.894801"/>
+    <path id="unfold-tab-4:7-score" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-4" data-edge-id="unfold-edge-4:7" data-tab-id="unfold-tab-4:7" d="M 95.852814 36.041987 L 124.137085 7.757716"/>
+    <path id="unfold-tab-0:4-score" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-6" data-edge-id="unfold-edge-0:4" data-tab-id="unfold-tab-0:4" d="M 11 120.894801 L 39.284271 92.61053"/>
+    <path id="unfold-tab-3:7-score" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-7" data-edge-id="unfold-edge-3:7" data-tab-id="unfold-tab-3:7" d="M 67.568542 64.326258 L 95.852814 36.041987"/>
+    <path id="unfold-tab-2:6-score" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-8" data-edge-id="unfold-edge-2:6" data-tab-id="unfold-tab-2:6" d="M 124.137085 64.326258 L 95.852814 92.61053"/>
+    <path id="unfold-tab-1:6-score" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-11" data-edge-id="unfold-edge-1:6" data-tab-id="unfold-tab-1:6" d="M 124.137085 120.894801 L 67.568542 120.894801"/>
+  </g>
+  <g id="operation-mountain-fold" data-operation="mountain-fold" fill="none" stroke="#8b5cf6" stroke-width="0.1">
+    <path id="unfold-edge-1:2-fold" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-1" data-edge-id="unfold-edge-1:2" d="M 95.852814 92.61053 L 67.568542 120.894801"/>
+    <path id="unfold-edge-0:1-fold" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-1" data-edge-id="unfold-edge-0:1" d="M 67.568542 120.894801 L 39.284271 92.61053"/>
+    <path id="unfold-edge-2:3-fold" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-2" data-edge-id="unfold-edge-2:3" d="M 67.568542 64.326258 L 95.852814 92.61053"/>
+    <path id="unfold-edge-4:5-fold" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-6" data-edge-id="unfold-edge-4:5" d="M 39.284271 149.179072 L 11 120.894801"/>
+    <path id="unfold-edge-6:7-fold" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-7" data-edge-id="unfold-edge-6:7" d="M 95.852814 36.041987 L 124.137085 64.326258"/>
+  </g>
+  <g id="operation-valley-fold" data-operation="valley-fold" fill="none" stroke="#14b8a6" stroke-width="0.1">
+    <path id="unfold-edge-0:2-fold" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-1" data-edge-id="unfold-edge-0:2" d="M 39.284271 92.61053 L 95.852814 92.61053"/>
+    <path id="unfold-edge-0:3-fold" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-2" data-edge-id="unfold-edge-0:3" d="M 39.284271 92.61053 L 67.568542 64.326258"/>
+    <path id="unfold-edge-1:5-fold" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-5" data-edge-id="unfold-edge-1:5" d="M 67.568542 120.894801 L 39.284271 149.179072"/>
+    <path id="unfold-edge-0:5-fold" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-5" data-edge-id="unfold-edge-0:5" d="M 39.284271 149.179072 L 39.284271 92.61053"/>
+    <path id="unfold-edge-3:6-fold" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-8" data-edge-id="unfold-edge-3:6" d="M 67.568542 64.326258 L 124.137085 64.326258"/>
+    <path id="unfold-edge-0:7-fold" data-part-id="unfold-island-1" data-contour-role="path" data-panel-id="unfold-face-10" data-edge-id="unfold-edge-0:7" d="M 39.284271 92.61053 L 39.284271 36.041987"/>
+  </g>
+  <g id="operation-perforate" data-operation="perforate" fill="none" stroke="#f59e0b" stroke-width="0.1">
+  </g>
+  <g id="operation-engrave" data-operation="engrave" fill="none" stroke="#000000" stroke-width="0.1">
+    <text id="unfold-face-1-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-1" x="67.568542" y="102.03862" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T1</text>
+    <text id="unfold-face-2-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-2" x="67.568542" y="83.182439" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T2</text>
+    <text id="unfold-face-3-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-3" x="20.42809" y="149.179072" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T3</text>
+    <text id="unfold-face-4-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-4" x="114.708995" y="36.041987" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T4</text>
+    <text id="unfold-face-5-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-5" x="48.712361" y="120.894801" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T5</text>
+    <text id="unfold-face-6-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-6" x="29.856181" y="120.894801" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T6</text>
+    <text id="unfold-face-7-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-7" x="95.852814" y="54.898168" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T7</text>
+    <text id="unfold-face-8-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-8" x="95.852814" y="73.754349" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T8</text>
+    <text id="unfold-face-9-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-9" x="29.856181" y="64.326258" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T9</text>
+    <text id="unfold-face-10-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-10" x="48.712361" y="64.326258" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T10</text>
+    <text id="unfold-face-11-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-11" x="95.852814" y="111.466711" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T11</text>
+    <text id="unfold-face-12-label" data-part-id="unfold-island-1" data-entity-id="unfold-face-12" x="58.140452" y="149.179072" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">T12</text>
+    <text id="unfold-edge-5:6-unfold-face-3-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-5:6" x="24.50968" y="161.423841" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S7</text>
+    <text id="unfold-edge-4:6-unfold-face-3-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-4:6" x="13" y="149.179072" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S5</text>
+    <text id="unfold-edge-4:6-unfold-face-4-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-4:6" x="122.137085" y="36.041987" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S5</text>
+    <text id="unfold-edge-4:7-unfold-face-4-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-4:7" x="110.627405" y="23.797218" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S6</text>
+    <text id="unfold-edge-0:4-unfold-face-6-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-0:4" x="25.774591" y="108.650032" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S1</text>
+    <text id="unfold-edge-3:7-unfold-face-7-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-3:7" x="83.608045" y="50.816578" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S4</text>
+    <text id="unfold-edge-2:6-unfold-face-8-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-2:6" x="108.097583" y="77.835938" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S3</text>
+    <text id="unfold-edge-0:4-unfold-face-9-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-0:4" x="25.774591" y="76.571027" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S1</text>
+    <text id="unfold-edge-4:7-unfold-face-9-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-4:7" x="25.774591" y="52.081489" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S6</text>
+    <text id="unfold-edge-3:7-unfold-face-10-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-3:7" x="52.793951" y="52.081489" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S4</text>
+    <text id="unfold-edge-2:6-unfold-face-11-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-2:6" x="108.097583" y="107.385121" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S3</text>
+    <text id="unfold-edge-1:6-unfold-face-11-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-1:6" x="95.852814" y="118.894801" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S2</text>
+    <text id="unfold-edge-1:6-unfold-face-12-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-1:6" x="65.568542" y="149.179072" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S2</text>
+    <text id="unfold-edge-5:6-unfold-face-12-label" data-part-id="unfold-island-1" data-entity-id="unfold-edge-5:6" x="54.058862" y="161.423841" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">S7</text>
+  </g>
+  <g id="operation-guide" data-operation="guide" fill="none" stroke="#6b7280" stroke-width="0.1">
+  </g>
+  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="3">
+    <text id="label-unfold-island-1" x="7" y="9">Net 1</text>
+  </g>
+</svg>

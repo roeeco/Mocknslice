@@ -6,6 +6,7 @@ const workers = vi.hoisted(() => ({
   generateStackedSlicesInWorker: vi.fn(),
   generateWaffleSlicesInWorker: vi.fn(),
   generateFoldTemplateInWorker: vi.fn(),
+  generateTemplateGraphInWorker: vi.fn(),
   generateMeshUnfoldInWorker: vi.fn(),
   generatePanelConstructionInWorker: vi.fn(),
 }));

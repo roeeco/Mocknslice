@@ -1,6 +1,7 @@
 import { useProjectStore } from '../../state/useProjectStore';
 import { copy } from '../../locales';
 import { BRAND } from '../../config/brand';
+import type { ReactNode } from 'react';
 
 function HistoryIcon({ direction }: { direction: 'undo' | 'redo' }) {
   return (
@@ -11,7 +12,7 @@ function HistoryIcon({ direction }: { direction: 'undo' | 'redo' }) {
   );
 }
 
-export function AppHeader() {
+export function AppHeader({ trailingActions }: { trailingActions?: ReactNode } = {}) {
   const project = useProjectStore((state) => state.project);
   const autosaveStatus = useProjectStore((state) => state.autosaveStatus);
   const undo = useProjectStore((state) => state.undo);
@@ -40,6 +41,7 @@ export function AppHeader() {
       </div>
 
       <div className="header-actions">
+        {trailingActions}
         <div className="language-actions" aria-label={copy.language}>
           <button type="button" aria-pressed={locale === 'en'} onClick={() => setLocale('en')}>
             EN

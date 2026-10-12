@@ -6,8 +6,10 @@ import { transformPoint, transformedBoundsForPart } from '../geometry/layout/par
 import {
   createRegistrationMarkPaths,
   prepareFabricationOutput,
+  type PreparedFabricationOutput,
 } from '../geometry/output/prepareFabricationOutput';
-import { CURRENT_PROJECT_FILE_VERSION } from './exportProject';
+// Literal historical inspection serializers retain their v8 vector contract.
+const LEGACY_VECTOR_PROJECT_VERSION = 8;
 import { BRAND } from '../config/brand';
 
 const operations: OperationType[] = [
@@ -79,8 +81,11 @@ function pathData(points: Point2D[], offsetX: number, offsetY: number, closed: b
   return `${commands.join(' ')}${closed ? ' Z' : ''}`;
 }
 
-export function createSvgDocument(project: ProjectData): string {
-  const prepared = prepareFabricationOutput(project);
+export function createSvgDocument(
+  project: ProjectData,
+  preparedInput?: PreparedFabricationOutput,
+): string {
+  const prepared = preparedInput ?? prepareFabricationOutput(project);
   const blockingIssue = prepared.issues.find((issue) => issue.severity === 'error');
   if (blockingIssue) throw new Error(blockingIssue.message);
   let cursorX = MARGIN_MM;
@@ -108,7 +113,7 @@ export function createSvgDocument(project: ProjectData): string {
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<svg xmlns="http://www.w3.org/2000/svg" width="${decimal(widthMm)}mm" height="${decimal(heightMm)}mm" viewBox="0 0 ${decimal(widthMm)} ${decimal(heightMm)}">`,
-    `  <metadata>${escapeXml(JSON.stringify({ application: BRAND.svgApplicationName, projectFormatVersion: CURRENT_PROJECT_FILE_VERSION, projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', kerfMm: prepared.appliedKerfMm, foldLineOutput: project.exportSettings.foldLineOutput }))}</metadata>`,
+    `  <metadata>${escapeXml(JSON.stringify({ application: BRAND.svgApplicationName, projectFormatVersion: prepared.provenance?.schemaVersion ?? LEGACY_VECTOR_PROJECT_VERSION, projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', kerfMm: prepared.appliedKerfMm, foldLineOutput: project.exportSettings.foldLineOutput, ...(prepared.provenance ?? {}) }))}</metadata>`,
   ];
   if (project.exportSettings.includeSheetBoundary) {
     lines.push(
@@ -187,10 +192,11 @@ export function createSheetSvgDocument(
   project: ProjectData,
   sheetId: string,
   layouts: readonly SheetLayout[] = project.sheetLayouts,
+  preparedInput?: PreparedFabricationOutput,
 ): string {
   const sheet = layouts.find((candidate) => candidate.id === sheetId);
   if (!sheet) throw new Error(`Sheet ${sheetId} does not exist.`);
-  const prepared = prepareFabricationOutput(project);
+  const prepared = preparedInput ?? prepareFabricationOutput(project);
   const blockingIssue = prepared.issues.find((issue) => issue.severity === 'error');
   if (blockingIssue) throw new Error(blockingIssue.message);
   const partsById = new Map(prepared.parts.map((part) => [part.id, part]));
@@ -205,7 +211,7 @@ export function createSheetSvgDocument(
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<svg xmlns="http://www.w3.org/2000/svg" width="${decimal(sheet.widthMm)}mm" height="${decimal(sheet.heightMm)}mm" viewBox="0 0 ${decimal(sheet.widthMm)} ${decimal(sheet.heightMm)}">`,
-    `  <metadata>${escapeXml(JSON.stringify({ application: BRAND.svgApplicationName, projectFormatVersion: CURRENT_PROJECT_FILE_VERSION, projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', sheetId: sheet.id, sheetNumber: sheetIndex + 1, kerfMm: prepared.appliedKerfMm, foldLineOutput: project.exportSettings.foldLineOutput }))}</metadata>`,
+    `  <metadata>${escapeXml(JSON.stringify({ application: BRAND.svgApplicationName, projectFormatVersion: prepared.provenance?.schemaVersion ?? LEGACY_VECTOR_PROJECT_VERSION, projectId: project.metadata.id, mode: project.fabricationMode, units: 'mm', sheetId: sheet.id, sheetNumber: sheetIndex + 1, kerfMm: prepared.appliedKerfMm, foldLineOutput: project.exportSettings.foldLineOutput, ...(prepared.provenance ?? {}) }))}</metadata>`,
   ];
   if (project.exportSettings.includeSheetBoundary) {
     lines.push(

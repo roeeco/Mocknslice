@@ -1,3 +1,9 @@
+import type {
+  PapercraftKernelInput,
+  PreparedPapercraftSource,
+  PapercraftResult,
+  PapercraftProgress,
+} from '../domain/papercraft';
 import type { StlUnit } from '../domain/model';
 import type { NormalizedMeshResult } from '../geometry/mesh/normalizeMesh';
 import type { FoldTemplateInput } from '../geometry/folding/generateFoldTemplate';
@@ -62,7 +68,31 @@ export interface PreparePanelUnfoldRequest {
   payload: PreparePanelUnfoldInput;
 }
 
+export interface GeneratePapercraftRequest {
+  id: string;
+  type: 'generate-papercraft';
+  payload: PapercraftKernelInput;
+}
+export interface PapercraftWorkerProgress {
+  id: string;
+  type: 'papercraft-progress';
+  progress: PapercraftProgress;
+}
+
+export interface GenerateTemplateGraphRequest {
+  id: string;
+  type: 'generate-template-graph';
+  payload: FoldTemplateInput;
+}
+export interface PreparePapercraftSourceRequest {
+  id: string;
+  type: 'prepare-papercraft-source';
+  payload: PapercraftKernelInput;
+}
 export type GeometryWorkerRequest =
+  | PreparePapercraftSourceRequest
+  | GenerateTemplateGraphRequest
+  | GeneratePapercraftRequest
   | NormalizeStlRequest
   | GenerateStackedSlicesRequest
   | GenerateWaffleSlicesRequest
@@ -72,6 +102,9 @@ export type GeometryWorkerRequest =
   | GeneratePanelConstructionRequest;
 
 export type GeometryWorkerResponse =
+  | { id: string; type: 'prepare-papercraft-source'; ok: true; result: PreparedPapercraftSource }
+  | { id: string; type: 'generate-template-graph'; ok: true; result: TemplateGenerationResult }
+  | { id: string; type: 'generate-papercraft'; ok: true; result: PapercraftResult }
   | { id: string; type: 'normalize-stl'; ok: true; result: NormalizedMeshResult }
   | { id: string; type: 'generate-stacked-slices'; ok: true; result: StackedSliceResult }
   | { id: string; type: 'generate-waffle-slices'; ok: true; result: WaffleSliceResult }

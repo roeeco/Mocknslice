@@ -1,0 +1,368 @@
+{
+  "format": "slicefold-project",
+  "version": 2,
+  "project": {
+    "metadata": {
+      "id": "project-legacy-fixture",
+      "name": "Legacy fixture",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    "model": {
+      "id": "model-legacy-fixture",
+      "name": "40 mm cube",
+      "source": {
+        "kind": "built-in",
+        "primitive": "cube"
+      },
+      "dimensions": {
+        "widthMm": 40,
+        "heightMm": 40,
+        "depthMm": 40
+      },
+      "transform": {
+        "positionMm": [0, 0, 0],
+        "rotationDeg": [0, 0, 0],
+        "scale": [1, 1, 1]
+      }
+    },
+    "fabricationMode": "stacked-slices",
+    "materialProfileSnapshot": {
+      "id": "card-300gsm",
+      "name": "300 gsm card",
+      "category": "card",
+      "thicknessMm": 0.35,
+      "kerfMm": 0.1,
+      "clearanceMm": 0.1,
+      "grainDirection": "none",
+      "scoreAllowanceMm": 0.2,
+      "defaultSheetWidthMm": 210,
+      "defaultSheetHeightMm": 297
+    },
+    "modeParameters": {
+      "sliceAxis": "z",
+      "spacingMm": 10,
+      "sliceThicknessMm": 0.35,
+      "contourEpsilonMm": 0.001,
+      "wafflePrimaryAxis": "x",
+      "waffleSecondaryAxis": "y",
+      "wafflePrimarySpacingMm": 20,
+      "waffleSecondarySpacingMm": 20,
+      "waffleThicknessMm": 0.35,
+      "waffleClearanceMm": 0.1,
+      "waffleSlotPattern": "alternating",
+      "waffleReverseSlots": false,
+      "foldTemplateKind": "open-box",
+      "foldFitAxis": "z",
+      "foldClearanceMm": 0.1,
+      "foldProfileToleranceMm": 1,
+      "foldWallHeightMm": 40,
+      "foldTabDepthMm": 8,
+      "foldLidDepthMm": 15,
+      "foldLidClearanceMm": 0.5,
+      "foldGussetDepthMm": 40,
+      "foldClosureFlapMm": 12,
+      "foldPrismSides": 6,
+      "foldPrismRotationDeg": 0,
+      "foldTopScale": 0,
+      "foldSeamTabMm": 8
+    },
+    "generatedParts": [
+      {
+        "id": "slice-z-1-1",
+        "name": "Slice Z1",
+        "label": "Z1",
+        "thicknessMm": 0.35,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "z",
+          "positionMm": -15,
+          "planeIndex": 0
+        },
+        "paths": [
+          {
+            "id": "slice-z-1-1-outer",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": 20,
+                "y": -15
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": -15,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": -15
+              },
+              {
+                "x": -20,
+                "y": -20
+              },
+              {
+                "x": -15,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "slice-z-2-1",
+        "name": "Slice Z2",
+        "label": "Z2",
+        "thicknessMm": 0.35,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "z",
+          "positionMm": -5,
+          "planeIndex": 1
+        },
+        "paths": [
+          {
+            "id": "slice-z-2-1-outer",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": 20,
+                "y": -5
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": -5,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": -5
+              },
+              {
+                "x": -20,
+                "y": -20
+              },
+              {
+                "x": -5,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "slice-z-3-1",
+        "name": "Slice Z3",
+        "label": "Z3",
+        "thicknessMm": 0.35,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "z",
+          "positionMm": 5,
+          "planeIndex": 2
+        },
+        "paths": [
+          {
+            "id": "slice-z-3-1-outer",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": 20,
+                "y": 5
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": 5,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 5
+              },
+              {
+                "x": -20,
+                "y": -20
+              },
+              {
+                "x": 5,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "slice-z-4-1",
+        "name": "Slice Z4",
+        "label": "Z4",
+        "thicknessMm": 0.35,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "z",
+          "positionMm": 15,
+          "planeIndex": 3
+        },
+        "paths": [
+          {
+            "id": "slice-z-4-1-outer",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": 20,
+                "y": 15
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": 15,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 15
+              },
+              {
+                "x": -20,
+                "y": -20
+              },
+              {
+                "x": 15,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "generationIssues": [],
+    "sheetLayouts": [
+      {
+        "id": "sheet-legacy-fixture",
+        "widthMm": 210,
+        "heightMm": 297,
+        "marginMm": 5,
+        "spacingMm": 3,
+        "placements": [
+          {
+            "partId": "slice-z-1-1",
+            "x": 25,
+            "y": 25,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "slice-z-2-1",
+            "x": 68,
+            "y": 25,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "slice-z-3-1",
+            "x": 111,
+            "y": 25,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "slice-z-4-1",
+            "x": 154,
+            "y": 25,
+            "rotationDeg": 0
+          }
+        ]
+      }
+    ],
+    "exportSettings": {
+      "includeLabels": true,
+      "includeRegistrationMarks": false,
+      "includeSheetBoundary": true,
+      "operationStyles": [
+        {
+          "operation": "cut",
+          "stroke": "#ff0000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "score",
+          "stroke": "#0000ff",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "mountain-fold",
+          "stroke": "#8b5cf6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "valley-fold",
+          "stroke": "#14b8a6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "perforate",
+          "stroke": "#f59e0b",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "engrave",
+          "stroke": "#000000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "guide",
+          "stroke": "#6b7280",
+          "strokeWidthMm": 0.1
+        }
+      ]
+    },
+    "acknowledgedWarningIds": []
+  }
+}

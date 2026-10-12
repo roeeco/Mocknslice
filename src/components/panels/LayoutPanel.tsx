@@ -1,3 +1,4 @@
+import { reliabilityCopy } from '../../locales/reliabilityCopy';
 import type { ChangeEvent } from 'react';
 import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
@@ -9,10 +10,15 @@ const sheetPresets = [
 ] as const;
 
 export function LayoutPanel() {
+  const selectedPartId = useProjectStore((s) => s.selectedPartId);
   const project = useProjectStore((state) => state.project);
   const activeSheetId = useProjectStore((state) => state.activeSheetId);
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const setActiveSheet = useProjectStore((state) => state.setActiveSheet);
+  const locale = useProjectStore((s) => s.locale),
+    c = reliabilityCopy(locale),
+    optimized = useProjectStore((s) => s.arrangeGeneratedPartsOptimized),
+    setLocked = useProjectStore((s) => s.setPartPlacementLocked);
   const arrangeGeneratedParts = useProjectStore((state) => state.arrangeGeneratedParts);
   const updateSheetSettings = useProjectStore((state) => state.updateSheetSettings);
   const addSheet = useProjectStore((state) => state.addSheet);
@@ -27,7 +33,9 @@ export function LayoutPanel() {
   if (!sheet) return null;
 
   const placement = sheet.placements.find((candidate) => candidate.partId === selectedEntityId);
-  const selectedPart = project.generatedParts.find((part) => part.id === selectedEntityId);
+  const selectedPart = project.generatedParts.find(
+    (part) => part.id === (selectedPartId ?? selectedEntityId),
+  );
   const placedCount = new Set(
     project.sheetLayouts.flatMap((layout) => layout.placements.map((p) => p.partId)),
   ).size;
@@ -169,6 +177,31 @@ export function LayoutPanel() {
       </div>
 
       <div className="layout-actions">
+        <button type="button" disabled={!project.generatedParts.length} onClick={optimized}>
+          {c.optimize}
+        </button>
+        <button
+          type="button"
+          disabled={!project.generatedParts.length}
+          onClick={arrangeGeneratedParts}
+        >
+          {c.reset}
+        </button>
+        {selectedPart ? (
+          <button
+            type="button"
+            onClick={() =>
+              setLocked(
+                selectedPart.id,
+                !sheet.placements.find((p) => p.partId === selectedPart.id)?.layoutLocked,
+              )
+            }
+          >
+            {sheet.placements.find((p) => p.partId === selectedPart.id)?.layoutLocked
+              ? c.unlock
+              : c.lock}
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={arrangeGeneratedParts}

@@ -1,5 +1,12 @@
+import { validateEmbeddedTemplates } from '../templates/authoring/projectValidation';
+import { parsePapercraftRecord } from '../domain/papercraftSchema';
 import { safeParse } from 'valibot';
-import type { LegacyProjectData, MocknSliceProjectFileV8, ProjectData } from '../domain/project';
+import type {
+  LegacyProjectData,
+  MocknSliceProjectFileV8,
+  MocknSliceProjectFileV9,
+  ProjectData,
+} from '../domain/project';
 import { createCubeMesh } from '../geometry/mesh/createPrimitiveMesh';
 import { modeSettingsSchema } from '../domain/modeSettingsSchema';
 import {
@@ -151,6 +158,7 @@ function isMaterial(value: unknown): boolean {
     isString(value.id) &&
     isString(value.name) &&
     isString(value.category) &&
+    (value.rotationAllowed === undefined || typeof value.rotationAllowed === 'boolean') &&
     isFiniteNumber(value.thicknessMm) &&
     isFiniteNumber(value.kerfMm) &&
     isFiniteNumber(value.clearanceMm) &&
@@ -190,6 +198,43 @@ function isFabricationPath(value: unknown): boolean {
 
 function isFabricationPart(value: unknown): boolean {
   if (!isRecord(value)) return false;
+  if (
+    value.stock !== undefined &&
+    (!isRecord(value.stock) ||
+      !isString(value.stock.id) ||
+      !isFiniteNumber(value.stock.kerfMm) ||
+      value.stock.kerfMm < 0 ||
+      !isFiniteNumber(value.stock.clearanceMm) ||
+      value.stock.clearanceMm < 0)
+  )
+    return false;
+  if (isRecord(value.waffle) && value.waffle.openingSlots !== undefined) {
+    const slots = value.waffle.openingSlots;
+    if (
+      !Array.isArray(slots) ||
+      slots.length > 1000 ||
+      slots.some(
+        (slot) =>
+          !isRecord(slot) ||
+          !isString(slot.id) ||
+          !isString(slot.pairedPartId) ||
+          !['x', 'y', 'z'].includes(String(slot.intersectionAxis)) ||
+          !isFiniteNumber(slot.widthMm) ||
+          slot.widthMm <= 0 ||
+          !isFiniteNumber(slot.depthMm) ||
+          slot.depthMm <= 0 ||
+          !isFiniteNumber(slot.centreMm) ||
+          !['start', 'end'].includes(String(slot.direction)) ||
+          !Array.isArray(slot.mouth) ||
+          slot.mouth.length !== 2 ||
+          !slot.mouth.every(isPoint2D) ||
+          !Array.isArray(slot.inner) ||
+          slot.inner.length !== 2 ||
+          !slot.inner.every(isPoint2D),
+      )
+    )
+      return false;
+  }
   const slice = value.slice;
   const waffle = value.waffle;
   const folding = value.folding;
@@ -693,6 +738,8 @@ function isSheetLayout(value: unknown): boolean {
   if (!isRecord(value)) return false;
   return (
     isString(value.id) &&
+    (value.stockThicknessMm === undefined ||
+      (isFiniteNumber(value.stockThicknessMm) && value.stockThicknessMm > 0)) &&
     isFiniteNumber(value.widthMm) &&
     isFiniteNumber(value.heightMm) &&
     isFiniteNumber(value.marginMm) &&
@@ -704,7 +751,8 @@ function isSheetLayout(value: unknown): boolean {
         isString(placement.partId) &&
         isFiniteNumber(placement.x) &&
         isFiniteNumber(placement.y) &&
-        isFiniteNumber(placement.rotationDeg),
+        isFiniteNumber(placement.rotationDeg) &&
+        (placement.layoutLocked === undefined || typeof placement.layoutLocked === 'boolean'),
     )
   );
 }
@@ -759,7 +807,7 @@ function isCurrentExportSettings(value: unknown): boolean {
 function isCanonicalGenerationRecord(value: unknown): boolean {
   return (
     isRecord(value) &&
-    value.signatureVersion === 2 &&
+    (value.signatureVersion === 2 || value.signatureVersion === 3) &&
     isString(value.mode) &&
     fabricationModes.has(value.mode) &&
     isString(value.inputHash) &&
@@ -975,7 +1023,10 @@ function markMigratedTopologyStale(project: ProjectData): ProjectData {
   };
 }
 
-export function migrateProjectFile(value: unknown): MocknSliceProjectFileV8 {
+export function migrateProjectFile(
+  value: unknown,
+): MocknSliceProjectFileV8 | MocknSliceProjectFileV9 {
+  validateProjectLimits(value);
   const originalVersion = isRecord(value) ? value.version : undefined;
   value = originalVersion === 7 ? upgradeV7ConnectionContracts(value) : value;
   if (
@@ -985,6 +1036,8 @@ export function migrateProjectFile(value: unknown): MocknSliceProjectFileV8 {
     throw new ProjectImportError('This file is not a MocknSlice project.');
   }
 
+  if (value.version !== 9 && isRecord(value.project) && value.project.papercraft !== undefined)
+    throw new ProjectImportError('Papercraft data requires project schema v9.');
   const legacy = value.format === 'slicefold-project';
   if (
     (legacy &&
@@ -993,13 +1046,35 @@ export function migrateProjectFile(value: unknown): MocknSliceProjectFileV8 {
       value.version !== 3 &&
       value.version !== 4 &&
       value.version !== 5) ||
-    (!legacy && value.version !== 6 && value.version !== 7 && value.version !== 8)
+    (!legacy &&
+      value.version !== 6 &&
+      value.version !== 7 &&
+      value.version !== 8 &&
+      value.version !== 9)
   ) {
     throw new ProjectImportError(
       `Project version ${String(value.version)} is not supported by this build.`,
     );
   }
 
+  if (value.version === 9) {
+    if (
+      !isCurrentProjectData(value.project) ||
+      !isCurrentExportSettings(value.project.exportSettings)
+    )
+      throw new ProjectImportError('The project file is incomplete or damaged.');
+    const project = withCurrentPanelSettings(withCurrentExportSettings(value.project));
+    try {
+      validateEmbeddedTemplates(project);
+      if (project.papercraft)
+        project.papercraft = parsePapercraftRecord(project.papercraft, project, isMeshUnfoldResult);
+    } catch (error) {
+      throw new ProjectImportError(
+        error instanceof Error ? error.message : 'Invalid papercraft project.',
+      );
+    }
+    return { format: 'mocknslice-project', version: 9, project };
+  }
   if (value.version === 7 || value.version === 8) {
     if (
       !isCurrentProjectData(value.project) ||
@@ -1009,7 +1084,7 @@ export function migrateProjectFile(value: unknown): MocknSliceProjectFileV8 {
     }
     return {
       format: 'mocknslice-project',
-      version: 8,
+      version: 9,
       project:
         value.version === 7
           ? markMigratedTopologyStale(
@@ -1081,14 +1156,60 @@ export function migrateProjectFile(value: unknown): MocknSliceProjectFileV8 {
 
   return {
     format: 'mocknslice-project',
-    version: 8,
+    version: 9,
     project: markMigratedTopologyStale(
       upgradeLegacyGenerationRecord(legacyProject, runtimeProject),
     ),
   };
 }
 
+export function validateProjectLimits(value: unknown): void {
+  const stack: { value: unknown; depth: number }[] = [{ value, depth: 0 }];
+  let count = 0;
+  while (stack.length) {
+    const next = stack.pop()!;
+    if (++count > 2000000 || next.depth > 64)
+      throw new ProjectImportError('Project exceeds supported structural complexity.');
+    if (next.value && typeof next.value === 'object')
+      for (const [key, child] of Object.entries(next.value)) {
+        if (['__proto__', 'prototype', 'constructor'].includes(key))
+          throw new ProjectImportError('Unsafe project property.');
+        stack.push({ value: child, depth: next.depth + 1 });
+      }
+  }
+  if (!isRecord(value) || !isRecord(value.project)) return;
+  const project = value.project;
+  if (isRecord(project.model) && isRecord(project.model.mesh)) {
+    const mesh = project.model.mesh;
+    const positions = mesh.positionsMm;
+    const indices = mesh.indices;
+    if (
+      !Array.isArray(indices) ||
+      !Array.isArray(positions) ||
+      indices.length > 300000 ||
+      indices.length % 3 ||
+      positions.length % 3 ||
+      indices.some(
+        (i: unknown) =>
+          typeof i !== 'number' || !Number.isInteger(i) || i < 0 || i * 3 + 2 >= positions.length,
+      )
+    )
+      throw new ProjectImportError('Mesh exceeds 100,000 triangles or contains invalid indices.');
+  }
+  if (
+    Array.isArray(project.generatedParts) &&
+    project.generatedParts.reduce(
+      (sum: number, part: unknown) =>
+        sum + (isRecord(part) && Array.isArray(part.paths) ? part.paths.length : 0),
+      0,
+    ) > 10000
+  )
+    throw new ProjectImportError('Project exceeds 10,000 fabrication paths.');
+}
+
 export function parseProjectFile(source: string): ProjectData {
+  if (new TextEncoder().encode(source).byteLength > 20 * 1024 * 1024)
+    throw new ProjectImportError('Project exceeds the 20 MiB import limit.');
   let parsed: unknown;
 
   try {

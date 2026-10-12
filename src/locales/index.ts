@@ -8,6 +8,17 @@ export let copy: LocalizedCopy = englishCopy;
 let activeLocale: Locale = 'en';
 
 const hebrewPhrases: Record<string, string> = {
+  'Download active sheet SVG': 'הורדת SVG לגיליון הפעיל',
+  'Ghosted source': 'מודל המקור',
+  'Fold preview': 'תצוגת קיפול',
+  'Assembled panel kit': 'ערכת לוחות מורכבת',
+  'Family A': 'משפחה א׳',
+  'Family B': 'משפחה ב׳',
+  'Retry 3D preview': 'ניסיון נוסף לתצוגת תלת־ממד',
+  '3D preview is unavailable in this browser. Model inspection data is still available.':
+    'תצוגת תלת־ממד אינה זמינה בדפדפן זה. נתוני בדיקת המודל עדיין זמינים.',
+  'The 3D preview stopped rendering. Model data and inspection controls remain available.':
+    'תצוגת תלת־ממד נעצרה. נתוני המודל וכלי הבדיקה עדיין זמינים.',
   'Project workflow': 'תהליך הפרויקט',
   Sheets: 'גיליונות',
   'This sheet is empty': 'הגיליון הזה ריק',

@@ -1,0 +1,134 @@
+%PDF-1.4
+% MocknSlice vector assembly sheets
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1700.787 1133.858] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 1717 >>
+stream
+q
+1 J 1 j
+0.45 0.45 0.45 RG
+0.283 w
+0.142 0.142 1700.504 1133.575 re S
+1 0 0 RG
+0.283 w
+14.173 836.22 m
+14.173 949.606 l
+S
+240.945 949.606 m
+411.024 949.606 l
+S
+411.024 836.22 m
+240.945 836.22 l
+S
+411.024 949.606 m
+637.795 949.606 l
+S
+637.795 836.22 m
+411.024 836.22 l
+S
+637.795 949.606 m
+807.874 949.606 l
+S
+807.874 836.22 m
+637.795 836.22 l
+S
+240.945 949.606 m
+240.945 1119.685 l
+S
+240.945 1119.685 m
+14.173 1119.685 l
+S
+14.173 1119.685 m
+14.173 949.606 l
+S
+240.945 666.142 m
+14.173 666.142 l
+S
+14.173 666.142 m
+14.173 836.22 l
+S
+807.874 949.606 m
+830.551 941.669 l
+830.551 844.157 l
+807.874 836.22 l
+S
+240.945 836.22 m
+274.961 824.315 l
+274.961 678.047 l
+240.945 666.142 l
+S
+0 0 1 RG
+0.283 w
+807.874 949.606 m
+807.874 836.22 l
+S
+240.945 836.22 m
+240.945 666.142 l
+S
+0.545 0.361 0.965 RG
+0.283 w
+0.078 0.722 0.651 RG
+0.283 w
+240.945 949.606 m
+240.945 836.22 l
+S
+411.024 949.606 m
+411.024 836.22 l
+S
+637.795 949.606 m
+637.795 836.22 l
+S
+14.173 949.606 m
+240.945 949.606 l
+S
+240.945 836.22 m
+14.173 836.22 l
+S
+0.961 0.62 0.043 RG
+0.283 w
+0 0 0 RG
+0.283 w
+BT /F1 8.504 Tf 1 0 0 1 127.559 892.913 Tm (Band 1) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 325.984 892.913 Tm (Band 2) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 524.409 892.913 Tm (Band 3) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 722.835 892.913 Tm (Band 4) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 127.559 1034.646 Tm (Front face) Tj ET
+BT /F1 8.504 Tf 1 0 0 1 127.559 751.181 Tm (Back face) Tj ET
+0.42 0.447 0.502 RG
+0.283 w
+0 0 0 rg
+BT /F1 8.504 Tf 1 0 0 1 19.843 1108.346 Tm (Envelope net) Tj ET
+0 0 0 rg
+BT /F1 7.087 Tf 1 0 0 1 14.173 1124.646 Tm (Upgrade baseline: fold-envelope - sheet 1 of 1) Tj ET
+BT /F1 5.102 Tf 1 0 0 1 14.173 1116.142 Tm (Operations: cut, score, valley-fold, engrave) Tj ET
+Q
+endstream
+endobj
+6 0 obj
+<< /Title (Upgrade baseline: fold-envelope) /Creator (MocknSlice) /Producer (MocknSlice fabrication output) >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000045 00000 n 
+0000000094 00000 n 
+0000000151 00000 n 
+0000000221 00000 n 
+0000000357 00000 n 
+0000002125 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R /Info 6 0 R >>
+startxref
+2251
+%%EOF

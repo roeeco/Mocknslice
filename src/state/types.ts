@@ -1,6 +1,17 @@
+import type { PapercraftWorkingSource } from '../domain/papercraft';
+import type { PapercraftRelinkProposal } from '../geometry/papercraft/relinkOnModelUpdate';
+import type { ModelData } from '../domain/model';
+import type { UserTemplateDefinition } from '../templates/authoring/types';
+import type { FabricationProfile } from '../geometry/output/fabricationProfiles';
+import type {
+  PapercraftEdgeEdit,
+  PapercraftIslandEdit,
+  PapercraftProgress,
+  PapercraftSettingsV2,
+} from '../domain/papercraft';
 import type { StateCreator } from 'zustand';
 import type { ExportSettings } from '../domain/exports';
-import type { FabricationMode, SheetLayout } from '../domain/fabrication';
+import type { FabricationMode, FabricationPart, SheetLayout } from '../domain/fabrication';
 import type { MaterialProfile } from '../domain/material';
 import type { TemplateKind } from '../domain/folding';
 import type { ModelAxis, StlUnit } from '../domain/model';
@@ -51,6 +62,8 @@ export interface ModelSlice {
 }
 
 export interface FabricationSlice {
+  generationDraft:
+    { source: ProjectData; parts: FabricationPart[]; issues: ValidationIssue[] } | undefined;
   sliceGenerationStatus: 'idle' | 'processing' | 'ready' | 'error' | 'cancelled' | 'stale';
   sliceGenerationError: RuntimeFailure | undefined;
   setFabricationMode: (mode: FabricationMode) => void;
@@ -69,13 +82,34 @@ export interface FabricationSlice {
   removePanelFeature: (id: string) => void;
   generateSlices: () => void;
   generateWaffleSlices: () => void;
-  generateFoldTemplate: () => void;
+  generateFoldTemplate: (options?: { mergeWithInputEdit?: boolean }) => void;
   generateMeshUnfold: () => void;
   generatePanelConstruction: () => void;
   cancelSliceGeneration: () => void;
 }
 
+export interface PapercraftSlice {
+  papercraftProgress: PapercraftProgress | undefined;
+  papercraftIssues: ValidationIssue[];
+  enablePapercraft: () => void;
+  useLegacyUnfolding: () => void;
+  updatePapercraftSettings: (
+    patch: Partial<
+      Omit<
+        PapercraftSettingsV2,
+        'algorithmVersion' | 'sourceMeshHash' | 'edgeEdits' | 'islandEdits'
+      >
+    >,
+    acceptSimplification?: boolean,
+  ) => void;
+  editPapercraftEdge: (edit: PapercraftEdgeEdit) => void;
+  editPapercraftIsland: (edit: PapercraftIslandEdit) => void;
+  generatePapercraft: (options?: { mergeWithInputEdit?: boolean }) => void;
+}
+
 export interface LayoutSlice {
+  arrangeGeneratedPartsOptimized: () => void;
+  setPartPlacementLocked: (partId: string, locked: boolean) => void;
   activeSheetId: string | undefined;
   setActiveSheet: (sheetId: string) => void;
   arrangeGeneratedParts: () => void;
@@ -135,6 +169,9 @@ export interface HistorySlice {
 }
 
 export interface ExportSlice {
+  fabricationProfile: FabricationProfile;
+  setFabricationProfile: (profile: FabricationProfile) => void;
+  acknowledgeFabricationWarnings: (ids: string[], accepted: boolean) => void;
   updateExportSettings: (settings: Partial<ExportSettings>) => void;
 }
 
@@ -143,7 +180,10 @@ export interface ValidationSlice {
   setValidationIssues: (issues: ValidationIssue[]) => void;
 }
 
-export type AppState = ProjectSlice &
+export type AppState = SourceUpdateSlice &
+  TemplateAuthoringSlice &
+  PapercraftSlice &
+  ProjectSlice &
   ModelSlice &
   FabricationSlice &
   LayoutSlice &
@@ -155,3 +195,28 @@ export type AppState = ProjectSlice &
   ValidationSlice;
 
 export type AppSliceCreator<T> = StateCreator<AppState, [], [], T>;
+
+export interface TemplateAuthoringSlice {
+  applyTemplateDefinition: (
+    definition: UserTemplateDefinition,
+    values?: Record<string, number>,
+  ) => void;
+  updateTemplateValues: (values: Record<string, number>) => void;
+  resetTemplateValues: () => void;
+}
+
+export interface SourceUpdateSlice {
+  pendingModelUpdate:
+    | {
+        originalProject: ProjectData;
+        model: ModelData;
+        settings: PapercraftSettingsV2;
+        workingSource: PapercraftWorkingSource | undefined;
+        proposal: PapercraftRelinkProposal;
+      }
+    | undefined;
+  proposePapercraftModelUpdate: (model: ModelData) => void;
+  acceptPapercraftModelUpdate: () => void;
+  cancelPapercraftModelUpdate: () => void;
+  resolvePapercraftEdit: (id: string, targetId?: string) => void;
+}

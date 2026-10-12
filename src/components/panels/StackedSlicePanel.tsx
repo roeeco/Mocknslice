@@ -1,3 +1,4 @@
+import { SliceReliabilityControls } from './SliceReliabilityControls';
 import type { ChangeEvent } from 'react';
 import type { SliceAxis } from '../../domain/fabrication';
 import { copy, t } from '../../locales';
@@ -103,6 +104,7 @@ export function StackedSlicePanel({
             </div>
           </AdvancedSettingsSection>
         ) : null}
+        <SliceReliabilityControls />
       </fieldset>
       {!hideGenerationAction ? (
         <div className="generation-actions">

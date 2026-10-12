@@ -6,6 +6,7 @@ export type MaterialCategory =
 export type MaterialDirection = 'none' | 'horizontal' | 'vertical';
 
 export interface MaterialProfile {
+  rotationAllowed?: boolean;
   id: string;
   name: string;
   category: MaterialCategory;
