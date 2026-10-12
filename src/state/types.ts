@@ -7,7 +7,7 @@ import type {
 } from '../domain/papercraft';
 import type { StateCreator } from 'zustand';
 import type { ExportSettings } from '../domain/exports';
-import type { FabricationMode, SheetLayout } from '../domain/fabrication';
+import type { FabricationMode, FabricationPart, SheetLayout } from '../domain/fabrication';
 import type { MaterialProfile } from '../domain/material';
 import type { TemplateKind } from '../domain/folding';
 import type { ModelAxis, StlUnit } from '../domain/model';
@@ -58,6 +58,8 @@ export interface ModelSlice {
 }
 
 export interface FabricationSlice {
+  generationDraft:
+    { source: ProjectData; parts: FabricationPart[]; issues: ValidationIssue[] } | undefined;
   sliceGenerationStatus: 'idle' | 'processing' | 'ready' | 'error' | 'cancelled' | 'stale';
   sliceGenerationError: RuntimeFailure | undefined;
   setFabricationMode: (mode: FabricationMode) => void;
@@ -102,6 +104,8 @@ export interface PapercraftSlice {
 }
 
 export interface LayoutSlice {
+  arrangeGeneratedPartsOptimized: () => void;
+  setPartPlacementLocked: (partId: string, locked: boolean) => void;
   activeSheetId: string | undefined;
   setActiveSheet: (sheetId: string) => void;
   arrangeGeneratedParts: () => void;

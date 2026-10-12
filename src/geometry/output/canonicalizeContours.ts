@@ -85,6 +85,20 @@ export function canonicalizeContours(source: readonly FabricationPart[]): {
       issues.push(
         outputIssue('OUTPUT_STOCK_INVALID', [part.id], 'Part stock thickness is invalid.'),
       );
+    if (
+      part.stock &&
+      (!Number.isFinite(part.stock.kerfMm) ||
+        part.stock.kerfMm < 0 ||
+        !Number.isFinite(part.stock.clearanceMm) ||
+        part.stock.clearanceMm < 0)
+    )
+      issues.push(
+        outputIssue(
+          'OUTPUT_STOCK_INVALID',
+          [part.id],
+          'Measured stock kerf and clearance must be non-negative finite millimetres.',
+        ),
+      );
     const pathIds = new Set<string>();
     for (const path of part.paths) {
       if (pathIds.has(path.id))

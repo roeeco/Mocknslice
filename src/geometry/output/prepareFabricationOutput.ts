@@ -9,6 +9,7 @@ export interface PreparedFabricationOutput {
   parts: FabricationPart[];
   issues: ValidationIssue[];
   appliedKerfMm: number;
+  appliedKerfByPart?: Record<string, number>;
   provenance?: {
     schemaVersion: 9;
     algorithmVersion: string;
@@ -256,11 +257,17 @@ export function prepareFabricationOutput(project: ProjectData): PreparedFabricat
     });
   }
 
+  const byPart: Record<string, number> = {};
   const parts = project.generatedParts.map((part) => {
+    const partKerfMm =
+      project.exportSettings.kerfCompensation === 'material' && part.stock
+        ? Math.max(0, part.stock.kerfMm)
+        : appliedKerfMm;
+    byPart[part.id] = partKerfMm;
     let skippedOpenKerf = 0;
     const paths = part.paths.flatMap((path): FabricationPath[] => {
       let prepared = path;
-      if (appliedKerfMm > 0 && path.operation === 'cut') {
+      if (partKerfMm > 0 && path.operation === 'cut') {
         if (!path.closed || path.points.length < 3) {
           skippedOpenKerf += 1;
         } else {
@@ -270,7 +277,7 @@ export function prepareFabricationOutput(project: ProjectData): PreparedFabricat
               return Math.hypot(next.x - point.x, next.y - point.y);
             }),
           );
-          if (minimumEdge <= appliedKerfMm) {
+          if (minimumEdge <= partKerfMm) {
             issues.push({
               id: `kerf-feature-narrow-${part.id}-${path.id}`,
               severity: 'warning',
@@ -281,7 +288,7 @@ export function prepareFabricationOutput(project: ProjectData): PreparedFabricat
             });
           }
           const direction = path.contourRole === 'hole' ? -1 : 1;
-          const offset = offsetClosedPathForKerf(path.points, (appliedKerfMm / 2) * direction);
+          const offset = offsetClosedPathForKerf(path.points, (partKerfMm / 2) * direction);
           if (offset) {
             prepared = { ...path, points: offset };
           } else {
@@ -317,7 +324,12 @@ export function prepareFabricationOutput(project: ProjectData): PreparedFabricat
     }
     return { ...part, paths };
   });
-  return { parts, issues, appliedKerfMm };
+  return {
+    parts,
+    issues,
+    appliedKerfMm,
+    ...(project.generatedParts.some((p) => p.stock) ? { appliedKerfByPart: byPart } : {}),
+  };
 }
 
 function partAreaMm2(project: ProjectData, part: FabricationPart): number {

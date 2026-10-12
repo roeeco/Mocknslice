@@ -1,3 +1,4 @@
+import { reliabilityCopy } from '../../locales/reliabilityCopy';
 import { useEffect, useState, type PropsWithChildren } from 'react';
 import { AppHeader } from '../../app/layout/AppHeader';
 import { useProjectStore } from '../../state/useProjectStore';
@@ -27,6 +28,8 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
     locale = useProjectStore((state) => state.locale),
     status = useProjectStore((state) => state.sliceGenerationStatus),
     materialLibrary = useProjectStore((state) => state.materials);
+  const generationDraft = useProjectStore((s) => s.generationDraft);
+  const [inspectPartial, setInspectPartial] = useState(false);
   const experience = useProjectStore((state) => state.experienceMode);
   const setExperience = useProjectStore((state) => state.setExperienceMode);
   const c = studioCopy(locale),
@@ -56,7 +59,19 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
     }, 150);
     return () => window.clearTimeout(timer);
   }, [draft, project]);
-  const shownPreview = draft && preview?.source === project ? preview.project : undefined;
+  const partial =
+    inspectPartial && generationDraft?.source === project
+      ? {
+          ...project,
+          generatedParts: generationDraft.parts,
+          generationIssues: generationDraft.issues,
+          foldingResult: undefined,
+          unfoldingResult: undefined,
+          panelConstructionResult: undefined,
+        }
+      : undefined;
+  const shownPreview =
+    partial ?? (draft && preview?.source === project ? preview.project : undefined);
   const canGenerate =
     project.fabricationMode === 'fold-template' ||
     project.fabricationMode === 'panel-construction' ||
@@ -102,7 +117,10 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
             }}
             disabled={
               value === 'manufacture' &&
-              (draft !== undefined || status === 'processing' || generation === 'absent')
+              (partial !== undefined ||
+                draft !== undefined ||
+                status === 'processing' ||
+                generation === 'absent')
             }
           >
             {c[value]}
@@ -251,6 +269,11 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
           </aside>
           <main className="studio-preview">
             <div className="studio-preview-actions">
+              {generationDraft?.source === project ? (
+                <button type="button" onClick={() => setInspectPartial((value) => !value)}>
+                  {inspectPartial ? reliabilityCopy(locale).last : reliabilityCopy(locale).partial}
+                </button>
+              ) : null}
               <button type="button" onClick={() => setInspectorOpen(true)}>
                 {c.design}
               </button>

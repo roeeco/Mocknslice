@@ -303,6 +303,9 @@ export function evaluateExportReadiness(
       parts: preparedParts,
       issues: preparedRaw.issues,
       appliedKerfMm: preparedRaw.appliedKerfMm,
+      ...(preparedRaw.appliedKerfByPart
+        ? { appliedKerfByPart: preparedRaw.appliedKerfByPart }
+        : {}),
     },
     projectSnapshot: snapshot,
     profile,

@@ -32,6 +32,7 @@ export interface StackedSliceInput {
 }
 
 export interface StackedSliceResult {
+  algorithmVersion?: string;
   parts: FabricationPart[];
   issues: ValidationIssue[];
   planePositionsMm: number[];
@@ -45,6 +46,7 @@ export interface WaffleSliceInput {
 }
 
 export interface WaffleSliceResult {
+  algorithmVersion?: string;
   parts: FabricationPart[];
   issues: ValidationIssue[];
   primaryPlanePositionsMm: number[];

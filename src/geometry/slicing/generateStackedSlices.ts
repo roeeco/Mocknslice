@@ -10,12 +10,16 @@ function rounded(value: number): number {
   return Math.round(value * 1_000_000) / 1_000_000;
 }
 
-export function generateStackedSlices(input: StackedSliceInput): StackedSliceResult {
+export function generateStackedSlices(
+  input: StackedSliceInput,
+  options?: { planePositionsMm: number[] },
+): StackedSliceResult {
   const { mesh, bounds, settings, modelId } = input;
   if (settings.thicknessMm <= 0 || !Number.isFinite(settings.thicknessMm)) {
     throw new Error('Slice thickness must be greater than zero.');
   }
-  const planes = createSlicePlanes(bounds, settings.axis, settings.spacingMm);
+  const planes =
+    options?.planePositionsMm ?? createSlicePlanes(bounds, settings.axis, settings.spacingMm);
   const parts: FabricationPart[] = [];
   const issues: ValidationIssue[] = [];
 

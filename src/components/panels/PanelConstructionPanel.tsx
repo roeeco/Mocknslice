@@ -1,3 +1,4 @@
+import { StockReliabilityControls } from './StockReliabilityControls';
 import type { ChangeEvent } from 'react';
 import type { CurrentPanelJointKind } from '../../domain/panelConstruction';
 import type { PanelProfileKind } from '../../domain/panelConstruction';
@@ -316,6 +317,7 @@ export function PanelConstructionPanel({
         ) : null}
       </fieldset>
       <ConnectionInspector mode="panel-construction" />
+      <StockReliabilityControls />
       {!hideGenerationAction ? (
         <div className="generation-actions">
           {status === 'processing' ? (

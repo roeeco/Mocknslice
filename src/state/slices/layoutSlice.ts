@@ -1,5 +1,7 @@
+import { arrangePartsByStock } from '../../geometry/layout/arrangePartsByStock';
+import { arrangePartsOptimizedByStock as arrangePartsOptimized } from '../../geometry/layout/arrangePartsOptimizedByStock';
+import { prepareFabricationOutput } from '../../geometry/output/prepareFabricationOutput';
 import type { SheetLayout } from '../../domain/fabrication';
-import { arrangePartsInRows } from '../../geometry/layout/arrangeParts';
 import { boundsForPart, normalizedRotation } from '../../geometry/layout/partPlacement';
 import { validationIssuesForProject } from '../../validation/projectValidation';
 import { recordProjectChange, touchProject } from '../projectChange';
@@ -24,7 +26,7 @@ function updateProject(
           rootFaceId: island.rootFaceId,
           translationMm: [placement.x, placement.y],
           rotationDeg: placement.rotationDeg,
-          layoutLocked: prior.get(island.id)?.layoutLocked ?? false,
+          layoutLocked: placement.layoutLocked ?? prior.get(island.id)?.layoutLocked ?? false,
         });
     }
     return touchProject({
@@ -52,6 +54,52 @@ function nextSheetId(): string {
 }
 
 export const createLayoutSlice: AppSliceCreator<LayoutSlice> = (set) => ({
+  setPartPlacementLocked: (partId, locked) =>
+    set((state) =>
+      updateProject(state, (layouts) =>
+        layouts.map((sheet) => ({
+          ...sheet,
+          placements: sheet.placements.map((p) =>
+            p.partId === partId ? { ...p, layoutLocked: locked } : p,
+          ),
+        })),
+      ),
+    ),
+  arrangeGeneratedPartsOptimized: () =>
+    set((state) => {
+      const template =
+        state.project.sheetLayouts.find((s) => s.id === state.activeSheetId) ??
+        state.project.sheetLayouts[0];
+      if (!template) return state;
+      const locked = [
+        ...new Set([
+          ...state.project.sheetLayouts.flatMap((s) =>
+            s.placements.filter((p) => p.layoutLocked).map((p) => p.partId),
+          ),
+          ...(state.project.papercraft?.settings.islandEdits
+            .filter((i) => i.layoutLocked)
+            .map((i) => i.id) ?? []),
+        ]),
+      ];
+      const material = state.project.materialProfileSnapshot,
+        rotationAllowed =
+          (material.rotationAllowed ?? true) &&
+          (!material.grainDirection || material.grainDirection === 'none') &&
+          (!material.fluteDirection || material.fluteDirection === 'none');
+      const result = arrangePartsOptimized(
+        prepareFabricationOutput(state.project).parts,
+        template,
+        { existingLayouts: state.project.sheetLayouts, lockedPartIds: locked, rotationAllowed },
+      );
+      return {
+        ...updateProject(state, () => result.layouts),
+        activeSheetId: result.layouts.find((s) => s.placements.length)?.id ?? result.layouts[0]?.id,
+        validationIssues: [
+          ...validationIssuesForProject({ ...state.project, sheetLayouts: result.layouts }),
+          ...result.issues,
+        ],
+      };
+    }),
   activeSheetId: undefined,
   setActiveSheet: (activeSheetId) => set({ activeSheetId }),
   arrangeGeneratedParts: () =>
@@ -60,23 +108,26 @@ export const createLayoutSlice: AppSliceCreator<LayoutSlice> = (set) => ({
         state.project.sheetLayouts.find((sheet) => sheet.id === state.activeSheetId) ??
         state.project.sheetLayouts[0];
       if (!template) return state;
-      const locked = new Set(
-        state.project.papercraft?.settings.islandEdits
+      const locked = new Set([
+        ...state.project.sheetLayouts.flatMap((sheet) =>
+          sheet.placements.filter((p) => p.layoutLocked).map((p) => p.partId),
+        ),
+        ...(state.project.papercraft?.settings.islandEdits
           .filter((i) => i.layoutLocked)
-          .map((i) => i.id) ?? [],
-      );
+          .map((i) => i.id) ?? []),
+      ]);
       const layouts = locked.size
         ? [
             ...state.project.sheetLayouts.map((sheet) => ({
               ...sheet,
               placements: sheet.placements.filter((p) => locked.has(p.partId)),
             })),
-            ...arrangePartsInRows(
+            ...arrangePartsByStock(
               state.project.generatedParts.filter((p) => !locked.has(p.id)),
               { ...template, id: `${template.id}-arranged-${state.past.length}`, placements: [] },
             ),
           ]
-        : arrangePartsInRows(state.project.generatedParts, template);
+        : arrangePartsByStock(state.project.generatedParts, template);
       const changed = recordProjectChange(state, (project) =>
         touchProject({ ...project, sheetLayouts: layouts }),
       );
@@ -138,6 +189,7 @@ export const createLayoutSlice: AppSliceCreator<LayoutSlice> = (set) => ({
                 ...sheet,
                 placements: sheet.placements.map((current) =>
                   current.partId === partId &&
+                  !current.layoutLocked &&
                   !state.project.papercraft?.settings.islandEdits.find((i) => i.id === partId)
                     ?.layoutLocked
                     ? {
@@ -165,6 +217,7 @@ export const createLayoutSlice: AppSliceCreator<LayoutSlice> = (set) => ({
                 ...sheet,
                 placements: sheet.placements.map((placement) =>
                   placement.partId === partId &&
+                  !placement.layoutLocked &&
                   !state.project.papercraft?.settings.islandEdits.find((i) => i.id === partId)
                     ?.layoutLocked
                     ? {
@@ -180,7 +233,12 @@ export const createLayoutSlice: AppSliceCreator<LayoutSlice> = (set) => ({
     ),
   movePartToSheet: (partId, sheetId) =>
     set((state) => {
-      if (state.project.papercraft?.settings.islandEdits.find((i) => i.id === partId)?.layoutLocked)
+      if (
+        state.project.sheetLayouts.some((sheet) =>
+          sheet.placements.some((p) => p.partId === partId && p.layoutLocked),
+        ) ||
+        state.project.papercraft?.settings.islandEdits.find((i) => i.id === partId)?.layoutLocked
+      )
         return state;
       const part = state.project.generatedParts.find((candidate) => candidate.id === partId);
       const sheet = state.project.sheetLayouts.find((candidate) => candidate.id === sheetId);

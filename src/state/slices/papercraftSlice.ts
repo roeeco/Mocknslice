@@ -124,6 +124,7 @@ export const createPapercraftSlice: AppSliceCreator<PapercraftSlice> = (set, get
                     x: edit.translationMm[0],
                     y: edit.translationMm[1],
                     rotationDeg: edit.rotationDeg,
+                    layoutLocked: edit.layoutLocked,
                   }
                 : p,
             ),

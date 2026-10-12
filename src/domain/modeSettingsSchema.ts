@@ -11,6 +11,7 @@ import {
   strictObject,
   string,
   variant,
+  tuple,
 } from 'valibot';
 import { CLASSROOM_RECIPE_IDS } from './classroomRecipes';
 
@@ -78,6 +79,10 @@ export const panelFeatureSchema = variant('kind', [
 
 export const modeSettingsSchema = strictObject({
   stackedSlices: strictObject({
+    firstLayerOffsetMm: optional(finiteNumber),
+    registrationHoles: optional(
+      strictObject({ id: string(), centres: tuple([offset, offset]), diameterMm: finiteNumber }),
+    ),
     axis,
     spacingMm: finiteNumber,
     thicknessMm: finiteNumber,
@@ -125,6 +130,12 @@ export const modeSettingsSchema = strictObject({
     searchAttempts: finiteNumber,
   }),
   panelConstruction: strictObject({
+    roleKerfMm: optional(
+      strictObject({ panel: finiteNumber, divider: finiteNumber, lid: finiteNumber }),
+    ),
+    roleClearanceMm: optional(
+      strictObject({ panel: finiteNumber, divider: finiteNumber, lid: finiteNumber }),
+    ),
     innerWidthMm: finiteNumber,
     innerDepthMm: finiteNumber,
     innerHeightMm: finiteNumber,

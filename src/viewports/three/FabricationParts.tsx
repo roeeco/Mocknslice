@@ -1,3 +1,4 @@
+import { WaffleInsertionGuides } from './WaffleInsertionGuides';
 import { usePreparedOutput } from '../../geometry/output/PreparedOutputContext';
 import { useDisplayedProjectField } from '../PreviewProject';
 import { useEffect, useMemo } from 'react';
@@ -54,6 +55,7 @@ function PartMesh({ part }: { part: FabricationPart }) {
         selectEntity(part.id);
       }}
     >
+      <WaffleInsertionGuides part={part} />
       <meshStandardMaterial color={selected ? '#f59e0b' : color} roughness={0.7} metalness={0.02} />
     </mesh>
   );

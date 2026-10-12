@@ -1,5 +1,5 @@
 import type { FabricationPart, SheetLayout } from '../../domain/fabrication';
-import { arrangePartsInRows } from './arrangeParts';
+import { arrangePartsByStock } from './arrangePartsByStock';
 
 /** Retain user transforms by stable ID. Resized collisions remain visible review issues. */
 export function preservePlacements(
@@ -9,7 +9,7 @@ export function preservePlacements(
 ): SheetLayout[] {
   const template = layouts[0];
   if (!template) return [];
-  if (previous.length === 0) return arrangePartsInRows(next, template);
+  if (previous.length === 0) return arrangePartsByStock(next, template);
   const ids = new Set(next.map((p) => p.id));
   const retained = layouts.map((sheet) => ({
     ...sheet,
@@ -22,5 +22,5 @@ export function preservePlacements(
   let id = `${template.id}-new-${suffix}`;
   const used = new Set(retained.map((sheet) => sheet.id));
   while (used.has(id)) id = `${template.id}-new-${++suffix}`;
-  return [...retained, ...arrangePartsInRows(additions, { ...template, id, placements: [] })];
+  return [...retained, ...arrangePartsByStock(additions, { ...template, id, placements: [] })];
 }

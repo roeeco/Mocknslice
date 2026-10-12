@@ -4,11 +4,11 @@ import { generatePapercraft } from '../geometry/papercraft/buildFabrication';
 import type { PapercraftWorkerProgress } from './protocol';
 import { normalizeMesh } from '../geometry/mesh/normalizeMesh';
 import { parseStl } from '../importers/importSTL';
-import { generateStackedSlices } from '../geometry/slicing/generateStackedSlices';
-import { generateWaffleSlices } from '../geometry/slicing/generateWaffleSlices';
+import { generateReliableStacked as generateStackedSlices } from '../geometry/slicing/generateReliableStacked';
+import { generateReliableWaffle as generateWaffleSlices } from '../geometry/slicing/generateReliableWaffle';
 import { generateRegisteredTemplate } from '../templates/registry';
 import { generateMeshUnfold } from '../geometry/unfolding/generateMeshUnfold';
-import { generatePanelConstruction } from '../geometry/panelConstruction/generatePanelConstruction';
+import { generateReliableConstruction as generatePanelConstruction } from '../geometry/panelConstruction/generateReliableConstruction';
 import { prepareAndGeneratePanelUnfold } from '../geometry/unfolding/generatePanelUnfold';
 import type { GeometryWorkerRequest, GeometryWorkerResponse } from './protocol';
 

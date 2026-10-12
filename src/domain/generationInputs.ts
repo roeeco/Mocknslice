@@ -147,9 +147,37 @@ function sliceAxis(value: SliceAxis, name: string): SliceAxis {
   return enumValue(value, ['x', 'y', 'z'], name);
 }
 
+function enumNormalized(value: number): number {
+  finite(value, 'Registration centre');
+  if (value < 0 || value > 1)
+    throw new GenerationInputError('Registration centres must be normalized from zero to one.');
+  return value;
+}
+
 function stackedSettings(project: ProjectData): StackedSliceSettings {
   const settings = project.modeSettings.stackedSlices;
   return {
+    ...(settings.firstLayerOffsetMm === undefined
+      ? {}
+      : { firstLayerOffsetMm: nonNegative(settings.firstLayerOffsetMm, 'First slice offset') }),
+    ...(settings.registrationHoles
+      ? {
+          registrationHoles: {
+            id: nonEmpty(settings.registrationHoles.id, 'Registration feature ID'),
+            diameterMm: positive(
+              settings.registrationHoles.diameterMm,
+              'Registration hole diameter',
+            ),
+            centres: settings.registrationHoles.centres.map((p) => ({
+              x: enumNormalized(p.x),
+              y: enumNormalized(p.y),
+            })) as [
+              (typeof settings.registrationHoles.centres)[0],
+              (typeof settings.registrationHoles.centres)[1],
+            ],
+          },
+        }
+      : {}),
     axis: sliceAxis(settings.axis, 'Slice axis'),
     spacingMm: positive(settings.spacingMm, 'Slice spacing'),
     thicknessMm: positive(settings.thicknessMm, 'Slice thickness'),
@@ -381,6 +409,24 @@ function panelSettings(project: ProjectData): PanelGenerationSettings {
     throw new GenerationInputError('Panel boundary tab IDs must be unique.');
   }
   return {
+    ...(settings.roleKerfMm
+      ? {
+          roleKerfMm: {
+            panel: nonNegative(settings.roleKerfMm.panel, 'Panel kerf'),
+            divider: nonNegative(settings.roleKerfMm.divider, 'Divider kerf'),
+            lid: nonNegative(settings.roleKerfMm.lid, 'Lid kerf'),
+          },
+        }
+      : {}),
+    ...(settings.roleClearanceMm
+      ? {
+          roleClearanceMm: {
+            panel: nonNegative(settings.roleClearanceMm.panel, 'Panel clearance'),
+            divider: nonNegative(settings.roleClearanceMm.divider, 'Divider clearance'),
+            lid: nonNegative(settings.roleClearanceMm.lid, 'Lid clearance'),
+          },
+        }
+      : {}),
     innerWidthMm: positive(settings.innerWidthMm, 'Panel inside width'),
     innerDepthMm: positive(settings.innerDepthMm, 'Panel inside depth'),
     innerHeightMm: positive(settings.innerHeightMm, 'Panel inside height'),

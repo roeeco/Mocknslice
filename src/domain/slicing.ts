@@ -1,6 +1,9 @@
+import type { Point2D } from './geometry';
 import type { SliceAxis } from './fabrication';
 
 export interface StackedSliceSettings {
+  firstLayerOffsetMm?: number | undefined;
+  registrationHoles?: { id: string; centres: [Point2D, Point2D]; diameterMm: number } | undefined;
   axis: SliceAxis;
   spacingMm: number;
   thicknessMm: number;

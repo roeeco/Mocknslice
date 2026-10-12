@@ -13,7 +13,6 @@ import {
 import { TEMPLATE_KINDS, type TemplateKind } from '../../domain/folding';
 import type { ProjectData } from '../../domain/project';
 import type { WaffleSliceResult } from '../../geometry/slicing/types';
-import { arrangePartsInRows } from '../../geometry/layout/arrangeParts';
 import { preservePlacements } from '../../geometry/layout/preservePlacements';
 import { expectedGenerationSignature, hashSerializable } from '../../domain/generation';
 import { runtimeFailure } from '../../domain/runtimeFailure';
@@ -128,6 +127,7 @@ function settingsChange(
   const activeInputChanged = generationInputChanged(state.project, nextProject);
   return {
     ...changed,
+    generationDraft: undefined,
     sliceGenerationStatus:
       state.project.generatedParts.length > 0 && activeInputChanged
         ? ('stale' as const)
@@ -141,6 +141,7 @@ function settingsChange(
 }
 
 export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, get) => ({
+  generationDraft: undefined,
   sliceGenerationStatus: 'idle',
   sliceGenerationError: undefined,
   setFabricationMode: (fabricationMode) =>
@@ -313,7 +314,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     cancelPapercraftTask();
     const task = generateStackedSlicesInWorker(input.payload);
     activeTask = task;
-    set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
+    set({
+      sliceGenerationStatus: 'processing',
+      sliceGenerationError: undefined,
+      generationDraft: undefined,
+    });
     void task.promise
       .then((result) => {
         set((state) => {
@@ -323,23 +328,47 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
             };
           }
+          const blockingIssue = result.issues.find((issue) => issue.severity === 'error');
+          if (blockingIssue)
+            return {
+              sliceGenerationStatus: 'error',
+              sliceGenerationError: runtimeFailure(
+                'SLICE_GENERATION_FAILED',
+                blockingIssue.message,
+              ),
+              generationDraft: {
+                source: state.project,
+                parts: result.parts,
+                issues: result.issues,
+              },
+              validationIssues: [...validationIssuesForProject(state.project), ...result.issues],
+            };
           const changed = recordProjectChange(state, (currentProject) => {
             const template = currentProject.sheetLayouts[0];
             return touchProject({
               ...currentProject,
               generatedParts: result.parts,
               generationIssues: result.issues,
-              generationRecord: generationRecordFor(currentProject, result, 'sf9-stacked-slices'),
+              generationRecord: generationRecordFor(
+                currentProject,
+                result,
+                result.algorithmVersion ?? 'sf9-stacked-slices',
+              ),
               foldingResult: undefined,
               unfoldingResult: undefined,
               panelConstructionResult: undefined,
               sheetLayouts: template
-                ? arrangePartsInRows(result.parts, template)
+                ? preservePlacements(
+                    currentProject.sheetLayouts,
+                    currentProject.generatedParts,
+                    result.parts,
+                  )
                 : currentProject.sheetLayouts,
             });
           });
           const nextProject = changed.project ?? state.project;
           return {
+            generationDraft: undefined,
             ...changed,
             sliceGenerationStatus: result.parts.length > 0 ? 'ready' : 'error',
             sliceGenerationError:
@@ -352,7 +381,9 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.parts[0]?.id,
             selectedPartId: result.parts[0]?.id,
-            activeSheetId: nextProject.sheetLayouts[0]?.id,
+            activeSheetId:
+              nextProject.sheetLayouts.find((s) => s.placements.length)?.id ??
+              nextProject.sheetLayouts[0]?.id,
             activeWorkflowStep: state.activeWorkflowStep,
             completedWorkflowSteps: state.completedWorkflowSteps,
             viewportMode: state.viewportMode,
@@ -401,7 +432,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     cancelPapercraftTask();
     const task = generateWaffleSlicesInWorker(input.payload);
     activeTask = task;
-    set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
+    set({
+      sliceGenerationStatus: 'processing',
+      sliceGenerationError: undefined,
+      generationDraft: undefined,
+    });
     void task.promise
       .then((result: WaffleSliceResult) => {
         set((state) => {
@@ -411,30 +446,56 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
             };
           }
+          const blockingIssue = result.issues.find((issue) => issue.severity === 'error');
+          if (blockingIssue)
+            return {
+              sliceGenerationStatus: 'error',
+              sliceGenerationError: runtimeFailure(
+                'SLICE_GENERATION_FAILED',
+                blockingIssue.message,
+              ),
+              generationDraft: {
+                source: state.project,
+                parts: result.parts,
+                issues: result.issues,
+              },
+              validationIssues: [...validationIssuesForProject(state.project), ...result.issues],
+            };
           const changed = recordProjectChange(state, (currentProject) => {
             const template = currentProject.sheetLayouts[0];
             return touchProject({
               ...currentProject,
               generatedParts: result.parts,
               generationIssues: result.issues,
-              generationRecord: generationRecordFor(currentProject, result, 'sf9-waffle-slices'),
+              generationRecord: generationRecordFor(
+                currentProject,
+                result,
+                result.algorithmVersion ?? 'sf9-waffle-slices',
+              ),
               foldingResult: undefined,
               unfoldingResult: undefined,
               panelConstructionResult: undefined,
               sheetLayouts: template
-                ? arrangePartsInRows(result.parts, template)
+                ? preservePlacements(
+                    currentProject.sheetLayouts,
+                    currentProject.generatedParts,
+                    result.parts,
+                  )
                 : currentProject.sheetLayouts,
             });
           });
           const nextProject = changed.project ?? state.project;
           return {
+            generationDraft: undefined,
             ...changed,
             sliceGenerationStatus: 'ready',
             sliceGenerationError: undefined,
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.parts[0]?.id,
             selectedPartId: result.parts[0]?.id,
-            activeSheetId: nextProject.sheetLayouts[0]?.id,
+            activeSheetId:
+              nextProject.sheetLayouts.find((s) => s.placements.length)?.id ??
+              nextProject.sheetLayouts[0]?.id,
             activeWorkflowStep: state.activeWorkflowStep,
             completedWorkflowSteps: state.completedWorkflowSteps,
             viewportMode: state.viewportMode,
@@ -475,7 +536,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     cancelPapercraftTask();
     const task = generateFoldTemplateInWorker(input.payload);
     activeTask = task;
-    set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
+    set({
+      sliceGenerationStatus: 'processing',
+      sliceGenerationError: undefined,
+      generationDraft: undefined,
+    });
     void task.promise
       .then((result) => {
         set((state) => {
@@ -513,7 +578,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
                       currentProject.generatedParts,
                       result.parts,
                     )
-                  : arrangePartsInRows(result.parts, template)
+                  : preservePlacements(
+                      currentProject.sheetLayouts,
+                      currentProject.generatedParts,
+                      result.parts,
+                    )
                 : currentProject.sheetLayouts,
             });
           };
@@ -543,7 +612,9 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
                 : undefined) ??
               result.panels[0]?.partId ??
               result.parts[0]?.id,
-            activeSheetId: nextProject.sheetLayouts[0]?.id,
+            activeSheetId:
+              nextProject.sheetLayouts.find((s) => s.placements.length)?.id ??
+              nextProject.sheetLayouts[0]?.id,
             activeWorkflowStep: state.activeWorkflowStep,
             completedWorkflowSteps: state.completedWorkflowSteps,
             viewportMode: state.viewportMode,
@@ -587,7 +658,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     cancelPapercraftTask();
     const task = generateMeshUnfoldInWorker(input.payload);
     activeTask = task;
-    set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
+    set({
+      sliceGenerationStatus: 'processing',
+      sliceGenerationError: undefined,
+      generationDraft: undefined,
+    });
     void task.promise
       .then((result) => {
         set((state) => {
@@ -612,12 +687,17 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               unfoldingResult: result,
               panelConstructionResult: undefined,
               sheetLayouts: template
-                ? arrangePartsInRows(result.parts, template)
+                ? preservePlacements(
+                    currentProject.sheetLayouts,
+                    currentProject.generatedParts,
+                    result.parts,
+                  )
                 : currentProject.sheetLayouts,
             });
           });
           const nextProject = changed.project ?? state.project;
           return {
+            generationDraft: undefined,
             ...changed,
             sliceGenerationStatus: result.parts.length > 0 ? 'ready' : 'error',
             sliceGenerationError:
@@ -630,7 +710,9 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
             validationIssues: validationIssuesForProject(nextProject),
             selectedEntityId: result.faces[0]?.id ?? result.parts[0]?.id,
             selectedPartId: result.faces[0]?.partId ?? result.parts[0]?.id,
-            activeSheetId: nextProject.sheetLayouts[0]?.id,
+            activeSheetId:
+              nextProject.sheetLayouts.find((s) => s.placements.length)?.id ??
+              nextProject.sheetLayouts[0]?.id,
             activeWorkflowStep: state.activeWorkflowStep,
             completedWorkflowSteps: state.completedWorkflowSteps,
             viewportMode: state.viewportMode,
@@ -671,7 +753,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     cancelPapercraftTask();
     const task = generatePanelConstructionInWorker(input.payload);
     activeTask = task;
-    set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
+    set({
+      sliceGenerationStatus: 'processing',
+      sliceGenerationError: undefined,
+      generationDraft: undefined,
+    });
     void task.promise
       .then((result) => {
         set((state) => {
@@ -706,7 +792,11 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               unfoldingResult: undefined,
               panelConstructionResult: result,
               sheetLayouts: template
-                ? arrangePartsInRows(result.parts, template)
+                ? preservePlacements(
+                    currentProject.sheetLayouts,
+                    currentProject.generatedParts,
+                    result.parts,
+                  )
                 : currentProject.sheetLayouts,
             });
           });
@@ -732,7 +822,9 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
                 : undefined) ??
               result.panels[0]?.partId ??
               result.parts[0]?.id,
-            activeSheetId: nextProject.sheetLayouts[0]?.id,
+            activeSheetId:
+              nextProject.sheetLayouts.find((s) => s.placements.length)?.id ??
+              nextProject.sheetLayouts[0]?.id,
             activeWorkflowStep: state.activeWorkflowStep,
             completedWorkflowSteps: state.completedWorkflowSteps,
             viewportMode: state.viewportMode,

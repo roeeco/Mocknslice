@@ -208,6 +208,10 @@ async function selectSheetContaining(page: Page, selector: string) {
     await activeSheet.selectOption({ index });
     if ((await page.locator(selector).count()) > 0) return;
   }
+  for (const sheet of await page.getByRole('button', { name: /^Sheet \d+$/ }).all()) {
+    await sheet.click();
+    if (await page.locator(selector).count()) return;
+  }
   throw new Error(`No generated sheet contains ${selector}.`);
 }
 
@@ -230,7 +234,8 @@ async function selectEditableEdge(page: Page, name: RegExp) {
 test('opens the foundation workspace and switches to the sheet preview', async ({ page }) => {
   const consoleErrors: string[] = [];
   page.on('console', (message) => {
-    if (message.type() === 'error') consoleErrors.push(message.text());
+    if (message.type() === 'error')
+      consoleErrors.push(`${message.text()} ${message.location().url}`);
   });
   await page.goto('/');
 
@@ -467,7 +472,8 @@ test('edits a survey kit, exports feature geometry, and re-imports the v9 projec
 test('edits and generates the flash-card access notch in 2D and 3D', async ({ page }) => {
   const consoleErrors: string[] = [];
   page.on('console', (message) => {
-    if (message.type() === 'error') consoleErrors.push(message.text());
+    if (message.type() === 'error')
+      consoleErrors.push(`${message.text()} ${message.location().url}`);
   });
   await page.goto('/');
   await reachClassroomRecipe(page, 'flash-card-holder');
@@ -736,7 +742,8 @@ test('builds a mixed-thickness divided panel enclosure and exports labelled join
 }) => {
   const consoleErrors: string[] = [];
   page.on('console', (message) => {
-    if (message.type() === 'error') consoleErrors.push(message.text());
+    if (message.type() === 'error')
+      consoleErrors.push(`${message.text()} ${message.location().url}`);
   });
   await page.goto('/');
   await reachConfigureStep(page, 'Panel construction');
@@ -760,6 +767,10 @@ test('builds a mixed-thickness divided panel enclosure and exports labelled join
   expect(consoleErrors).toEqual([]);
 
   await page.getByRole('button', { name: 'Next' }).click();
+  for (const sheet of await page.getByRole('button', { name: /^Sheet \d+$/ }).all()) {
+    await sheet.click();
+    if (await page.getByRole('button', { name: 'Base panel on sheet' }).isVisible()) break;
+  }
   await expect(page.getByRole('button', { name: 'Base panel on sheet' })).toBeVisible();
   await expect(page.locator('path[data-contour-role="hole"]')).not.toHaveCount(0);
   await expect(page.locator('path[data-edge-id^="construction-joint-"]')).not.toHaveCount(0);
@@ -800,7 +811,7 @@ test('builds paired connection overrides with bounded open-top panel profiles', 
   await selectEditableEdge(page, /Base.*Front/);
   await page.getByRole('button', { name: 'Butt joint' }).click();
   await selectEditableEdge(page, /Front.*Left/);
-  await page.getByLabel('Fit clearance (mm)').fill('0.25');
+  await page.getByLabel('Fit clearance (mm)', { exact: true }).fill('0.25');
   await expect(page.locator('.generation-status')).toContainText('Needs regeneration');
   await page.getByRole('button', { name: 'Regenerate', exact: true }).click();
   await expect(page.locator('.generation-status')).toContainText('Current');
@@ -843,6 +854,10 @@ test('edits cardboard panel creases and glue seams, then exports v9 score metada
   await expect(page.getByRole('dialog', { name: /Edge treatment:/ })).toHaveCount(0);
 
   await page.getByRole('button', { name: '2D parts' }).click();
+  await selectSheetContaining(
+    page,
+    'path[data-operation="score"][data-edge-id="construction-joint-1"]',
+  );
   await expect(
     page.locator('path[data-operation="score"][data-edge-id="construction-joint-1"]'),
   ).toHaveCount(1);

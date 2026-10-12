@@ -157,6 +157,7 @@ function isMaterial(value: unknown): boolean {
     isString(value.id) &&
     isString(value.name) &&
     isString(value.category) &&
+    (value.rotationAllowed === undefined || typeof value.rotationAllowed === 'boolean') &&
     isFiniteNumber(value.thicknessMm) &&
     isFiniteNumber(value.kerfMm) &&
     isFiniteNumber(value.clearanceMm) &&
@@ -196,6 +197,43 @@ function isFabricationPath(value: unknown): boolean {
 
 function isFabricationPart(value: unknown): boolean {
   if (!isRecord(value)) return false;
+  if (
+    value.stock !== undefined &&
+    (!isRecord(value.stock) ||
+      !isString(value.stock.id) ||
+      !isFiniteNumber(value.stock.kerfMm) ||
+      value.stock.kerfMm < 0 ||
+      !isFiniteNumber(value.stock.clearanceMm) ||
+      value.stock.clearanceMm < 0)
+  )
+    return false;
+  if (isRecord(value.waffle) && value.waffle.openingSlots !== undefined) {
+    const slots = value.waffle.openingSlots;
+    if (
+      !Array.isArray(slots) ||
+      slots.length > 1000 ||
+      slots.some(
+        (slot) =>
+          !isRecord(slot) ||
+          !isString(slot.id) ||
+          !isString(slot.pairedPartId) ||
+          !['x', 'y', 'z'].includes(String(slot.intersectionAxis)) ||
+          !isFiniteNumber(slot.widthMm) ||
+          slot.widthMm <= 0 ||
+          !isFiniteNumber(slot.depthMm) ||
+          slot.depthMm <= 0 ||
+          !isFiniteNumber(slot.centreMm) ||
+          !['start', 'end'].includes(String(slot.direction)) ||
+          !Array.isArray(slot.mouth) ||
+          slot.mouth.length !== 2 ||
+          !slot.mouth.every(isPoint2D) ||
+          !Array.isArray(slot.inner) ||
+          slot.inner.length !== 2 ||
+          !slot.inner.every(isPoint2D),
+      )
+    )
+      return false;
+  }
   const slice = value.slice;
   const waffle = value.waffle;
   const folding = value.folding;
@@ -699,6 +737,8 @@ function isSheetLayout(value: unknown): boolean {
   if (!isRecord(value)) return false;
   return (
     isString(value.id) &&
+    (value.stockThicknessMm === undefined ||
+      (isFiniteNumber(value.stockThicknessMm) && value.stockThicknessMm > 0)) &&
     isFiniteNumber(value.widthMm) &&
     isFiniteNumber(value.heightMm) &&
     isFiniteNumber(value.marginMm) &&
@@ -710,7 +750,8 @@ function isSheetLayout(value: unknown): boolean {
         isString(placement.partId) &&
         isFiniteNumber(placement.x) &&
         isFiniteNumber(placement.y) &&
-        isFiniteNumber(placement.rotationDeg),
+        isFiniteNumber(placement.rotationDeg) &&
+        (placement.layoutLocked === undefined || typeof placement.layoutLocked === 'boolean'),
     )
   );
 }

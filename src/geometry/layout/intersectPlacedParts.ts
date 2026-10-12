@@ -58,6 +58,30 @@ export function intersectPlacedParts(
       );
       continue;
     }
+    const stocks = new Set(
+      sheet.placements.flatMap((p) =>
+        byId.has(p.partId) ? [byId.get(p.partId)!.thicknessMm] : [],
+      ),
+    );
+    if (stocks.size > 1)
+      issues.push(
+        outputIssue(
+          'SHEET_STOCK_MIXED',
+          [sheet.id],
+          'One cutting sheet cannot contain different physical stock thicknesses.',
+        ),
+      );
+    if (
+      sheet.stockThicknessMm !== undefined &&
+      [...stocks].some((t) => Math.abs(t - sheet.stockThicknessMm!) > EPS_LENGTH_MM)
+    )
+      issues.push(
+        outputIssue(
+          'SHEET_STOCK_MISMATCH',
+          [sheet.id],
+          'Part thickness differs from the declared sheet stock.',
+        ),
+      );
     const valid: { part: FabricationPart; placement: SheetPlacement }[] = [];
     for (const placement of sheet.placements) {
       const part = byId.get(placement.partId);

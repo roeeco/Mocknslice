@@ -87,6 +87,8 @@ function PartOnSheet({
 }) {
   const locked = useProjectStore(
     (s) =>
+      s.project.sheetLayouts.flatMap((sheet) => sheet.placements).find((p) => p.partId === part.id)
+        ?.layoutLocked ??
       s.project.papercraft?.settings.islandEdits.find((i) => i.id === part.id)?.layoutLocked ??
       false,
   );
@@ -331,7 +333,7 @@ export function TwoViewport() {
             type="button"
             className={candidate.id === sheet.id ? 'is-selected' : undefined}
             aria-pressed={candidate.id === sheet.id}
-            onClick={() => interactiveLayout && setActiveSheet(candidate.id)}
+            onClick={() => setActiveSheet(candidate.id)}
             key={candidate.id}
           >
             Sheet {index + 1}

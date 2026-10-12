@@ -46,6 +46,7 @@ export interface FabricationPart {
   labels?: FabricationLabel[];
   thicknessMm: Millimetres;
   sourceReference?: string;
+  stock?: { id: string; kerfMm: number; clearanceMm: number };
   slice?: {
     axis: SliceAxis;
     positionMm: Millimetres;
@@ -54,6 +55,7 @@ export interface FabricationPart {
   waffle?: {
     family: 'a' | 'b';
     slotCount: number;
+    openingSlots?: OpeningSlot[];
   };
   folding?: {
     templateKind: string;
@@ -73,6 +75,7 @@ export interface FabricationPart {
 }
 
 export interface SheetPlacement {
+  layoutLocked?: boolean;
   partId: string;
   x: Millimetres;
   y: Millimetres;
@@ -80,10 +83,23 @@ export interface SheetPlacement {
 }
 
 export interface SheetLayout {
+  stockThicknessMm?: number;
   id: string;
   widthMm: Millimetres;
   heightMm: Millimetres;
   marginMm: Millimetres;
   spacingMm: Millimetres;
   placements: SheetPlacement[];
+}
+
+export interface OpeningSlot {
+  id: string;
+  pairedPartId: string;
+  intersectionAxis: 'x' | 'y' | 'z';
+  centreMm: number;
+  widthMm: number;
+  depthMm: number;
+  direction: 'start' | 'end';
+  mouth: [Point2D, Point2D];
+  inner: [Point2D, Point2D];
 }
