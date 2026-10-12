@@ -19,6 +19,11 @@ export function validateTemplateDefinition(
 ): string[] {
   const errors: string[] = [];
   if (
+    (definition.fefcoCode || definition.id.startsWith('fefco:')) &&
+    (!definition.generatorId || !knownGenerators.has(definition.generatorId))
+  )
+    errors.push('FEFCO entries require an implemented local template generator.');
+  if (
     !/^[a-z0-9][a-z0-9:-]*$/.test(definition.id) ||
     !Number.isInteger(definition.version) ||
     definition.version < 1

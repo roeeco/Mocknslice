@@ -69,7 +69,7 @@ export interface FabricationSlice {
   removePanelFeature: (id: string) => void;
   generateSlices: () => void;
   generateWaffleSlices: () => void;
-  generateFoldTemplate: () => void;
+  generateFoldTemplate: (options?: { mergeWithInputEdit?: boolean }) => void;
   generateMeshUnfold: () => void;
   generatePanelConstruction: () => void;
   cancelSliceGeneration: () => void;

@@ -293,7 +293,7 @@ export function FabricationOutputPanel() {
           }
           onClick={() => activeSheet && createSheetSvgDownload(project, activeSheet.id, layouts)}
         >
-          Download active sheet SVG
+          {t('Download active sheet SVG')}
         </button>
         <button
           className="primary-panel-action"

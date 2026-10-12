@@ -99,9 +99,17 @@ describe('versioned local template registry', () => {
         generators,
       ).length,
     ).toBeGreaterThan(0);
-    const catalog = { ...definition, id: 'fefco:0201', status: 'catalog-only' as const };
+    const catalog = {
+      ...definition,
+      id: 'reference:unimplemented',
+      status: 'catalog-only' as const,
+    };
     delete catalog.generatorId;
     expect(validateTemplateDefinition(catalog, generators)).toEqual([]);
+    expect(
+      validateTemplateDefinition({ ...catalog, id: 'fefco:0201', fefcoCode: '0201' }, generators)
+        .length,
+    ).toBeGreaterThan(0);
   });
 
   it('resolves a complete immutable instance and rejects invalid supplied values without clamping', () => {

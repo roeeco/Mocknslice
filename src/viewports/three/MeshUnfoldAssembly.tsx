@@ -1,3 +1,4 @@
+import { useDisplayedProjectField } from '../PreviewProject';
 import { Edges } from '@react-three/drei';
 import { useEffect, useMemo } from 'react';
 import { BufferGeometry, Float32BufferAttribute } from 'three';
@@ -22,7 +23,7 @@ function UnfoldFaceMesh({
   positions: [Vector3Mm, Vector3Mm, Vector3Mm];
 }) {
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
-  const project = useProjectStore((state) => state.project);
+  const project = useDisplayedProjectField((project) => project);
   const relatedPanelIds = assemblySelectionPanelIds(project, selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
   const geometry = useMemo(() => {
@@ -67,7 +68,7 @@ function UnfoldFaceMesh({
 }
 
 export function MeshUnfoldAssembly() {
-  const result = useProjectStore((state) => state.project.unfoldingResult);
+  const result = useDisplayedProjectField((project) => project.unfoldingResult);
   const progress = useProjectStore((state) => state.foldPreviewProgress);
   const positions = useMemo<UnfoldedFaceVertices>(
     () =>

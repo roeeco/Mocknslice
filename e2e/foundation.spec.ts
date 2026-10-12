@@ -1,5 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript("window.localStorage.setItem('mocknslice-workflow', 'legacy')");
+});
+
 const tetrahedronStl = `solid tetrahedron
 facet normal 0 0 -1
 outer loop

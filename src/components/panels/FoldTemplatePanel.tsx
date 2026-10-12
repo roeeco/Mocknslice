@@ -330,7 +330,7 @@ export function FoldTemplatePanel({
               {copy.cancelGeneration}
             </button>
           ) : (
-            <button className="primary-panel-action" type="button" onClick={generate}>
+            <button className="primary-panel-action" type="button" onClick={() => generate()}>
               {status === 'stale' ? 'Regenerate template' : copy.generateTemplate}
             </button>
           )}

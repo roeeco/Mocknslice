@@ -13,6 +13,7 @@ import { TEMPLATE_KINDS, type TemplateKind } from '../../domain/folding';
 import type { ProjectData } from '../../domain/project';
 import type { WaffleSliceResult } from '../../geometry/slicing/types';
 import { arrangePartsInRows } from '../../geometry/layout/arrangeParts';
+import { preservePlacements } from '../../geometry/layout/preservePlacements';
 import { expectedGenerationSignature, hashSerializable } from '../../domain/generation';
 import { runtimeFailure } from '../../domain/runtimeFailure';
 import {
@@ -450,8 +451,9 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
         if (activeTask === task) activeTask = undefined;
       });
   },
-  generateFoldTemplate: () => {
+  generateFoldTemplate: (options) => {
     const { project } = get();
+    const inputHistory = get().past.at(-1);
     let input: GenerationInputForMode<'fold-template'>;
     try {
       input = generationInputForMode(project, 'fold-template');
@@ -485,7 +487,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               sliceGenerationError: runtimeFailure('FOLD_GENERATION_FAILED', blockingIssue.message),
             };
           }
-          const changed = recordProjectChange(state, (currentProject) => {
+          const applyResult = (currentProject: ProjectData) => {
             const template = currentProject.sheetLayouts[0];
             return touchProject({
               ...currentProject,
@@ -500,10 +502,20 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
               unfoldingResult: undefined,
               panelConstructionResult: undefined,
               sheetLayouts: template
-                ? arrangePartsInRows(result.parts, template)
+                ? options?.mergeWithInputEdit
+                  ? preservePlacements(
+                      currentProject.sheetLayouts,
+                      currentProject.generatedParts,
+                      result.parts,
+                    )
+                  : arrangePartsInRows(result.parts, template)
                 : currentProject.sheetLayouts,
             });
-          });
+          };
+          const changed =
+            options?.mergeWithInputEdit && inputHistory && state.past.at(-1) === inputHistory
+              ? { project: applyResult(state.project), autosaveStatus: 'pending' as const }
+              : recordProjectChange(state, applyResult);
           const nextProject = changed.project ?? state.project;
           const generationSucceeded = result.parts.length > 0;
           const retainedEdge = result.editableEdges?.find(

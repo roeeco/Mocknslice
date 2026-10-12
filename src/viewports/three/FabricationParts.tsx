@@ -1,3 +1,4 @@
+import { useDisplayedProjectField } from '../PreviewProject';
 import { useEffect, useMemo } from 'react';
 import { ExtrudeGeometry, Path, Shape } from 'three';
 import type { FabricationPart } from '../../domain/fabrication';
@@ -58,7 +59,7 @@ function PartMesh({ part }: { part: FabricationPart }) {
 }
 
 export function FabricationParts() {
-  const parts = useProjectStore((state) => state.project.generatedParts);
+  const parts = useDisplayedProjectField((project) => project.generatedParts);
   return (
     <>
       {parts.map((part) => (

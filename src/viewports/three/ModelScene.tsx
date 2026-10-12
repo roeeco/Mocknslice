@@ -1,6 +1,7 @@
+import { useDisplayedProjectField } from '../PreviewProject';
 import { Edges, Grid, OrbitControls } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useEffectEvent } from 'react';
 import { BufferGeometry, Float32BufferAttribute } from 'three';
 import type { SerializableTriangleMesh } from '../../domain/geometry';
 import { useProjectStore } from '../../state/useProjectStore';
@@ -21,12 +22,12 @@ function CameraRig() {
   const camera = useThree((state) => state.camera);
   const preset = useProjectStore((state) => state.cameraPreset);
   const resetToken = useProjectStore((state) => state.cameraResetToken);
-  const dimensions = useProjectStore((state) => state.project.model.dimensions);
-  const unfoldingResult = useProjectStore((state) => state.project.unfoldingResult);
-  const panelResult = useProjectStore((state) => state.project.panelConstructionResult);
-  const foldingResult = useProjectStore((state) => state.project.foldingResult);
+  const dimensions = useDisplayedProjectField((project) => project.model.dimensions);
+  const unfoldingResult = useDisplayedProjectField((project) => project.unfoldingResult);
+  const panelResult = useDisplayedProjectField((project) => project.panelConstructionResult);
+  const foldingResult = useDisplayedProjectField((project) => project.foldingResult);
 
-  useEffect(() => {
+  const positionCamera = useEffectEvent(() => {
     const unfoldedPoints = unfoldingResult?.faces.flatMap((face) => face.points2D) ?? [];
     const unfoldedWidth = unfoldedPoints.length
       ? Math.max(...unfoldedPoints.map((point) => point.x)) -
@@ -59,7 +60,12 @@ function CameraRig() {
     camera.far = Math.max(1000, largestDimension * 20);
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
-  }, [camera, dimensions, foldingResult, panelResult, preset, resetToken, unfoldingResult]);
+  });
+  const modelId = useDisplayedProjectField((project) => project.model.id);
+  const hasResult = Boolean(foldingResult || panelResult || unfoldingResult);
+  useEffect(() => {
+    positionCamera();
+  }, [camera, preset, resetToken, modelId, hasResult]);
 
   return null;
 }
@@ -78,12 +84,12 @@ function ImportedGeometry({ mesh }: { mesh: SerializableTriangleMesh }) {
 }
 
 export function ModelScene() {
-  const model = useProjectStore((state) => state.project.model);
-  const hasParts = useProjectStore((state) => state.project.generatedParts.length > 0);
+  const model = useDisplayedProjectField((project) => project.model);
+  const hasParts = useDisplayedProjectField((project) => project.generatedParts.length > 0);
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
-  const fabricationMode = useProjectStore((state) => state.project.fabricationMode);
-  const foldingResult = useProjectStore((state) => state.project.foldingResult);
+  const fabricationMode = useDisplayedProjectField((project) => project.fabricationMode);
+  const foldingResult = useDisplayedProjectField((project) => project.foldingResult);
   const { widthMm, heightMm, depthMm } = model.dimensions;
   const selected = selectedEntityId === model.id;
   const templateDimensions = foldingResult?.resolvedDimensions;

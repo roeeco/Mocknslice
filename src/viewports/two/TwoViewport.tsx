@@ -1,3 +1,4 @@
+import { useDisplayedProjectField } from '../PreviewProject';
 import {
   useMemo,
   useRef,
@@ -211,7 +212,7 @@ export function TwoViewport() {
   const svgRef = useRef<SVGSVGElement>(null);
   const [drag, setDrag] = useState<DragState>();
   const [storedView, setStoredView] = useState<ViewState>();
-  const project = useProjectStore((state) => state.project);
+  const project = useDisplayedProjectField((project) => project);
   const experienceMode = useProjectStore((state) => state.experienceMode);
   const activeSheetId = useProjectStore((state) => state.activeSheetId);
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);

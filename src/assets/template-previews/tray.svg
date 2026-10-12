@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 150">
+<title>Original generated tray inspection preview</title>
+<path d="M 45 5 L 125 5" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 125 5 L 125 45" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 45 45 L 45 5" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 165 45 L 165 105" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 125 105 L 125 145" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 125 145 L 45 145" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 45 145 L 45 105" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 5 105 L 5 45" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 45 45 L 125 45" fill="none" stroke="#94aaa3" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 125 45 L 125 105" fill="none" stroke="#94aaa3" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 125 105 L 45 105" fill="none" stroke="#94aaa3" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 45 105 L 45 45" fill="none" stroke="#94aaa3" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 5 45 L 7.800000000000001 37 L 42.2 37 L 45 45" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 5 45 L 45 45" fill="none" stroke="#94aaa3" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 45 105 L 42.2 113 L 7.800000000000001 113 L 5 105" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 45 105 L 5 105" fill="none" stroke="#94aaa3" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 125 45 L 127.80000000000001 37 L 162.2 37 L 165 45" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 125 45 L 165 45" fill="none" stroke="#94aaa3" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 165 105 L 162.2 113 L 127.80000000000001 113 L 125 105" fill="none" stroke="#315b50" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+<path d="M 165 105 L 125 105" fill="none" stroke="#94aaa3" stroke-width="0.8" vector-effect="non-scaling-stroke"/>
+</svg>

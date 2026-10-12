@@ -4,6 +4,7 @@ import { WorkflowNavigation } from '../../components/workflow/WorkflowNavigation
 import { WorkflowPanel } from '../../components/workflow/WorkflowPanel';
 import { AppHeader } from './AppHeader';
 import { useProjectStore } from '../../state/useProjectStore';
+import { studioCopy } from '../../locales/studioCopy';
 
 function ExperienceModeIcon({ advanced }: { advanced: boolean }) {
   return advanced ? (
@@ -18,12 +19,21 @@ function ExperienceModeIcon({ advanced }: { advanced: boolean }) {
   );
 }
 
-export function AppShell({ children }: PropsWithChildren) {
+export function AppShell({ children, onStudio }: PropsWithChildren<{ onStudio?: () => void }>) {
   const experienceMode = useProjectStore((state) => state.experienceMode);
   const setExperienceMode = useProjectStore((state) => state.setExperienceMode);
+  const locale = useProjectStore((state) => state.locale);
   return (
     <div className="app-shell">
-      <AppHeader />
+      <AppHeader
+        trailingActions={
+          onStudio ? (
+            <button type="button" onClick={onStudio}>
+              {studioCopy(locale).studio}
+            </button>
+          ) : undefined
+        }
+      />
       <aside className="left-sidebar">
         <div className="sidebar-title">
           <p className="eyebrow">{copy.workspace}</p>
