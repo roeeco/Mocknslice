@@ -1,8 +1,10 @@
-import { verifySurfaceDeviation } from '../geometry/papercraft/measureSurfaceDeviation';
 import { papercraftPreparationHash } from '../geometry/papercraft/workingSource';
 import { compileToParts } from '../geometry/designGraph/compileToParts';
 import { papercraftHalfEdges } from '../geometry/papercraft/halfEdge';
-import { preflightPapercraftSource } from '../geometry/papercraft/prepareSource';
+import {
+  validateAcceptedPapercraftMesh,
+  preflightPapercraftSource,
+} from '../geometry/papercraft/prepareSource';
 import { applyPose } from '../geometry/designGraph/poses';
 import { meshVertex } from '../geometry/unfolding/meshAdjacency';
 import { EPS_LENGTH_MM } from '../geometry/designGraph/tolerances';
@@ -37,6 +39,36 @@ const tabPreference = v.object({
   targetDepthMm: positive,
   shoulderAngleDeg: v.pipe(positive, v.maxValue(89.999)),
 });
+const edgeEditSchema = v.object({
+  id,
+  intent: v.picklist(['auto', 'must-cut', 'must-join']),
+  tab: tabPreference,
+});
+const islandEditSchema = v.object({
+  id,
+  rootFaceId: id,
+  sourceFaceIds: v.optional(bounded(id, 200)),
+  translationMm: v.tuple([finite, finite]),
+  rotationDeg: finite,
+  layoutLocked: v.boolean(),
+});
+export const unresolvedPapercraftEditsSchema = bounded(
+  v.variant('kind', [
+    v.object({
+      id,
+      kind: v.literal('edge'),
+      reason: v.pipe(v.string(), v.maxLength(1024)),
+      edit: edgeEditSchema,
+    }),
+    v.object({
+      id,
+      kind: v.literal('island'),
+      reason: v.pipe(v.string(), v.maxLength(1024)),
+      edit: islandEditSchema,
+    }),
+  ]),
+  500,
+);
 const settings = v.object({
   algorithmVersion: v.literal('papercraft-v2'),
   sourceMeshHash: id,
@@ -47,21 +79,8 @@ const settings = v.object({
   maxCandidates: v.pipe(index, v.minValue(1), v.maxValue(32)),
   tabDefaultDepthMm: positive,
   tabShoulderAngleDeg: v.pipe(positive, v.maxValue(89.999)),
-  edgeEdits: bounded(
-    v.object({ id, intent: v.picklist(['auto', 'must-cut', 'must-join']), tab: tabPreference }),
-    300,
-  ),
-  islandEdits: bounded(
-    v.object({
-      id,
-      rootFaceId: id,
-      sourceFaceIds: v.optional(bounded(id, 200)),
-      translationMm: v.tuple([finite, finite]),
-      rotationDeg: finite,
-      layoutLocked: v.boolean(),
-    }),
-    200,
-  ),
+  edgeEdits: bounded(edgeEditSchema, 300),
+  islandEdits: bounded(islandEditSchema, 200),
 });
 const path = v.object({
   id,
@@ -300,7 +319,7 @@ export function parsePapercraftRecord(
       working.preparationHash ===
         papercraftPreparationHash({ mesh: project.model.mesh, settings: record.settings })
     ) {
-      const bound = verifySurfaceDeviation(
+      const bound = validateAcceptedPapercraftMesh(
         project.model.mesh,
         working.mesh,
         record.settings.maximumDeviationMm,
@@ -388,6 +407,39 @@ export function parsePapercraftRecord(
         hashSerializable(saved.unfolding) !== hashSerializable(project.unfoldingResult))
     )
       throw new Error('Papercraft compatibility artifacts disagree.');
+    if (
+      project.model.mesh &&
+      record.settings.sourceMeshHash === hashSerializable(project.model.mesh)
+    ) {
+      const currentHash = papercraftInputHash({
+        mesh: project.model.mesh,
+        settings: record.settings,
+        materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
+        acceptSimplification: record.acceptSimplification,
+        workingSource: record.workingSource,
+      });
+      if (currentHash === saved.inputHash) {
+        if (
+          record.workingSource &&
+          hashSerializable(saved.source.mesh) !== record.workingSource.meshHash
+        )
+          throw new Error('Current result differs from its accepted working mesh.');
+        if (
+          !saved.source.metrics.simplified &&
+          hashSerializable(saved.source.mesh) !== hashSerializable(project.model.mesh)
+        )
+          throw new Error('Current result differs from the source mesh.');
+        if (
+          saved.source.metrics.simplified &&
+          !validateAcceptedPapercraftMesh(
+            project.model.mesh,
+            saved.source.mesh,
+            record.settings.maximumDeviationMm,
+          ).verified
+        )
+          throw new Error('Current result exceeds its accepted source preparation.');
+      }
+    }
     // A stale intent is valid to save: retain the last valid result and let currentness block cutting.
     if (saved.inputHash !== saved.graph.source.inputHash)
       throw new Error('Papercraft graph hash disagrees with result.');

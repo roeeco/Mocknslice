@@ -1036,8 +1036,19 @@ export function migrateProjectFile(
     throw new ProjectImportError('This file is not a MocknSlice project.');
   }
 
-  if (value.version !== 9 && isRecord(value.project) && value.project.papercraft !== undefined)
-    throw new ProjectImportError('Papercraft data requires project schema v9.');
+  const nativeProject = value.project;
+  if (
+    value.version !== 9 &&
+    isRecord(nativeProject) &&
+    [
+      'papercraft',
+      'templateInstance',
+      'templateDefinitions',
+      'designGraph',
+      'unresolvedEdits',
+    ].some((key) => nativeProject[key] !== undefined)
+  )
+    throw new ProjectImportError('Native design data requires project schema v9.');
   const legacy = value.format === 'slicefold-project';
   if (
     (legacy &&

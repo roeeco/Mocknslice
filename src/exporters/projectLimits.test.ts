@@ -4,6 +4,20 @@ import { parseProjectFile, migrateProjectFile } from './importProject';
 import { serializeProject } from './exportProject';
 
 describe('project import bounds', () => {
+  it('requires v9 validation for every native project field', () => {
+    for (const field of [
+      'papercraft',
+      'templateInstance',
+      'templateDefinitions',
+      'designGraph',
+      'unresolvedEdits',
+    ]) {
+      const project = { ...createProject(), [field]: {} };
+      expect(() =>
+        migrateProjectFile({ format: 'mocknslice-project', version: 8, project }),
+      ).toThrow('schema v9');
+    }
+  });
   it('rejects oversized files and excessive nesting before state replacement', () => {
     expect(() => parseProjectFile(' '.repeat(20 * 1024 * 1024 + 1))).toThrow('20 MiB');
     let nested: unknown = {};

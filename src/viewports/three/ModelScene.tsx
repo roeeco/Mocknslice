@@ -1,3 +1,4 @@
+import { papercraftFaceVerticesAtProgress } from '../../geometry/papercraft/foldPreview';
 import { useDisplayedProjectField } from '../PreviewProject';
 import { Edges, Grid, OrbitControls } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
@@ -23,6 +24,9 @@ function CameraRig() {
   const preset = useProjectStore((state) => state.cameraPreset);
   const resetToken = useProjectStore((state) => state.cameraResetToken);
   const dimensions = useDisplayedProjectField((project) => project.model.dimensions);
+  const native = useDisplayedProjectField((project) =>
+    project.fabricationMode === 'mesh-unfold' ? project.papercraft?.result : undefined,
+  );
   const unfoldingResult = useDisplayedProjectField((project) => project.unfoldingResult);
   const panelResult = useDisplayedProjectField((project) => project.panelConstructionResult);
   const foldingResult = useDisplayedProjectField((project) => project.foldingResult);
@@ -37,7 +41,20 @@ function CameraRig() {
       ? Math.max(...unfoldedPoints.map((point) => point.y)) -
         Math.min(...unfoldedPoints.map((point) => point.y))
       : 0;
+    const nativeFlat = native
+      ? [...papercraftFaceVerticesAtProgress(native, 0).values()].flat()
+      : [];
+    const nativeSpan = nativeFlat.length
+      ? Math.max(
+          ...[0, 1, 2].map(
+            (axis) =>
+              Math.max(...nativeFlat.map((p) => p[axis]!)) -
+              Math.min(...nativeFlat.map((p) => p[axis]!)),
+          ),
+        )
+      : 0;
     const largestDimension = Math.max(
+      nativeSpan,
       dimensions.widthMm,
       dimensions.heightMm,
       dimensions.depthMm,

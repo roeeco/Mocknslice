@@ -1,5 +1,13 @@
 # MocknSlice architecture
 
+## Current upgrade architecture
+
+The Studio shell and retained legacy workflow share serializable project state. Native folding/custom definitions and papercraft compile panel graphs into physical boundaries; sliced/panel generators retain their mode-specific pure kernels. A frozen `PreparedOutputProvider` snapshot joins 2D/3D inspection, readiness and SVG/PDF. Verified currentness, topology, placement and operation checks gate production; old outputs remain accessible as drafts.
+
+Papercraft uses typed workers for preparation/optimization, an immutable accepted working mesh for stable edits, and a confirmed source-update proposal. Relinking retains ambiguous intent as persistent unresolved records. Worker cancellation and project/source identity checks protect last valid artifacts; autosave guards prevent late hydration/save completions from overwriting newer intent. Renderer-only triangulation and GPU objects stay outside serialized graphs. Version-locked authoring definitions are bounded data, not executable code.
+
+Project/schema storage is v9. IndexedDB database version 2 adds the immutable template library without replacing projects, settings or autosave pointers. The registry exposes seven working folding families and five working construction recipes, with no unsupported FEFCO entries. ADRs 0026–0035 record the staged transition; [UPGRADE_HANDOFF.md](UPGRADE_HANDOFF.md) maps implemented goals to remaining release work. Legacy-specific descriptions below remain useful compatibility history where they differ from these current native paths.
+
 ## Layer boundaries
 
 ### Domain

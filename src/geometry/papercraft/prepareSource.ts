@@ -1,6 +1,10 @@
 import { papercraftPreparationHash } from './workingSource';
 import { verifySurfaceDeviation } from './measureSurfaceDeviation';
-import type { PapercraftKernelInput, PreparedPapercraftSource } from '../../domain/papercraft';
+import type {
+  PapercraftRunHooks,
+  PapercraftKernelInput,
+  PreparedPapercraftSource,
+} from '../../domain/papercraft';
 import type { SerializableTriangleMesh } from '../../domain/geometry';
 import type { ValidationIssue } from '../../domain/validation';
 import { hashSerializable } from '../../domain/canonicalHash';
@@ -157,7 +161,38 @@ function bodyTopology(mesh: SerializableTriangleMesh): string[] {
   }
   return bodies.sort();
 }
-export function preparePapercraftSource(input: PapercraftKernelInput): PreparedPapercraftSource {
+export function validateAcceptedPapercraftMesh(
+  original: SerializableTriangleMesh,
+  working: SerializableTriangleMesh,
+  limitMm: number,
+) {
+  const surface = verifySurfaceDeviation(original, working, limitMm);
+  const before = buildMeshTopology(original),
+    after = buildMeshTopology(working);
+  const near = (a: number[], b: number[]) => Math.hypot(...a.map((v, i) => v - b[i]!)) <= 1e-6;
+  const sharpPreserved = before.edges
+    .filter((e) => (e.dihedralDeg ?? 0) >= 30)
+    .every((edge) => {
+      const a = meshVertex(original, edge.vertexA),
+        b = meshVertex(original, edge.vertexB);
+      return after.edges.some((next) => {
+        const c = meshVertex(working, next.vertexA),
+          d = meshVertex(working, next.vertexB);
+        return (near(a, c) && near(b, d)) || (near(a, d) && near(b, c));
+      });
+    });
+  return {
+    ...surface,
+    verified:
+      surface.verified &&
+      sharpPreserved &&
+      JSON.stringify(bodyTopology(original)) === JSON.stringify(bodyTopology(working)),
+  };
+}
+export function preparePapercraftSource(
+  input: PapercraftKernelInput,
+  hooks: PapercraftRunHooks = {},
+): PreparedPapercraftSource {
   let mesh = structuredClone(input.mesh);
   const issues = preflightPapercraftSource(mesh);
   const beforeFaceCount = mesh.indices.length / 3;
@@ -216,6 +251,17 @@ export function preparePapercraftSource(input: PapercraftKernelInput): PreparedP
           'Accepted working mesh no longer matches source preparation. Reset preparation and review edits.',
         ),
       );
+    else if (
+      !issues.length &&
+      !validateAcceptedPapercraftMesh(input.mesh, working.mesh, working.maximumDeviationMm).verified
+    )
+      issues.push(
+        papercraftIssue(
+          'PAPERCRAFT_WORKING_SOURCE_INVALID',
+          [],
+          'Accepted working mesh does not preserve source topology, sharp edges or the continuous deviation bound.',
+        ),
+      );
     else {
       mesh = structuredClone(working.mesh);
       maximumDeviationMm = working.maximumDeviationMm;
@@ -241,30 +287,34 @@ export function preparePapercraftSource(input: PapercraftKernelInput): PreparedP
     beforeFaceCount > settings.faceTarget &&
     input.acceptSimplification
   ) {
-    const result = simplifyMeshQem(mesh, {
-      targetFaceCount: settings.faceTarget,
-      maximumDeviationMm: settings.maximumDeviationMm,
-      sharpEdgeAngleDeg: 30,
-    });
+    const topologyBefore = JSON.stringify(bodyTopology(mesh));
+    const result = simplifyMeshQem(
+      mesh,
+      {
+        targetFaceCount: settings.faceTarget,
+        maximumDeviationMm: settings.maximumDeviationMm,
+        sharpEdgeAngleDeg: 30,
+      },
+      {
+        retainLockedCoordinates: true,
+        acceptTrial: (trial) =>
+          !preflightPapercraftSource(trial).length &&
+          JSON.stringify(bodyTopology(trial)) === topologyBefore,
+        shouldStop: () => {
+          if (hooks.cancelled?.()) throw new DOMException('Preparation cancelled.', 'AbortError');
+          return hooks.budgetExpired?.() ?? false;
+        },
+      },
+    );
     const nextIssues = preflightPapercraftSource(result.mesh);
-    const surface = verifySurfaceDeviation(input.mesh, result.mesh, settings.maximumDeviationMm);
-    const sharpEdges = buildMeshTopology(mesh).edges.filter((e) => (e.dihedralDeg ?? 0) >= 30);
-    const nextEdges = buildMeshTopology(result.mesh).edges;
-    const near = (a: number[], b: number[]) => Math.hypot(...a.map((v, i) => v - b[i]!)) <= 1e-6;
-    const sharpPreserved = sharpEdges.every((edge) => {
-      const a = meshVertex(mesh, edge.vertexA),
-        b = meshVertex(mesh, edge.vertexB);
-      return nextEdges.some((next) => {
-        const c = meshVertex(result.mesh, next.vertexA),
-          d = meshVertex(result.mesh, next.vertexB);
-        return (near(a, c) && near(b, d)) || (near(a, d) && near(b, c));
-      });
-    });
+    const surface = validateAcceptedPapercraftMesh(
+      input.mesh,
+      result.mesh,
+      settings.maximumDeviationMm,
+    );
     if (
       nextIssues.length ||
       !surface.verified ||
-      !sharpPreserved ||
-      JSON.stringify(bodyTopology(mesh)) !== JSON.stringify(bodyTopology(result.mesh)) ||
       result.maximumDeviationMm > settings.maximumDeviationMm
     )
       issues.push(
@@ -325,7 +375,9 @@ export function preparePapercraftSource(input: PapercraftKernelInput): PreparedP
       papercraftIssue(
         'PAPERCRAFT_FACE_LIMIT',
         [],
-        'Source exceeds the chosen target. Explicitly accept bounded simplification or import a lower-poly source.',
+        input.acceptSimplification
+          ? 'Conservative preparation could not reach the target without changing preserved geometry or exceeding its budget. Increase the target or import a lower-poly source.'
+          : 'Source exceeds the chosen target. Explicitly accept bounded simplification or import a lower-poly source.',
       ),
     );
   const topology = issues.length ? { faces: [], halfEdges: [] } : papercraftHalfEdges(mesh);

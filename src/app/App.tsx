@@ -1,3 +1,4 @@
+import { PapercraftSourceReview } from '../components/papercraft/PapercraftSourceReview';
 import { PreparedOutputProvider } from '../components/studio/PreparedOutputProvider';
 import { useEffect, useState } from 'react';
 import { useProjectAutosave } from '../persistence/useProjectAutosave';
@@ -162,6 +163,7 @@ export function App() {
   };
   return (
     <PreparedOutputProvider>
+      <PapercraftSourceReview />
       {legacy ? (
         <AppShell onStudio={() => toggleWorkflow(false)}>{workspace}</AppShell>
       ) : (

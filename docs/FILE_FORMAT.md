@@ -5,10 +5,24 @@ Project exports use formatted JSON with the suffix `.mocknslice.json`. Legacy `.
 ```json
 {
   "format": "mocknslice-project",
-  "version": 7,
+  "version": 9,
   "project": {}
 }
 ```
+
+## Current v9 contract
+
+New exports and IndexedDB records use version 9. Versions 1–8 migrate through explicit legacy branches while retaining source data, settings, layouts and last valid inspection output. Native-only fields require v9 validation; claiming an earlier version does not bypass their checks.
+
+Optional `papercraft` stores v2 settings, explicit simplification acceptance, the last result and an accepted `workingSource` with mesh, mesh hash, preparation hash and verified maximum deviation. The original model mesh remains unchanged by simplification. Island edits may contain `sourceFaceIds` for confidence relinking. Optional `unresolvedEdits` stores bounded, discriminated edge/island intent records that must be explicitly remapped or discarded before production export. Stale output may remain saved and inspectable, but currentness blocks cutting.
+
+Optional `templateInstance` and `templateDefinitions` lock exact bounded definitions and parameter values to saved projects. `designGraph` stores the shared serializable panel/connection/feature/piece representation. Hashes, geometry references, native cache correspondence, topology and source preparation are validated before replacing an open project. No runtime worker, selection or Three.js object is serialized.
+
+Native fabrication uses closed physical outer/hole boundaries, including integrated waffle mouths and glue tabs; historical open-slot snapshots below remain inspection data. Preview and production SVG/PDF consume a common frozen prepared snapshot with stock, kerf, placement and operation checks. Project imports are limited to 20 MiB, 100,000 source triangles and 10,000 paths. See ADRs 0032–0035 and [the handoff](UPGRADE_HANDOFF.md) for validation limits and release gates.
+
+## Historical version details
+
+The following describes the earlier formats and outputs retained for compatibility; statements about versions 7/8 or open waffle slot paths are historical, not the current export contract.
 
 Version 8 stores project metadata, a serializable source model and transform, optional normalized mesh positions and triangle indices, centred bounds, model-health data, import settings, fabrication mode, complete typed settings for every mode, a material profile snapshot, generated parts, optional folding, mesh-unfold, or panel-construction result, canonical generation provenance, sheet layouts, export settings, and acknowledged warning IDs. Structured generation issues are persisted with the output.
 

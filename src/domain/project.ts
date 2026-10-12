@@ -1,3 +1,4 @@
+import type { UnresolvedPapercraftEdit } from './papercraft';
 import type { SavedTemplateInstance, UserTemplateDefinition } from '../templates/authoring/types';
 import type { FabricationDesignGraph } from './designGraph';
 import type { PapercraftWorkingSource, PapercraftResult, PapercraftSettingsV2 } from './papercraft';
@@ -20,8 +21,7 @@ export interface ProjectMetadata {
 }
 
 export interface ProjectData {
-  unresolvedEdits?:
-    import('../geometry/papercraft/relinkOnModelUpdate').UnresolvedPapercraftEdit[] | undefined;
+  unresolvedEdits?: UnresolvedPapercraftEdit[] | undefined;
   templateInstance?: SavedTemplateInstance | undefined;
   templateDefinitions?: UserTemplateDefinition[] | undefined;
   designGraph?: FabricationDesignGraph | undefined;

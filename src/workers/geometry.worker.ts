@@ -1,5 +1,5 @@
-import { preparePapercraftSource } from '../geometry/papercraft/prepareSource';
 /// <reference lib="webworker" />
+import { preparePapercraftSource } from '../geometry/papercraft/prepareSource';
 
 import { generateNativeTemplate } from '../templates/generateNativeTemplate';
 import { generatePapercraft } from '../geometry/papercraft/buildFabrication';
@@ -20,11 +20,14 @@ context.onmessage = (event: MessageEvent<GeometryWorkerRequest>) => {
   const request = event.data;
   try {
     if (request.type === 'prepare-papercraft-source') {
+      const deadline = performance.now() + 6000;
       const response: GeometryWorkerResponse = {
         id: request.id,
         type: request.type,
         ok: true,
-        result: preparePapercraftSource(request.payload),
+        result: preparePapercraftSource(request.payload, {
+          budgetExpired: () => performance.now() >= deadline,
+        }),
       };
       context.postMessage(response);
     } else if (request.type === 'generate-template-graph') {

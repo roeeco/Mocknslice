@@ -2288,3 +2288,20 @@ html[dir='rtl'] .workflow-step {
     transition-duration: 0.01ms !important;
   }
 }
+
+.source-update-dialog {
+  width: min(680px, 92vw);
+  max-height: 85vh;
+  overflow: auto;
+  border: 1px solid #bbb;
+  border-radius: 12px;
+  padding: 24px;
+  color: #253b35;
+  background: #f4f1e8;
+}
+.source-update-dialog::backdrop {
+  background: rgb(0 0 0 / 45%);
+}
+.source-update-dialog button {
+  margin: 8px;
+}

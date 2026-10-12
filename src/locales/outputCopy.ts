@@ -40,6 +40,13 @@ const he: typeof en = {
 export const outputCopy = (locale: 'en' | 'he') => (locale === 'he' ? he : en);
 
 const issueMessagesHe: Record<string, string> = {
+  SOURCE_EDITS_UNRESOLVED:
+    'יש להתאים עריכות מקור שלא נמצאה להן התאמה, או למחוק אותן במפורש, לפני חיתוך.',
+  PAPERCRAFT_WORKING_SOURCE_INVALID:
+    'הרשת שהתקבלה אינה תואמת עוד להכנת המקור. יש לבדוק שוב את ההכנה והעריכות.',
+  PAPERCRAFT_PREPARATION_BUDGET:
+    'הכנה אוטומטית מוגבלת ל־5,000 משולשים במקור. ייבאו רשת פחות מפורטת לפריסה.',
+
   FABRICATION_NOMINAL:
     'זו גאומטריה נומינלית בלבד. יש לבדוק התאמה לחומר, קווי קיפול והרכבה בניסוי בחומר.',
   GENERATION_STALE: 'הפריסה הקודמת אינה תואמת להגדרות הנוכחיות. חשבו מחדש לפני חיתוך.',

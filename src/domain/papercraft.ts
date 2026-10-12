@@ -11,7 +11,7 @@ export interface PapercraftEdgeEdit {
   tab: { owner: 'face-a' | 'face-b' | 'none'; targetDepthMm: number; shoulderAngleDeg: number };
 }
 export interface PapercraftIslandEdit {
-  sourceFaceIds?: string[];
+  sourceFaceIds?: string[] | undefined;
   id: string;
   rootFaceId: string;
   translationMm: [number, number];
@@ -152,4 +152,11 @@ export interface PapercraftResult extends PapercraftKernelResult {
   parts: FabricationPart[];
   /** Compatibility bridge for the existing renderer; geometry comes from the graph computation. */
   unfolding: MeshUnfoldResult;
+}
+
+export interface UnresolvedPapercraftEdit {
+  id: string;
+  kind: 'edge' | 'island';
+  reason: string;
+  edit: PapercraftEdgeEdit | PapercraftIslandEdit;
 }

@@ -15,6 +15,7 @@ export function cancelPapercraftTask() {
   active = undefined;
 }
 export const createPapercraftSlice: AppSliceCreator<PapercraftSlice> = (set, get) => ({
+  papercraftCandidate: undefined,
   papercraftProgress: undefined,
   papercraftIssues: [],
   enablePapercraft: () => {
@@ -70,7 +71,9 @@ export const createPapercraftSlice: AppSliceCreator<PapercraftSlice> = (set, get
     const project = get().project,
       native = project.papercraft;
     if (!native) return;
-    const result = native.result;
+    const candidate =
+      get().papercraftCandidate?.sourceProject === project ? get().papercraftCandidate : undefined;
+    const result = candidate?.result ?? native.result;
     if (result && !result.source.halfEdges.some((e) => e.edgeKey === edit.id)) return;
     set((state) => ({
       ...recordProjectChange(state, (current) =>
@@ -78,6 +81,9 @@ export const createPapercraftSlice: AppSliceCreator<PapercraftSlice> = (set, get
           ...current,
           papercraft: {
             ...current.papercraft!,
+            workingSource:
+              current.papercraft!.workingSource ??
+              (candidate ? acceptedWorkingSource(candidate.input, candidate.result) : undefined),
             settings: {
               ...current.papercraft!.settings,
               edgeEdits: [
@@ -197,6 +203,7 @@ export const createPapercraftSlice: AppSliceCreator<PapercraftSlice> = (set, get
           if (blocking)
             return {
               sliceGenerationStatus: 'error',
+              papercraftCandidate: { sourceProject: current, result, input },
               papercraftIssues: result.issues,
               papercraftProgress: undefined,
               sliceGenerationError: runtimeFailure('UNFOLD_GENERATION_FAILED', blocking.message),
@@ -272,14 +279,18 @@ export const createPapercraftSlice: AppSliceCreator<PapercraftSlice> = (set, get
           const selectedEdge = result.unfolding.edges.find((e) => e.id === state.selectedEntityId);
           return {
             ...changed,
+            papercraftCandidate: undefined,
             sliceGenerationStatus: 'ready',
             sliceGenerationError: undefined,
             papercraftIssues: result.issues,
             papercraftProgress: undefined,
             validationIssues: validationIssuesForProject(next),
-            activeSheetId: next.sheetLayouts.some((s) => s.id === state.activeSheetId)
+            activeSheetId: next.sheetLayouts.some(
+              (s) => s.id === state.activeSheetId && s.placements.length > 0,
+            )
               ? state.activeSheetId
-              : next.sheetLayouts[0]?.id,
+              : (next.sheetLayouts.find((s) => s.placements.length > 0)?.id ??
+                next.sheetLayouts[0]?.id),
             selectedEntityId: selectedEdge?.id ?? result.faces[0]?.id,
             selectedPartId: selectedEdge
               ? result.unfolding.faces.find((f) => f.faceIndex === selectedEdge.faceAIndex)?.partId
