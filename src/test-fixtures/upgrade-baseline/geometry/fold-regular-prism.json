@@ -1,0 +1,4814 @@
+{
+  "input": {
+    "mode": "fold-template",
+    "payload": {
+      "materialThicknessMm": 1,
+      "settings": {
+        "templateKind": "regular-prism",
+        "fitAxis": "y",
+        "clearanceMm": 0,
+        "profileToleranceMm": 1,
+        "sizeMode": "custom",
+        "envelopeDimensions": {
+          "widthMm": 80,
+          "lengthMm": 60,
+          "heightMm": 40
+        },
+        "parameters": {
+          "wallHeightMm": 40,
+          "tabDepthMm": 8,
+          "lidDepthMm": 15,
+          "lidClearanceMm": 0.5,
+          "gussetDepthMm": 40,
+          "closureFlapMm": 12,
+          "prismSides": 6,
+          "prismRotationDeg": 0,
+          "topScale": 0.5,
+          "seamTabMm": 8,
+          "standalone": true,
+          "closureMethod": "glue",
+          "slotClearanceMm": 0.1
+        },
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      }
+    }
+  },
+  "result": {
+    "settings": {
+      "templateKind": "regular-prism",
+      "fitAxis": "y",
+      "clearanceMm": 0,
+      "profileToleranceMm": 1,
+      "sizeMode": "custom",
+      "envelopeDimensions": {
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40
+      },
+      "parameters": {
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "standalone": true,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1
+      },
+      "connectionOverrides": [],
+      "boundaryGlueTabs": [],
+      "glueTabDepthMm": 8
+    },
+    "profile": {
+      "sourceModelId": "standalone-template",
+      "fitAxis": "y",
+      "sourceHullPoints": [
+        {
+          "x": -40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": 30
+        },
+        {
+          "x": -40,
+          "y": 30
+        }
+      ],
+      "fittedPoints": [
+        {
+          "x": -40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": 30
+        },
+        {
+          "x": -40,
+          "y": 30
+        }
+      ],
+      "clearanceMm": 0,
+      "simplificationToleranceMm": 1,
+      "axisMinMm": -20,
+      "axisMaxMm": 20,
+      "widthMm": 80,
+      "heightMm": 60,
+      "depthMm": 40
+    },
+    "panels": [
+      {
+        "id": "fold-prism-main-band-1",
+        "partId": "fold-prism-main",
+        "name": "Band 1",
+        "role": "band",
+        "outline": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 57.320508075688764,
+            "y": 0
+          },
+          {
+            "x": 57.320508075688764,
+            "y": 40
+          },
+          {
+            "x": 0,
+            "y": 40
+          }
+        ]
+      },
+      {
+        "id": "fold-prism-main-band-2",
+        "partId": "fold-prism-main",
+        "name": "Band 2",
+        "role": "band",
+        "outline": [
+          {
+            "x": 57.320508075688764,
+            "y": 0
+          },
+          {
+            "x": 114.64101615137753,
+            "y": 0
+          },
+          {
+            "x": 114.64101615137753,
+            "y": 40
+          },
+          {
+            "x": 57.320508075688764,
+            "y": 40
+          }
+        ]
+      },
+      {
+        "id": "fold-prism-main-band-3",
+        "partId": "fold-prism-main",
+        "name": "Band 3",
+        "role": "band",
+        "outline": [
+          {
+            "x": 114.64101615137753,
+            "y": 0
+          },
+          {
+            "x": 171.96152422706632,
+            "y": 0
+          },
+          {
+            "x": 171.96152422706632,
+            "y": 40
+          },
+          {
+            "x": 114.64101615137753,
+            "y": 40
+          }
+        ]
+      },
+      {
+        "id": "fold-prism-main-band-4",
+        "partId": "fold-prism-main",
+        "name": "Band 4",
+        "role": "band",
+        "outline": [
+          {
+            "x": 171.96152422706632,
+            "y": 0
+          },
+          {
+            "x": 229.28203230275508,
+            "y": 0
+          },
+          {
+            "x": 229.28203230275508,
+            "y": 40
+          },
+          {
+            "x": 171.96152422706632,
+            "y": 40
+          }
+        ]
+      },
+      {
+        "id": "fold-prism-main-band-5",
+        "partId": "fold-prism-main",
+        "name": "Band 5",
+        "role": "band",
+        "outline": [
+          {
+            "x": 229.28203230275508,
+            "y": 0
+          },
+          {
+            "x": 286.6025403784439,
+            "y": 0
+          },
+          {
+            "x": 286.6025403784439,
+            "y": 40
+          },
+          {
+            "x": 229.28203230275508,
+            "y": 40
+          }
+        ]
+      },
+      {
+        "id": "fold-prism-main-band-6",
+        "partId": "fold-prism-main",
+        "name": "Band 6",
+        "role": "band",
+        "outline": [
+          {
+            "x": 286.6025403784439,
+            "y": 0
+          },
+          {
+            "x": 343.92304845413264,
+            "y": 0
+          },
+          {
+            "x": 343.92304845413264,
+            "y": 40
+          },
+          {
+            "x": 286.6025403784439,
+            "y": 40
+          }
+        ]
+      },
+      {
+        "id": "fold-prism-main-face-a",
+        "partId": "fold-prism-main",
+        "name": "Front face",
+        "role": "face",
+        "outline": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 57.320508075688764,
+            "y": 0
+          },
+          {
+            "x": 85.98076211353316,
+            "y": -49.641016151377535
+          },
+          {
+            "x": 57.32050807568877,
+            "y": -99.2820323027551
+          },
+          {
+            "x": 1.4210854715202004e-14,
+            "y": -99.28203230275511
+          },
+          {
+            "x": -28.660254037844393,
+            "y": -49.641016151377535
+          }
+        ]
+      },
+      {
+        "id": "fold-prism-main-face-b",
+        "partId": "fold-prism-main",
+        "name": "Back face",
+        "role": "face",
+        "outline": [
+          {
+            "x": 0,
+            "y": 40
+          },
+          {
+            "x": 57.320508075688764,
+            "y": 40
+          },
+          {
+            "x": 85.98076211353316,
+            "y": 89.64101615137753
+          },
+          {
+            "x": 57.32050807568877,
+            "y": 139.2820323027551
+          },
+          {
+            "x": 1.4210854715202004e-14,
+            "y": 139.2820323027551
+          },
+          {
+            "x": -28.660254037844393,
+            "y": 89.64101615137753
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "id": "fold-prism-main-band-fold-1",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-1",
+        "panelBId": "fold-prism-main-band-2",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 60,
+        "pairLabel": "F1",
+        "start": {
+          "x": 57.320508,
+          "y": 0
+        },
+        "end": {
+          "x": 57.320508,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-band-fold-2",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-2",
+        "panelBId": "fold-prism-main-band-3",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 60,
+        "pairLabel": "F2",
+        "start": {
+          "x": 114.641016,
+          "y": 0
+        },
+        "end": {
+          "x": 114.641016,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-band-fold-3",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-3",
+        "panelBId": "fold-prism-main-band-4",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 60,
+        "pairLabel": "F3",
+        "start": {
+          "x": 171.961524,
+          "y": 0
+        },
+        "end": {
+          "x": 171.961524,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-band-fold-4",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-4",
+        "panelBId": "fold-prism-main-band-5",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 60,
+        "pairLabel": "F4",
+        "start": {
+          "x": 229.282032,
+          "y": 0
+        },
+        "end": {
+          "x": 229.282032,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-band-fold-5",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-5",
+        "panelBId": "fold-prism-main-band-6",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 60,
+        "pairLabel": "F5",
+        "start": {
+          "x": 286.60254,
+          "y": 0
+        },
+        "end": {
+          "x": 286.60254,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-face-a-fold",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-1",
+        "panelBId": "fold-prism-main-face-a",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F6",
+        "start": {
+          "x": 0,
+          "y": 0
+        },
+        "end": {
+          "x": 57.320508,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-prism-main-face-b-fold",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-1",
+        "panelBId": "fold-prism-main-face-b",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F7",
+        "start": {
+          "x": 57.320508,
+          "y": 40
+        },
+        "end": {
+          "x": 0,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-band-1-boundary-4",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-1",
+        "disposition": "boundary",
+        "start": {
+          "x": 0,
+          "y": 40
+        },
+        "end": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-prism-main-band-2-boundary-1",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-2",
+        "disposition": "boundary",
+        "start": {
+          "x": 57.320508,
+          "y": 0
+        },
+        "end": {
+          "x": 114.641016,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-prism-main-band-2-boundary-3",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-2",
+        "disposition": "boundary",
+        "start": {
+          "x": 114.641016,
+          "y": 40
+        },
+        "end": {
+          "x": 57.320508,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-band-3-boundary-1",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-3",
+        "disposition": "boundary",
+        "start": {
+          "x": 114.641016,
+          "y": 0
+        },
+        "end": {
+          "x": 171.961524,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-prism-main-band-3-boundary-3",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-3",
+        "disposition": "boundary",
+        "start": {
+          "x": 171.961524,
+          "y": 40
+        },
+        "end": {
+          "x": 114.641016,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-band-4-boundary-1",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-4",
+        "disposition": "boundary",
+        "start": {
+          "x": 171.961524,
+          "y": 0
+        },
+        "end": {
+          "x": 229.282032,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-prism-main-band-4-boundary-3",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-4",
+        "disposition": "boundary",
+        "start": {
+          "x": 229.282032,
+          "y": 40
+        },
+        "end": {
+          "x": 171.961524,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-band-5-boundary-1",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-5",
+        "disposition": "boundary",
+        "start": {
+          "x": 229.282032,
+          "y": 0
+        },
+        "end": {
+          "x": 286.60254,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-prism-main-band-5-boundary-3",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-5",
+        "disposition": "boundary",
+        "start": {
+          "x": 286.60254,
+          "y": 40
+        },
+        "end": {
+          "x": 229.282032,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-band-6-boundary-1",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-6",
+        "disposition": "boundary",
+        "start": {
+          "x": 286.60254,
+          "y": 0
+        },
+        "end": {
+          "x": 343.923048,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-prism-main-band-6-boundary-3",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-6",
+        "disposition": "boundary",
+        "start": {
+          "x": 343.923048,
+          "y": 40
+        },
+        "end": {
+          "x": 286.60254,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-face-a-boundary-2",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-face-a",
+        "disposition": "boundary",
+        "start": {
+          "x": 57.320508,
+          "y": 0
+        },
+        "end": {
+          "x": 85.980762,
+          "y": -49.641016
+        }
+      },
+      {
+        "id": "fold-prism-main-face-a-boundary-3",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-face-a",
+        "disposition": "boundary",
+        "start": {
+          "x": 85.980762,
+          "y": -49.641016
+        },
+        "end": {
+          "x": 57.320508,
+          "y": -99.282032
+        }
+      },
+      {
+        "id": "fold-prism-main-face-a-boundary-4",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-face-a",
+        "disposition": "boundary",
+        "start": {
+          "x": 57.320508,
+          "y": -99.282032
+        },
+        "end": {
+          "x": 0,
+          "y": -99.282032
+        }
+      },
+      {
+        "id": "fold-prism-main-face-a-boundary-5",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-face-a",
+        "disposition": "boundary",
+        "start": {
+          "x": 0,
+          "y": -99.282032
+        },
+        "end": {
+          "x": -28.660254,
+          "y": -49.641016
+        }
+      },
+      {
+        "id": "fold-prism-main-face-a-boundary-6",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-face-a",
+        "disposition": "boundary",
+        "start": {
+          "x": -28.660254,
+          "y": -49.641016
+        },
+        "end": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "id": "fold-prism-main-face-b-boundary-2",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-face-b",
+        "disposition": "boundary",
+        "start": {
+          "x": 57.320508,
+          "y": 40
+        },
+        "end": {
+          "x": 85.980762,
+          "y": 89.641016
+        }
+      },
+      {
+        "id": "fold-prism-main-face-b-boundary-3",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-face-b",
+        "disposition": "boundary",
+        "start": {
+          "x": 85.980762,
+          "y": 89.641016
+        },
+        "end": {
+          "x": 57.320508,
+          "y": 139.282032
+        }
+      },
+      {
+        "id": "fold-prism-main-face-b-boundary-4",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-face-b",
+        "disposition": "boundary",
+        "start": {
+          "x": 57.320508,
+          "y": 139.282032
+        },
+        "end": {
+          "x": 0,
+          "y": 139.282032
+        }
+      },
+      {
+        "id": "fold-prism-main-face-b-boundary-5",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-face-b",
+        "disposition": "boundary",
+        "start": {
+          "x": 0,
+          "y": 139.282032
+        },
+        "end": {
+          "x": -28.660254,
+          "y": 89.641016
+        }
+      },
+      {
+        "id": "fold-prism-main-face-b-boundary-6",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-face-b",
+        "disposition": "boundary",
+        "start": {
+          "x": -28.660254,
+          "y": 89.641016
+        },
+        "end": {
+          "x": 0,
+          "y": 40
+        }
+      },
+      {
+        "id": "fold-prism-main-seam-tab-base",
+        "partId": "fold-prism-main",
+        "panelAId": "fold-prism-main-band-6",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T1",
+        "start": {
+          "x": 343.923048,
+          "y": 0
+        },
+        "end": {
+          "x": 343.923048,
+          "y": 40
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "fold-prism-main-band-fold-1-connection",
+        "panelAId": "fold-prism-main-band-1",
+        "panelBId": "fold-prism-main-band-2",
+        "edgeA": {
+          "start": {
+            "x": 57.320508,
+            "y": 0
+          },
+          "end": {
+            "x": 57.320508,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 57.320508,
+            "y": 0
+          },
+          "end": {
+            "x": 57.320508,
+            "y": 40
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-prism-main-band-fold-2-connection",
+        "panelAId": "fold-prism-main-band-2",
+        "panelBId": "fold-prism-main-band-3",
+        "edgeA": {
+          "start": {
+            "x": 114.641016,
+            "y": 0
+          },
+          "end": {
+            "x": 114.641016,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 114.641016,
+            "y": 0
+          },
+          "end": {
+            "x": 114.641016,
+            "y": 40
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-prism-main-band-fold-3-connection",
+        "panelAId": "fold-prism-main-band-3",
+        "panelBId": "fold-prism-main-band-4",
+        "edgeA": {
+          "start": {
+            "x": 171.961524,
+            "y": 0
+          },
+          "end": {
+            "x": 171.961524,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 171.961524,
+            "y": 0
+          },
+          "end": {
+            "x": 171.961524,
+            "y": 40
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-prism-main-band-fold-4-connection",
+        "panelAId": "fold-prism-main-band-4",
+        "panelBId": "fold-prism-main-band-5",
+        "edgeA": {
+          "start": {
+            "x": 229.282032,
+            "y": 0
+          },
+          "end": {
+            "x": 229.282032,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 229.282032,
+            "y": 0
+          },
+          "end": {
+            "x": 229.282032,
+            "y": 40
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-prism-main-band-fold-5-connection",
+        "panelAId": "fold-prism-main-band-5",
+        "panelBId": "fold-prism-main-band-6",
+        "edgeA": {
+          "start": {
+            "x": 286.60254,
+            "y": 0
+          },
+          "end": {
+            "x": 286.60254,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 286.60254,
+            "y": 0
+          },
+          "end": {
+            "x": 286.60254,
+            "y": 40
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-prism-main-face-a-fold-connection",
+        "panelAId": "fold-prism-main-band-1",
+        "panelBId": "fold-prism-main-face-a",
+        "edgeA": {
+          "start": {
+            "x": 0,
+            "y": 0
+          },
+          "end": {
+            "x": 57.320508,
+            "y": 0
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 0,
+            "y": 0
+          },
+          "end": {
+            "x": 57.320508,
+            "y": 0
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-prism-main-face-b-fold-connection",
+        "panelAId": "fold-prism-main-band-1",
+        "panelBId": "fold-prism-main-face-b",
+        "edgeA": {
+          "start": {
+            "x": 57.320508,
+            "y": 40
+          },
+          "end": {
+            "x": 0,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 57.320508,
+            "y": 40
+          },
+          "end": {
+            "x": 0,
+            "y": 40
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-prism-main-seam-tab-connection",
+        "panelAId": "fold-prism-main-band-6",
+        "panelBId": "fold-prism-main-band-1",
+        "edgeA": {
+          "start": {
+            "x": 343.923048,
+            "y": 0
+          },
+          "end": {
+            "x": 343.923048,
+            "y": 40
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 0,
+            "y": 40
+          },
+          "end": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-prism-main-seam-tab"]
+      }
+    ],
+    "tabs": [
+      {
+        "id": "fold-prism-main-seam-tab",
+        "partId": "fold-prism-main",
+        "edgeId": "fold-prism-main-seam-tab-base",
+        "ownerPanelId": "fold-prism-main-band-6",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 343.923048,
+          "y": 0
+        },
+        "baseEnd": {
+          "x": 343.923048,
+          "y": 40
+        },
+        "outline": [
+          {
+            "x": 343.923048,
+            "y": 0
+          },
+          {
+            "x": 351.923048,
+            "y": 2.8
+          },
+          {
+            "x": 351.923048,
+            "y": 37.2
+          },
+          {
+            "x": 343.923048,
+            "y": 40
+          }
+        ],
+        "receiverPanelId": "fold-prism-main-band-1"
+      }
+    ],
+    "parts": [
+      {
+        "id": "fold-prism-main",
+        "name": "6-sided prism net",
+        "label": "6-sided prism net",
+        "paths": [
+          {
+            "id": "fold-prism-main-band-1-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 40
+              },
+              {
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-1",
+            "edgeId": "fold-prism-main-band-1-boundary-4"
+          },
+          {
+            "id": "fold-prism-main-band-2-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 0
+              },
+              {
+                "x": 114.641016,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-2",
+            "edgeId": "fold-prism-main-band-2-boundary-1"
+          },
+          {
+            "id": "fold-prism-main-band-2-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 114.641016,
+                "y": 40
+              },
+              {
+                "x": 57.320508,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-2",
+            "edgeId": "fold-prism-main-band-2-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-band-3-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 114.641016,
+                "y": 0
+              },
+              {
+                "x": 171.961524,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-3",
+            "edgeId": "fold-prism-main-band-3-boundary-1"
+          },
+          {
+            "id": "fold-prism-main-band-3-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 171.961524,
+                "y": 40
+              },
+              {
+                "x": 114.641016,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-3",
+            "edgeId": "fold-prism-main-band-3-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-band-4-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 171.961524,
+                "y": 0
+              },
+              {
+                "x": 229.282032,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-4",
+            "edgeId": "fold-prism-main-band-4-boundary-1"
+          },
+          {
+            "id": "fold-prism-main-band-4-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 229.282032,
+                "y": 40
+              },
+              {
+                "x": 171.961524,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-4",
+            "edgeId": "fold-prism-main-band-4-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-band-5-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 229.282032,
+                "y": 0
+              },
+              {
+                "x": 286.60254,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-5",
+            "edgeId": "fold-prism-main-band-5-boundary-1"
+          },
+          {
+            "id": "fold-prism-main-band-5-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 286.60254,
+                "y": 40
+              },
+              {
+                "x": 229.282032,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-5",
+            "edgeId": "fold-prism-main-band-5-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-band-6-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 286.60254,
+                "y": 0
+              },
+              {
+                "x": 343.923048,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-6",
+            "edgeId": "fold-prism-main-band-6-boundary-1"
+          },
+          {
+            "id": "fold-prism-main-band-6-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 343.923048,
+                "y": 40
+              },
+              {
+                "x": 286.60254,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-6",
+            "edgeId": "fold-prism-main-band-6-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-face-a-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 0
+              },
+              {
+                "x": 85.980762,
+                "y": -49.641016
+              }
+            ],
+            "panelId": "fold-prism-main-face-a",
+            "edgeId": "fold-prism-main-face-a-boundary-2"
+          },
+          {
+            "id": "fold-prism-main-face-a-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 85.980762,
+                "y": -49.641016
+              },
+              {
+                "x": 57.320508,
+                "y": -99.282032
+              }
+            ],
+            "panelId": "fold-prism-main-face-a",
+            "edgeId": "fold-prism-main-face-a-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-face-a-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": -99.282032
+              },
+              {
+                "x": 0,
+                "y": -99.282032
+              }
+            ],
+            "panelId": "fold-prism-main-face-a",
+            "edgeId": "fold-prism-main-face-a-boundary-4"
+          },
+          {
+            "id": "fold-prism-main-face-a-boundary-5-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": -99.282032
+              },
+              {
+                "x": -28.660254,
+                "y": -49.641016
+              }
+            ],
+            "panelId": "fold-prism-main-face-a",
+            "edgeId": "fold-prism-main-face-a-boundary-5"
+          },
+          {
+            "id": "fold-prism-main-face-a-boundary-6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -28.660254,
+                "y": -49.641016
+              },
+              {
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-face-a",
+            "edgeId": "fold-prism-main-face-a-boundary-6"
+          },
+          {
+            "id": "fold-prism-main-face-b-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 40
+              },
+              {
+                "x": 85.980762,
+                "y": 89.641016
+              }
+            ],
+            "panelId": "fold-prism-main-face-b",
+            "edgeId": "fold-prism-main-face-b-boundary-2"
+          },
+          {
+            "id": "fold-prism-main-face-b-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 85.980762,
+                "y": 89.641016
+              },
+              {
+                "x": 57.320508,
+                "y": 139.282032
+              }
+            ],
+            "panelId": "fold-prism-main-face-b",
+            "edgeId": "fold-prism-main-face-b-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-face-b-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 139.282032
+              },
+              {
+                "x": 0,
+                "y": 139.282032
+              }
+            ],
+            "panelId": "fold-prism-main-face-b",
+            "edgeId": "fold-prism-main-face-b-boundary-4"
+          },
+          {
+            "id": "fold-prism-main-face-b-boundary-5-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 139.282032
+              },
+              {
+                "x": -28.660254,
+                "y": 89.641016
+              }
+            ],
+            "panelId": "fold-prism-main-face-b",
+            "edgeId": "fold-prism-main-face-b-boundary-5"
+          },
+          {
+            "id": "fold-prism-main-face-b-boundary-6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -28.660254,
+                "y": 89.641016
+              },
+              {
+                "x": 0,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-face-b",
+            "edgeId": "fold-prism-main-face-b-boundary-6"
+          },
+          {
+            "id": "fold-prism-main-band-fold-1-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 0
+              },
+              {
+                "x": 57.320508,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-1",
+            "edgeId": "fold-prism-main-band-fold-1"
+          },
+          {
+            "id": "fold-prism-main-band-fold-2-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 114.641016,
+                "y": 0
+              },
+              {
+                "x": 114.641016,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-2",
+            "edgeId": "fold-prism-main-band-fold-2"
+          },
+          {
+            "id": "fold-prism-main-band-fold-3-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 171.961524,
+                "y": 0
+              },
+              {
+                "x": 171.961524,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-3",
+            "edgeId": "fold-prism-main-band-fold-3"
+          },
+          {
+            "id": "fold-prism-main-band-fold-4-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 229.282032,
+                "y": 0
+              },
+              {
+                "x": 229.282032,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-4",
+            "edgeId": "fold-prism-main-band-fold-4"
+          },
+          {
+            "id": "fold-prism-main-band-fold-5-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 286.60254,
+                "y": 0
+              },
+              {
+                "x": 286.60254,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-5",
+            "edgeId": "fold-prism-main-band-fold-5"
+          },
+          {
+            "id": "fold-prism-main-face-a-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 57.320508,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-1",
+            "edgeId": "fold-prism-main-face-a-fold"
+          },
+          {
+            "id": "fold-prism-main-face-b-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 40
+              },
+              {
+                "x": 0,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-1",
+            "edgeId": "fold-prism-main-face-b-fold"
+          },
+          {
+            "id": "fold-prism-main-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 343.923048,
+                "y": 0
+              },
+              {
+                "x": 351.923048,
+                "y": 2.8
+              },
+              {
+                "x": 351.923048,
+                "y": 37.2
+              },
+              {
+                "x": 343.923048,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-6",
+            "tabId": "fold-prism-main-seam-tab"
+          },
+          {
+            "id": "fold-prism-main-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 343.923048,
+                "y": 0
+              },
+              {
+                "x": 343.923048,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-6",
+            "tabId": "fold-prism-main-seam-tab",
+            "edgeId": "fold-prism-main-seam-tab-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-prism-main-band-1-label",
+            "text": "Band 1",
+            "position": {
+              "x": 28.660254,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-1"
+          },
+          {
+            "id": "fold-prism-main-band-2-label",
+            "text": "Band 2",
+            "position": {
+              "x": 85.980762,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-2"
+          },
+          {
+            "id": "fold-prism-main-band-3-label",
+            "text": "Band 3",
+            "position": {
+              "x": 143.30127,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-3"
+          },
+          {
+            "id": "fold-prism-main-band-4-label",
+            "text": "Band 4",
+            "position": {
+              "x": 200.621778,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-4"
+          },
+          {
+            "id": "fold-prism-main-band-5-label",
+            "text": "Band 5",
+            "position": {
+              "x": 257.942286,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-5"
+          },
+          {
+            "id": "fold-prism-main-band-6-label",
+            "text": "Band 6",
+            "position": {
+              "x": 315.262794,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-6"
+          },
+          {
+            "id": "fold-prism-main-face-a-label",
+            "text": "Front face",
+            "position": {
+              "x": 28.660254,
+              "y": -49.641016
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-face-a"
+          },
+          {
+            "id": "fold-prism-main-face-b-label",
+            "text": "Back face",
+            "position": {
+              "x": 28.660254,
+              "y": 89.641016
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-face-b"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "regular-prism",
+          "panelIds": [
+            "fold-prism-main-band-1",
+            "fold-prism-main-band-2",
+            "fold-prism-main-band-3",
+            "fold-prism-main-band-4",
+            "fold-prism-main-band-5",
+            "fold-prism-main-band-6",
+            "fold-prism-main-face-a",
+            "fold-prism-main-face-b"
+          ]
+        }
+      }
+    ],
+    "issues": [],
+    "assembledPreview": {
+      "panels": [
+        {
+          "id": "fold-prism-main-band-1",
+          "partId": "fold-prism-main",
+          "name": "Band 1",
+          "verticesMm": [
+            [57.32050807568877, -20, 0],
+            [28.660254037844393, -20, 49.64101615137754],
+            [28.660254037844393, 20, 49.64101615137754],
+            [57.32050807568877, 20, 0]
+          ]
+        },
+        {
+          "id": "fold-prism-main-band-2",
+          "partId": "fold-prism-main",
+          "name": "Band 2",
+          "verticesMm": [
+            [28.660254037844393, -20, 49.64101615137754],
+            [-28.66025403784437, -20, 49.64101615137755],
+            [-28.66025403784437, 20, 49.64101615137755],
+            [28.660254037844393, 20, 49.64101615137754]
+          ]
+        },
+        {
+          "id": "fold-prism-main-band-3",
+          "partId": "fold-prism-main",
+          "name": "Band 3",
+          "verticesMm": [
+            [-28.66025403784437, -20, 49.64101615137755],
+            [-57.32050807568877, -20, 7.019737674039226e-15],
+            [-57.32050807568877, 20, 7.019737674039226e-15],
+            [-28.66025403784437, 20, 49.64101615137755]
+          ]
+        },
+        {
+          "id": "fold-prism-main-band-4",
+          "partId": "fold-prism-main",
+          "name": "Band 4",
+          "verticesMm": [
+            [-57.32050807568877, -20, 7.019737674039226e-15],
+            [-28.66025403784441, -20, -49.641016151377535],
+            [-28.66025403784441, 20, -49.641016151377535],
+            [-57.32050807568877, 20, 7.019737674039226e-15]
+          ]
+        },
+        {
+          "id": "fold-prism-main-band-5",
+          "partId": "fold-prism-main",
+          "name": "Band 5",
+          "verticesMm": [
+            [-28.66025403784441, -20, -49.641016151377535],
+            [28.660254037844393, -20, -49.64101615137754],
+            [28.660254037844393, 20, -49.64101615137754],
+            [-28.66025403784441, 20, -49.641016151377535]
+          ]
+        },
+        {
+          "id": "fold-prism-main-band-6",
+          "partId": "fold-prism-main",
+          "name": "Band 6",
+          "verticesMm": [
+            [28.660254037844393, -20, -49.64101615137754],
+            [57.32050807568877, -20, 0],
+            [57.32050807568877, 20, 0],
+            [28.660254037844393, 20, -49.64101615137754]
+          ]
+        },
+        {
+          "id": "fold-prism-main-face-a",
+          "partId": "fold-prism-main",
+          "name": "Front face",
+          "verticesMm": [
+            [57.32050807568877, -20, 0],
+            [28.660254037844393, -20, 49.64101615137754],
+            [-28.66025403784437, -20, 49.64101615137755],
+            [-57.32050807568877, -20, 7.019737674039226e-15],
+            [-28.66025403784441, -20, -49.641016151377535],
+            [28.660254037844393, -20, -49.64101615137754]
+          ]
+        },
+        {
+          "id": "fold-prism-main-face-b",
+          "partId": "fold-prism-main",
+          "name": "Back face",
+          "verticesMm": [
+            [57.32050807568877, 20, 0],
+            [28.660254037844393, 20, 49.64101615137754],
+            [-28.66025403784437, 20, 49.64101615137755],
+            [-57.32050807568877, 20, 7.019737674039226e-15],
+            [-28.66025403784441, 20, -49.641016151377535],
+            [28.660254037844393, 20, -49.64101615137754]
+          ]
+        }
+      ]
+    },
+    "editableEdges": [
+      {
+        "id": "fold-prism-main-band-1-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-band-1",
+        "startMm": [57.32050807568877, 20, 0],
+        "endMm": [57.32050807568877, -20, 0],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-2-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-band-2",
+        "startMm": [28.660254037844393, -20, 49.64101615137754],
+        "endMm": [-28.66025403784437, -20, 49.64101615137755],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-2-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-band-2",
+        "startMm": [-28.66025403784437, 20, 49.64101615137755],
+        "endMm": [28.660254037844393, 20, 49.64101615137754],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-3-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-band-3",
+        "startMm": [-28.66025403784437, -20, 49.64101615137755],
+        "endMm": [-57.32050807568877, -20, 7.019737674039226e-15],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-3-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-band-3",
+        "startMm": [-57.32050807568877, 20, 7.019737674039226e-15],
+        "endMm": [-28.66025403784437, 20, 49.64101615137755],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-4-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-band-4",
+        "startMm": [-57.32050807568877, -20, 7.019737674039226e-15],
+        "endMm": [-28.66025403784441, -20, -49.641016151377535],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-4-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-band-4",
+        "startMm": [-28.66025403784441, 20, -49.641016151377535],
+        "endMm": [-57.32050807568877, 20, 7.019737674039226e-15],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-5-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-band-5",
+        "startMm": [-28.66025403784441, -20, -49.641016151377535],
+        "endMm": [28.660254037844393, -20, -49.64101615137754],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-5-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-band-5",
+        "startMm": [28.660254037844393, 20, -49.64101615137754],
+        "endMm": [-28.66025403784441, 20, -49.641016151377535],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-6-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-band-6",
+        "startMm": [28.660254037844393, -20, -49.64101615137754],
+        "endMm": [57.32050807568877, -20, 0],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-6-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-band-6",
+        "startMm": [57.32050807568877, 20, 0],
+        "endMm": [28.660254037844393, 20, -49.64101615137754],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-fold-1-connection",
+        "kind": "connection",
+        "panelAId": "fold-prism-main-band-1",
+        "panelBId": "fold-prism-main-band-2",
+        "startMm": [28.660254037844393, -20, 49.64101615137754],
+        "endMm": [28.660254037844393, 20, 49.64101615137754],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-fold-2-connection",
+        "kind": "connection",
+        "panelAId": "fold-prism-main-band-2",
+        "panelBId": "fold-prism-main-band-3",
+        "startMm": [-28.66025403784437, -20, 49.64101615137755],
+        "endMm": [-28.66025403784437, 20, 49.64101615137755],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-fold-3-connection",
+        "kind": "connection",
+        "panelAId": "fold-prism-main-band-3",
+        "panelBId": "fold-prism-main-band-4",
+        "startMm": [-57.32050807568877, -20, 7.019737674039226e-15],
+        "endMm": [-57.32050807568877, 20, 7.019737674039226e-15],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-fold-4-connection",
+        "kind": "connection",
+        "panelAId": "fold-prism-main-band-4",
+        "panelBId": "fold-prism-main-band-5",
+        "startMm": [-28.66025403784441, -20, -49.641016151377535],
+        "endMm": [-28.66025403784441, 20, -49.641016151377535],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-band-fold-5-connection",
+        "kind": "connection",
+        "panelAId": "fold-prism-main-band-5",
+        "panelBId": "fold-prism-main-band-6",
+        "startMm": [28.660254037844393, -20, -49.64101615137754],
+        "endMm": [28.660254037844393, 20, -49.64101615137754],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-a-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-face-a",
+        "startMm": [28.660254037844393, -20, 49.64101615137754],
+        "endMm": [-28.66025403784437, -20, 49.64101615137755],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-a-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-face-a",
+        "startMm": [-28.66025403784437, -20, 49.64101615137755],
+        "endMm": [-57.32050807568877, -20, 7.019737674039226e-15],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-a-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-face-a",
+        "startMm": [-57.32050807568877, -20, 7.019737674039226e-15],
+        "endMm": [-28.66025403784441, -20, -49.641016151377535],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-a-boundary-5",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-face-a",
+        "startMm": [-28.66025403784441, -20, -49.641016151377535],
+        "endMm": [28.660254037844393, -20, -49.64101615137754],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-a-boundary-6",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-face-a",
+        "startMm": [28.660254037844393, -20, -49.64101615137754],
+        "endMm": [57.32050807568877, -20, 0],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-a-fold-connection",
+        "kind": "connection",
+        "panelAId": "fold-prism-main-band-1",
+        "panelBId": "fold-prism-main-face-a",
+        "startMm": [57.32050807568877, -20, 0],
+        "endMm": [28.660254037844393, -20, 49.64101615137754],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-b-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-face-b",
+        "startMm": [28.660254037844393, 20, 49.64101615137754],
+        "endMm": [-28.66025403784437, 20, 49.64101615137755],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-b-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-face-b",
+        "startMm": [-28.66025403784437, 20, 49.64101615137755],
+        "endMm": [-57.32050807568877, 20, 7.019737674039226e-15],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-b-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-face-b",
+        "startMm": [-57.32050807568877, 20, 7.019737674039226e-15],
+        "endMm": [-28.66025403784441, 20, -49.641016151377535],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-b-boundary-5",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-face-b",
+        "startMm": [-28.66025403784441, 20, -49.641016151377535],
+        "endMm": [28.660254037844393, 20, -49.64101615137754],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-b-boundary-6",
+        "kind": "boundary",
+        "panelAId": "fold-prism-main-face-b",
+        "startMm": [28.660254037844393, 20, -49.64101615137754],
+        "endMm": [57.32050807568877, 20, 0],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-face-b-fold-connection",
+        "kind": "connection",
+        "panelAId": "fold-prism-main-band-1",
+        "panelBId": "fold-prism-main-face-b",
+        "startMm": [28.660254037844393, 20, 49.64101615137754],
+        "endMm": [57.32050807568877, 20, 0],
+        "editable": true
+      },
+      {
+        "id": "fold-prism-main-seam-tab-connection",
+        "kind": "connection",
+        "panelAId": "fold-prism-main-band-6",
+        "panelBId": "fold-prism-main-band-1",
+        "startMm": [57.32050807568877, -20, 0],
+        "endMm": [57.32050807568877, 20, 0],
+        "editable": true
+      }
+    ],
+    "resolvedDimensions": {
+      "widthMm": 80,
+      "lengthMm": 60,
+      "heightMm": 40
+    },
+    "algorithmVersion": "interactive-connections-v8",
+    "inputHash": "sf6-ce4fbb08"
+  },
+  "project": {
+    "metadata": {
+      "id": "project-upgrade-baseline",
+      "name": "Upgrade baseline: fold-regular-prism",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    "model": {
+      "id": "model-legacy-fixture",
+      "name": "40 mm cube",
+      "source": {
+        "kind": "built-in",
+        "primitive": "cube"
+      },
+      "dimensions": {
+        "widthMm": 40,
+        "heightMm": 40,
+        "depthMm": 40
+      },
+      "transform": {
+        "positionMm": [0, 0, 0],
+        "rotationDeg": [0, 0, 0],
+        "scale": [1, 1, 1]
+      },
+      "mesh": {
+        "positionsMm": [
+          -20, -20, -20, 20, -20, -20, 20, 20, -20, -20, 20, -20, -20, -20, 20, 20, -20, 20, 20, 20,
+          20, -20, 20, 20
+        ],
+        "indices": [
+          0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 3, 7, 6, 3, 6, 2, 0, 4, 7, 0, 7, 3,
+          1, 2, 6, 1, 6, 5
+        ]
+      },
+      "bounds": {
+        "minMm": [-20, -20, -20],
+        "maxMm": [20, 20, 20]
+      },
+      "healthReport": {
+        "triangleCount": 12,
+        "openEdgeCount": 0,
+        "nonManifoldEdgeCount": 0,
+        "disconnectedShellCount": 1,
+        "orientationIssueCount": 0,
+        "weldedVertexCount": 8,
+        "signedVolumeMm3": 64000.00000000001,
+        "likelyInverted": false,
+        "inspected": true
+      }
+    },
+    "fabricationMode": "fold-template",
+    "materialProfileSnapshot": {
+      "id": "card-300gsm",
+      "name": "300 gsm card",
+      "category": "card",
+      "thicknessMm": 1,
+      "kerfMm": 0.1,
+      "clearanceMm": 0.1,
+      "grainDirection": "none",
+      "scoreAllowanceMm": 0.2,
+      "defaultSheetWidthMm": 210,
+      "defaultSheetHeightMm": 297
+    },
+    "generatedParts": [
+      {
+        "id": "fold-prism-main",
+        "name": "6-sided prism net",
+        "label": "6-sided prism net",
+        "paths": [
+          {
+            "id": "fold-prism-main-band-1-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 40
+              },
+              {
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-1",
+            "edgeId": "fold-prism-main-band-1-boundary-4"
+          },
+          {
+            "id": "fold-prism-main-band-2-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 0
+              },
+              {
+                "x": 114.641016,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-2",
+            "edgeId": "fold-prism-main-band-2-boundary-1"
+          },
+          {
+            "id": "fold-prism-main-band-2-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 114.641016,
+                "y": 40
+              },
+              {
+                "x": 57.320508,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-2",
+            "edgeId": "fold-prism-main-band-2-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-band-3-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 114.641016,
+                "y": 0
+              },
+              {
+                "x": 171.961524,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-3",
+            "edgeId": "fold-prism-main-band-3-boundary-1"
+          },
+          {
+            "id": "fold-prism-main-band-3-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 171.961524,
+                "y": 40
+              },
+              {
+                "x": 114.641016,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-3",
+            "edgeId": "fold-prism-main-band-3-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-band-4-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 171.961524,
+                "y": 0
+              },
+              {
+                "x": 229.282032,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-4",
+            "edgeId": "fold-prism-main-band-4-boundary-1"
+          },
+          {
+            "id": "fold-prism-main-band-4-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 229.282032,
+                "y": 40
+              },
+              {
+                "x": 171.961524,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-4",
+            "edgeId": "fold-prism-main-band-4-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-band-5-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 229.282032,
+                "y": 0
+              },
+              {
+                "x": 286.60254,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-5",
+            "edgeId": "fold-prism-main-band-5-boundary-1"
+          },
+          {
+            "id": "fold-prism-main-band-5-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 286.60254,
+                "y": 40
+              },
+              {
+                "x": 229.282032,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-5",
+            "edgeId": "fold-prism-main-band-5-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-band-6-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 286.60254,
+                "y": 0
+              },
+              {
+                "x": 343.923048,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-6",
+            "edgeId": "fold-prism-main-band-6-boundary-1"
+          },
+          {
+            "id": "fold-prism-main-band-6-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 343.923048,
+                "y": 40
+              },
+              {
+                "x": 286.60254,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-6",
+            "edgeId": "fold-prism-main-band-6-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-face-a-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 0
+              },
+              {
+                "x": 85.980762,
+                "y": -49.641016
+              }
+            ],
+            "panelId": "fold-prism-main-face-a",
+            "edgeId": "fold-prism-main-face-a-boundary-2"
+          },
+          {
+            "id": "fold-prism-main-face-a-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 85.980762,
+                "y": -49.641016
+              },
+              {
+                "x": 57.320508,
+                "y": -99.282032
+              }
+            ],
+            "panelId": "fold-prism-main-face-a",
+            "edgeId": "fold-prism-main-face-a-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-face-a-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": -99.282032
+              },
+              {
+                "x": 0,
+                "y": -99.282032
+              }
+            ],
+            "panelId": "fold-prism-main-face-a",
+            "edgeId": "fold-prism-main-face-a-boundary-4"
+          },
+          {
+            "id": "fold-prism-main-face-a-boundary-5-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": -99.282032
+              },
+              {
+                "x": -28.660254,
+                "y": -49.641016
+              }
+            ],
+            "panelId": "fold-prism-main-face-a",
+            "edgeId": "fold-prism-main-face-a-boundary-5"
+          },
+          {
+            "id": "fold-prism-main-face-a-boundary-6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -28.660254,
+                "y": -49.641016
+              },
+              {
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-face-a",
+            "edgeId": "fold-prism-main-face-a-boundary-6"
+          },
+          {
+            "id": "fold-prism-main-face-b-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 40
+              },
+              {
+                "x": 85.980762,
+                "y": 89.641016
+              }
+            ],
+            "panelId": "fold-prism-main-face-b",
+            "edgeId": "fold-prism-main-face-b-boundary-2"
+          },
+          {
+            "id": "fold-prism-main-face-b-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 85.980762,
+                "y": 89.641016
+              },
+              {
+                "x": 57.320508,
+                "y": 139.282032
+              }
+            ],
+            "panelId": "fold-prism-main-face-b",
+            "edgeId": "fold-prism-main-face-b-boundary-3"
+          },
+          {
+            "id": "fold-prism-main-face-b-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 139.282032
+              },
+              {
+                "x": 0,
+                "y": 139.282032
+              }
+            ],
+            "panelId": "fold-prism-main-face-b",
+            "edgeId": "fold-prism-main-face-b-boundary-4"
+          },
+          {
+            "id": "fold-prism-main-face-b-boundary-5-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 139.282032
+              },
+              {
+                "x": -28.660254,
+                "y": 89.641016
+              }
+            ],
+            "panelId": "fold-prism-main-face-b",
+            "edgeId": "fold-prism-main-face-b-boundary-5"
+          },
+          {
+            "id": "fold-prism-main-face-b-boundary-6-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -28.660254,
+                "y": 89.641016
+              },
+              {
+                "x": 0,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-face-b",
+            "edgeId": "fold-prism-main-face-b-boundary-6"
+          },
+          {
+            "id": "fold-prism-main-band-fold-1-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 0
+              },
+              {
+                "x": 57.320508,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-1",
+            "edgeId": "fold-prism-main-band-fold-1"
+          },
+          {
+            "id": "fold-prism-main-band-fold-2-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 114.641016,
+                "y": 0
+              },
+              {
+                "x": 114.641016,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-2",
+            "edgeId": "fold-prism-main-band-fold-2"
+          },
+          {
+            "id": "fold-prism-main-band-fold-3-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 171.961524,
+                "y": 0
+              },
+              {
+                "x": 171.961524,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-3",
+            "edgeId": "fold-prism-main-band-fold-3"
+          },
+          {
+            "id": "fold-prism-main-band-fold-4-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 229.282032,
+                "y": 0
+              },
+              {
+                "x": 229.282032,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-4",
+            "edgeId": "fold-prism-main-band-fold-4"
+          },
+          {
+            "id": "fold-prism-main-band-fold-5-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 286.60254,
+                "y": 0
+              },
+              {
+                "x": 286.60254,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-5",
+            "edgeId": "fold-prism-main-band-fold-5"
+          },
+          {
+            "id": "fold-prism-main-face-a-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 0,
+                "y": 0
+              },
+              {
+                "x": 57.320508,
+                "y": 0
+              }
+            ],
+            "panelId": "fold-prism-main-band-1",
+            "edgeId": "fold-prism-main-face-a-fold"
+          },
+          {
+            "id": "fold-prism-main-face-b-fold-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 57.320508,
+                "y": 40
+              },
+              {
+                "x": 0,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-1",
+            "edgeId": "fold-prism-main-face-b-fold"
+          },
+          {
+            "id": "fold-prism-main-seam-tab-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 343.923048,
+                "y": 0
+              },
+              {
+                "x": 351.923048,
+                "y": 2.8
+              },
+              {
+                "x": 351.923048,
+                "y": 37.2
+              },
+              {
+                "x": 343.923048,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-6",
+            "tabId": "fold-prism-main-seam-tab"
+          },
+          {
+            "id": "fold-prism-main-seam-tab-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 343.923048,
+                "y": 0
+              },
+              {
+                "x": 343.923048,
+                "y": 40
+              }
+            ],
+            "panelId": "fold-prism-main-band-6",
+            "tabId": "fold-prism-main-seam-tab",
+            "edgeId": "fold-prism-main-seam-tab-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-prism-main-band-1-label",
+            "text": "Band 1",
+            "position": {
+              "x": 28.660254,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-1"
+          },
+          {
+            "id": "fold-prism-main-band-2-label",
+            "text": "Band 2",
+            "position": {
+              "x": 85.980762,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-2"
+          },
+          {
+            "id": "fold-prism-main-band-3-label",
+            "text": "Band 3",
+            "position": {
+              "x": 143.30127,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-3"
+          },
+          {
+            "id": "fold-prism-main-band-4-label",
+            "text": "Band 4",
+            "position": {
+              "x": 200.621778,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-4"
+          },
+          {
+            "id": "fold-prism-main-band-5-label",
+            "text": "Band 5",
+            "position": {
+              "x": 257.942286,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-5"
+          },
+          {
+            "id": "fold-prism-main-band-6-label",
+            "text": "Band 6",
+            "position": {
+              "x": 315.262794,
+              "y": 20
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-band-6"
+          },
+          {
+            "id": "fold-prism-main-face-a-label",
+            "text": "Front face",
+            "position": {
+              "x": 28.660254,
+              "y": -49.641016
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-face-a"
+          },
+          {
+            "id": "fold-prism-main-face-b-label",
+            "text": "Back face",
+            "position": {
+              "x": 28.660254,
+              "y": 89.641016
+            },
+            "operation": "engrave",
+            "entityId": "fold-prism-main-face-b"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "regular-prism",
+          "panelIds": [
+            "fold-prism-main-band-1",
+            "fold-prism-main-band-2",
+            "fold-prism-main-band-3",
+            "fold-prism-main-band-4",
+            "fold-prism-main-band-5",
+            "fold-prism-main-band-6",
+            "fold-prism-main-face-a",
+            "fold-prism-main-face-b"
+          ]
+        }
+      }
+    ],
+    "generationIssues": [],
+    "sheetLayouts": [
+      {
+        "id": "sheet-upgrade-baseline",
+        "widthMm": 600,
+        "heightMm": 400,
+        "marginMm": 5,
+        "spacingMm": 3,
+        "placements": [
+          {
+            "partId": "fold-prism-main",
+            "x": 33.660253999999995,
+            "y": 104.282032,
+            "rotationDeg": 0
+          }
+        ]
+      }
+    ],
+    "exportSettings": {
+      "includeLabels": true,
+      "includeRegistrationMarks": false,
+      "includeSheetBoundary": true,
+      "operationStyles": [
+        {
+          "operation": "cut",
+          "stroke": "#ff0000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "score",
+          "stroke": "#0000ff",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "mountain-fold",
+          "stroke": "#8b5cf6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "valley-fold",
+          "stroke": "#14b8a6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "perforate",
+          "stroke": "#f59e0b",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "engrave",
+          "stroke": "#000000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "guide",
+          "stroke": "#6b7280",
+          "strokeWidthMm": 0.1
+        }
+      ],
+      "kerfCompensation": "none",
+      "customKerfMm": 0.1,
+      "foldLineOutput": "preserve",
+      "perforationDashMm": 2,
+      "perforationGapMm": 1,
+      "labelFontSizeMm": 3
+    },
+    "acknowledgedWarningIds": [],
+    "modeSettings": {
+      "stackedSlices": {
+        "axis": "z",
+        "spacingMm": 10,
+        "thicknessMm": 1,
+        "contourEpsilonMm": 0.001
+      },
+      "waffleSlices": {
+        "primaryAxis": "x",
+        "secondaryAxis": "y",
+        "primarySpacingMm": 20,
+        "secondarySpacingMm": 20,
+        "thicknessMm": 3,
+        "clearanceMm": 0.15,
+        "contourEpsilonMm": 0.001,
+        "slotPattern": "alternating",
+        "reverseSlots": false
+      },
+      "foldTemplate": {
+        "templateKind": "regular-prism",
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40,
+        "profileToleranceMm": 1,
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1,
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "meshUnfold": {
+        "strategy": "automatic",
+        "rootFaceIndex": 0,
+        "manualSeamKeys": [],
+        "tabDepthMm": 6,
+        "maximumFaceCount": 200,
+        "searchAttempts": 18
+      },
+      "panelConstruction": {
+        "innerWidthMm": 80,
+        "innerDepthMm": 60,
+        "innerHeightMm": 50,
+        "jointKind": "finger",
+        "fingerWidthMm": 10,
+        "clearanceMm": 0.15,
+        "includeLid": false,
+        "panelThicknessMm": 1,
+        "dividerThicknessMm": 1,
+        "lidThicknessMm": 1,
+        "widthDividerCount": 0,
+        "depthDividerCount": 0,
+        "connectionOverrides": {},
+        "panelProfiles": {
+          "front": "flat",
+          "back": "flat"
+        },
+        "glueTabDepthMm": 8,
+        "boundaryGlueTabs": [],
+        "features": []
+      }
+    },
+    "foldingResult": {
+      "settings": {
+        "templateKind": "regular-prism",
+        "fitAxis": "y",
+        "clearanceMm": 0,
+        "profileToleranceMm": 1,
+        "sizeMode": "custom",
+        "envelopeDimensions": {
+          "widthMm": 80,
+          "lengthMm": 60,
+          "heightMm": 40
+        },
+        "parameters": {
+          "wallHeightMm": 40,
+          "tabDepthMm": 8,
+          "lidDepthMm": 15,
+          "lidClearanceMm": 0.5,
+          "gussetDepthMm": 40,
+          "closureFlapMm": 12,
+          "prismSides": 6,
+          "prismRotationDeg": 0,
+          "topScale": 0.5,
+          "seamTabMm": 8,
+          "standalone": true,
+          "closureMethod": "glue",
+          "slotClearanceMm": 0.1
+        },
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "profile": {
+        "sourceModelId": "standalone-template",
+        "fitAxis": "y",
+        "sourceHullPoints": [
+          {
+            "x": -40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": 30
+          }
+        ],
+        "fittedPoints": [
+          {
+            "x": -40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": 30
+          }
+        ],
+        "clearanceMm": 0,
+        "simplificationToleranceMm": 1,
+        "axisMinMm": -20,
+        "axisMaxMm": 20,
+        "widthMm": 80,
+        "heightMm": 60,
+        "depthMm": 40
+      },
+      "panels": [
+        {
+          "id": "fold-prism-main-band-1",
+          "partId": "fold-prism-main",
+          "name": "Band 1",
+          "role": "band",
+          "outline": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 57.320508075688764,
+              "y": 0
+            },
+            {
+              "x": 57.320508075688764,
+              "y": 40
+            },
+            {
+              "x": 0,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "id": "fold-prism-main-band-2",
+          "partId": "fold-prism-main",
+          "name": "Band 2",
+          "role": "band",
+          "outline": [
+            {
+              "x": 57.320508075688764,
+              "y": 0
+            },
+            {
+              "x": 114.64101615137753,
+              "y": 0
+            },
+            {
+              "x": 114.64101615137753,
+              "y": 40
+            },
+            {
+              "x": 57.320508075688764,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "id": "fold-prism-main-band-3",
+          "partId": "fold-prism-main",
+          "name": "Band 3",
+          "role": "band",
+          "outline": [
+            {
+              "x": 114.64101615137753,
+              "y": 0
+            },
+            {
+              "x": 171.96152422706632,
+              "y": 0
+            },
+            {
+              "x": 171.96152422706632,
+              "y": 40
+            },
+            {
+              "x": 114.64101615137753,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "id": "fold-prism-main-band-4",
+          "partId": "fold-prism-main",
+          "name": "Band 4",
+          "role": "band",
+          "outline": [
+            {
+              "x": 171.96152422706632,
+              "y": 0
+            },
+            {
+              "x": 229.28203230275508,
+              "y": 0
+            },
+            {
+              "x": 229.28203230275508,
+              "y": 40
+            },
+            {
+              "x": 171.96152422706632,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "id": "fold-prism-main-band-5",
+          "partId": "fold-prism-main",
+          "name": "Band 5",
+          "role": "band",
+          "outline": [
+            {
+              "x": 229.28203230275508,
+              "y": 0
+            },
+            {
+              "x": 286.6025403784439,
+              "y": 0
+            },
+            {
+              "x": 286.6025403784439,
+              "y": 40
+            },
+            {
+              "x": 229.28203230275508,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "id": "fold-prism-main-band-6",
+          "partId": "fold-prism-main",
+          "name": "Band 6",
+          "role": "band",
+          "outline": [
+            {
+              "x": 286.6025403784439,
+              "y": 0
+            },
+            {
+              "x": 343.92304845413264,
+              "y": 0
+            },
+            {
+              "x": 343.92304845413264,
+              "y": 40
+            },
+            {
+              "x": 286.6025403784439,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "id": "fold-prism-main-face-a",
+          "partId": "fold-prism-main",
+          "name": "Front face",
+          "role": "face",
+          "outline": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 57.320508075688764,
+              "y": 0
+            },
+            {
+              "x": 85.98076211353316,
+              "y": -49.641016151377535
+            },
+            {
+              "x": 57.32050807568877,
+              "y": -99.2820323027551
+            },
+            {
+              "x": 1.4210854715202004e-14,
+              "y": -99.28203230275511
+            },
+            {
+              "x": -28.660254037844393,
+              "y": -49.641016151377535
+            }
+          ]
+        },
+        {
+          "id": "fold-prism-main-face-b",
+          "partId": "fold-prism-main",
+          "name": "Back face",
+          "role": "face",
+          "outline": [
+            {
+              "x": 0,
+              "y": 40
+            },
+            {
+              "x": 57.320508075688764,
+              "y": 40
+            },
+            {
+              "x": 85.98076211353316,
+              "y": 89.64101615137753
+            },
+            {
+              "x": 57.32050807568877,
+              "y": 139.2820323027551
+            },
+            {
+              "x": 1.4210854715202004e-14,
+              "y": 139.2820323027551
+            },
+            {
+              "x": -28.660254037844393,
+              "y": 89.64101615137753
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "fold-prism-main-band-fold-1",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-1",
+          "panelBId": "fold-prism-main-band-2",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 60,
+          "pairLabel": "F1",
+          "start": {
+            "x": 57.320508,
+            "y": 0
+          },
+          "end": {
+            "x": 57.320508,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-band-fold-2",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-2",
+          "panelBId": "fold-prism-main-band-3",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 60,
+          "pairLabel": "F2",
+          "start": {
+            "x": 114.641016,
+            "y": 0
+          },
+          "end": {
+            "x": 114.641016,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-band-fold-3",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-3",
+          "panelBId": "fold-prism-main-band-4",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 60,
+          "pairLabel": "F3",
+          "start": {
+            "x": 171.961524,
+            "y": 0
+          },
+          "end": {
+            "x": 171.961524,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-band-fold-4",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-4",
+          "panelBId": "fold-prism-main-band-5",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 60,
+          "pairLabel": "F4",
+          "start": {
+            "x": 229.282032,
+            "y": 0
+          },
+          "end": {
+            "x": 229.282032,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-band-fold-5",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-5",
+          "panelBId": "fold-prism-main-band-6",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 60,
+          "pairLabel": "F5",
+          "start": {
+            "x": 286.60254,
+            "y": 0
+          },
+          "end": {
+            "x": 286.60254,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-face-a-fold",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-1",
+          "panelBId": "fold-prism-main-face-a",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F6",
+          "start": {
+            "x": 0,
+            "y": 0
+          },
+          "end": {
+            "x": 57.320508,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-prism-main-face-b-fold",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-1",
+          "panelBId": "fold-prism-main-face-b",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F7",
+          "start": {
+            "x": 57.320508,
+            "y": 40
+          },
+          "end": {
+            "x": 0,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-band-1-boundary-4",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-1",
+          "disposition": "boundary",
+          "start": {
+            "x": 0,
+            "y": 40
+          },
+          "end": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-prism-main-band-2-boundary-1",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-2",
+          "disposition": "boundary",
+          "start": {
+            "x": 57.320508,
+            "y": 0
+          },
+          "end": {
+            "x": 114.641016,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-prism-main-band-2-boundary-3",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-2",
+          "disposition": "boundary",
+          "start": {
+            "x": 114.641016,
+            "y": 40
+          },
+          "end": {
+            "x": 57.320508,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-band-3-boundary-1",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-3",
+          "disposition": "boundary",
+          "start": {
+            "x": 114.641016,
+            "y": 0
+          },
+          "end": {
+            "x": 171.961524,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-prism-main-band-3-boundary-3",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-3",
+          "disposition": "boundary",
+          "start": {
+            "x": 171.961524,
+            "y": 40
+          },
+          "end": {
+            "x": 114.641016,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-band-4-boundary-1",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-4",
+          "disposition": "boundary",
+          "start": {
+            "x": 171.961524,
+            "y": 0
+          },
+          "end": {
+            "x": 229.282032,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-prism-main-band-4-boundary-3",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-4",
+          "disposition": "boundary",
+          "start": {
+            "x": 229.282032,
+            "y": 40
+          },
+          "end": {
+            "x": 171.961524,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-band-5-boundary-1",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-5",
+          "disposition": "boundary",
+          "start": {
+            "x": 229.282032,
+            "y": 0
+          },
+          "end": {
+            "x": 286.60254,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-prism-main-band-5-boundary-3",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-5",
+          "disposition": "boundary",
+          "start": {
+            "x": 286.60254,
+            "y": 40
+          },
+          "end": {
+            "x": 229.282032,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-band-6-boundary-1",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-6",
+          "disposition": "boundary",
+          "start": {
+            "x": 286.60254,
+            "y": 0
+          },
+          "end": {
+            "x": 343.923048,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-prism-main-band-6-boundary-3",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-6",
+          "disposition": "boundary",
+          "start": {
+            "x": 343.923048,
+            "y": 40
+          },
+          "end": {
+            "x": 286.60254,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-face-a-boundary-2",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-face-a",
+          "disposition": "boundary",
+          "start": {
+            "x": 57.320508,
+            "y": 0
+          },
+          "end": {
+            "x": 85.980762,
+            "y": -49.641016
+          }
+        },
+        {
+          "id": "fold-prism-main-face-a-boundary-3",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-face-a",
+          "disposition": "boundary",
+          "start": {
+            "x": 85.980762,
+            "y": -49.641016
+          },
+          "end": {
+            "x": 57.320508,
+            "y": -99.282032
+          }
+        },
+        {
+          "id": "fold-prism-main-face-a-boundary-4",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-face-a",
+          "disposition": "boundary",
+          "start": {
+            "x": 57.320508,
+            "y": -99.282032
+          },
+          "end": {
+            "x": 0,
+            "y": -99.282032
+          }
+        },
+        {
+          "id": "fold-prism-main-face-a-boundary-5",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-face-a",
+          "disposition": "boundary",
+          "start": {
+            "x": 0,
+            "y": -99.282032
+          },
+          "end": {
+            "x": -28.660254,
+            "y": -49.641016
+          }
+        },
+        {
+          "id": "fold-prism-main-face-a-boundary-6",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-face-a",
+          "disposition": "boundary",
+          "start": {
+            "x": -28.660254,
+            "y": -49.641016
+          },
+          "end": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "id": "fold-prism-main-face-b-boundary-2",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-face-b",
+          "disposition": "boundary",
+          "start": {
+            "x": 57.320508,
+            "y": 40
+          },
+          "end": {
+            "x": 85.980762,
+            "y": 89.641016
+          }
+        },
+        {
+          "id": "fold-prism-main-face-b-boundary-3",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-face-b",
+          "disposition": "boundary",
+          "start": {
+            "x": 85.980762,
+            "y": 89.641016
+          },
+          "end": {
+            "x": 57.320508,
+            "y": 139.282032
+          }
+        },
+        {
+          "id": "fold-prism-main-face-b-boundary-4",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-face-b",
+          "disposition": "boundary",
+          "start": {
+            "x": 57.320508,
+            "y": 139.282032
+          },
+          "end": {
+            "x": 0,
+            "y": 139.282032
+          }
+        },
+        {
+          "id": "fold-prism-main-face-b-boundary-5",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-face-b",
+          "disposition": "boundary",
+          "start": {
+            "x": 0,
+            "y": 139.282032
+          },
+          "end": {
+            "x": -28.660254,
+            "y": 89.641016
+          }
+        },
+        {
+          "id": "fold-prism-main-face-b-boundary-6",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-face-b",
+          "disposition": "boundary",
+          "start": {
+            "x": -28.660254,
+            "y": 89.641016
+          },
+          "end": {
+            "x": 0,
+            "y": 40
+          }
+        },
+        {
+          "id": "fold-prism-main-seam-tab-base",
+          "partId": "fold-prism-main",
+          "panelAId": "fold-prism-main-band-6",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T1",
+          "start": {
+            "x": 343.923048,
+            "y": 0
+          },
+          "end": {
+            "x": 343.923048,
+            "y": 40
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "fold-prism-main-band-fold-1-connection",
+          "panelAId": "fold-prism-main-band-1",
+          "panelBId": "fold-prism-main-band-2",
+          "edgeA": {
+            "start": {
+              "x": 57.320508,
+              "y": 0
+            },
+            "end": {
+              "x": 57.320508,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 57.320508,
+              "y": 0
+            },
+            "end": {
+              "x": 57.320508,
+              "y": 40
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-prism-main-band-fold-2-connection",
+          "panelAId": "fold-prism-main-band-2",
+          "panelBId": "fold-prism-main-band-3",
+          "edgeA": {
+            "start": {
+              "x": 114.641016,
+              "y": 0
+            },
+            "end": {
+              "x": 114.641016,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 114.641016,
+              "y": 0
+            },
+            "end": {
+              "x": 114.641016,
+              "y": 40
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-prism-main-band-fold-3-connection",
+          "panelAId": "fold-prism-main-band-3",
+          "panelBId": "fold-prism-main-band-4",
+          "edgeA": {
+            "start": {
+              "x": 171.961524,
+              "y": 0
+            },
+            "end": {
+              "x": 171.961524,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 171.961524,
+              "y": 0
+            },
+            "end": {
+              "x": 171.961524,
+              "y": 40
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-prism-main-band-fold-4-connection",
+          "panelAId": "fold-prism-main-band-4",
+          "panelBId": "fold-prism-main-band-5",
+          "edgeA": {
+            "start": {
+              "x": 229.282032,
+              "y": 0
+            },
+            "end": {
+              "x": 229.282032,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 229.282032,
+              "y": 0
+            },
+            "end": {
+              "x": 229.282032,
+              "y": 40
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-prism-main-band-fold-5-connection",
+          "panelAId": "fold-prism-main-band-5",
+          "panelBId": "fold-prism-main-band-6",
+          "edgeA": {
+            "start": {
+              "x": 286.60254,
+              "y": 0
+            },
+            "end": {
+              "x": 286.60254,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 286.60254,
+              "y": 0
+            },
+            "end": {
+              "x": 286.60254,
+              "y": 40
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-prism-main-face-a-fold-connection",
+          "panelAId": "fold-prism-main-band-1",
+          "panelBId": "fold-prism-main-face-a",
+          "edgeA": {
+            "start": {
+              "x": 0,
+              "y": 0
+            },
+            "end": {
+              "x": 57.320508,
+              "y": 0
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 0,
+              "y": 0
+            },
+            "end": {
+              "x": 57.320508,
+              "y": 0
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-prism-main-face-b-fold-connection",
+          "panelAId": "fold-prism-main-band-1",
+          "panelBId": "fold-prism-main-face-b",
+          "edgeA": {
+            "start": {
+              "x": 57.320508,
+              "y": 40
+            },
+            "end": {
+              "x": 0,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 57.320508,
+              "y": 40
+            },
+            "end": {
+              "x": 0,
+              "y": 40
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-prism-main-seam-tab-connection",
+          "panelAId": "fold-prism-main-band-6",
+          "panelBId": "fold-prism-main-band-1",
+          "edgeA": {
+            "start": {
+              "x": 343.923048,
+              "y": 0
+            },
+            "end": {
+              "x": 343.923048,
+              "y": 40
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 0,
+              "y": 40
+            },
+            "end": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-prism-main-seam-tab"]
+        }
+      ],
+      "tabs": [
+        {
+          "id": "fold-prism-main-seam-tab",
+          "partId": "fold-prism-main",
+          "edgeId": "fold-prism-main-seam-tab-base",
+          "ownerPanelId": "fold-prism-main-band-6",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 343.923048,
+            "y": 0
+          },
+          "baseEnd": {
+            "x": 343.923048,
+            "y": 40
+          },
+          "outline": [
+            {
+              "x": 343.923048,
+              "y": 0
+            },
+            {
+              "x": 351.923048,
+              "y": 2.8
+            },
+            {
+              "x": 351.923048,
+              "y": 37.2
+            },
+            {
+              "x": 343.923048,
+              "y": 40
+            }
+          ],
+          "receiverPanelId": "fold-prism-main-band-1"
+        }
+      ],
+      "parts": [
+        {
+          "id": "fold-prism-main",
+          "name": "6-sided prism net",
+          "label": "6-sided prism net",
+          "paths": [
+            {
+              "id": "fold-prism-main-band-1-boundary-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 0,
+                  "y": 40
+                },
+                {
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-prism-main-band-1",
+              "edgeId": "fold-prism-main-band-1-boundary-4"
+            },
+            {
+              "id": "fold-prism-main-band-2-boundary-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 57.320508,
+                  "y": 0
+                },
+                {
+                  "x": 114.641016,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-prism-main-band-2",
+              "edgeId": "fold-prism-main-band-2-boundary-1"
+            },
+            {
+              "id": "fold-prism-main-band-2-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 114.641016,
+                  "y": 40
+                },
+                {
+                  "x": 57.320508,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-2",
+              "edgeId": "fold-prism-main-band-2-boundary-3"
+            },
+            {
+              "id": "fold-prism-main-band-3-boundary-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 114.641016,
+                  "y": 0
+                },
+                {
+                  "x": 171.961524,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-prism-main-band-3",
+              "edgeId": "fold-prism-main-band-3-boundary-1"
+            },
+            {
+              "id": "fold-prism-main-band-3-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 171.961524,
+                  "y": 40
+                },
+                {
+                  "x": 114.641016,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-3",
+              "edgeId": "fold-prism-main-band-3-boundary-3"
+            },
+            {
+              "id": "fold-prism-main-band-4-boundary-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 171.961524,
+                  "y": 0
+                },
+                {
+                  "x": 229.282032,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-prism-main-band-4",
+              "edgeId": "fold-prism-main-band-4-boundary-1"
+            },
+            {
+              "id": "fold-prism-main-band-4-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 229.282032,
+                  "y": 40
+                },
+                {
+                  "x": 171.961524,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-4",
+              "edgeId": "fold-prism-main-band-4-boundary-3"
+            },
+            {
+              "id": "fold-prism-main-band-5-boundary-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 229.282032,
+                  "y": 0
+                },
+                {
+                  "x": 286.60254,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-prism-main-band-5",
+              "edgeId": "fold-prism-main-band-5-boundary-1"
+            },
+            {
+              "id": "fold-prism-main-band-5-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 286.60254,
+                  "y": 40
+                },
+                {
+                  "x": 229.282032,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-5",
+              "edgeId": "fold-prism-main-band-5-boundary-3"
+            },
+            {
+              "id": "fold-prism-main-band-6-boundary-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 286.60254,
+                  "y": 0
+                },
+                {
+                  "x": 343.923048,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-prism-main-band-6",
+              "edgeId": "fold-prism-main-band-6-boundary-1"
+            },
+            {
+              "id": "fold-prism-main-band-6-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 343.923048,
+                  "y": 40
+                },
+                {
+                  "x": 286.60254,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-6",
+              "edgeId": "fold-prism-main-band-6-boundary-3"
+            },
+            {
+              "id": "fold-prism-main-face-a-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 57.320508,
+                  "y": 0
+                },
+                {
+                  "x": 85.980762,
+                  "y": -49.641016
+                }
+              ],
+              "panelId": "fold-prism-main-face-a",
+              "edgeId": "fold-prism-main-face-a-boundary-2"
+            },
+            {
+              "id": "fold-prism-main-face-a-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 85.980762,
+                  "y": -49.641016
+                },
+                {
+                  "x": 57.320508,
+                  "y": -99.282032
+                }
+              ],
+              "panelId": "fold-prism-main-face-a",
+              "edgeId": "fold-prism-main-face-a-boundary-3"
+            },
+            {
+              "id": "fold-prism-main-face-a-boundary-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 57.320508,
+                  "y": -99.282032
+                },
+                {
+                  "x": 0,
+                  "y": -99.282032
+                }
+              ],
+              "panelId": "fold-prism-main-face-a",
+              "edgeId": "fold-prism-main-face-a-boundary-4"
+            },
+            {
+              "id": "fold-prism-main-face-a-boundary-5-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 0,
+                  "y": -99.282032
+                },
+                {
+                  "x": -28.660254,
+                  "y": -49.641016
+                }
+              ],
+              "panelId": "fold-prism-main-face-a",
+              "edgeId": "fold-prism-main-face-a-boundary-5"
+            },
+            {
+              "id": "fold-prism-main-face-a-boundary-6-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": -28.660254,
+                  "y": -49.641016
+                },
+                {
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-prism-main-face-a",
+              "edgeId": "fold-prism-main-face-a-boundary-6"
+            },
+            {
+              "id": "fold-prism-main-face-b-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 57.320508,
+                  "y": 40
+                },
+                {
+                  "x": 85.980762,
+                  "y": 89.641016
+                }
+              ],
+              "panelId": "fold-prism-main-face-b",
+              "edgeId": "fold-prism-main-face-b-boundary-2"
+            },
+            {
+              "id": "fold-prism-main-face-b-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 85.980762,
+                  "y": 89.641016
+                },
+                {
+                  "x": 57.320508,
+                  "y": 139.282032
+                }
+              ],
+              "panelId": "fold-prism-main-face-b",
+              "edgeId": "fold-prism-main-face-b-boundary-3"
+            },
+            {
+              "id": "fold-prism-main-face-b-boundary-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 57.320508,
+                  "y": 139.282032
+                },
+                {
+                  "x": 0,
+                  "y": 139.282032
+                }
+              ],
+              "panelId": "fold-prism-main-face-b",
+              "edgeId": "fold-prism-main-face-b-boundary-4"
+            },
+            {
+              "id": "fold-prism-main-face-b-boundary-5-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 0,
+                  "y": 139.282032
+                },
+                {
+                  "x": -28.660254,
+                  "y": 89.641016
+                }
+              ],
+              "panelId": "fold-prism-main-face-b",
+              "edgeId": "fold-prism-main-face-b-boundary-5"
+            },
+            {
+              "id": "fold-prism-main-face-b-boundary-6-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": -28.660254,
+                  "y": 89.641016
+                },
+                {
+                  "x": 0,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-face-b",
+              "edgeId": "fold-prism-main-face-b-boundary-6"
+            },
+            {
+              "id": "fold-prism-main-band-fold-1-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 57.320508,
+                  "y": 0
+                },
+                {
+                  "x": 57.320508,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-1",
+              "edgeId": "fold-prism-main-band-fold-1"
+            },
+            {
+              "id": "fold-prism-main-band-fold-2-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 114.641016,
+                  "y": 0
+                },
+                {
+                  "x": 114.641016,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-2",
+              "edgeId": "fold-prism-main-band-fold-2"
+            },
+            {
+              "id": "fold-prism-main-band-fold-3-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 171.961524,
+                  "y": 0
+                },
+                {
+                  "x": 171.961524,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-3",
+              "edgeId": "fold-prism-main-band-fold-3"
+            },
+            {
+              "id": "fold-prism-main-band-fold-4-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 229.282032,
+                  "y": 0
+                },
+                {
+                  "x": 229.282032,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-4",
+              "edgeId": "fold-prism-main-band-fold-4"
+            },
+            {
+              "id": "fold-prism-main-band-fold-5-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 286.60254,
+                  "y": 0
+                },
+                {
+                  "x": 286.60254,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-5",
+              "edgeId": "fold-prism-main-band-fold-5"
+            },
+            {
+              "id": "fold-prism-main-face-a-fold-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "x": 57.320508,
+                  "y": 0
+                }
+              ],
+              "panelId": "fold-prism-main-band-1",
+              "edgeId": "fold-prism-main-face-a-fold"
+            },
+            {
+              "id": "fold-prism-main-face-b-fold-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 57.320508,
+                  "y": 40
+                },
+                {
+                  "x": 0,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-1",
+              "edgeId": "fold-prism-main-face-b-fold"
+            },
+            {
+              "id": "fold-prism-main-seam-tab-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 343.923048,
+                  "y": 0
+                },
+                {
+                  "x": 351.923048,
+                  "y": 2.8
+                },
+                {
+                  "x": 351.923048,
+                  "y": 37.2
+                },
+                {
+                  "x": 343.923048,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-6",
+              "tabId": "fold-prism-main-seam-tab"
+            },
+            {
+              "id": "fold-prism-main-seam-tab-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 343.923048,
+                  "y": 0
+                },
+                {
+                  "x": 343.923048,
+                  "y": 40
+                }
+              ],
+              "panelId": "fold-prism-main-band-6",
+              "tabId": "fold-prism-main-seam-tab",
+              "edgeId": "fold-prism-main-seam-tab-base"
+            }
+          ],
+          "labels": [
+            {
+              "id": "fold-prism-main-band-1-label",
+              "text": "Band 1",
+              "position": {
+                "x": 28.660254,
+                "y": 20
+              },
+              "operation": "engrave",
+              "entityId": "fold-prism-main-band-1"
+            },
+            {
+              "id": "fold-prism-main-band-2-label",
+              "text": "Band 2",
+              "position": {
+                "x": 85.980762,
+                "y": 20
+              },
+              "operation": "engrave",
+              "entityId": "fold-prism-main-band-2"
+            },
+            {
+              "id": "fold-prism-main-band-3-label",
+              "text": "Band 3",
+              "position": {
+                "x": 143.30127,
+                "y": 20
+              },
+              "operation": "engrave",
+              "entityId": "fold-prism-main-band-3"
+            },
+            {
+              "id": "fold-prism-main-band-4-label",
+              "text": "Band 4",
+              "position": {
+                "x": 200.621778,
+                "y": 20
+              },
+              "operation": "engrave",
+              "entityId": "fold-prism-main-band-4"
+            },
+            {
+              "id": "fold-prism-main-band-5-label",
+              "text": "Band 5",
+              "position": {
+                "x": 257.942286,
+                "y": 20
+              },
+              "operation": "engrave",
+              "entityId": "fold-prism-main-band-5"
+            },
+            {
+              "id": "fold-prism-main-band-6-label",
+              "text": "Band 6",
+              "position": {
+                "x": 315.262794,
+                "y": 20
+              },
+              "operation": "engrave",
+              "entityId": "fold-prism-main-band-6"
+            },
+            {
+              "id": "fold-prism-main-face-a-label",
+              "text": "Front face",
+              "position": {
+                "x": 28.660254,
+                "y": -49.641016
+              },
+              "operation": "engrave",
+              "entityId": "fold-prism-main-face-a"
+            },
+            {
+              "id": "fold-prism-main-face-b-label",
+              "text": "Back face",
+              "position": {
+                "x": 28.660254,
+                "y": 89.641016
+              },
+              "operation": "engrave",
+              "entityId": "fold-prism-main-face-b"
+            }
+          ],
+          "thicknessMm": 1,
+          "folding": {
+            "templateKind": "regular-prism",
+            "panelIds": [
+              "fold-prism-main-band-1",
+              "fold-prism-main-band-2",
+              "fold-prism-main-band-3",
+              "fold-prism-main-band-4",
+              "fold-prism-main-band-5",
+              "fold-prism-main-band-6",
+              "fold-prism-main-face-a",
+              "fold-prism-main-face-b"
+            ]
+          }
+        }
+      ],
+      "issues": [],
+      "assembledPreview": {
+        "panels": [
+          {
+            "id": "fold-prism-main-band-1",
+            "partId": "fold-prism-main",
+            "name": "Band 1",
+            "verticesMm": [
+              [57.32050807568877, -20, 0],
+              [28.660254037844393, -20, 49.64101615137754],
+              [28.660254037844393, 20, 49.64101615137754],
+              [57.32050807568877, 20, 0]
+            ]
+          },
+          {
+            "id": "fold-prism-main-band-2",
+            "partId": "fold-prism-main",
+            "name": "Band 2",
+            "verticesMm": [
+              [28.660254037844393, -20, 49.64101615137754],
+              [-28.66025403784437, -20, 49.64101615137755],
+              [-28.66025403784437, 20, 49.64101615137755],
+              [28.660254037844393, 20, 49.64101615137754]
+            ]
+          },
+          {
+            "id": "fold-prism-main-band-3",
+            "partId": "fold-prism-main",
+            "name": "Band 3",
+            "verticesMm": [
+              [-28.66025403784437, -20, 49.64101615137755],
+              [-57.32050807568877, -20, 7.019737674039226e-15],
+              [-57.32050807568877, 20, 7.019737674039226e-15],
+              [-28.66025403784437, 20, 49.64101615137755]
+            ]
+          },
+          {
+            "id": "fold-prism-main-band-4",
+            "partId": "fold-prism-main",
+            "name": "Band 4",
+            "verticesMm": [
+              [-57.32050807568877, -20, 7.019737674039226e-15],
+              [-28.66025403784441, -20, -49.641016151377535],
+              [-28.66025403784441, 20, -49.641016151377535],
+              [-57.32050807568877, 20, 7.019737674039226e-15]
+            ]
+          },
+          {
+            "id": "fold-prism-main-band-5",
+            "partId": "fold-prism-main",
+            "name": "Band 5",
+            "verticesMm": [
+              [-28.66025403784441, -20, -49.641016151377535],
+              [28.660254037844393, -20, -49.64101615137754],
+              [28.660254037844393, 20, -49.64101615137754],
+              [-28.66025403784441, 20, -49.641016151377535]
+            ]
+          },
+          {
+            "id": "fold-prism-main-band-6",
+            "partId": "fold-prism-main",
+            "name": "Band 6",
+            "verticesMm": [
+              [28.660254037844393, -20, -49.64101615137754],
+              [57.32050807568877, -20, 0],
+              [57.32050807568877, 20, 0],
+              [28.660254037844393, 20, -49.64101615137754]
+            ]
+          },
+          {
+            "id": "fold-prism-main-face-a",
+            "partId": "fold-prism-main",
+            "name": "Front face",
+            "verticesMm": [
+              [57.32050807568877, -20, 0],
+              [28.660254037844393, -20, 49.64101615137754],
+              [-28.66025403784437, -20, 49.64101615137755],
+              [-57.32050807568877, -20, 7.019737674039226e-15],
+              [-28.66025403784441, -20, -49.641016151377535],
+              [28.660254037844393, -20, -49.64101615137754]
+            ]
+          },
+          {
+            "id": "fold-prism-main-face-b",
+            "partId": "fold-prism-main",
+            "name": "Back face",
+            "verticesMm": [
+              [57.32050807568877, 20, 0],
+              [28.660254037844393, 20, 49.64101615137754],
+              [-28.66025403784437, 20, 49.64101615137755],
+              [-57.32050807568877, 20, 7.019737674039226e-15],
+              [-28.66025403784441, 20, -49.641016151377535],
+              [28.660254037844393, 20, -49.64101615137754]
+            ]
+          }
+        ]
+      },
+      "editableEdges": [
+        {
+          "id": "fold-prism-main-band-1-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-band-1",
+          "startMm": [57.32050807568877, 20, 0],
+          "endMm": [57.32050807568877, -20, 0],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-2-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-band-2",
+          "startMm": [28.660254037844393, -20, 49.64101615137754],
+          "endMm": [-28.66025403784437, -20, 49.64101615137755],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-2-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-band-2",
+          "startMm": [-28.66025403784437, 20, 49.64101615137755],
+          "endMm": [28.660254037844393, 20, 49.64101615137754],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-3-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-band-3",
+          "startMm": [-28.66025403784437, -20, 49.64101615137755],
+          "endMm": [-57.32050807568877, -20, 7.019737674039226e-15],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-3-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-band-3",
+          "startMm": [-57.32050807568877, 20, 7.019737674039226e-15],
+          "endMm": [-28.66025403784437, 20, 49.64101615137755],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-4-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-band-4",
+          "startMm": [-57.32050807568877, -20, 7.019737674039226e-15],
+          "endMm": [-28.66025403784441, -20, -49.641016151377535],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-4-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-band-4",
+          "startMm": [-28.66025403784441, 20, -49.641016151377535],
+          "endMm": [-57.32050807568877, 20, 7.019737674039226e-15],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-5-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-band-5",
+          "startMm": [-28.66025403784441, -20, -49.641016151377535],
+          "endMm": [28.660254037844393, -20, -49.64101615137754],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-5-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-band-5",
+          "startMm": [28.660254037844393, 20, -49.64101615137754],
+          "endMm": [-28.66025403784441, 20, -49.641016151377535],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-6-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-band-6",
+          "startMm": [28.660254037844393, -20, -49.64101615137754],
+          "endMm": [57.32050807568877, -20, 0],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-6-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-band-6",
+          "startMm": [57.32050807568877, 20, 0],
+          "endMm": [28.660254037844393, 20, -49.64101615137754],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-fold-1-connection",
+          "kind": "connection",
+          "panelAId": "fold-prism-main-band-1",
+          "panelBId": "fold-prism-main-band-2",
+          "startMm": [28.660254037844393, -20, 49.64101615137754],
+          "endMm": [28.660254037844393, 20, 49.64101615137754],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-fold-2-connection",
+          "kind": "connection",
+          "panelAId": "fold-prism-main-band-2",
+          "panelBId": "fold-prism-main-band-3",
+          "startMm": [-28.66025403784437, -20, 49.64101615137755],
+          "endMm": [-28.66025403784437, 20, 49.64101615137755],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-fold-3-connection",
+          "kind": "connection",
+          "panelAId": "fold-prism-main-band-3",
+          "panelBId": "fold-prism-main-band-4",
+          "startMm": [-57.32050807568877, -20, 7.019737674039226e-15],
+          "endMm": [-57.32050807568877, 20, 7.019737674039226e-15],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-fold-4-connection",
+          "kind": "connection",
+          "panelAId": "fold-prism-main-band-4",
+          "panelBId": "fold-prism-main-band-5",
+          "startMm": [-28.66025403784441, -20, -49.641016151377535],
+          "endMm": [-28.66025403784441, 20, -49.641016151377535],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-band-fold-5-connection",
+          "kind": "connection",
+          "panelAId": "fold-prism-main-band-5",
+          "panelBId": "fold-prism-main-band-6",
+          "startMm": [28.660254037844393, -20, -49.64101615137754],
+          "endMm": [28.660254037844393, 20, -49.64101615137754],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-a-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-face-a",
+          "startMm": [28.660254037844393, -20, 49.64101615137754],
+          "endMm": [-28.66025403784437, -20, 49.64101615137755],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-a-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-face-a",
+          "startMm": [-28.66025403784437, -20, 49.64101615137755],
+          "endMm": [-57.32050807568877, -20, 7.019737674039226e-15],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-a-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-face-a",
+          "startMm": [-57.32050807568877, -20, 7.019737674039226e-15],
+          "endMm": [-28.66025403784441, -20, -49.641016151377535],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-a-boundary-5",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-face-a",
+          "startMm": [-28.66025403784441, -20, -49.641016151377535],
+          "endMm": [28.660254037844393, -20, -49.64101615137754],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-a-boundary-6",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-face-a",
+          "startMm": [28.660254037844393, -20, -49.64101615137754],
+          "endMm": [57.32050807568877, -20, 0],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-a-fold-connection",
+          "kind": "connection",
+          "panelAId": "fold-prism-main-band-1",
+          "panelBId": "fold-prism-main-face-a",
+          "startMm": [57.32050807568877, -20, 0],
+          "endMm": [28.660254037844393, -20, 49.64101615137754],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-b-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-face-b",
+          "startMm": [28.660254037844393, 20, 49.64101615137754],
+          "endMm": [-28.66025403784437, 20, 49.64101615137755],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-b-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-face-b",
+          "startMm": [-28.66025403784437, 20, 49.64101615137755],
+          "endMm": [-57.32050807568877, 20, 7.019737674039226e-15],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-b-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-face-b",
+          "startMm": [-57.32050807568877, 20, 7.019737674039226e-15],
+          "endMm": [-28.66025403784441, 20, -49.641016151377535],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-b-boundary-5",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-face-b",
+          "startMm": [-28.66025403784441, 20, -49.641016151377535],
+          "endMm": [28.660254037844393, 20, -49.64101615137754],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-b-boundary-6",
+          "kind": "boundary",
+          "panelAId": "fold-prism-main-face-b",
+          "startMm": [28.660254037844393, 20, -49.64101615137754],
+          "endMm": [57.32050807568877, 20, 0],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-face-b-fold-connection",
+          "kind": "connection",
+          "panelAId": "fold-prism-main-band-1",
+          "panelBId": "fold-prism-main-face-b",
+          "startMm": [28.660254037844393, 20, 49.64101615137754],
+          "endMm": [57.32050807568877, 20, 0],
+          "editable": true
+        },
+        {
+          "id": "fold-prism-main-seam-tab-connection",
+          "kind": "connection",
+          "panelAId": "fold-prism-main-band-6",
+          "panelBId": "fold-prism-main-band-1",
+          "startMm": [57.32050807568877, -20, 0],
+          "endMm": [57.32050807568877, 20, 0],
+          "editable": true
+        }
+      ],
+      "resolvedDimensions": {
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40
+      },
+      "algorithmVersion": "interactive-connections-v8",
+      "inputHash": "sf6-ce4fbb08"
+    },
+    "generationRecord": {
+      "signatureVersion": 2,
+      "mode": "fold-template",
+      "inputHash": "sf9-d6f181b7",
+      "resultHash": "sf9-caafbb51",
+      "algorithmVersion": "interactive-connections-v8",
+      "generatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

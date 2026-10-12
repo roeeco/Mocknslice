@@ -1,0 +1,3326 @@
+{
+  "input": {
+    "mode": "fold-template",
+    "payload": {
+      "materialThicknessMm": 1,
+      "settings": {
+        "templateKind": "open-box",
+        "fitAxis": "y",
+        "clearanceMm": 0,
+        "profileToleranceMm": 1,
+        "sizeMode": "custom",
+        "envelopeDimensions": {
+          "widthMm": 80,
+          "lengthMm": 60,
+          "heightMm": 40
+        },
+        "parameters": {
+          "wallHeightMm": 40,
+          "tabDepthMm": 8,
+          "lidDepthMm": 15,
+          "lidClearanceMm": 0.5,
+          "gussetDepthMm": 40,
+          "closureFlapMm": 12,
+          "prismSides": 6,
+          "prismRotationDeg": 0,
+          "topScale": 0.5,
+          "seamTabMm": 8,
+          "standalone": true,
+          "closureMethod": "glue",
+          "slotClearanceMm": 0.1
+        },
+        "connectionOverrides": [
+          {
+            "id": "baseline-fold-cut",
+            "templateKind": "open-box",
+            "connectionId": "fold-open-box-main-fold-bottom-connection",
+            "treatment": "cut",
+            "closure": "none"
+          }
+        ],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      }
+    }
+  },
+  "result": {
+    "settings": {
+      "templateKind": "open-box",
+      "fitAxis": "y",
+      "clearanceMm": 0,
+      "profileToleranceMm": 1,
+      "sizeMode": "custom",
+      "envelopeDimensions": {
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40
+      },
+      "parameters": {
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "standalone": true,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1
+      },
+      "connectionOverrides": [
+        {
+          "id": "baseline-fold-cut",
+          "templateKind": "open-box",
+          "connectionId": "fold-open-box-main-fold-bottom-connection",
+          "treatment": "cut",
+          "closure": "none"
+        }
+      ],
+      "boundaryGlueTabs": [],
+      "glueTabDepthMm": 8
+    },
+    "profile": {
+      "sourceModelId": "standalone-template",
+      "fitAxis": "y",
+      "sourceHullPoints": [
+        {
+          "x": -40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": 30
+        },
+        {
+          "x": -40,
+          "y": 30
+        }
+      ],
+      "fittedPoints": [
+        {
+          "x": -40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": 30
+        },
+        {
+          "x": -40,
+          "y": 30
+        }
+      ],
+      "clearanceMm": 0,
+      "simplificationToleranceMm": 1,
+      "axisMinMm": -20,
+      "axisMaxMm": 20,
+      "widthMm": 80,
+      "heightMm": 60,
+      "depthMm": 40
+    },
+    "panels": [
+      {
+        "id": "fold-open-box-main-base",
+        "partId": "fold-open-box-main",
+        "name": "Base",
+        "role": "base",
+        "outline": [
+          {
+            "x": 50,
+            "y": 50
+          },
+          {
+            "x": 130,
+            "y": 50
+          },
+          {
+            "x": 130,
+            "y": 110
+          },
+          {
+            "x": 50,
+            "y": 110
+          }
+        ]
+      },
+      {
+        "id": "fold-open-box-main-wall-bottom",
+        "partId": "fold-open-box-main",
+        "name": "Bottom wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 50,
+            "y": 10
+          },
+          {
+            "x": 130,
+            "y": 10
+          },
+          {
+            "x": 130,
+            "y": 50
+          },
+          {
+            "x": 50,
+            "y": 50
+          }
+        ]
+      },
+      {
+        "id": "fold-open-box-main-wall-right",
+        "partId": "fold-open-box-main",
+        "name": "Right wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 130,
+            "y": 50
+          },
+          {
+            "x": 170,
+            "y": 50
+          },
+          {
+            "x": 170,
+            "y": 110
+          },
+          {
+            "x": 130,
+            "y": 110
+          }
+        ]
+      },
+      {
+        "id": "fold-open-box-main-wall-top",
+        "partId": "fold-open-box-main",
+        "name": "Top wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 50,
+            "y": 110
+          },
+          {
+            "x": 130,
+            "y": 110
+          },
+          {
+            "x": 130,
+            "y": 150
+          },
+          {
+            "x": 50,
+            "y": 150
+          }
+        ]
+      },
+      {
+        "id": "fold-open-box-main-wall-left",
+        "partId": "fold-open-box-main",
+        "name": "Left wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 10,
+            "y": 50
+          },
+          {
+            "x": 50,
+            "y": 50
+          },
+          {
+            "x": 50,
+            "y": 110
+          },
+          {
+            "x": 10,
+            "y": 110
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "id": "fold-open-box-main-fold-bottom",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-bottom",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F1",
+        "start": {
+          "x": 50,
+          "y": 50
+        },
+        "end": {
+          "x": 130,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-open-box-main-fold-right",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-right",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F2",
+        "start": {
+          "x": 130,
+          "y": 50
+        },
+        "end": {
+          "x": 130,
+          "y": 110
+        }
+      },
+      {
+        "id": "fold-open-box-main-fold-top",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-top",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F3",
+        "start": {
+          "x": 130,
+          "y": 110
+        },
+        "end": {
+          "x": 50,
+          "y": 110
+        }
+      },
+      {
+        "id": "fold-open-box-main-fold-left",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-left",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F4",
+        "start": {
+          "x": 50,
+          "y": 110
+        },
+        "end": {
+          "x": 50,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-open-box-main-wall-bottom-boundary-1",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-bottom",
+        "disposition": "boundary",
+        "start": {
+          "x": 50,
+          "y": 10
+        },
+        "end": {
+          "x": 130,
+          "y": 10
+        }
+      },
+      {
+        "id": "fold-open-box-main-wall-bottom-boundary-2",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-bottom",
+        "disposition": "boundary",
+        "start": {
+          "x": 130,
+          "y": 10
+        },
+        "end": {
+          "x": 130,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-open-box-main-wall-bottom-boundary-4",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-bottom",
+        "disposition": "boundary",
+        "start": {
+          "x": 50,
+          "y": 50
+        },
+        "end": {
+          "x": 50,
+          "y": 10
+        }
+      },
+      {
+        "id": "fold-open-box-main-wall-right-boundary-2",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-right",
+        "disposition": "boundary",
+        "start": {
+          "x": 170,
+          "y": 50
+        },
+        "end": {
+          "x": 170,
+          "y": 110
+        }
+      },
+      {
+        "id": "fold-open-box-main-wall-top-boundary-2",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-top",
+        "disposition": "boundary",
+        "start": {
+          "x": 130,
+          "y": 110
+        },
+        "end": {
+          "x": 130,
+          "y": 150
+        }
+      },
+      {
+        "id": "fold-open-box-main-wall-top-boundary-3",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-top",
+        "disposition": "boundary",
+        "start": {
+          "x": 130,
+          "y": 150
+        },
+        "end": {
+          "x": 50,
+          "y": 150
+        }
+      },
+      {
+        "id": "fold-open-box-main-wall-top-boundary-4",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-top",
+        "disposition": "boundary",
+        "start": {
+          "x": 50,
+          "y": 150
+        },
+        "end": {
+          "x": 50,
+          "y": 110
+        }
+      },
+      {
+        "id": "fold-open-box-main-wall-left-boundary-4",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-left",
+        "disposition": "boundary",
+        "start": {
+          "x": 10,
+          "y": 110
+        },
+        "end": {
+          "x": 10,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-open-box-main-tab-left-bottom-base",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-left",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T1",
+        "start": {
+          "x": 10,
+          "y": 50
+        },
+        "end": {
+          "x": 50,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-open-box-main-tab-left-top-base",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-left",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T2",
+        "start": {
+          "x": 50,
+          "y": 110
+        },
+        "end": {
+          "x": 10,
+          "y": 110
+        }
+      },
+      {
+        "id": "fold-open-box-main-tab-right-bottom-base",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-right",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T3",
+        "start": {
+          "x": 130,
+          "y": 50
+        },
+        "end": {
+          "x": 170,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-open-box-main-tab-right-top-base",
+        "partId": "fold-open-box-main",
+        "panelAId": "fold-open-box-main-wall-right",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T4",
+        "start": {
+          "x": 170,
+          "y": 110
+        },
+        "end": {
+          "x": 130,
+          "y": 110
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "fold-open-box-main-fold-bottom-connection",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-bottom",
+        "edgeA": {
+          "start": {
+            "x": 50,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 50
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 50,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 50
+          }
+        },
+        "disposition": "seam",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-open-box-main-fold-right-connection",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-right",
+        "edgeA": {
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-open-box-main-fold-top-connection",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-top",
+        "edgeA": {
+          "start": {
+            "x": 130,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 110
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 130,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 110
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-open-box-main-fold-left-connection",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-left",
+        "edgeA": {
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-open-box-main-tab-left-bottom-connection",
+        "panelAId": "fold-open-box-main-wall-left",
+        "panelBId": "fold-open-box-main-wall-bottom",
+        "edgeA": {
+          "start": {
+            "x": 10,
+            "y": 50
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 50,
+            "y": 10
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": [
+          "fold-open-box-main-tab-left-bottom-connection-manual-tab",
+          "fold-open-box-main-tab-left-top-connection-manual-tab"
+        ]
+      },
+      {
+        "id": "fold-open-box-main-tab-left-top-connection",
+        "panelAId": "fold-open-box-main-wall-left",
+        "panelBId": "fold-open-box-main-wall-top",
+        "edgeA": {
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 10,
+            "y": 110
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 150
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": [
+          "fold-open-box-main-tab-left-bottom-connection-manual-tab",
+          "fold-open-box-main-tab-left-top-connection-manual-tab"
+        ]
+      },
+      {
+        "id": "fold-open-box-main-tab-right-bottom-connection",
+        "panelAId": "fold-open-box-main-wall-right",
+        "panelBId": "fold-open-box-main-wall-bottom",
+        "edgeA": {
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 170,
+            "y": 50
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 10
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": [
+          "fold-open-box-main-tab-right-bottom-connection-manual-tab",
+          "fold-open-box-main-tab-right-top-connection-manual-tab"
+        ]
+      },
+      {
+        "id": "fold-open-box-main-tab-right-top-connection",
+        "panelAId": "fold-open-box-main-wall-right",
+        "panelBId": "fold-open-box-main-wall-top",
+        "edgeA": {
+          "start": {
+            "x": 170,
+            "y": 110
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 130,
+            "y": 150
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": [
+          "fold-open-box-main-tab-right-bottom-connection-manual-tab",
+          "fold-open-box-main-tab-right-top-connection-manual-tab"
+        ]
+      }
+    ],
+    "tabs": [
+      {
+        "id": "fold-open-box-main-tab-left-bottom-connection-manual-tab",
+        "partId": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+        "edgeId": "fold-open-box-main-tab-left-bottom-connection-manual-tab-base",
+        "ownerPanelId": "fold-open-box-main-wall-left",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 10,
+          "y": 50
+        },
+        "baseEnd": {
+          "x": 50,
+          "y": 50
+        },
+        "outline": [
+          {
+            "x": 10,
+            "y": 50
+          },
+          {
+            "x": 12.8,
+            "y": 42
+          },
+          {
+            "x": 47.2,
+            "y": 42
+          },
+          {
+            "x": 50,
+            "y": 50
+          }
+        ]
+      },
+      {
+        "id": "fold-open-box-main-tab-left-top-connection-manual-tab",
+        "partId": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+        "edgeId": "fold-open-box-main-tab-left-top-connection-manual-tab-base",
+        "ownerPanelId": "fold-open-box-main-wall-left",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 50,
+          "y": 110
+        },
+        "baseEnd": {
+          "x": 10,
+          "y": 110
+        },
+        "outline": [
+          {
+            "x": 50,
+            "y": 110
+          },
+          {
+            "x": 47.2,
+            "y": 118
+          },
+          {
+            "x": 12.8,
+            "y": 118
+          },
+          {
+            "x": 10,
+            "y": 110
+          }
+        ]
+      },
+      {
+        "id": "fold-open-box-main-tab-right-bottom-connection-manual-tab",
+        "partId": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+        "edgeId": "fold-open-box-main-tab-right-bottom-connection-manual-tab-base",
+        "ownerPanelId": "fold-open-box-main-wall-right",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 130,
+          "y": 50
+        },
+        "baseEnd": {
+          "x": 170,
+          "y": 50
+        },
+        "outline": [
+          {
+            "x": 130,
+            "y": 50
+          },
+          {
+            "x": 132.8,
+            "y": 42
+          },
+          {
+            "x": 167.2,
+            "y": 42
+          },
+          {
+            "x": 170,
+            "y": 50
+          }
+        ]
+      },
+      {
+        "id": "fold-open-box-main-tab-right-top-connection-manual-tab",
+        "partId": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+        "edgeId": "fold-open-box-main-tab-right-top-connection-manual-tab-base",
+        "ownerPanelId": "fold-open-box-main-wall-right",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 170,
+          "y": 110
+        },
+        "baseEnd": {
+          "x": 130,
+          "y": 110
+        },
+        "outline": [
+          {
+            "x": 170,
+            "y": 110
+          },
+          {
+            "x": 167.2,
+            "y": 118
+          },
+          {
+            "x": 132.8,
+            "y": 118
+          },
+          {
+            "x": 130,
+            "y": 110
+          }
+        ]
+      }
+    ],
+    "parts": [
+      {
+        "id": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+        "name": "open-box component",
+        "label": "fold-open-box-main-base + fold-open-box-main-wall-left + fold-open-box-main-wall-right + fold-open-box-main-wall-top",
+        "thicknessMm": 1,
+        "paths": [
+          {
+            "id": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top-outline-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": 50,
+                "y": 50
+              },
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 132.8,
+                "y": 42
+              },
+              {
+                "x": 167.2,
+                "y": 42
+              },
+              {
+                "x": 170,
+                "y": 50
+              },
+              {
+                "x": 170,
+                "y": 110
+              },
+              {
+                "x": 167.2,
+                "y": 118
+              },
+              {
+                "x": 132.8,
+                "y": 118
+              },
+              {
+                "x": 130,
+                "y": 110
+              },
+              {
+                "x": 130,
+                "y": 150
+              },
+              {
+                "x": 50,
+                "y": 150
+              },
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 47.2,
+                "y": 118
+              },
+              {
+                "x": 12.8,
+                "y": 118
+              },
+              {
+                "x": 10,
+                "y": 110
+              },
+              {
+                "x": 10,
+                "y": 50
+              },
+              {
+                "x": 12.8,
+                "y": 42
+              },
+              {
+                "x": 47.2,
+                "y": 42
+              }
+            ]
+          },
+          {
+            "id": "fold-open-box-main-fold-right-connection-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 130,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-open-box-main-base",
+            "edgeId": "fold-open-box-main-fold-right-connection"
+          },
+          {
+            "id": "fold-open-box-main-fold-top-connection-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 110
+              },
+              {
+                "x": 50,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-open-box-main-base",
+            "edgeId": "fold-open-box-main-fold-top-connection"
+          },
+          {
+            "id": "fold-open-box-main-fold-left-connection-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-open-box-main-base",
+            "edgeId": "fold-open-box-main-fold-left-connection"
+          },
+          {
+            "id": "fold-open-box-main-tab-left-bottom-connection-manual-tab-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 50
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-open-box-main-wall-left",
+            "tabId": "fold-open-box-main-tab-left-bottom-connection-manual-tab",
+            "edgeId": "fold-open-box-main-tab-left-bottom-connection-manual-tab-base"
+          },
+          {
+            "id": "fold-open-box-main-tab-left-top-connection-manual-tab-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 10,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-open-box-main-wall-left",
+            "tabId": "fold-open-box-main-tab-left-top-connection-manual-tab",
+            "edgeId": "fold-open-box-main-tab-left-top-connection-manual-tab-base"
+          },
+          {
+            "id": "fold-open-box-main-tab-right-bottom-connection-manual-tab-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 170,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-open-box-main-wall-right",
+            "tabId": "fold-open-box-main-tab-right-bottom-connection-manual-tab",
+            "edgeId": "fold-open-box-main-tab-right-bottom-connection-manual-tab-base"
+          },
+          {
+            "id": "fold-open-box-main-tab-right-top-connection-manual-tab-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 170,
+                "y": 110
+              },
+              {
+                "x": 130,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-open-box-main-wall-right",
+            "tabId": "fold-open-box-main-tab-right-top-connection-manual-tab",
+            "edgeId": "fold-open-box-main-tab-right-top-connection-manual-tab-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-open-box-main-base-label",
+            "text": "Base",
+            "position": {
+              "x": 90,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-open-box-main-base"
+          },
+          {
+            "id": "fold-open-box-main-wall-left-label",
+            "text": "Left wall",
+            "position": {
+              "x": 30,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-open-box-main-wall-left"
+          },
+          {
+            "id": "fold-open-box-main-wall-right-label",
+            "text": "Right wall",
+            "position": {
+              "x": 150,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-open-box-main-wall-right"
+          },
+          {
+            "id": "fold-open-box-main-wall-top-label",
+            "text": "Top wall",
+            "position": {
+              "x": 90,
+              "y": 130
+            },
+            "operation": "engrave",
+            "entityId": "fold-open-box-main-wall-top"
+          }
+        ],
+        "folding": {
+          "templateKind": "open-box",
+          "panelIds": [
+            "fold-open-box-main-base",
+            "fold-open-box-main-wall-left",
+            "fold-open-box-main-wall-right",
+            "fold-open-box-main-wall-top"
+          ]
+        }
+      },
+      {
+        "id": "fold-open-box-component-fold-open-box-main-wall-bottom",
+        "name": "open-box component",
+        "label": "fold-open-box-main-wall-bottom",
+        "thicknessMm": 1,
+        "paths": [
+          {
+            "id": "fold-open-box-component-fold-open-box-main-wall-bottom-outline-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": 50,
+                "y": 10
+              },
+              {
+                "x": 130,
+                "y": 10
+              },
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ]
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-open-box-main-wall-bottom-label",
+            "text": "Bottom wall",
+            "position": {
+              "x": 90,
+              "y": 30
+            },
+            "operation": "engrave",
+            "entityId": "fold-open-box-main-wall-bottom"
+          }
+        ],
+        "folding": {
+          "templateKind": "open-box",
+          "panelIds": ["fold-open-box-main-wall-bottom"]
+        }
+      }
+    ],
+    "issues": [],
+    "assembledPreview": {
+      "panels": [
+        {
+          "id": "fold-open-box-main-base",
+          "partId": "fold-open-box-main",
+          "name": "Base",
+          "verticesMm": [
+            [-40, -20, -30],
+            [40, -20, -30],
+            [40, -20, 30],
+            [-40, -20, 30]
+          ]
+        },
+        {
+          "id": "fold-open-box-main-wall-bottom",
+          "partId": "fold-open-box-main",
+          "name": "Bottom wall",
+          "verticesMm": [
+            [-40, -20, -30],
+            [40, -20, -30],
+            [40, 20, -30],
+            [-40, 20, -30]
+          ]
+        },
+        {
+          "id": "fold-open-box-main-wall-right",
+          "partId": "fold-open-box-main",
+          "name": "Right wall",
+          "verticesMm": [
+            [40, -20, -30],
+            [40, -20, 30],
+            [40, 20, 30],
+            [40, 20, -30]
+          ]
+        },
+        {
+          "id": "fold-open-box-main-wall-top",
+          "partId": "fold-open-box-main",
+          "name": "Top wall",
+          "verticesMm": [
+            [40, -20, 30],
+            [-40, -20, 30],
+            [-40, 20, 30],
+            [40, 20, 30]
+          ]
+        },
+        {
+          "id": "fold-open-box-main-wall-left",
+          "partId": "fold-open-box-main",
+          "name": "Left wall",
+          "verticesMm": [
+            [-40, -20, 30],
+            [-40, -20, -30],
+            [-40, 20, -30],
+            [-40, 20, 30]
+          ]
+        }
+      ]
+    },
+    "editableEdges": [
+      {
+        "id": "fold-open-box-main-fold-bottom-connection",
+        "kind": "connection",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-bottom",
+        "startMm": [-40, -20, -30],
+        "endMm": [40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-fold-left-connection",
+        "kind": "connection",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-left",
+        "startMm": [-40, -20, 30],
+        "endMm": [-40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-fold-right-connection",
+        "kind": "connection",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-right",
+        "startMm": [40, -20, -30],
+        "endMm": [40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-fold-top-connection",
+        "kind": "connection",
+        "panelAId": "fold-open-box-main-base",
+        "panelBId": "fold-open-box-main-wall-top",
+        "startMm": [40, -20, 30],
+        "endMm": [-40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-tab-left-bottom-connection",
+        "kind": "connection",
+        "panelAId": "fold-open-box-main-wall-left",
+        "panelBId": "fold-open-box-main-wall-bottom",
+        "startMm": [-40, -20, 30],
+        "endMm": [-40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-tab-left-top-connection",
+        "kind": "connection",
+        "panelAId": "fold-open-box-main-wall-left",
+        "panelBId": "fold-open-box-main-wall-top",
+        "startMm": [-40, 20, -30],
+        "endMm": [-40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-tab-right-bottom-connection",
+        "kind": "connection",
+        "panelAId": "fold-open-box-main-wall-right",
+        "panelBId": "fold-open-box-main-wall-bottom",
+        "startMm": [40, -20, -30],
+        "endMm": [40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-tab-right-top-connection",
+        "kind": "connection",
+        "panelAId": "fold-open-box-main-wall-right",
+        "panelBId": "fold-open-box-main-wall-top",
+        "startMm": [40, 20, 30],
+        "endMm": [40, 20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-wall-bottom-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-open-box-main-wall-bottom",
+        "startMm": [-40, -20, -30],
+        "endMm": [40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-wall-bottom-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-open-box-main-wall-bottom",
+        "startMm": [40, -20, -30],
+        "endMm": [40, 20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-wall-bottom-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-open-box-main-wall-bottom",
+        "startMm": [-40, 20, -30],
+        "endMm": [-40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-wall-left-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-open-box-main-wall-left",
+        "startMm": [-40, 20, 30],
+        "endMm": [-40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-wall-right-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-open-box-main-wall-right",
+        "startMm": [40, -20, 30],
+        "endMm": [40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-wall-top-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-open-box-main-wall-top",
+        "startMm": [-40, -20, 30],
+        "endMm": [-40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-wall-top-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-open-box-main-wall-top",
+        "startMm": [-40, 20, 30],
+        "endMm": [40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-open-box-main-wall-top-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-open-box-main-wall-top",
+        "startMm": [40, 20, 30],
+        "endMm": [40, -20, 30],
+        "editable": true
+      }
+    ],
+    "resolvedDimensions": {
+      "widthMm": 80,
+      "lengthMm": 60,
+      "heightMm": 40
+    },
+    "algorithmVersion": "interactive-connections-v8",
+    "inputHash": "sf6-fc555e38"
+  },
+  "project": {
+    "metadata": {
+      "id": "project-upgrade-baseline",
+      "name": "Upgrade baseline: fold-edited-v8",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    "model": {
+      "id": "model-legacy-fixture",
+      "name": "40 mm cube",
+      "source": {
+        "kind": "built-in",
+        "primitive": "cube"
+      },
+      "dimensions": {
+        "widthMm": 40,
+        "heightMm": 40,
+        "depthMm": 40
+      },
+      "transform": {
+        "positionMm": [0, 0, 0],
+        "rotationDeg": [0, 0, 0],
+        "scale": [1, 1, 1]
+      },
+      "mesh": {
+        "positionsMm": [
+          -20, -20, -20, 20, -20, -20, 20, 20, -20, -20, 20, -20, -20, -20, 20, 20, -20, 20, 20, 20,
+          20, -20, 20, 20
+        ],
+        "indices": [
+          0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 3, 7, 6, 3, 6, 2, 0, 4, 7, 0, 7, 3,
+          1, 2, 6, 1, 6, 5
+        ]
+      },
+      "bounds": {
+        "minMm": [-20, -20, -20],
+        "maxMm": [20, 20, 20]
+      },
+      "healthReport": {
+        "triangleCount": 12,
+        "openEdgeCount": 0,
+        "nonManifoldEdgeCount": 0,
+        "disconnectedShellCount": 1,
+        "orientationIssueCount": 0,
+        "weldedVertexCount": 8,
+        "signedVolumeMm3": 64000.00000000001,
+        "likelyInverted": false,
+        "inspected": true
+      }
+    },
+    "fabricationMode": "fold-template",
+    "materialProfileSnapshot": {
+      "id": "card-300gsm",
+      "name": "300 gsm card",
+      "category": "card",
+      "thicknessMm": 1,
+      "kerfMm": 0.1,
+      "clearanceMm": 0.1,
+      "grainDirection": "none",
+      "scoreAllowanceMm": 0.2,
+      "defaultSheetWidthMm": 210,
+      "defaultSheetHeightMm": 297
+    },
+    "generatedParts": [
+      {
+        "id": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+        "name": "open-box component",
+        "label": "fold-open-box-main-base + fold-open-box-main-wall-left + fold-open-box-main-wall-right + fold-open-box-main-wall-top",
+        "thicknessMm": 1,
+        "paths": [
+          {
+            "id": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top-outline-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": 50,
+                "y": 50
+              },
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 132.8,
+                "y": 42
+              },
+              {
+                "x": 167.2,
+                "y": 42
+              },
+              {
+                "x": 170,
+                "y": 50
+              },
+              {
+                "x": 170,
+                "y": 110
+              },
+              {
+                "x": 167.2,
+                "y": 118
+              },
+              {
+                "x": 132.8,
+                "y": 118
+              },
+              {
+                "x": 130,
+                "y": 110
+              },
+              {
+                "x": 130,
+                "y": 150
+              },
+              {
+                "x": 50,
+                "y": 150
+              },
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 47.2,
+                "y": 118
+              },
+              {
+                "x": 12.8,
+                "y": 118
+              },
+              {
+                "x": 10,
+                "y": 110
+              },
+              {
+                "x": 10,
+                "y": 50
+              },
+              {
+                "x": 12.8,
+                "y": 42
+              },
+              {
+                "x": 47.2,
+                "y": 42
+              }
+            ]
+          },
+          {
+            "id": "fold-open-box-main-fold-right-connection-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 130,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-open-box-main-base",
+            "edgeId": "fold-open-box-main-fold-right-connection"
+          },
+          {
+            "id": "fold-open-box-main-fold-top-connection-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 110
+              },
+              {
+                "x": 50,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-open-box-main-base",
+            "edgeId": "fold-open-box-main-fold-top-connection"
+          },
+          {
+            "id": "fold-open-box-main-fold-left-connection-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-open-box-main-base",
+            "edgeId": "fold-open-box-main-fold-left-connection"
+          },
+          {
+            "id": "fold-open-box-main-tab-left-bottom-connection-manual-tab-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 50
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-open-box-main-wall-left",
+            "tabId": "fold-open-box-main-tab-left-bottom-connection-manual-tab",
+            "edgeId": "fold-open-box-main-tab-left-bottom-connection-manual-tab-base"
+          },
+          {
+            "id": "fold-open-box-main-tab-left-top-connection-manual-tab-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 10,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-open-box-main-wall-left",
+            "tabId": "fold-open-box-main-tab-left-top-connection-manual-tab",
+            "edgeId": "fold-open-box-main-tab-left-top-connection-manual-tab-base"
+          },
+          {
+            "id": "fold-open-box-main-tab-right-bottom-connection-manual-tab-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 170,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-open-box-main-wall-right",
+            "tabId": "fold-open-box-main-tab-right-bottom-connection-manual-tab",
+            "edgeId": "fold-open-box-main-tab-right-bottom-connection-manual-tab-base"
+          },
+          {
+            "id": "fold-open-box-main-tab-right-top-connection-manual-tab-score",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 170,
+                "y": 110
+              },
+              {
+                "x": 130,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-open-box-main-wall-right",
+            "tabId": "fold-open-box-main-tab-right-top-connection-manual-tab",
+            "edgeId": "fold-open-box-main-tab-right-top-connection-manual-tab-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-open-box-main-base-label",
+            "text": "Base",
+            "position": {
+              "x": 90,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-open-box-main-base"
+          },
+          {
+            "id": "fold-open-box-main-wall-left-label",
+            "text": "Left wall",
+            "position": {
+              "x": 30,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-open-box-main-wall-left"
+          },
+          {
+            "id": "fold-open-box-main-wall-right-label",
+            "text": "Right wall",
+            "position": {
+              "x": 150,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-open-box-main-wall-right"
+          },
+          {
+            "id": "fold-open-box-main-wall-top-label",
+            "text": "Top wall",
+            "position": {
+              "x": 90,
+              "y": 130
+            },
+            "operation": "engrave",
+            "entityId": "fold-open-box-main-wall-top"
+          }
+        ],
+        "folding": {
+          "templateKind": "open-box",
+          "panelIds": [
+            "fold-open-box-main-base",
+            "fold-open-box-main-wall-left",
+            "fold-open-box-main-wall-right",
+            "fold-open-box-main-wall-top"
+          ]
+        }
+      },
+      {
+        "id": "fold-open-box-component-fold-open-box-main-wall-bottom",
+        "name": "open-box component",
+        "label": "fold-open-box-main-wall-bottom",
+        "thicknessMm": 1,
+        "paths": [
+          {
+            "id": "fold-open-box-component-fold-open-box-main-wall-bottom-outline-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": 50,
+                "y": 10
+              },
+              {
+                "x": 130,
+                "y": 10
+              },
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ]
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-open-box-main-wall-bottom-label",
+            "text": "Bottom wall",
+            "position": {
+              "x": 90,
+              "y": 30
+            },
+            "operation": "engrave",
+            "entityId": "fold-open-box-main-wall-bottom"
+          }
+        ],
+        "folding": {
+          "templateKind": "open-box",
+          "panelIds": ["fold-open-box-main-wall-bottom"]
+        }
+      }
+    ],
+    "generationIssues": [],
+    "sheetLayouts": [
+      {
+        "id": "sheet-upgrade-baseline",
+        "widthMm": 600,
+        "heightMm": 400,
+        "marginMm": 5,
+        "spacingMm": 3,
+        "placements": [
+          {
+            "partId": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+            "x": -5,
+            "y": -37,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "fold-open-box-component-fold-open-box-main-wall-bottom",
+            "x": 118,
+            "y": -5,
+            "rotationDeg": 0
+          }
+        ]
+      }
+    ],
+    "exportSettings": {
+      "includeLabels": true,
+      "includeRegistrationMarks": false,
+      "includeSheetBoundary": true,
+      "operationStyles": [
+        {
+          "operation": "cut",
+          "stroke": "#ff0000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "score",
+          "stroke": "#0000ff",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "mountain-fold",
+          "stroke": "#8b5cf6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "valley-fold",
+          "stroke": "#14b8a6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "perforate",
+          "stroke": "#f59e0b",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "engrave",
+          "stroke": "#000000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "guide",
+          "stroke": "#6b7280",
+          "strokeWidthMm": 0.1
+        }
+      ],
+      "kerfCompensation": "none",
+      "customKerfMm": 0.1,
+      "foldLineOutput": "preserve",
+      "perforationDashMm": 2,
+      "perforationGapMm": 1,
+      "labelFontSizeMm": 3
+    },
+    "acknowledgedWarningIds": [],
+    "modeSettings": {
+      "stackedSlices": {
+        "axis": "z",
+        "spacingMm": 10,
+        "thicknessMm": 1,
+        "contourEpsilonMm": 0.001
+      },
+      "waffleSlices": {
+        "primaryAxis": "x",
+        "secondaryAxis": "y",
+        "primarySpacingMm": 20,
+        "secondarySpacingMm": 20,
+        "thicknessMm": 3,
+        "clearanceMm": 0.15,
+        "contourEpsilonMm": 0.001,
+        "slotPattern": "alternating",
+        "reverseSlots": false
+      },
+      "foldTemplate": {
+        "templateKind": "open-box",
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40,
+        "profileToleranceMm": 1,
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1,
+        "connectionOverrides": [
+          {
+            "id": "baseline-fold-cut",
+            "templateKind": "open-box",
+            "connectionId": "fold-open-box-main-fold-bottom-connection",
+            "treatment": "cut",
+            "closure": "none"
+          }
+        ],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "meshUnfold": {
+        "strategy": "automatic",
+        "rootFaceIndex": 0,
+        "manualSeamKeys": [],
+        "tabDepthMm": 6,
+        "maximumFaceCount": 200,
+        "searchAttempts": 18
+      },
+      "panelConstruction": {
+        "innerWidthMm": 80,
+        "innerDepthMm": 60,
+        "innerHeightMm": 50,
+        "jointKind": "finger",
+        "fingerWidthMm": 10,
+        "clearanceMm": 0.15,
+        "includeLid": false,
+        "panelThicknessMm": 1,
+        "dividerThicknessMm": 1,
+        "lidThicknessMm": 1,
+        "widthDividerCount": 0,
+        "depthDividerCount": 0,
+        "connectionOverrides": {},
+        "panelProfiles": {
+          "front": "flat",
+          "back": "flat"
+        },
+        "glueTabDepthMm": 8,
+        "boundaryGlueTabs": [],
+        "features": []
+      }
+    },
+    "foldingResult": {
+      "settings": {
+        "templateKind": "open-box",
+        "fitAxis": "y",
+        "clearanceMm": 0,
+        "profileToleranceMm": 1,
+        "sizeMode": "custom",
+        "envelopeDimensions": {
+          "widthMm": 80,
+          "lengthMm": 60,
+          "heightMm": 40
+        },
+        "parameters": {
+          "wallHeightMm": 40,
+          "tabDepthMm": 8,
+          "lidDepthMm": 15,
+          "lidClearanceMm": 0.5,
+          "gussetDepthMm": 40,
+          "closureFlapMm": 12,
+          "prismSides": 6,
+          "prismRotationDeg": 0,
+          "topScale": 0.5,
+          "seamTabMm": 8,
+          "standalone": true,
+          "closureMethod": "glue",
+          "slotClearanceMm": 0.1
+        },
+        "connectionOverrides": [
+          {
+            "id": "baseline-fold-cut",
+            "templateKind": "open-box",
+            "connectionId": "fold-open-box-main-fold-bottom-connection",
+            "treatment": "cut",
+            "closure": "none"
+          }
+        ],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "profile": {
+        "sourceModelId": "standalone-template",
+        "fitAxis": "y",
+        "sourceHullPoints": [
+          {
+            "x": -40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": 30
+          }
+        ],
+        "fittedPoints": [
+          {
+            "x": -40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": 30
+          }
+        ],
+        "clearanceMm": 0,
+        "simplificationToleranceMm": 1,
+        "axisMinMm": -20,
+        "axisMaxMm": 20,
+        "widthMm": 80,
+        "heightMm": 60,
+        "depthMm": 40
+      },
+      "panels": [
+        {
+          "id": "fold-open-box-main-base",
+          "partId": "fold-open-box-main",
+          "name": "Base",
+          "role": "base",
+          "outline": [
+            {
+              "x": 50,
+              "y": 50
+            },
+            {
+              "x": 130,
+              "y": 50
+            },
+            {
+              "x": 130,
+              "y": 110
+            },
+            {
+              "x": 50,
+              "y": 110
+            }
+          ]
+        },
+        {
+          "id": "fold-open-box-main-wall-bottom",
+          "partId": "fold-open-box-main",
+          "name": "Bottom wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 50,
+              "y": 10
+            },
+            {
+              "x": 130,
+              "y": 10
+            },
+            {
+              "x": 130,
+              "y": 50
+            },
+            {
+              "x": 50,
+              "y": 50
+            }
+          ]
+        },
+        {
+          "id": "fold-open-box-main-wall-right",
+          "partId": "fold-open-box-main",
+          "name": "Right wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 130,
+              "y": 50
+            },
+            {
+              "x": 170,
+              "y": 50
+            },
+            {
+              "x": 170,
+              "y": 110
+            },
+            {
+              "x": 130,
+              "y": 110
+            }
+          ]
+        },
+        {
+          "id": "fold-open-box-main-wall-top",
+          "partId": "fold-open-box-main",
+          "name": "Top wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 50,
+              "y": 110
+            },
+            {
+              "x": 130,
+              "y": 110
+            },
+            {
+              "x": 130,
+              "y": 150
+            },
+            {
+              "x": 50,
+              "y": 150
+            }
+          ]
+        },
+        {
+          "id": "fold-open-box-main-wall-left",
+          "partId": "fold-open-box-main",
+          "name": "Left wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 10,
+              "y": 50
+            },
+            {
+              "x": 50,
+              "y": 50
+            },
+            {
+              "x": 50,
+              "y": 110
+            },
+            {
+              "x": 10,
+              "y": 110
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "fold-open-box-main-fold-bottom",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-bottom",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F1",
+          "start": {
+            "x": 50,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-open-box-main-fold-right",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-right",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F2",
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        },
+        {
+          "id": "fold-open-box-main-fold-top",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-top",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F3",
+          "start": {
+            "x": 130,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 110
+          }
+        },
+        {
+          "id": "fold-open-box-main-fold-left",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-left",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F4",
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-open-box-main-wall-bottom-boundary-1",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-bottom",
+          "disposition": "boundary",
+          "start": {
+            "x": 50,
+            "y": 10
+          },
+          "end": {
+            "x": 130,
+            "y": 10
+          }
+        },
+        {
+          "id": "fold-open-box-main-wall-bottom-boundary-2",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-bottom",
+          "disposition": "boundary",
+          "start": {
+            "x": 130,
+            "y": 10
+          },
+          "end": {
+            "x": 130,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-open-box-main-wall-bottom-boundary-4",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-bottom",
+          "disposition": "boundary",
+          "start": {
+            "x": 50,
+            "y": 50
+          },
+          "end": {
+            "x": 50,
+            "y": 10
+          }
+        },
+        {
+          "id": "fold-open-box-main-wall-right-boundary-2",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-right",
+          "disposition": "boundary",
+          "start": {
+            "x": 170,
+            "y": 50
+          },
+          "end": {
+            "x": 170,
+            "y": 110
+          }
+        },
+        {
+          "id": "fold-open-box-main-wall-top-boundary-2",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-top",
+          "disposition": "boundary",
+          "start": {
+            "x": 130,
+            "y": 110
+          },
+          "end": {
+            "x": 130,
+            "y": 150
+          }
+        },
+        {
+          "id": "fold-open-box-main-wall-top-boundary-3",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-top",
+          "disposition": "boundary",
+          "start": {
+            "x": 130,
+            "y": 150
+          },
+          "end": {
+            "x": 50,
+            "y": 150
+          }
+        },
+        {
+          "id": "fold-open-box-main-wall-top-boundary-4",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-top",
+          "disposition": "boundary",
+          "start": {
+            "x": 50,
+            "y": 150
+          },
+          "end": {
+            "x": 50,
+            "y": 110
+          }
+        },
+        {
+          "id": "fold-open-box-main-wall-left-boundary-4",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-left",
+          "disposition": "boundary",
+          "start": {
+            "x": 10,
+            "y": 110
+          },
+          "end": {
+            "x": 10,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-open-box-main-tab-left-bottom-base",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-left",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T1",
+          "start": {
+            "x": 10,
+            "y": 50
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-open-box-main-tab-left-top-base",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-left",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T2",
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 10,
+            "y": 110
+          }
+        },
+        {
+          "id": "fold-open-box-main-tab-right-bottom-base",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-right",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T3",
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 170,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-open-box-main-tab-right-top-base",
+          "partId": "fold-open-box-main",
+          "panelAId": "fold-open-box-main-wall-right",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T4",
+          "start": {
+            "x": 170,
+            "y": 110
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "fold-open-box-main-fold-bottom-connection",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-bottom",
+          "edgeA": {
+            "start": {
+              "x": 50,
+              "y": 50
+            },
+            "end": {
+              "x": 130,
+              "y": 50
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 50,
+              "y": 50
+            },
+            "end": {
+              "x": 130,
+              "y": 50
+            }
+          },
+          "disposition": "seam",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-open-box-main-fold-right-connection",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-right",
+          "edgeA": {
+            "start": {
+              "x": 130,
+              "y": 50
+            },
+            "end": {
+              "x": 130,
+              "y": 110
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 130,
+              "y": 50
+            },
+            "end": {
+              "x": 130,
+              "y": 110
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-open-box-main-fold-top-connection",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-top",
+          "edgeA": {
+            "start": {
+              "x": 130,
+              "y": 110
+            },
+            "end": {
+              "x": 50,
+              "y": 110
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 130,
+              "y": 110
+            },
+            "end": {
+              "x": 50,
+              "y": 110
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-open-box-main-fold-left-connection",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-left",
+          "edgeA": {
+            "start": {
+              "x": 50,
+              "y": 110
+            },
+            "end": {
+              "x": 50,
+              "y": 50
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 50,
+              "y": 110
+            },
+            "end": {
+              "x": 50,
+              "y": 50
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-open-box-main-tab-left-bottom-connection",
+          "panelAId": "fold-open-box-main-wall-left",
+          "panelBId": "fold-open-box-main-wall-bottom",
+          "edgeA": {
+            "start": {
+              "x": 10,
+              "y": 50
+            },
+            "end": {
+              "x": 50,
+              "y": 50
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 50,
+              "y": 10
+            },
+            "end": {
+              "x": 50,
+              "y": 50
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": [
+            "fold-open-box-main-tab-left-bottom-connection-manual-tab",
+            "fold-open-box-main-tab-left-top-connection-manual-tab"
+          ]
+        },
+        {
+          "id": "fold-open-box-main-tab-left-top-connection",
+          "panelAId": "fold-open-box-main-wall-left",
+          "panelBId": "fold-open-box-main-wall-top",
+          "edgeA": {
+            "start": {
+              "x": 50,
+              "y": 110
+            },
+            "end": {
+              "x": 10,
+              "y": 110
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 50,
+              "y": 110
+            },
+            "end": {
+              "x": 50,
+              "y": 150
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": [
+            "fold-open-box-main-tab-left-bottom-connection-manual-tab",
+            "fold-open-box-main-tab-left-top-connection-manual-tab"
+          ]
+        },
+        {
+          "id": "fold-open-box-main-tab-right-bottom-connection",
+          "panelAId": "fold-open-box-main-wall-right",
+          "panelBId": "fold-open-box-main-wall-bottom",
+          "edgeA": {
+            "start": {
+              "x": 130,
+              "y": 50
+            },
+            "end": {
+              "x": 170,
+              "y": 50
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 130,
+              "y": 50
+            },
+            "end": {
+              "x": 130,
+              "y": 10
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": [
+            "fold-open-box-main-tab-right-bottom-connection-manual-tab",
+            "fold-open-box-main-tab-right-top-connection-manual-tab"
+          ]
+        },
+        {
+          "id": "fold-open-box-main-tab-right-top-connection",
+          "panelAId": "fold-open-box-main-wall-right",
+          "panelBId": "fold-open-box-main-wall-top",
+          "edgeA": {
+            "start": {
+              "x": 170,
+              "y": 110
+            },
+            "end": {
+              "x": 130,
+              "y": 110
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 130,
+              "y": 150
+            },
+            "end": {
+              "x": 130,
+              "y": 110
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": [
+            "fold-open-box-main-tab-right-bottom-connection-manual-tab",
+            "fold-open-box-main-tab-right-top-connection-manual-tab"
+          ]
+        }
+      ],
+      "tabs": [
+        {
+          "id": "fold-open-box-main-tab-left-bottom-connection-manual-tab",
+          "partId": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+          "edgeId": "fold-open-box-main-tab-left-bottom-connection-manual-tab-base",
+          "ownerPanelId": "fold-open-box-main-wall-left",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 10,
+            "y": 50
+          },
+          "baseEnd": {
+            "x": 50,
+            "y": 50
+          },
+          "outline": [
+            {
+              "x": 10,
+              "y": 50
+            },
+            {
+              "x": 12.8,
+              "y": 42
+            },
+            {
+              "x": 47.2,
+              "y": 42
+            },
+            {
+              "x": 50,
+              "y": 50
+            }
+          ]
+        },
+        {
+          "id": "fold-open-box-main-tab-left-top-connection-manual-tab",
+          "partId": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+          "edgeId": "fold-open-box-main-tab-left-top-connection-manual-tab-base",
+          "ownerPanelId": "fold-open-box-main-wall-left",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 50,
+            "y": 110
+          },
+          "baseEnd": {
+            "x": 10,
+            "y": 110
+          },
+          "outline": [
+            {
+              "x": 50,
+              "y": 110
+            },
+            {
+              "x": 47.2,
+              "y": 118
+            },
+            {
+              "x": 12.8,
+              "y": 118
+            },
+            {
+              "x": 10,
+              "y": 110
+            }
+          ]
+        },
+        {
+          "id": "fold-open-box-main-tab-right-bottom-connection-manual-tab",
+          "partId": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+          "edgeId": "fold-open-box-main-tab-right-bottom-connection-manual-tab-base",
+          "ownerPanelId": "fold-open-box-main-wall-right",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 130,
+            "y": 50
+          },
+          "baseEnd": {
+            "x": 170,
+            "y": 50
+          },
+          "outline": [
+            {
+              "x": 130,
+              "y": 50
+            },
+            {
+              "x": 132.8,
+              "y": 42
+            },
+            {
+              "x": 167.2,
+              "y": 42
+            },
+            {
+              "x": 170,
+              "y": 50
+            }
+          ]
+        },
+        {
+          "id": "fold-open-box-main-tab-right-top-connection-manual-tab",
+          "partId": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+          "edgeId": "fold-open-box-main-tab-right-top-connection-manual-tab-base",
+          "ownerPanelId": "fold-open-box-main-wall-right",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 170,
+            "y": 110
+          },
+          "baseEnd": {
+            "x": 130,
+            "y": 110
+          },
+          "outline": [
+            {
+              "x": 170,
+              "y": 110
+            },
+            {
+              "x": 167.2,
+              "y": 118
+            },
+            {
+              "x": 132.8,
+              "y": 118
+            },
+            {
+              "x": 130,
+              "y": 110
+            }
+          ]
+        }
+      ],
+      "parts": [
+        {
+          "id": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top",
+          "name": "open-box component",
+          "label": "fold-open-box-main-base + fold-open-box-main-wall-left + fold-open-box-main-wall-right + fold-open-box-main-wall-top",
+          "thicknessMm": 1,
+          "paths": [
+            {
+              "id": "fold-open-box-component-fold-open-box-main-base-fold-open-box-main-wall-left-fold-open-box-main-wall-right-fold-open-box-main-wall-top-outline-1",
+              "operation": "cut",
+              "closed": true,
+              "contourRole": "outer",
+              "points": [
+                {
+                  "x": 50,
+                  "y": 50
+                },
+                {
+                  "x": 130,
+                  "y": 50
+                },
+                {
+                  "x": 132.8,
+                  "y": 42
+                },
+                {
+                  "x": 167.2,
+                  "y": 42
+                },
+                {
+                  "x": 170,
+                  "y": 50
+                },
+                {
+                  "x": 170,
+                  "y": 110
+                },
+                {
+                  "x": 167.2,
+                  "y": 118
+                },
+                {
+                  "x": 132.8,
+                  "y": 118
+                },
+                {
+                  "x": 130,
+                  "y": 110
+                },
+                {
+                  "x": 130,
+                  "y": 150
+                },
+                {
+                  "x": 50,
+                  "y": 150
+                },
+                {
+                  "x": 50,
+                  "y": 110
+                },
+                {
+                  "x": 47.2,
+                  "y": 118
+                },
+                {
+                  "x": 12.8,
+                  "y": 118
+                },
+                {
+                  "x": 10,
+                  "y": 110
+                },
+                {
+                  "x": 10,
+                  "y": 50
+                },
+                {
+                  "x": 12.8,
+                  "y": 42
+                },
+                {
+                  "x": 47.2,
+                  "y": 42
+                }
+              ]
+            },
+            {
+              "id": "fold-open-box-main-fold-right-connection-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 130,
+                  "y": 50
+                },
+                {
+                  "x": 130,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-open-box-main-base",
+              "edgeId": "fold-open-box-main-fold-right-connection"
+            },
+            {
+              "id": "fold-open-box-main-fold-top-connection-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 130,
+                  "y": 110
+                },
+                {
+                  "x": 50,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-open-box-main-base",
+              "edgeId": "fold-open-box-main-fold-top-connection"
+            },
+            {
+              "id": "fold-open-box-main-fold-left-connection-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 50,
+                  "y": 110
+                },
+                {
+                  "x": 50,
+                  "y": 50
+                }
+              ],
+              "panelId": "fold-open-box-main-base",
+              "edgeId": "fold-open-box-main-fold-left-connection"
+            },
+            {
+              "id": "fold-open-box-main-tab-left-bottom-connection-manual-tab-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 10,
+                  "y": 50
+                },
+                {
+                  "x": 50,
+                  "y": 50
+                }
+              ],
+              "panelId": "fold-open-box-main-wall-left",
+              "tabId": "fold-open-box-main-tab-left-bottom-connection-manual-tab",
+              "edgeId": "fold-open-box-main-tab-left-bottom-connection-manual-tab-base"
+            },
+            {
+              "id": "fold-open-box-main-tab-left-top-connection-manual-tab-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 50,
+                  "y": 110
+                },
+                {
+                  "x": 10,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-open-box-main-wall-left",
+              "tabId": "fold-open-box-main-tab-left-top-connection-manual-tab",
+              "edgeId": "fold-open-box-main-tab-left-top-connection-manual-tab-base"
+            },
+            {
+              "id": "fold-open-box-main-tab-right-bottom-connection-manual-tab-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 130,
+                  "y": 50
+                },
+                {
+                  "x": 170,
+                  "y": 50
+                }
+              ],
+              "panelId": "fold-open-box-main-wall-right",
+              "tabId": "fold-open-box-main-tab-right-bottom-connection-manual-tab",
+              "edgeId": "fold-open-box-main-tab-right-bottom-connection-manual-tab-base"
+            },
+            {
+              "id": "fold-open-box-main-tab-right-top-connection-manual-tab-score",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 170,
+                  "y": 110
+                },
+                {
+                  "x": 130,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-open-box-main-wall-right",
+              "tabId": "fold-open-box-main-tab-right-top-connection-manual-tab",
+              "edgeId": "fold-open-box-main-tab-right-top-connection-manual-tab-base"
+            }
+          ],
+          "labels": [
+            {
+              "id": "fold-open-box-main-base-label",
+              "text": "Base",
+              "position": {
+                "x": 90,
+                "y": 80
+              },
+              "operation": "engrave",
+              "entityId": "fold-open-box-main-base"
+            },
+            {
+              "id": "fold-open-box-main-wall-left-label",
+              "text": "Left wall",
+              "position": {
+                "x": 30,
+                "y": 80
+              },
+              "operation": "engrave",
+              "entityId": "fold-open-box-main-wall-left"
+            },
+            {
+              "id": "fold-open-box-main-wall-right-label",
+              "text": "Right wall",
+              "position": {
+                "x": 150,
+                "y": 80
+              },
+              "operation": "engrave",
+              "entityId": "fold-open-box-main-wall-right"
+            },
+            {
+              "id": "fold-open-box-main-wall-top-label",
+              "text": "Top wall",
+              "position": {
+                "x": 90,
+                "y": 130
+              },
+              "operation": "engrave",
+              "entityId": "fold-open-box-main-wall-top"
+            }
+          ],
+          "folding": {
+            "templateKind": "open-box",
+            "panelIds": [
+              "fold-open-box-main-base",
+              "fold-open-box-main-wall-left",
+              "fold-open-box-main-wall-right",
+              "fold-open-box-main-wall-top"
+            ]
+          }
+        },
+        {
+          "id": "fold-open-box-component-fold-open-box-main-wall-bottom",
+          "name": "open-box component",
+          "label": "fold-open-box-main-wall-bottom",
+          "thicknessMm": 1,
+          "paths": [
+            {
+              "id": "fold-open-box-component-fold-open-box-main-wall-bottom-outline-1",
+              "operation": "cut",
+              "closed": true,
+              "contourRole": "outer",
+              "points": [
+                {
+                  "x": 50,
+                  "y": 10
+                },
+                {
+                  "x": 130,
+                  "y": 10
+                },
+                {
+                  "x": 130,
+                  "y": 50
+                },
+                {
+                  "x": 50,
+                  "y": 50
+                }
+              ]
+            }
+          ],
+          "labels": [
+            {
+              "id": "fold-open-box-main-wall-bottom-label",
+              "text": "Bottom wall",
+              "position": {
+                "x": 90,
+                "y": 30
+              },
+              "operation": "engrave",
+              "entityId": "fold-open-box-main-wall-bottom"
+            }
+          ],
+          "folding": {
+            "templateKind": "open-box",
+            "panelIds": ["fold-open-box-main-wall-bottom"]
+          }
+        }
+      ],
+      "issues": [],
+      "assembledPreview": {
+        "panels": [
+          {
+            "id": "fold-open-box-main-base",
+            "partId": "fold-open-box-main",
+            "name": "Base",
+            "verticesMm": [
+              [-40, -20, -30],
+              [40, -20, -30],
+              [40, -20, 30],
+              [-40, -20, 30]
+            ]
+          },
+          {
+            "id": "fold-open-box-main-wall-bottom",
+            "partId": "fold-open-box-main",
+            "name": "Bottom wall",
+            "verticesMm": [
+              [-40, -20, -30],
+              [40, -20, -30],
+              [40, 20, -30],
+              [-40, 20, -30]
+            ]
+          },
+          {
+            "id": "fold-open-box-main-wall-right",
+            "partId": "fold-open-box-main",
+            "name": "Right wall",
+            "verticesMm": [
+              [40, -20, -30],
+              [40, -20, 30],
+              [40, 20, 30],
+              [40, 20, -30]
+            ]
+          },
+          {
+            "id": "fold-open-box-main-wall-top",
+            "partId": "fold-open-box-main",
+            "name": "Top wall",
+            "verticesMm": [
+              [40, -20, 30],
+              [-40, -20, 30],
+              [-40, 20, 30],
+              [40, 20, 30]
+            ]
+          },
+          {
+            "id": "fold-open-box-main-wall-left",
+            "partId": "fold-open-box-main",
+            "name": "Left wall",
+            "verticesMm": [
+              [-40, -20, 30],
+              [-40, -20, -30],
+              [-40, 20, -30],
+              [-40, 20, 30]
+            ]
+          }
+        ]
+      },
+      "editableEdges": [
+        {
+          "id": "fold-open-box-main-fold-bottom-connection",
+          "kind": "connection",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-bottom",
+          "startMm": [-40, -20, -30],
+          "endMm": [40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-fold-left-connection",
+          "kind": "connection",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-left",
+          "startMm": [-40, -20, 30],
+          "endMm": [-40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-fold-right-connection",
+          "kind": "connection",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-right",
+          "startMm": [40, -20, -30],
+          "endMm": [40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-fold-top-connection",
+          "kind": "connection",
+          "panelAId": "fold-open-box-main-base",
+          "panelBId": "fold-open-box-main-wall-top",
+          "startMm": [40, -20, 30],
+          "endMm": [-40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-tab-left-bottom-connection",
+          "kind": "connection",
+          "panelAId": "fold-open-box-main-wall-left",
+          "panelBId": "fold-open-box-main-wall-bottom",
+          "startMm": [-40, -20, 30],
+          "endMm": [-40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-tab-left-top-connection",
+          "kind": "connection",
+          "panelAId": "fold-open-box-main-wall-left",
+          "panelBId": "fold-open-box-main-wall-top",
+          "startMm": [-40, 20, -30],
+          "endMm": [-40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-tab-right-bottom-connection",
+          "kind": "connection",
+          "panelAId": "fold-open-box-main-wall-right",
+          "panelBId": "fold-open-box-main-wall-bottom",
+          "startMm": [40, -20, -30],
+          "endMm": [40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-tab-right-top-connection",
+          "kind": "connection",
+          "panelAId": "fold-open-box-main-wall-right",
+          "panelBId": "fold-open-box-main-wall-top",
+          "startMm": [40, 20, 30],
+          "endMm": [40, 20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-wall-bottom-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-open-box-main-wall-bottom",
+          "startMm": [-40, -20, -30],
+          "endMm": [40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-wall-bottom-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-open-box-main-wall-bottom",
+          "startMm": [40, -20, -30],
+          "endMm": [40, 20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-wall-bottom-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-open-box-main-wall-bottom",
+          "startMm": [-40, 20, -30],
+          "endMm": [-40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-wall-left-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-open-box-main-wall-left",
+          "startMm": [-40, 20, 30],
+          "endMm": [-40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-wall-right-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-open-box-main-wall-right",
+          "startMm": [40, -20, 30],
+          "endMm": [40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-wall-top-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-open-box-main-wall-top",
+          "startMm": [-40, -20, 30],
+          "endMm": [-40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-wall-top-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-open-box-main-wall-top",
+          "startMm": [-40, 20, 30],
+          "endMm": [40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-open-box-main-wall-top-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-open-box-main-wall-top",
+          "startMm": [40, 20, 30],
+          "endMm": [40, -20, 30],
+          "editable": true
+        }
+      ],
+      "resolvedDimensions": {
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40
+      },
+      "algorithmVersion": "interactive-connections-v8",
+      "inputHash": "sf6-fc555e38"
+    },
+    "generationRecord": {
+      "signatureVersion": 2,
+      "mode": "fold-template",
+      "inputHash": "sf9-8ae2bfcb",
+      "resultHash": "sf9-65e59601",
+      "algorithmVersion": "interactive-connections-v8",
+      "generatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

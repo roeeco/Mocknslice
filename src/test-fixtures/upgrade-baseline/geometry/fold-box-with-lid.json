@@ -1,0 +1,7057 @@
+{
+  "input": {
+    "mode": "fold-template",
+    "payload": {
+      "materialThicknessMm": 1,
+      "settings": {
+        "templateKind": "box-with-lid",
+        "fitAxis": "y",
+        "clearanceMm": 0,
+        "profileToleranceMm": 1,
+        "sizeMode": "custom",
+        "envelopeDimensions": {
+          "widthMm": 80,
+          "lengthMm": 60,
+          "heightMm": 40
+        },
+        "parameters": {
+          "wallHeightMm": 40,
+          "tabDepthMm": 8,
+          "lidDepthMm": 15,
+          "lidClearanceMm": 0.5,
+          "gussetDepthMm": 40,
+          "closureFlapMm": 12,
+          "prismSides": 6,
+          "prismRotationDeg": 0,
+          "topScale": 0.5,
+          "seamTabMm": 8,
+          "standalone": true,
+          "closureMethod": "glue",
+          "slotClearanceMm": 0.1
+        },
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      }
+    }
+  },
+  "result": {
+    "settings": {
+      "templateKind": "box-with-lid",
+      "fitAxis": "y",
+      "clearanceMm": 0,
+      "profileToleranceMm": 1,
+      "sizeMode": "custom",
+      "envelopeDimensions": {
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40
+      },
+      "parameters": {
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "standalone": true,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1
+      },
+      "connectionOverrides": [],
+      "boundaryGlueTabs": [],
+      "glueTabDepthMm": 8
+    },
+    "profile": {
+      "sourceModelId": "standalone-template",
+      "fitAxis": "y",
+      "sourceHullPoints": [
+        {
+          "x": -40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": 30
+        },
+        {
+          "x": -40,
+          "y": 30
+        }
+      ],
+      "fittedPoints": [
+        {
+          "x": -40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": -30
+        },
+        {
+          "x": 40,
+          "y": 30
+        },
+        {
+          "x": -40,
+          "y": 30
+        }
+      ],
+      "clearanceMm": 0,
+      "simplificationToleranceMm": 1,
+      "axisMinMm": -20,
+      "axisMaxMm": 20,
+      "widthMm": 80,
+      "heightMm": 60,
+      "depthMm": 40
+    },
+    "panels": [
+      {
+        "id": "fold-box-base-base",
+        "partId": "fold-box-base",
+        "name": "Base",
+        "role": "base",
+        "outline": [
+          {
+            "x": 50,
+            "y": 50
+          },
+          {
+            "x": 130,
+            "y": 50
+          },
+          {
+            "x": 130,
+            "y": 110
+          },
+          {
+            "x": 50,
+            "y": 110
+          }
+        ]
+      },
+      {
+        "id": "fold-box-base-wall-bottom",
+        "partId": "fold-box-base",
+        "name": "Bottom wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 50,
+            "y": 10
+          },
+          {
+            "x": 130,
+            "y": 10
+          },
+          {
+            "x": 130,
+            "y": 50
+          },
+          {
+            "x": 50,
+            "y": 50
+          }
+        ]
+      },
+      {
+        "id": "fold-box-base-wall-right",
+        "partId": "fold-box-base",
+        "name": "Right wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 130,
+            "y": 50
+          },
+          {
+            "x": 170,
+            "y": 50
+          },
+          {
+            "x": 170,
+            "y": 110
+          },
+          {
+            "x": 130,
+            "y": 110
+          }
+        ]
+      },
+      {
+        "id": "fold-box-base-wall-top",
+        "partId": "fold-box-base",
+        "name": "Top wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 50,
+            "y": 110
+          },
+          {
+            "x": 130,
+            "y": 110
+          },
+          {
+            "x": 130,
+            "y": 150
+          },
+          {
+            "x": 50,
+            "y": 150
+          }
+        ]
+      },
+      {
+        "id": "fold-box-base-wall-left",
+        "partId": "fold-box-base",
+        "name": "Left wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 10,
+            "y": 50
+          },
+          {
+            "x": 50,
+            "y": 50
+          },
+          {
+            "x": 50,
+            "y": 110
+          },
+          {
+            "x": 10,
+            "y": 110
+          }
+        ]
+      },
+      {
+        "id": "fold-box-lid-lid",
+        "partId": "fold-box-lid",
+        "name": "Lid face",
+        "role": "lid",
+        "outline": [
+          {
+            "x": 25,
+            "y": 25
+          },
+          {
+            "x": 108,
+            "y": 25
+          },
+          {
+            "x": 108,
+            "y": 88
+          },
+          {
+            "x": 25,
+            "y": 88
+          }
+        ]
+      },
+      {
+        "id": "fold-box-lid-wall-bottom",
+        "partId": "fold-box-lid",
+        "name": "Bottom wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 25,
+            "y": 10
+          },
+          {
+            "x": 108,
+            "y": 10
+          },
+          {
+            "x": 108,
+            "y": 25
+          },
+          {
+            "x": 25,
+            "y": 25
+          }
+        ]
+      },
+      {
+        "id": "fold-box-lid-wall-right",
+        "partId": "fold-box-lid",
+        "name": "Right wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 108,
+            "y": 25
+          },
+          {
+            "x": 123,
+            "y": 25
+          },
+          {
+            "x": 123,
+            "y": 88
+          },
+          {
+            "x": 108,
+            "y": 88
+          }
+        ]
+      },
+      {
+        "id": "fold-box-lid-wall-top",
+        "partId": "fold-box-lid",
+        "name": "Top wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 25,
+            "y": 88
+          },
+          {
+            "x": 108,
+            "y": 88
+          },
+          {
+            "x": 108,
+            "y": 103
+          },
+          {
+            "x": 25,
+            "y": 103
+          }
+        ]
+      },
+      {
+        "id": "fold-box-lid-wall-left",
+        "partId": "fold-box-lid",
+        "name": "Left wall",
+        "role": "wall",
+        "outline": [
+          {
+            "x": 10,
+            "y": 25
+          },
+          {
+            "x": 25,
+            "y": 25
+          },
+          {
+            "x": 25,
+            "y": 88
+          },
+          {
+            "x": 10,
+            "y": 88
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "id": "fold-box-base-fold-bottom",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-bottom",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F1",
+        "start": {
+          "x": 50,
+          "y": 50
+        },
+        "end": {
+          "x": 130,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-box-base-fold-right",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-right",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F2",
+        "start": {
+          "x": 130,
+          "y": 50
+        },
+        "end": {
+          "x": 130,
+          "y": 110
+        }
+      },
+      {
+        "id": "fold-box-base-fold-top",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-top",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F3",
+        "start": {
+          "x": 130,
+          "y": 110
+        },
+        "end": {
+          "x": 50,
+          "y": 110
+        }
+      },
+      {
+        "id": "fold-box-base-fold-left",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-left",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F4",
+        "start": {
+          "x": 50,
+          "y": 110
+        },
+        "end": {
+          "x": 50,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-box-base-wall-bottom-boundary-1",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-bottom",
+        "disposition": "boundary",
+        "start": {
+          "x": 50,
+          "y": 10
+        },
+        "end": {
+          "x": 130,
+          "y": 10
+        }
+      },
+      {
+        "id": "fold-box-base-wall-bottom-boundary-2",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-bottom",
+        "disposition": "boundary",
+        "start": {
+          "x": 130,
+          "y": 10
+        },
+        "end": {
+          "x": 130,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-box-base-wall-bottom-boundary-4",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-bottom",
+        "disposition": "boundary",
+        "start": {
+          "x": 50,
+          "y": 50
+        },
+        "end": {
+          "x": 50,
+          "y": 10
+        }
+      },
+      {
+        "id": "fold-box-base-wall-right-boundary-2",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-right",
+        "disposition": "boundary",
+        "start": {
+          "x": 170,
+          "y": 50
+        },
+        "end": {
+          "x": 170,
+          "y": 110
+        }
+      },
+      {
+        "id": "fold-box-base-wall-top-boundary-2",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-top",
+        "disposition": "boundary",
+        "start": {
+          "x": 130,
+          "y": 110
+        },
+        "end": {
+          "x": 130,
+          "y": 150
+        }
+      },
+      {
+        "id": "fold-box-base-wall-top-boundary-3",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-top",
+        "disposition": "boundary",
+        "start": {
+          "x": 130,
+          "y": 150
+        },
+        "end": {
+          "x": 50,
+          "y": 150
+        }
+      },
+      {
+        "id": "fold-box-base-wall-top-boundary-4",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-top",
+        "disposition": "boundary",
+        "start": {
+          "x": 50,
+          "y": 150
+        },
+        "end": {
+          "x": 50,
+          "y": 110
+        }
+      },
+      {
+        "id": "fold-box-base-wall-left-boundary-4",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-left",
+        "disposition": "boundary",
+        "start": {
+          "x": 10,
+          "y": 110
+        },
+        "end": {
+          "x": 10,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-box-base-tab-left-bottom-base",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-left",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T1",
+        "start": {
+          "x": 10,
+          "y": 50
+        },
+        "end": {
+          "x": 50,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-box-base-tab-left-top-base",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-left",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T2",
+        "start": {
+          "x": 50,
+          "y": 110
+        },
+        "end": {
+          "x": 10,
+          "y": 110
+        }
+      },
+      {
+        "id": "fold-box-base-tab-right-bottom-base",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-right",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T3",
+        "start": {
+          "x": 130,
+          "y": 50
+        },
+        "end": {
+          "x": 170,
+          "y": 50
+        }
+      },
+      {
+        "id": "fold-box-base-tab-right-top-base",
+        "partId": "fold-box-base",
+        "panelAId": "fold-box-base-wall-right",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T4",
+        "start": {
+          "x": 170,
+          "y": 110
+        },
+        "end": {
+          "x": 130,
+          "y": 110
+        }
+      },
+      {
+        "id": "fold-box-lid-fold-bottom",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-bottom",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F1",
+        "start": {
+          "x": 25,
+          "y": 25
+        },
+        "end": {
+          "x": 108,
+          "y": 25
+        }
+      },
+      {
+        "id": "fold-box-lid-fold-right",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-right",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F2",
+        "start": {
+          "x": 108,
+          "y": 25
+        },
+        "end": {
+          "x": 108,
+          "y": 88
+        }
+      },
+      {
+        "id": "fold-box-lid-fold-top",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-top",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F3",
+        "start": {
+          "x": 108,
+          "y": 88
+        },
+        "end": {
+          "x": 25,
+          "y": 88
+        }
+      },
+      {
+        "id": "fold-box-lid-fold-left",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-left",
+        "disposition": "hinge",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "F4",
+        "start": {
+          "x": 25,
+          "y": 88
+        },
+        "end": {
+          "x": 25,
+          "y": 25
+        }
+      },
+      {
+        "id": "fold-box-lid-wall-bottom-boundary-1",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-bottom",
+        "disposition": "boundary",
+        "start": {
+          "x": 25,
+          "y": 10
+        },
+        "end": {
+          "x": 108,
+          "y": 10
+        }
+      },
+      {
+        "id": "fold-box-lid-wall-bottom-boundary-2",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-bottom",
+        "disposition": "boundary",
+        "start": {
+          "x": 108,
+          "y": 10
+        },
+        "end": {
+          "x": 108,
+          "y": 25
+        }
+      },
+      {
+        "id": "fold-box-lid-wall-bottom-boundary-4",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-bottom",
+        "disposition": "boundary",
+        "start": {
+          "x": 25,
+          "y": 25
+        },
+        "end": {
+          "x": 25,
+          "y": 10
+        }
+      },
+      {
+        "id": "fold-box-lid-wall-right-boundary-2",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-right",
+        "disposition": "boundary",
+        "start": {
+          "x": 123,
+          "y": 25
+        },
+        "end": {
+          "x": 123,
+          "y": 88
+        }
+      },
+      {
+        "id": "fold-box-lid-wall-top-boundary-2",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-top",
+        "disposition": "boundary",
+        "start": {
+          "x": 108,
+          "y": 88
+        },
+        "end": {
+          "x": 108,
+          "y": 103
+        }
+      },
+      {
+        "id": "fold-box-lid-wall-top-boundary-3",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-top",
+        "disposition": "boundary",
+        "start": {
+          "x": 108,
+          "y": 103
+        },
+        "end": {
+          "x": 25,
+          "y": 103
+        }
+      },
+      {
+        "id": "fold-box-lid-wall-top-boundary-4",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-top",
+        "disposition": "boundary",
+        "start": {
+          "x": 25,
+          "y": 103
+        },
+        "end": {
+          "x": 25,
+          "y": 88
+        }
+      },
+      {
+        "id": "fold-box-lid-wall-left-boundary-4",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-left",
+        "disposition": "boundary",
+        "start": {
+          "x": 10,
+          "y": 88
+        },
+        "end": {
+          "x": 10,
+          "y": 25
+        }
+      },
+      {
+        "id": "fold-box-lid-tab-left-bottom-base",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-left",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T1",
+        "start": {
+          "x": 10,
+          "y": 25
+        },
+        "end": {
+          "x": 25,
+          "y": 25
+        }
+      },
+      {
+        "id": "fold-box-lid-tab-left-top-base",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-left",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T2",
+        "start": {
+          "x": 25,
+          "y": 88
+        },
+        "end": {
+          "x": 10,
+          "y": 88
+        }
+      },
+      {
+        "id": "fold-box-lid-tab-right-bottom-base",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-right",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T3",
+        "start": {
+          "x": 108,
+          "y": 25
+        },
+        "end": {
+          "x": 123,
+          "y": 25
+        }
+      },
+      {
+        "id": "fold-box-lid-tab-right-top-base",
+        "partId": "fold-box-lid",
+        "panelAId": "fold-box-lid-wall-right",
+        "disposition": "seam",
+        "foldDirection": "valley",
+        "targetAngleDeg": 90,
+        "pairLabel": "T4",
+        "start": {
+          "x": 123,
+          "y": 88
+        },
+        "end": {
+          "x": 108,
+          "y": 88
+        }
+      }
+    ],
+    "connections": [
+      {
+        "id": "fold-box-base-fold-bottom-connection",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-bottom",
+        "edgeA": {
+          "start": {
+            "x": 50,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 50
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 50,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 50
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-box-base-fold-right-connection",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-right",
+        "edgeA": {
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-box-base-fold-top-connection",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-top",
+        "edgeA": {
+          "start": {
+            "x": 130,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 110
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 130,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 110
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-box-base-fold-left-connection",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-left",
+        "edgeA": {
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-box-base-tab-left-bottom-connection",
+        "panelAId": "fold-box-base-wall-left",
+        "panelBId": "fold-box-base-wall-bottom",
+        "edgeA": {
+          "start": {
+            "x": 10,
+            "y": 50
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 50,
+            "y": 10
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-box-base-tab-left-bottom"]
+      },
+      {
+        "id": "fold-box-base-tab-left-top-connection",
+        "panelAId": "fold-box-base-wall-left",
+        "panelBId": "fold-box-base-wall-top",
+        "edgeA": {
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 10,
+            "y": 110
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 150
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-box-base-tab-left-top"]
+      },
+      {
+        "id": "fold-box-base-tab-right-bottom-connection",
+        "panelAId": "fold-box-base-wall-right",
+        "panelBId": "fold-box-base-wall-bottom",
+        "edgeA": {
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 170,
+            "y": 50
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 10
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-box-base-tab-right-bottom"]
+      },
+      {
+        "id": "fold-box-base-tab-right-top-connection",
+        "panelAId": "fold-box-base-wall-right",
+        "panelBId": "fold-box-base-wall-top",
+        "edgeA": {
+          "start": {
+            "x": 170,
+            "y": 110
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 130,
+            "y": 150
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-box-base-tab-right-top"]
+      },
+      {
+        "id": "fold-box-lid-fold-bottom-connection",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-bottom",
+        "edgeA": {
+          "start": {
+            "x": 25,
+            "y": 25
+          },
+          "end": {
+            "x": 108,
+            "y": 25
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 25,
+            "y": 25
+          },
+          "end": {
+            "x": 108,
+            "y": 25
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-box-lid-fold-right-connection",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-right",
+        "edgeA": {
+          "start": {
+            "x": 108,
+            "y": 25
+          },
+          "end": {
+            "x": 108,
+            "y": 88
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 108,
+            "y": 25
+          },
+          "end": {
+            "x": 108,
+            "y": 88
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-box-lid-fold-top-connection",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-top",
+        "edgeA": {
+          "start": {
+            "x": 108,
+            "y": 88
+          },
+          "end": {
+            "x": 25,
+            "y": 88
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 108,
+            "y": 88
+          },
+          "end": {
+            "x": 25,
+            "y": 88
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-box-lid-fold-left-connection",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-left",
+        "edgeA": {
+          "start": {
+            "x": 25,
+            "y": 88
+          },
+          "end": {
+            "x": 25,
+            "y": 25
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 25,
+            "y": 88
+          },
+          "end": {
+            "x": 25,
+            "y": 25
+          }
+        },
+        "disposition": "hinge",
+        "closure": "none",
+        "required": false,
+        "tabIds": []
+      },
+      {
+        "id": "fold-box-lid-tab-left-bottom-connection",
+        "panelAId": "fold-box-lid-wall-left",
+        "panelBId": "fold-box-lid-wall-bottom",
+        "edgeA": {
+          "start": {
+            "x": 10,
+            "y": 25
+          },
+          "end": {
+            "x": 25,
+            "y": 25
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 25,
+            "y": 10
+          },
+          "end": {
+            "x": 25,
+            "y": 25
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-box-lid-tab-left-bottom"]
+      },
+      {
+        "id": "fold-box-lid-tab-left-top-connection",
+        "panelAId": "fold-box-lid-wall-left",
+        "panelBId": "fold-box-lid-wall-top",
+        "edgeA": {
+          "start": {
+            "x": 25,
+            "y": 88
+          },
+          "end": {
+            "x": 10,
+            "y": 88
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 25,
+            "y": 88
+          },
+          "end": {
+            "x": 25,
+            "y": 103
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-box-lid-tab-left-top"]
+      },
+      {
+        "id": "fold-box-lid-tab-right-bottom-connection",
+        "panelAId": "fold-box-lid-wall-right",
+        "panelBId": "fold-box-lid-wall-bottom",
+        "edgeA": {
+          "start": {
+            "x": 108,
+            "y": 25
+          },
+          "end": {
+            "x": 123,
+            "y": 25
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 108,
+            "y": 25
+          },
+          "end": {
+            "x": 108,
+            "y": 10
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-box-lid-tab-right-bottom"]
+      },
+      {
+        "id": "fold-box-lid-tab-right-top-connection",
+        "panelAId": "fold-box-lid-wall-right",
+        "panelBId": "fold-box-lid-wall-top",
+        "edgeA": {
+          "start": {
+            "x": 123,
+            "y": 88
+          },
+          "end": {
+            "x": 108,
+            "y": 88
+          }
+        },
+        "edgeB": {
+          "start": {
+            "x": 108,
+            "y": 103
+          },
+          "end": {
+            "x": 108,
+            "y": 88
+          }
+        },
+        "disposition": "seam",
+        "closure": "glue-tab",
+        "required": true,
+        "tabIds": ["fold-box-lid-tab-right-top"]
+      }
+    ],
+    "tabs": [
+      {
+        "id": "fold-box-base-tab-left-bottom",
+        "partId": "fold-box-base",
+        "edgeId": "fold-box-base-tab-left-bottom-base",
+        "ownerPanelId": "fold-box-base-wall-left",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 10,
+          "y": 50
+        },
+        "baseEnd": {
+          "x": 50,
+          "y": 50
+        },
+        "outline": [
+          {
+            "x": 10,
+            "y": 50
+          },
+          {
+            "x": 12.8,
+            "y": 42
+          },
+          {
+            "x": 47.2,
+            "y": 42
+          },
+          {
+            "x": 50,
+            "y": 50
+          }
+        ],
+        "receiverPanelId": "fold-box-base-wall-bottom"
+      },
+      {
+        "id": "fold-box-base-tab-left-top",
+        "partId": "fold-box-base",
+        "edgeId": "fold-box-base-tab-left-top-base",
+        "ownerPanelId": "fold-box-base-wall-left",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 50,
+          "y": 110
+        },
+        "baseEnd": {
+          "x": 10,
+          "y": 110
+        },
+        "outline": [
+          {
+            "x": 50,
+            "y": 110
+          },
+          {
+            "x": 47.2,
+            "y": 118
+          },
+          {
+            "x": 12.8,
+            "y": 118
+          },
+          {
+            "x": 10,
+            "y": 110
+          }
+        ],
+        "receiverPanelId": "fold-box-base-wall-top"
+      },
+      {
+        "id": "fold-box-base-tab-right-bottom",
+        "partId": "fold-box-base",
+        "edgeId": "fold-box-base-tab-right-bottom-base",
+        "ownerPanelId": "fold-box-base-wall-right",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 130,
+          "y": 50
+        },
+        "baseEnd": {
+          "x": 170,
+          "y": 50
+        },
+        "outline": [
+          {
+            "x": 130,
+            "y": 50
+          },
+          {
+            "x": 132.8,
+            "y": 42
+          },
+          {
+            "x": 167.2,
+            "y": 42
+          },
+          {
+            "x": 170,
+            "y": 50
+          }
+        ],
+        "receiverPanelId": "fold-box-base-wall-bottom"
+      },
+      {
+        "id": "fold-box-base-tab-right-top",
+        "partId": "fold-box-base",
+        "edgeId": "fold-box-base-tab-right-top-base",
+        "ownerPanelId": "fold-box-base-wall-right",
+        "style": "glue",
+        "depthMm": 8,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 170,
+          "y": 110
+        },
+        "baseEnd": {
+          "x": 130,
+          "y": 110
+        },
+        "outline": [
+          {
+            "x": 170,
+            "y": 110
+          },
+          {
+            "x": 167.2,
+            "y": 118
+          },
+          {
+            "x": 132.8,
+            "y": 118
+          },
+          {
+            "x": 130,
+            "y": 110
+          }
+        ],
+        "receiverPanelId": "fold-box-base-wall-top"
+      },
+      {
+        "id": "fold-box-lid-tab-left-bottom",
+        "partId": "fold-box-lid",
+        "edgeId": "fold-box-lid-tab-left-bottom-base",
+        "ownerPanelId": "fold-box-lid-wall-left",
+        "style": "glue",
+        "depthMm": 5.25,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 10,
+          "y": 25
+        },
+        "baseEnd": {
+          "x": 25,
+          "y": 25
+        },
+        "outline": [
+          {
+            "x": 10,
+            "y": 25
+          },
+          {
+            "x": 11.8375,
+            "y": 19.75
+          },
+          {
+            "x": 23.1625,
+            "y": 19.75
+          },
+          {
+            "x": 25,
+            "y": 25
+          }
+        ],
+        "receiverPanelId": "fold-box-lid-wall-bottom"
+      },
+      {
+        "id": "fold-box-lid-tab-left-top",
+        "partId": "fold-box-lid",
+        "edgeId": "fold-box-lid-tab-left-top-base",
+        "ownerPanelId": "fold-box-lid-wall-left",
+        "style": "glue",
+        "depthMm": 5.25,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 25,
+          "y": 88
+        },
+        "baseEnd": {
+          "x": 10,
+          "y": 88
+        },
+        "outline": [
+          {
+            "x": 25,
+            "y": 88
+          },
+          {
+            "x": 23.1625,
+            "y": 93.25
+          },
+          {
+            "x": 11.8375,
+            "y": 93.25
+          },
+          {
+            "x": 10,
+            "y": 88
+          }
+        ],
+        "receiverPanelId": "fold-box-lid-wall-top"
+      },
+      {
+        "id": "fold-box-lid-tab-right-bottom",
+        "partId": "fold-box-lid",
+        "edgeId": "fold-box-lid-tab-right-bottom-base",
+        "ownerPanelId": "fold-box-lid-wall-right",
+        "style": "glue",
+        "depthMm": 5.25,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 108,
+          "y": 25
+        },
+        "baseEnd": {
+          "x": 123,
+          "y": 25
+        },
+        "outline": [
+          {
+            "x": 108,
+            "y": 25
+          },
+          {
+            "x": 109.8375,
+            "y": 19.75
+          },
+          {
+            "x": 121.1625,
+            "y": 19.75
+          },
+          {
+            "x": 123,
+            "y": 25
+          }
+        ],
+        "receiverPanelId": "fold-box-lid-wall-bottom"
+      },
+      {
+        "id": "fold-box-lid-tab-right-top",
+        "partId": "fold-box-lid",
+        "edgeId": "fold-box-lid-tab-right-top-base",
+        "ownerPanelId": "fold-box-lid-wall-right",
+        "style": "glue",
+        "depthMm": 5.25,
+        "shoulderAngleDeg": 20,
+        "enabled": true,
+        "baseStart": {
+          "x": 123,
+          "y": 88
+        },
+        "baseEnd": {
+          "x": 108,
+          "y": 88
+        },
+        "outline": [
+          {
+            "x": 123,
+            "y": 88
+          },
+          {
+            "x": 121.1625,
+            "y": 93.25
+          },
+          {
+            "x": 109.8375,
+            "y": 93.25
+          },
+          {
+            "x": 108,
+            "y": 88
+          }
+        ],
+        "receiverPanelId": "fold-box-lid-wall-top"
+      }
+    ],
+    "parts": [
+      {
+        "id": "fold-box-base",
+        "name": "Box base net",
+        "label": "Box base net",
+        "paths": [
+          {
+            "id": "fold-box-base-wall-bottom-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 10
+              },
+              {
+                "x": 130,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-box-base-wall-bottom",
+            "edgeId": "fold-box-base-wall-bottom-boundary-1"
+          },
+          {
+            "id": "fold-box-base-wall-bottom-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 10
+              },
+              {
+                "x": 130,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-bottom",
+            "edgeId": "fold-box-base-wall-bottom-boundary-2"
+          },
+          {
+            "id": "fold-box-base-wall-bottom-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 50
+              },
+              {
+                "x": 50,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-box-base-wall-bottom",
+            "edgeId": "fold-box-base-wall-bottom-boundary-4"
+          },
+          {
+            "id": "fold-box-base-wall-right-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 170,
+                "y": 50
+              },
+              {
+                "x": 170,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-right",
+            "edgeId": "fold-box-base-wall-right-boundary-2"
+          },
+          {
+            "id": "fold-box-base-wall-top-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 110
+              },
+              {
+                "x": 130,
+                "y": 150
+              }
+            ],
+            "panelId": "fold-box-base-wall-top",
+            "edgeId": "fold-box-base-wall-top-boundary-2"
+          },
+          {
+            "id": "fold-box-base-wall-top-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 150
+              },
+              {
+                "x": 50,
+                "y": 150
+              }
+            ],
+            "panelId": "fold-box-base-wall-top",
+            "edgeId": "fold-box-base-wall-top-boundary-3"
+          },
+          {
+            "id": "fold-box-base-wall-top-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 150
+              },
+              {
+                "x": 50,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-top",
+            "edgeId": "fold-box-base-wall-top-boundary-4"
+          },
+          {
+            "id": "fold-box-base-wall-left-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 110
+              },
+              {
+                "x": 10,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-left",
+            "edgeId": "fold-box-base-wall-left-boundary-4"
+          },
+          {
+            "id": "fold-box-base-fold-bottom-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 50
+              },
+              {
+                "x": 130,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-base",
+            "edgeId": "fold-box-base-fold-bottom"
+          },
+          {
+            "id": "fold-box-base-fold-right-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 130,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-base",
+            "edgeId": "fold-box-base-fold-right"
+          },
+          {
+            "id": "fold-box-base-fold-top-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 110
+              },
+              {
+                "x": 50,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-base",
+            "edgeId": "fold-box-base-fold-top"
+          },
+          {
+            "id": "fold-box-base-fold-left-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-base",
+            "edgeId": "fold-box-base-fold-left"
+          },
+          {
+            "id": "fold-box-base-tab-left-bottom-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 50
+              },
+              {
+                "x": 12.8,
+                "y": 42
+              },
+              {
+                "x": 47.2,
+                "y": 42
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-left",
+            "tabId": "fold-box-base-tab-left-bottom"
+          },
+          {
+            "id": "fold-box-base-tab-left-bottom-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 50
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-left",
+            "tabId": "fold-box-base-tab-left-bottom",
+            "edgeId": "fold-box-base-tab-left-bottom-base"
+          },
+          {
+            "id": "fold-box-base-tab-left-top-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 47.2,
+                "y": 118
+              },
+              {
+                "x": 12.8,
+                "y": 118
+              },
+              {
+                "x": 10,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-left",
+            "tabId": "fold-box-base-tab-left-top"
+          },
+          {
+            "id": "fold-box-base-tab-left-top-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 10,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-left",
+            "tabId": "fold-box-base-tab-left-top",
+            "edgeId": "fold-box-base-tab-left-top-base"
+          },
+          {
+            "id": "fold-box-base-tab-right-bottom-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 132.8,
+                "y": 42
+              },
+              {
+                "x": 167.2,
+                "y": 42
+              },
+              {
+                "x": 170,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-right",
+            "tabId": "fold-box-base-tab-right-bottom"
+          },
+          {
+            "id": "fold-box-base-tab-right-bottom-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 170,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-right",
+            "tabId": "fold-box-base-tab-right-bottom",
+            "edgeId": "fold-box-base-tab-right-bottom-base"
+          },
+          {
+            "id": "fold-box-base-tab-right-top-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 170,
+                "y": 110
+              },
+              {
+                "x": 167.2,
+                "y": 118
+              },
+              {
+                "x": 132.8,
+                "y": 118
+              },
+              {
+                "x": 130,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-right",
+            "tabId": "fold-box-base-tab-right-top"
+          },
+          {
+            "id": "fold-box-base-tab-right-top-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 170,
+                "y": 110
+              },
+              {
+                "x": 130,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-right",
+            "tabId": "fold-box-base-tab-right-top",
+            "edgeId": "fold-box-base-tab-right-top-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-box-base-base-label",
+            "text": "Base",
+            "position": {
+              "x": 90,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-base-base"
+          },
+          {
+            "id": "fold-box-base-wall-bottom-label",
+            "text": "Bottom wall",
+            "position": {
+              "x": 90,
+              "y": 30
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-base-wall-bottom"
+          },
+          {
+            "id": "fold-box-base-wall-right-label",
+            "text": "Right wall",
+            "position": {
+              "x": 150,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-base-wall-right"
+          },
+          {
+            "id": "fold-box-base-wall-top-label",
+            "text": "Top wall",
+            "position": {
+              "x": 90,
+              "y": 130
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-base-wall-top"
+          },
+          {
+            "id": "fold-box-base-wall-left-label",
+            "text": "Left wall",
+            "position": {
+              "x": 30,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-base-wall-left"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "box-with-lid",
+          "panelIds": [
+            "fold-box-base-base",
+            "fold-box-base-wall-bottom",
+            "fold-box-base-wall-right",
+            "fold-box-base-wall-top",
+            "fold-box-base-wall-left"
+          ]
+        }
+      },
+      {
+        "id": "fold-box-lid",
+        "name": "Box lid net",
+        "label": "Box lid net",
+        "paths": [
+          {
+            "id": "fold-box-lid-wall-bottom-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 10
+              },
+              {
+                "x": 108,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-box-lid-wall-bottom",
+            "edgeId": "fold-box-lid-wall-bottom-boundary-1"
+          },
+          {
+            "id": "fold-box-lid-wall-bottom-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 10
+              },
+              {
+                "x": 108,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-bottom",
+            "edgeId": "fold-box-lid-wall-bottom-boundary-2"
+          },
+          {
+            "id": "fold-box-lid-wall-bottom-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 25
+              },
+              {
+                "x": 25,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-box-lid-wall-bottom",
+            "edgeId": "fold-box-lid-wall-bottom-boundary-4"
+          },
+          {
+            "id": "fold-box-lid-wall-right-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 123,
+                "y": 25
+              },
+              {
+                "x": 123,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-right",
+            "edgeId": "fold-box-lid-wall-right-boundary-2"
+          },
+          {
+            "id": "fold-box-lid-wall-top-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 88
+              },
+              {
+                "x": 108,
+                "y": 103
+              }
+            ],
+            "panelId": "fold-box-lid-wall-top",
+            "edgeId": "fold-box-lid-wall-top-boundary-2"
+          },
+          {
+            "id": "fold-box-lid-wall-top-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 103
+              },
+              {
+                "x": 25,
+                "y": 103
+              }
+            ],
+            "panelId": "fold-box-lid-wall-top",
+            "edgeId": "fold-box-lid-wall-top-boundary-3"
+          },
+          {
+            "id": "fold-box-lid-wall-top-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 103
+              },
+              {
+                "x": 25,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-top",
+            "edgeId": "fold-box-lid-wall-top-boundary-4"
+          },
+          {
+            "id": "fold-box-lid-wall-left-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 88
+              },
+              {
+                "x": 10,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-left",
+            "edgeId": "fold-box-lid-wall-left-boundary-4"
+          },
+          {
+            "id": "fold-box-lid-fold-bottom-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 25
+              },
+              {
+                "x": 108,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-lid",
+            "edgeId": "fold-box-lid-fold-bottom"
+          },
+          {
+            "id": "fold-box-lid-fold-right-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 25
+              },
+              {
+                "x": 108,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-lid",
+            "edgeId": "fold-box-lid-fold-right"
+          },
+          {
+            "id": "fold-box-lid-fold-top-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 88
+              },
+              {
+                "x": 25,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-lid",
+            "edgeId": "fold-box-lid-fold-top"
+          },
+          {
+            "id": "fold-box-lid-fold-left-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 88
+              },
+              {
+                "x": 25,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-lid",
+            "edgeId": "fold-box-lid-fold-left"
+          },
+          {
+            "id": "fold-box-lid-tab-left-bottom-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 25
+              },
+              {
+                "x": 11.8375,
+                "y": 19.75
+              },
+              {
+                "x": 23.1625,
+                "y": 19.75
+              },
+              {
+                "x": 25,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-left",
+            "tabId": "fold-box-lid-tab-left-bottom"
+          },
+          {
+            "id": "fold-box-lid-tab-left-bottom-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 25
+              },
+              {
+                "x": 25,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-left",
+            "tabId": "fold-box-lid-tab-left-bottom",
+            "edgeId": "fold-box-lid-tab-left-bottom-base"
+          },
+          {
+            "id": "fold-box-lid-tab-left-top-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 88
+              },
+              {
+                "x": 23.1625,
+                "y": 93.25
+              },
+              {
+                "x": 11.8375,
+                "y": 93.25
+              },
+              {
+                "x": 10,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-left",
+            "tabId": "fold-box-lid-tab-left-top"
+          },
+          {
+            "id": "fold-box-lid-tab-left-top-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 88
+              },
+              {
+                "x": 10,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-left",
+            "tabId": "fold-box-lid-tab-left-top",
+            "edgeId": "fold-box-lid-tab-left-top-base"
+          },
+          {
+            "id": "fold-box-lid-tab-right-bottom-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 25
+              },
+              {
+                "x": 109.8375,
+                "y": 19.75
+              },
+              {
+                "x": 121.1625,
+                "y": 19.75
+              },
+              {
+                "x": 123,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-right",
+            "tabId": "fold-box-lid-tab-right-bottom"
+          },
+          {
+            "id": "fold-box-lid-tab-right-bottom-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 25
+              },
+              {
+                "x": 123,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-right",
+            "tabId": "fold-box-lid-tab-right-bottom",
+            "edgeId": "fold-box-lid-tab-right-bottom-base"
+          },
+          {
+            "id": "fold-box-lid-tab-right-top-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 123,
+                "y": 88
+              },
+              {
+                "x": 121.1625,
+                "y": 93.25
+              },
+              {
+                "x": 109.8375,
+                "y": 93.25
+              },
+              {
+                "x": 108,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-right",
+            "tabId": "fold-box-lid-tab-right-top"
+          },
+          {
+            "id": "fold-box-lid-tab-right-top-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 123,
+                "y": 88
+              },
+              {
+                "x": 108,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-right",
+            "tabId": "fold-box-lid-tab-right-top",
+            "edgeId": "fold-box-lid-tab-right-top-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-box-lid-lid-label",
+            "text": "Lid face",
+            "position": {
+              "x": 66.5,
+              "y": 56.5
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-lid-lid"
+          },
+          {
+            "id": "fold-box-lid-wall-bottom-label",
+            "text": "Bottom wall",
+            "position": {
+              "x": 66.5,
+              "y": 17.5
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-lid-wall-bottom"
+          },
+          {
+            "id": "fold-box-lid-wall-right-label",
+            "text": "Right wall",
+            "position": {
+              "x": 115.5,
+              "y": 56.5
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-lid-wall-right"
+          },
+          {
+            "id": "fold-box-lid-wall-top-label",
+            "text": "Top wall",
+            "position": {
+              "x": 66.5,
+              "y": 95.5
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-lid-wall-top"
+          },
+          {
+            "id": "fold-box-lid-wall-left-label",
+            "text": "Left wall",
+            "position": {
+              "x": 17.5,
+              "y": 56.5
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-lid-wall-left"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "box-with-lid",
+          "panelIds": [
+            "fold-box-lid-lid",
+            "fold-box-lid-wall-bottom",
+            "fold-box-lid-wall-right",
+            "fold-box-lid-wall-top",
+            "fold-box-lid-wall-left"
+          ]
+        }
+      }
+    ],
+    "issues": [
+      {
+        "id": "tab-depth-clamped-fold-box-lid-tab-left-bottom",
+        "severity": "warning",
+        "code": "TAB_DEPTH_CLAMPED",
+        "message": "Tab fold-box-lid-tab-left-bottom was reduced from 8 mm to 5.25 mm to fit its edge.",
+        "affectedEntityIds": [
+          "fold-box-lid",
+          "fold-box-lid-tab-left-bottom",
+          "fold-box-lid-wall-left"
+        ],
+        "suggestedAction": "Review the adjusted tab before fabrication."
+      },
+      {
+        "id": "tab-depth-clamped-fold-box-lid-tab-left-top",
+        "severity": "warning",
+        "code": "TAB_DEPTH_CLAMPED",
+        "message": "Tab fold-box-lid-tab-left-top was reduced from 8 mm to 5.25 mm to fit its edge.",
+        "affectedEntityIds": [
+          "fold-box-lid",
+          "fold-box-lid-tab-left-top",
+          "fold-box-lid-wall-left"
+        ],
+        "suggestedAction": "Review the adjusted tab before fabrication."
+      },
+      {
+        "id": "tab-depth-clamped-fold-box-lid-tab-right-bottom",
+        "severity": "warning",
+        "code": "TAB_DEPTH_CLAMPED",
+        "message": "Tab fold-box-lid-tab-right-bottom was reduced from 8 mm to 5.25 mm to fit its edge.",
+        "affectedEntityIds": [
+          "fold-box-lid",
+          "fold-box-lid-tab-right-bottom",
+          "fold-box-lid-wall-right"
+        ],
+        "suggestedAction": "Review the adjusted tab before fabrication."
+      },
+      {
+        "id": "tab-depth-clamped-fold-box-lid-tab-right-top",
+        "severity": "warning",
+        "code": "TAB_DEPTH_CLAMPED",
+        "message": "Tab fold-box-lid-tab-right-top was reduced from 8 mm to 5.25 mm to fit its edge.",
+        "affectedEntityIds": [
+          "fold-box-lid",
+          "fold-box-lid-tab-right-top",
+          "fold-box-lid-wall-right"
+        ],
+        "suggestedAction": "Review the adjusted tab before fabrication."
+      }
+    ],
+    "assembledPreview": {
+      "panels": [
+        {
+          "id": "fold-box-base-base",
+          "partId": "fold-box-base",
+          "name": "Base",
+          "verticesMm": [
+            [-40, -20, -30],
+            [40, -20, -30],
+            [40, -20, 30],
+            [-40, -20, 30]
+          ]
+        },
+        {
+          "id": "fold-box-base-wall-bottom",
+          "partId": "fold-box-base",
+          "name": "Bottom wall",
+          "verticesMm": [
+            [-40, -20, -30],
+            [40, -20, -30],
+            [40, 20, -30],
+            [-40, 20, -30]
+          ]
+        },
+        {
+          "id": "fold-box-base-wall-right",
+          "partId": "fold-box-base",
+          "name": "Right wall",
+          "verticesMm": [
+            [40, -20, -30],
+            [40, -20, 30],
+            [40, 20, 30],
+            [40, 20, -30]
+          ]
+        },
+        {
+          "id": "fold-box-base-wall-top",
+          "partId": "fold-box-base",
+          "name": "Top wall",
+          "verticesMm": [
+            [40, -20, 30],
+            [-40, -20, 30],
+            [-40, 20, 30],
+            [40, 20, 30]
+          ]
+        },
+        {
+          "id": "fold-box-base-wall-left",
+          "partId": "fold-box-base",
+          "name": "Left wall",
+          "verticesMm": [
+            [-40, -20, 30],
+            [-40, -20, -30],
+            [-40, 20, -30],
+            [-40, 20, 30]
+          ]
+        },
+        {
+          "id": "fold-box-lid-lid",
+          "partId": "fold-box-lid",
+          "name": "Lid face",
+          "verticesMm": [
+            [-41.5, 21, -31.5],
+            [41.5, 21, -31.5],
+            [41.5, 21, 31.5],
+            [-41.5, 21, 31.5]
+          ]
+        },
+        {
+          "id": "fold-box-lid-wall-bottom",
+          "partId": "fold-box-lid",
+          "name": "Bottom wall",
+          "verticesMm": [
+            [-41.5, 21, -31.5],
+            [41.5, 21, -31.5],
+            [41.5, 6, -31.5],
+            [-41.5, 6, -31.5]
+          ]
+        },
+        {
+          "id": "fold-box-lid-wall-right",
+          "partId": "fold-box-lid",
+          "name": "Right wall",
+          "verticesMm": [
+            [41.5, 21, -31.5],
+            [41.5, 21, 31.5],
+            [41.5, 6, 31.5],
+            [41.5, 6, -31.5]
+          ]
+        },
+        {
+          "id": "fold-box-lid-wall-top",
+          "partId": "fold-box-lid",
+          "name": "Top wall",
+          "verticesMm": [
+            [41.5, 21, 31.5],
+            [-41.5, 21, 31.5],
+            [-41.5, 6, 31.5],
+            [41.5, 6, 31.5]
+          ]
+        },
+        {
+          "id": "fold-box-lid-wall-left",
+          "partId": "fold-box-lid",
+          "name": "Left wall",
+          "verticesMm": [
+            [-41.5, 21, 31.5],
+            [-41.5, 21, -31.5],
+            [-41.5, 6, -31.5],
+            [-41.5, 6, 31.5]
+          ]
+        }
+      ]
+    },
+    "editableEdges": [
+      {
+        "id": "fold-box-base-fold-bottom-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-bottom",
+        "startMm": [-40, -20, -30],
+        "endMm": [40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-fold-left-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-left",
+        "startMm": [-40, -20, 30],
+        "endMm": [-40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-fold-right-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-right",
+        "startMm": [40, -20, -30],
+        "endMm": [40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-fold-top-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-base-base",
+        "panelBId": "fold-box-base-wall-top",
+        "startMm": [40, -20, 30],
+        "endMm": [-40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-tab-left-bottom-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-base-wall-left",
+        "panelBId": "fold-box-base-wall-bottom",
+        "startMm": [-40, -20, 30],
+        "endMm": [-40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-tab-left-top-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-base-wall-left",
+        "panelBId": "fold-box-base-wall-top",
+        "startMm": [-40, 20, -30],
+        "endMm": [-40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-tab-right-bottom-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-base-wall-right",
+        "panelBId": "fold-box-base-wall-bottom",
+        "startMm": [40, -20, -30],
+        "endMm": [40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-tab-right-top-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-base-wall-right",
+        "panelBId": "fold-box-base-wall-top",
+        "startMm": [40, 20, 30],
+        "endMm": [40, 20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-wall-bottom-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-box-base-wall-bottom",
+        "startMm": [-40, -20, -30],
+        "endMm": [40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-wall-bottom-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-box-base-wall-bottom",
+        "startMm": [40, -20, -30],
+        "endMm": [40, 20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-wall-bottom-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-box-base-wall-bottom",
+        "startMm": [-40, 20, -30],
+        "endMm": [-40, -20, -30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-wall-left-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-box-base-wall-left",
+        "startMm": [-40, 20, 30],
+        "endMm": [-40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-wall-right-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-box-base-wall-right",
+        "startMm": [40, -20, 30],
+        "endMm": [40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-wall-top-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-box-base-wall-top",
+        "startMm": [-40, -20, 30],
+        "endMm": [-40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-wall-top-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-box-base-wall-top",
+        "startMm": [-40, 20, 30],
+        "endMm": [40, 20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-base-wall-top-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-box-base-wall-top",
+        "startMm": [40, 20, 30],
+        "endMm": [40, -20, 30],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-fold-bottom-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-bottom",
+        "startMm": [-41.5, 21, -31.5],
+        "endMm": [41.5, 21, -31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-fold-left-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-left",
+        "startMm": [-41.5, 21, 31.5],
+        "endMm": [-41.5, 21, -31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-fold-right-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-right",
+        "startMm": [41.5, 21, -31.5],
+        "endMm": [41.5, 21, 31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-fold-top-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-lid-lid",
+        "panelBId": "fold-box-lid-wall-top",
+        "startMm": [41.5, 21, 31.5],
+        "endMm": [-41.5, 21, 31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-tab-left-bottom-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-lid-wall-left",
+        "panelBId": "fold-box-lid-wall-bottom",
+        "startMm": [-41.5, 21, 31.5],
+        "endMm": [-41.5, 21, -31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-tab-left-top-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-lid-wall-left",
+        "panelBId": "fold-box-lid-wall-top",
+        "startMm": [-41.5, 6, -31.5],
+        "endMm": [-41.5, 6, 31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-tab-right-bottom-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-lid-wall-right",
+        "panelBId": "fold-box-lid-wall-bottom",
+        "startMm": [41.5, 21, -31.5],
+        "endMm": [41.5, 21, 31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-tab-right-top-connection",
+        "kind": "connection",
+        "panelAId": "fold-box-lid-wall-right",
+        "panelBId": "fold-box-lid-wall-top",
+        "startMm": [41.5, 6, 31.5],
+        "endMm": [41.5, 6, -31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-wall-bottom-boundary-1",
+        "kind": "boundary",
+        "panelAId": "fold-box-lid-wall-bottom",
+        "startMm": [-41.5, 21, -31.5],
+        "endMm": [41.5, 21, -31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-wall-bottom-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-box-lid-wall-bottom",
+        "startMm": [41.5, 21, -31.5],
+        "endMm": [41.5, 6, -31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-wall-bottom-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-box-lid-wall-bottom",
+        "startMm": [-41.5, 6, -31.5],
+        "endMm": [-41.5, 21, -31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-wall-left-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-box-lid-wall-left",
+        "startMm": [-41.5, 6, 31.5],
+        "endMm": [-41.5, 21, 31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-wall-right-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-box-lid-wall-right",
+        "startMm": [41.5, 21, 31.5],
+        "endMm": [41.5, 6, 31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-wall-top-boundary-2",
+        "kind": "boundary",
+        "panelAId": "fold-box-lid-wall-top",
+        "startMm": [-41.5, 21, 31.5],
+        "endMm": [-41.5, 6, 31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-wall-top-boundary-3",
+        "kind": "boundary",
+        "panelAId": "fold-box-lid-wall-top",
+        "startMm": [-41.5, 6, 31.5],
+        "endMm": [41.5, 6, 31.5],
+        "editable": true
+      },
+      {
+        "id": "fold-box-lid-wall-top-boundary-4",
+        "kind": "boundary",
+        "panelAId": "fold-box-lid-wall-top",
+        "startMm": [41.5, 6, 31.5],
+        "endMm": [41.5, 21, 31.5],
+        "editable": true
+      }
+    ],
+    "resolvedDimensions": {
+      "widthMm": 80,
+      "lengthMm": 60,
+      "heightMm": 40
+    },
+    "algorithmVersion": "interactive-connections-v8",
+    "inputHash": "sf6-110afec8"
+  },
+  "project": {
+    "metadata": {
+      "id": "project-upgrade-baseline",
+      "name": "Upgrade baseline: fold-box-with-lid",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    "model": {
+      "id": "model-legacy-fixture",
+      "name": "40 mm cube",
+      "source": {
+        "kind": "built-in",
+        "primitive": "cube"
+      },
+      "dimensions": {
+        "widthMm": 40,
+        "heightMm": 40,
+        "depthMm": 40
+      },
+      "transform": {
+        "positionMm": [0, 0, 0],
+        "rotationDeg": [0, 0, 0],
+        "scale": [1, 1, 1]
+      },
+      "mesh": {
+        "positionsMm": [
+          -20, -20, -20, 20, -20, -20, 20, 20, -20, -20, 20, -20, -20, -20, 20, 20, -20, 20, 20, 20,
+          20, -20, 20, 20
+        ],
+        "indices": [
+          0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 3, 7, 6, 3, 6, 2, 0, 4, 7, 0, 7, 3,
+          1, 2, 6, 1, 6, 5
+        ]
+      },
+      "bounds": {
+        "minMm": [-20, -20, -20],
+        "maxMm": [20, 20, 20]
+      },
+      "healthReport": {
+        "triangleCount": 12,
+        "openEdgeCount": 0,
+        "nonManifoldEdgeCount": 0,
+        "disconnectedShellCount": 1,
+        "orientationIssueCount": 0,
+        "weldedVertexCount": 8,
+        "signedVolumeMm3": 64000.00000000001,
+        "likelyInverted": false,
+        "inspected": true
+      }
+    },
+    "fabricationMode": "fold-template",
+    "materialProfileSnapshot": {
+      "id": "card-300gsm",
+      "name": "300 gsm card",
+      "category": "card",
+      "thicknessMm": 1,
+      "kerfMm": 0.1,
+      "clearanceMm": 0.1,
+      "grainDirection": "none",
+      "scoreAllowanceMm": 0.2,
+      "defaultSheetWidthMm": 210,
+      "defaultSheetHeightMm": 297
+    },
+    "generatedParts": [
+      {
+        "id": "fold-box-base",
+        "name": "Box base net",
+        "label": "Box base net",
+        "paths": [
+          {
+            "id": "fold-box-base-wall-bottom-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 10
+              },
+              {
+                "x": 130,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-box-base-wall-bottom",
+            "edgeId": "fold-box-base-wall-bottom-boundary-1"
+          },
+          {
+            "id": "fold-box-base-wall-bottom-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 10
+              },
+              {
+                "x": 130,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-bottom",
+            "edgeId": "fold-box-base-wall-bottom-boundary-2"
+          },
+          {
+            "id": "fold-box-base-wall-bottom-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 50
+              },
+              {
+                "x": 50,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-box-base-wall-bottom",
+            "edgeId": "fold-box-base-wall-bottom-boundary-4"
+          },
+          {
+            "id": "fold-box-base-wall-right-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 170,
+                "y": 50
+              },
+              {
+                "x": 170,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-right",
+            "edgeId": "fold-box-base-wall-right-boundary-2"
+          },
+          {
+            "id": "fold-box-base-wall-top-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 110
+              },
+              {
+                "x": 130,
+                "y": 150
+              }
+            ],
+            "panelId": "fold-box-base-wall-top",
+            "edgeId": "fold-box-base-wall-top-boundary-2"
+          },
+          {
+            "id": "fold-box-base-wall-top-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 150
+              },
+              {
+                "x": 50,
+                "y": 150
+              }
+            ],
+            "panelId": "fold-box-base-wall-top",
+            "edgeId": "fold-box-base-wall-top-boundary-3"
+          },
+          {
+            "id": "fold-box-base-wall-top-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 150
+              },
+              {
+                "x": 50,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-top",
+            "edgeId": "fold-box-base-wall-top-boundary-4"
+          },
+          {
+            "id": "fold-box-base-wall-left-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 110
+              },
+              {
+                "x": 10,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-left",
+            "edgeId": "fold-box-base-wall-left-boundary-4"
+          },
+          {
+            "id": "fold-box-base-fold-bottom-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 50
+              },
+              {
+                "x": 130,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-base",
+            "edgeId": "fold-box-base-fold-bottom"
+          },
+          {
+            "id": "fold-box-base-fold-right-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 130,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-base",
+            "edgeId": "fold-box-base-fold-right"
+          },
+          {
+            "id": "fold-box-base-fold-top-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 110
+              },
+              {
+                "x": 50,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-base",
+            "edgeId": "fold-box-base-fold-top"
+          },
+          {
+            "id": "fold-box-base-fold-left-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-base",
+            "edgeId": "fold-box-base-fold-left"
+          },
+          {
+            "id": "fold-box-base-tab-left-bottom-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 50
+              },
+              {
+                "x": 12.8,
+                "y": 42
+              },
+              {
+                "x": 47.2,
+                "y": 42
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-left",
+            "tabId": "fold-box-base-tab-left-bottom"
+          },
+          {
+            "id": "fold-box-base-tab-left-bottom-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 50
+              },
+              {
+                "x": 50,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-left",
+            "tabId": "fold-box-base-tab-left-bottom",
+            "edgeId": "fold-box-base-tab-left-bottom-base"
+          },
+          {
+            "id": "fold-box-base-tab-left-top-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 47.2,
+                "y": 118
+              },
+              {
+                "x": 12.8,
+                "y": 118
+              },
+              {
+                "x": 10,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-left",
+            "tabId": "fold-box-base-tab-left-top"
+          },
+          {
+            "id": "fold-box-base-tab-left-top-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 50,
+                "y": 110
+              },
+              {
+                "x": 10,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-left",
+            "tabId": "fold-box-base-tab-left-top",
+            "edgeId": "fold-box-base-tab-left-top-base"
+          },
+          {
+            "id": "fold-box-base-tab-right-bottom-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 132.8,
+                "y": 42
+              },
+              {
+                "x": 167.2,
+                "y": 42
+              },
+              {
+                "x": 170,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-right",
+            "tabId": "fold-box-base-tab-right-bottom"
+          },
+          {
+            "id": "fold-box-base-tab-right-bottom-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 130,
+                "y": 50
+              },
+              {
+                "x": 170,
+                "y": 50
+              }
+            ],
+            "panelId": "fold-box-base-wall-right",
+            "tabId": "fold-box-base-tab-right-bottom",
+            "edgeId": "fold-box-base-tab-right-bottom-base"
+          },
+          {
+            "id": "fold-box-base-tab-right-top-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 170,
+                "y": 110
+              },
+              {
+                "x": 167.2,
+                "y": 118
+              },
+              {
+                "x": 132.8,
+                "y": 118
+              },
+              {
+                "x": 130,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-right",
+            "tabId": "fold-box-base-tab-right-top"
+          },
+          {
+            "id": "fold-box-base-tab-right-top-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 170,
+                "y": 110
+              },
+              {
+                "x": 130,
+                "y": 110
+              }
+            ],
+            "panelId": "fold-box-base-wall-right",
+            "tabId": "fold-box-base-tab-right-top",
+            "edgeId": "fold-box-base-tab-right-top-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-box-base-base-label",
+            "text": "Base",
+            "position": {
+              "x": 90,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-base-base"
+          },
+          {
+            "id": "fold-box-base-wall-bottom-label",
+            "text": "Bottom wall",
+            "position": {
+              "x": 90,
+              "y": 30
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-base-wall-bottom"
+          },
+          {
+            "id": "fold-box-base-wall-right-label",
+            "text": "Right wall",
+            "position": {
+              "x": 150,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-base-wall-right"
+          },
+          {
+            "id": "fold-box-base-wall-top-label",
+            "text": "Top wall",
+            "position": {
+              "x": 90,
+              "y": 130
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-base-wall-top"
+          },
+          {
+            "id": "fold-box-base-wall-left-label",
+            "text": "Left wall",
+            "position": {
+              "x": 30,
+              "y": 80
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-base-wall-left"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "box-with-lid",
+          "panelIds": [
+            "fold-box-base-base",
+            "fold-box-base-wall-bottom",
+            "fold-box-base-wall-right",
+            "fold-box-base-wall-top",
+            "fold-box-base-wall-left"
+          ]
+        }
+      },
+      {
+        "id": "fold-box-lid",
+        "name": "Box lid net",
+        "label": "Box lid net",
+        "paths": [
+          {
+            "id": "fold-box-lid-wall-bottom-boundary-1-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 10
+              },
+              {
+                "x": 108,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-box-lid-wall-bottom",
+            "edgeId": "fold-box-lid-wall-bottom-boundary-1"
+          },
+          {
+            "id": "fold-box-lid-wall-bottom-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 10
+              },
+              {
+                "x": 108,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-bottom",
+            "edgeId": "fold-box-lid-wall-bottom-boundary-2"
+          },
+          {
+            "id": "fold-box-lid-wall-bottom-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 25
+              },
+              {
+                "x": 25,
+                "y": 10
+              }
+            ],
+            "panelId": "fold-box-lid-wall-bottom",
+            "edgeId": "fold-box-lid-wall-bottom-boundary-4"
+          },
+          {
+            "id": "fold-box-lid-wall-right-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 123,
+                "y": 25
+              },
+              {
+                "x": 123,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-right",
+            "edgeId": "fold-box-lid-wall-right-boundary-2"
+          },
+          {
+            "id": "fold-box-lid-wall-top-boundary-2-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 88
+              },
+              {
+                "x": 108,
+                "y": 103
+              }
+            ],
+            "panelId": "fold-box-lid-wall-top",
+            "edgeId": "fold-box-lid-wall-top-boundary-2"
+          },
+          {
+            "id": "fold-box-lid-wall-top-boundary-3-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 103
+              },
+              {
+                "x": 25,
+                "y": 103
+              }
+            ],
+            "panelId": "fold-box-lid-wall-top",
+            "edgeId": "fold-box-lid-wall-top-boundary-3"
+          },
+          {
+            "id": "fold-box-lid-wall-top-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 103
+              },
+              {
+                "x": 25,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-top",
+            "edgeId": "fold-box-lid-wall-top-boundary-4"
+          },
+          {
+            "id": "fold-box-lid-wall-left-boundary-4-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 88
+              },
+              {
+                "x": 10,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-left",
+            "edgeId": "fold-box-lid-wall-left-boundary-4"
+          },
+          {
+            "id": "fold-box-lid-fold-bottom-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 25
+              },
+              {
+                "x": 108,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-lid",
+            "edgeId": "fold-box-lid-fold-bottom"
+          },
+          {
+            "id": "fold-box-lid-fold-right-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 25
+              },
+              {
+                "x": 108,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-lid",
+            "edgeId": "fold-box-lid-fold-right"
+          },
+          {
+            "id": "fold-box-lid-fold-top-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 88
+              },
+              {
+                "x": 25,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-lid",
+            "edgeId": "fold-box-lid-fold-top"
+          },
+          {
+            "id": "fold-box-lid-fold-left-fold",
+            "operation": "valley-fold",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 88
+              },
+              {
+                "x": 25,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-lid",
+            "edgeId": "fold-box-lid-fold-left"
+          },
+          {
+            "id": "fold-box-lid-tab-left-bottom-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 25
+              },
+              {
+                "x": 11.8375,
+                "y": 19.75
+              },
+              {
+                "x": 23.1625,
+                "y": 19.75
+              },
+              {
+                "x": 25,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-left",
+            "tabId": "fold-box-lid-tab-left-bottom"
+          },
+          {
+            "id": "fold-box-lid-tab-left-bottom-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 10,
+                "y": 25
+              },
+              {
+                "x": 25,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-left",
+            "tabId": "fold-box-lid-tab-left-bottom",
+            "edgeId": "fold-box-lid-tab-left-bottom-base"
+          },
+          {
+            "id": "fold-box-lid-tab-left-top-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 88
+              },
+              {
+                "x": 23.1625,
+                "y": 93.25
+              },
+              {
+                "x": 11.8375,
+                "y": 93.25
+              },
+              {
+                "x": 10,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-left",
+            "tabId": "fold-box-lid-tab-left-top"
+          },
+          {
+            "id": "fold-box-lid-tab-left-top-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 25,
+                "y": 88
+              },
+              {
+                "x": 10,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-left",
+            "tabId": "fold-box-lid-tab-left-top",
+            "edgeId": "fold-box-lid-tab-left-top-base"
+          },
+          {
+            "id": "fold-box-lid-tab-right-bottom-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 25
+              },
+              {
+                "x": 109.8375,
+                "y": 19.75
+              },
+              {
+                "x": 121.1625,
+                "y": 19.75
+              },
+              {
+                "x": 123,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-right",
+            "tabId": "fold-box-lid-tab-right-bottom"
+          },
+          {
+            "id": "fold-box-lid-tab-right-bottom-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 108,
+                "y": 25
+              },
+              {
+                "x": 123,
+                "y": 25
+              }
+            ],
+            "panelId": "fold-box-lid-wall-right",
+            "tabId": "fold-box-lid-tab-right-bottom",
+            "edgeId": "fold-box-lid-tab-right-bottom-base"
+          },
+          {
+            "id": "fold-box-lid-tab-right-top-cut",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 123,
+                "y": 88
+              },
+              {
+                "x": 121.1625,
+                "y": 93.25
+              },
+              {
+                "x": 109.8375,
+                "y": 93.25
+              },
+              {
+                "x": 108,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-right",
+            "tabId": "fold-box-lid-tab-right-top"
+          },
+          {
+            "id": "fold-box-lid-tab-right-top-fold",
+            "operation": "score",
+            "closed": false,
+            "points": [
+              {
+                "x": 123,
+                "y": 88
+              },
+              {
+                "x": 108,
+                "y": 88
+              }
+            ],
+            "panelId": "fold-box-lid-wall-right",
+            "tabId": "fold-box-lid-tab-right-top",
+            "edgeId": "fold-box-lid-tab-right-top-base"
+          }
+        ],
+        "labels": [
+          {
+            "id": "fold-box-lid-lid-label",
+            "text": "Lid face",
+            "position": {
+              "x": 66.5,
+              "y": 56.5
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-lid-lid"
+          },
+          {
+            "id": "fold-box-lid-wall-bottom-label",
+            "text": "Bottom wall",
+            "position": {
+              "x": 66.5,
+              "y": 17.5
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-lid-wall-bottom"
+          },
+          {
+            "id": "fold-box-lid-wall-right-label",
+            "text": "Right wall",
+            "position": {
+              "x": 115.5,
+              "y": 56.5
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-lid-wall-right"
+          },
+          {
+            "id": "fold-box-lid-wall-top-label",
+            "text": "Top wall",
+            "position": {
+              "x": 66.5,
+              "y": 95.5
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-lid-wall-top"
+          },
+          {
+            "id": "fold-box-lid-wall-left-label",
+            "text": "Left wall",
+            "position": {
+              "x": 17.5,
+              "y": 56.5
+            },
+            "operation": "engrave",
+            "entityId": "fold-box-lid-wall-left"
+          }
+        ],
+        "thicknessMm": 1,
+        "folding": {
+          "templateKind": "box-with-lid",
+          "panelIds": [
+            "fold-box-lid-lid",
+            "fold-box-lid-wall-bottom",
+            "fold-box-lid-wall-right",
+            "fold-box-lid-wall-top",
+            "fold-box-lid-wall-left"
+          ]
+        }
+      }
+    ],
+    "generationIssues": [
+      {
+        "id": "tab-depth-clamped-fold-box-lid-tab-left-bottom",
+        "severity": "warning",
+        "code": "TAB_DEPTH_CLAMPED",
+        "message": "Tab fold-box-lid-tab-left-bottom was reduced from 8 mm to 5.25 mm to fit its edge.",
+        "affectedEntityIds": [
+          "fold-box-lid",
+          "fold-box-lid-tab-left-bottom",
+          "fold-box-lid-wall-left"
+        ],
+        "suggestedAction": "Review the adjusted tab before fabrication."
+      },
+      {
+        "id": "tab-depth-clamped-fold-box-lid-tab-left-top",
+        "severity": "warning",
+        "code": "TAB_DEPTH_CLAMPED",
+        "message": "Tab fold-box-lid-tab-left-top was reduced from 8 mm to 5.25 mm to fit its edge.",
+        "affectedEntityIds": [
+          "fold-box-lid",
+          "fold-box-lid-tab-left-top",
+          "fold-box-lid-wall-left"
+        ],
+        "suggestedAction": "Review the adjusted tab before fabrication."
+      },
+      {
+        "id": "tab-depth-clamped-fold-box-lid-tab-right-bottom",
+        "severity": "warning",
+        "code": "TAB_DEPTH_CLAMPED",
+        "message": "Tab fold-box-lid-tab-right-bottom was reduced from 8 mm to 5.25 mm to fit its edge.",
+        "affectedEntityIds": [
+          "fold-box-lid",
+          "fold-box-lid-tab-right-bottom",
+          "fold-box-lid-wall-right"
+        ],
+        "suggestedAction": "Review the adjusted tab before fabrication."
+      },
+      {
+        "id": "tab-depth-clamped-fold-box-lid-tab-right-top",
+        "severity": "warning",
+        "code": "TAB_DEPTH_CLAMPED",
+        "message": "Tab fold-box-lid-tab-right-top was reduced from 8 mm to 5.25 mm to fit its edge.",
+        "affectedEntityIds": [
+          "fold-box-lid",
+          "fold-box-lid-tab-right-top",
+          "fold-box-lid-wall-right"
+        ],
+        "suggestedAction": "Review the adjusted tab before fabrication."
+      }
+    ],
+    "sheetLayouts": [
+      {
+        "id": "sheet-upgrade-baseline",
+        "widthMm": 600,
+        "heightMm": 400,
+        "marginMm": 5,
+        "spacingMm": 3,
+        "placements": [
+          {
+            "partId": "fold-box-base",
+            "x": -5,
+            "y": -5,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "fold-box-lid",
+            "x": 158,
+            "y": -5,
+            "rotationDeg": 0
+          }
+        ]
+      }
+    ],
+    "exportSettings": {
+      "includeLabels": true,
+      "includeRegistrationMarks": false,
+      "includeSheetBoundary": true,
+      "operationStyles": [
+        {
+          "operation": "cut",
+          "stroke": "#ff0000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "score",
+          "stroke": "#0000ff",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "mountain-fold",
+          "stroke": "#8b5cf6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "valley-fold",
+          "stroke": "#14b8a6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "perforate",
+          "stroke": "#f59e0b",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "engrave",
+          "stroke": "#000000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "guide",
+          "stroke": "#6b7280",
+          "strokeWidthMm": 0.1
+        }
+      ],
+      "kerfCompensation": "none",
+      "customKerfMm": 0.1,
+      "foldLineOutput": "preserve",
+      "perforationDashMm": 2,
+      "perforationGapMm": 1,
+      "labelFontSizeMm": 3
+    },
+    "acknowledgedWarningIds": [],
+    "modeSettings": {
+      "stackedSlices": {
+        "axis": "z",
+        "spacingMm": 10,
+        "thicknessMm": 1,
+        "contourEpsilonMm": 0.001
+      },
+      "waffleSlices": {
+        "primaryAxis": "x",
+        "secondaryAxis": "y",
+        "primarySpacingMm": 20,
+        "secondarySpacingMm": 20,
+        "thicknessMm": 3,
+        "clearanceMm": 0.15,
+        "contourEpsilonMm": 0.001,
+        "slotPattern": "alternating",
+        "reverseSlots": false
+      },
+      "foldTemplate": {
+        "templateKind": "box-with-lid",
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40,
+        "profileToleranceMm": 1,
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1,
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "meshUnfold": {
+        "strategy": "automatic",
+        "rootFaceIndex": 0,
+        "manualSeamKeys": [],
+        "tabDepthMm": 6,
+        "maximumFaceCount": 200,
+        "searchAttempts": 18
+      },
+      "panelConstruction": {
+        "innerWidthMm": 80,
+        "innerDepthMm": 60,
+        "innerHeightMm": 50,
+        "jointKind": "finger",
+        "fingerWidthMm": 10,
+        "clearanceMm": 0.15,
+        "includeLid": false,
+        "panelThicknessMm": 1,
+        "dividerThicknessMm": 1,
+        "lidThicknessMm": 1,
+        "widthDividerCount": 0,
+        "depthDividerCount": 0,
+        "connectionOverrides": {},
+        "panelProfiles": {
+          "front": "flat",
+          "back": "flat"
+        },
+        "glueTabDepthMm": 8,
+        "boundaryGlueTabs": [],
+        "features": []
+      }
+    },
+    "foldingResult": {
+      "settings": {
+        "templateKind": "box-with-lid",
+        "fitAxis": "y",
+        "clearanceMm": 0,
+        "profileToleranceMm": 1,
+        "sizeMode": "custom",
+        "envelopeDimensions": {
+          "widthMm": 80,
+          "lengthMm": 60,
+          "heightMm": 40
+        },
+        "parameters": {
+          "wallHeightMm": 40,
+          "tabDepthMm": 8,
+          "lidDepthMm": 15,
+          "lidClearanceMm": 0.5,
+          "gussetDepthMm": 40,
+          "closureFlapMm": 12,
+          "prismSides": 6,
+          "prismRotationDeg": 0,
+          "topScale": 0.5,
+          "seamTabMm": 8,
+          "standalone": true,
+          "closureMethod": "glue",
+          "slotClearanceMm": 0.1
+        },
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "profile": {
+        "sourceModelId": "standalone-template",
+        "fitAxis": "y",
+        "sourceHullPoints": [
+          {
+            "x": -40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": 30
+          }
+        ],
+        "fittedPoints": [
+          {
+            "x": -40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": -30
+          },
+          {
+            "x": 40,
+            "y": 30
+          },
+          {
+            "x": -40,
+            "y": 30
+          }
+        ],
+        "clearanceMm": 0,
+        "simplificationToleranceMm": 1,
+        "axisMinMm": -20,
+        "axisMaxMm": 20,
+        "widthMm": 80,
+        "heightMm": 60,
+        "depthMm": 40
+      },
+      "panels": [
+        {
+          "id": "fold-box-base-base",
+          "partId": "fold-box-base",
+          "name": "Base",
+          "role": "base",
+          "outline": [
+            {
+              "x": 50,
+              "y": 50
+            },
+            {
+              "x": 130,
+              "y": 50
+            },
+            {
+              "x": 130,
+              "y": 110
+            },
+            {
+              "x": 50,
+              "y": 110
+            }
+          ]
+        },
+        {
+          "id": "fold-box-base-wall-bottom",
+          "partId": "fold-box-base",
+          "name": "Bottom wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 50,
+              "y": 10
+            },
+            {
+              "x": 130,
+              "y": 10
+            },
+            {
+              "x": 130,
+              "y": 50
+            },
+            {
+              "x": 50,
+              "y": 50
+            }
+          ]
+        },
+        {
+          "id": "fold-box-base-wall-right",
+          "partId": "fold-box-base",
+          "name": "Right wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 130,
+              "y": 50
+            },
+            {
+              "x": 170,
+              "y": 50
+            },
+            {
+              "x": 170,
+              "y": 110
+            },
+            {
+              "x": 130,
+              "y": 110
+            }
+          ]
+        },
+        {
+          "id": "fold-box-base-wall-top",
+          "partId": "fold-box-base",
+          "name": "Top wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 50,
+              "y": 110
+            },
+            {
+              "x": 130,
+              "y": 110
+            },
+            {
+              "x": 130,
+              "y": 150
+            },
+            {
+              "x": 50,
+              "y": 150
+            }
+          ]
+        },
+        {
+          "id": "fold-box-base-wall-left",
+          "partId": "fold-box-base",
+          "name": "Left wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 10,
+              "y": 50
+            },
+            {
+              "x": 50,
+              "y": 50
+            },
+            {
+              "x": 50,
+              "y": 110
+            },
+            {
+              "x": 10,
+              "y": 110
+            }
+          ]
+        },
+        {
+          "id": "fold-box-lid-lid",
+          "partId": "fold-box-lid",
+          "name": "Lid face",
+          "role": "lid",
+          "outline": [
+            {
+              "x": 25,
+              "y": 25
+            },
+            {
+              "x": 108,
+              "y": 25
+            },
+            {
+              "x": 108,
+              "y": 88
+            },
+            {
+              "x": 25,
+              "y": 88
+            }
+          ]
+        },
+        {
+          "id": "fold-box-lid-wall-bottom",
+          "partId": "fold-box-lid",
+          "name": "Bottom wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 25,
+              "y": 10
+            },
+            {
+              "x": 108,
+              "y": 10
+            },
+            {
+              "x": 108,
+              "y": 25
+            },
+            {
+              "x": 25,
+              "y": 25
+            }
+          ]
+        },
+        {
+          "id": "fold-box-lid-wall-right",
+          "partId": "fold-box-lid",
+          "name": "Right wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 108,
+              "y": 25
+            },
+            {
+              "x": 123,
+              "y": 25
+            },
+            {
+              "x": 123,
+              "y": 88
+            },
+            {
+              "x": 108,
+              "y": 88
+            }
+          ]
+        },
+        {
+          "id": "fold-box-lid-wall-top",
+          "partId": "fold-box-lid",
+          "name": "Top wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 25,
+              "y": 88
+            },
+            {
+              "x": 108,
+              "y": 88
+            },
+            {
+              "x": 108,
+              "y": 103
+            },
+            {
+              "x": 25,
+              "y": 103
+            }
+          ]
+        },
+        {
+          "id": "fold-box-lid-wall-left",
+          "partId": "fold-box-lid",
+          "name": "Left wall",
+          "role": "wall",
+          "outline": [
+            {
+              "x": 10,
+              "y": 25
+            },
+            {
+              "x": 25,
+              "y": 25
+            },
+            {
+              "x": 25,
+              "y": 88
+            },
+            {
+              "x": 10,
+              "y": 88
+            }
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "id": "fold-box-base-fold-bottom",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-bottom",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F1",
+          "start": {
+            "x": 50,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-box-base-fold-right",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-right",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F2",
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        },
+        {
+          "id": "fold-box-base-fold-top",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-top",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F3",
+          "start": {
+            "x": 130,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 110
+          }
+        },
+        {
+          "id": "fold-box-base-fold-left",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-left",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F4",
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-box-base-wall-bottom-boundary-1",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-bottom",
+          "disposition": "boundary",
+          "start": {
+            "x": 50,
+            "y": 10
+          },
+          "end": {
+            "x": 130,
+            "y": 10
+          }
+        },
+        {
+          "id": "fold-box-base-wall-bottom-boundary-2",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-bottom",
+          "disposition": "boundary",
+          "start": {
+            "x": 130,
+            "y": 10
+          },
+          "end": {
+            "x": 130,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-box-base-wall-bottom-boundary-4",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-bottom",
+          "disposition": "boundary",
+          "start": {
+            "x": 50,
+            "y": 50
+          },
+          "end": {
+            "x": 50,
+            "y": 10
+          }
+        },
+        {
+          "id": "fold-box-base-wall-right-boundary-2",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-right",
+          "disposition": "boundary",
+          "start": {
+            "x": 170,
+            "y": 50
+          },
+          "end": {
+            "x": 170,
+            "y": 110
+          }
+        },
+        {
+          "id": "fold-box-base-wall-top-boundary-2",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-top",
+          "disposition": "boundary",
+          "start": {
+            "x": 130,
+            "y": 110
+          },
+          "end": {
+            "x": 130,
+            "y": 150
+          }
+        },
+        {
+          "id": "fold-box-base-wall-top-boundary-3",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-top",
+          "disposition": "boundary",
+          "start": {
+            "x": 130,
+            "y": 150
+          },
+          "end": {
+            "x": 50,
+            "y": 150
+          }
+        },
+        {
+          "id": "fold-box-base-wall-top-boundary-4",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-top",
+          "disposition": "boundary",
+          "start": {
+            "x": 50,
+            "y": 150
+          },
+          "end": {
+            "x": 50,
+            "y": 110
+          }
+        },
+        {
+          "id": "fold-box-base-wall-left-boundary-4",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-left",
+          "disposition": "boundary",
+          "start": {
+            "x": 10,
+            "y": 110
+          },
+          "end": {
+            "x": 10,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-box-base-tab-left-bottom-base",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-left",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T1",
+          "start": {
+            "x": 10,
+            "y": 50
+          },
+          "end": {
+            "x": 50,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-box-base-tab-left-top-base",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-left",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T2",
+          "start": {
+            "x": 50,
+            "y": 110
+          },
+          "end": {
+            "x": 10,
+            "y": 110
+          }
+        },
+        {
+          "id": "fold-box-base-tab-right-bottom-base",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-right",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T3",
+          "start": {
+            "x": 130,
+            "y": 50
+          },
+          "end": {
+            "x": 170,
+            "y": 50
+          }
+        },
+        {
+          "id": "fold-box-base-tab-right-top-base",
+          "partId": "fold-box-base",
+          "panelAId": "fold-box-base-wall-right",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T4",
+          "start": {
+            "x": 170,
+            "y": 110
+          },
+          "end": {
+            "x": 130,
+            "y": 110
+          }
+        },
+        {
+          "id": "fold-box-lid-fold-bottom",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-bottom",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F1",
+          "start": {
+            "x": 25,
+            "y": 25
+          },
+          "end": {
+            "x": 108,
+            "y": 25
+          }
+        },
+        {
+          "id": "fold-box-lid-fold-right",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-right",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F2",
+          "start": {
+            "x": 108,
+            "y": 25
+          },
+          "end": {
+            "x": 108,
+            "y": 88
+          }
+        },
+        {
+          "id": "fold-box-lid-fold-top",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-top",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F3",
+          "start": {
+            "x": 108,
+            "y": 88
+          },
+          "end": {
+            "x": 25,
+            "y": 88
+          }
+        },
+        {
+          "id": "fold-box-lid-fold-left",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-left",
+          "disposition": "hinge",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "F4",
+          "start": {
+            "x": 25,
+            "y": 88
+          },
+          "end": {
+            "x": 25,
+            "y": 25
+          }
+        },
+        {
+          "id": "fold-box-lid-wall-bottom-boundary-1",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-bottom",
+          "disposition": "boundary",
+          "start": {
+            "x": 25,
+            "y": 10
+          },
+          "end": {
+            "x": 108,
+            "y": 10
+          }
+        },
+        {
+          "id": "fold-box-lid-wall-bottom-boundary-2",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-bottom",
+          "disposition": "boundary",
+          "start": {
+            "x": 108,
+            "y": 10
+          },
+          "end": {
+            "x": 108,
+            "y": 25
+          }
+        },
+        {
+          "id": "fold-box-lid-wall-bottom-boundary-4",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-bottom",
+          "disposition": "boundary",
+          "start": {
+            "x": 25,
+            "y": 25
+          },
+          "end": {
+            "x": 25,
+            "y": 10
+          }
+        },
+        {
+          "id": "fold-box-lid-wall-right-boundary-2",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-right",
+          "disposition": "boundary",
+          "start": {
+            "x": 123,
+            "y": 25
+          },
+          "end": {
+            "x": 123,
+            "y": 88
+          }
+        },
+        {
+          "id": "fold-box-lid-wall-top-boundary-2",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-top",
+          "disposition": "boundary",
+          "start": {
+            "x": 108,
+            "y": 88
+          },
+          "end": {
+            "x": 108,
+            "y": 103
+          }
+        },
+        {
+          "id": "fold-box-lid-wall-top-boundary-3",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-top",
+          "disposition": "boundary",
+          "start": {
+            "x": 108,
+            "y": 103
+          },
+          "end": {
+            "x": 25,
+            "y": 103
+          }
+        },
+        {
+          "id": "fold-box-lid-wall-top-boundary-4",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-top",
+          "disposition": "boundary",
+          "start": {
+            "x": 25,
+            "y": 103
+          },
+          "end": {
+            "x": 25,
+            "y": 88
+          }
+        },
+        {
+          "id": "fold-box-lid-wall-left-boundary-4",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-left",
+          "disposition": "boundary",
+          "start": {
+            "x": 10,
+            "y": 88
+          },
+          "end": {
+            "x": 10,
+            "y": 25
+          }
+        },
+        {
+          "id": "fold-box-lid-tab-left-bottom-base",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-left",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T1",
+          "start": {
+            "x": 10,
+            "y": 25
+          },
+          "end": {
+            "x": 25,
+            "y": 25
+          }
+        },
+        {
+          "id": "fold-box-lid-tab-left-top-base",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-left",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T2",
+          "start": {
+            "x": 25,
+            "y": 88
+          },
+          "end": {
+            "x": 10,
+            "y": 88
+          }
+        },
+        {
+          "id": "fold-box-lid-tab-right-bottom-base",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-right",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T3",
+          "start": {
+            "x": 108,
+            "y": 25
+          },
+          "end": {
+            "x": 123,
+            "y": 25
+          }
+        },
+        {
+          "id": "fold-box-lid-tab-right-top-base",
+          "partId": "fold-box-lid",
+          "panelAId": "fold-box-lid-wall-right",
+          "disposition": "seam",
+          "foldDirection": "valley",
+          "targetAngleDeg": 90,
+          "pairLabel": "T4",
+          "start": {
+            "x": 123,
+            "y": 88
+          },
+          "end": {
+            "x": 108,
+            "y": 88
+          }
+        }
+      ],
+      "connections": [
+        {
+          "id": "fold-box-base-fold-bottom-connection",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-bottom",
+          "edgeA": {
+            "start": {
+              "x": 50,
+              "y": 50
+            },
+            "end": {
+              "x": 130,
+              "y": 50
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 50,
+              "y": 50
+            },
+            "end": {
+              "x": 130,
+              "y": 50
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-box-base-fold-right-connection",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-right",
+          "edgeA": {
+            "start": {
+              "x": 130,
+              "y": 50
+            },
+            "end": {
+              "x": 130,
+              "y": 110
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 130,
+              "y": 50
+            },
+            "end": {
+              "x": 130,
+              "y": 110
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-box-base-fold-top-connection",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-top",
+          "edgeA": {
+            "start": {
+              "x": 130,
+              "y": 110
+            },
+            "end": {
+              "x": 50,
+              "y": 110
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 130,
+              "y": 110
+            },
+            "end": {
+              "x": 50,
+              "y": 110
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-box-base-fold-left-connection",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-left",
+          "edgeA": {
+            "start": {
+              "x": 50,
+              "y": 110
+            },
+            "end": {
+              "x": 50,
+              "y": 50
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 50,
+              "y": 110
+            },
+            "end": {
+              "x": 50,
+              "y": 50
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-box-base-tab-left-bottom-connection",
+          "panelAId": "fold-box-base-wall-left",
+          "panelBId": "fold-box-base-wall-bottom",
+          "edgeA": {
+            "start": {
+              "x": 10,
+              "y": 50
+            },
+            "end": {
+              "x": 50,
+              "y": 50
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 50,
+              "y": 10
+            },
+            "end": {
+              "x": 50,
+              "y": 50
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-box-base-tab-left-bottom"]
+        },
+        {
+          "id": "fold-box-base-tab-left-top-connection",
+          "panelAId": "fold-box-base-wall-left",
+          "panelBId": "fold-box-base-wall-top",
+          "edgeA": {
+            "start": {
+              "x": 50,
+              "y": 110
+            },
+            "end": {
+              "x": 10,
+              "y": 110
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 50,
+              "y": 110
+            },
+            "end": {
+              "x": 50,
+              "y": 150
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-box-base-tab-left-top"]
+        },
+        {
+          "id": "fold-box-base-tab-right-bottom-connection",
+          "panelAId": "fold-box-base-wall-right",
+          "panelBId": "fold-box-base-wall-bottom",
+          "edgeA": {
+            "start": {
+              "x": 130,
+              "y": 50
+            },
+            "end": {
+              "x": 170,
+              "y": 50
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 130,
+              "y": 50
+            },
+            "end": {
+              "x": 130,
+              "y": 10
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-box-base-tab-right-bottom"]
+        },
+        {
+          "id": "fold-box-base-tab-right-top-connection",
+          "panelAId": "fold-box-base-wall-right",
+          "panelBId": "fold-box-base-wall-top",
+          "edgeA": {
+            "start": {
+              "x": 170,
+              "y": 110
+            },
+            "end": {
+              "x": 130,
+              "y": 110
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 130,
+              "y": 150
+            },
+            "end": {
+              "x": 130,
+              "y": 110
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-box-base-tab-right-top"]
+        },
+        {
+          "id": "fold-box-lid-fold-bottom-connection",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-bottom",
+          "edgeA": {
+            "start": {
+              "x": 25,
+              "y": 25
+            },
+            "end": {
+              "x": 108,
+              "y": 25
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 25,
+              "y": 25
+            },
+            "end": {
+              "x": 108,
+              "y": 25
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-box-lid-fold-right-connection",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-right",
+          "edgeA": {
+            "start": {
+              "x": 108,
+              "y": 25
+            },
+            "end": {
+              "x": 108,
+              "y": 88
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 108,
+              "y": 25
+            },
+            "end": {
+              "x": 108,
+              "y": 88
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-box-lid-fold-top-connection",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-top",
+          "edgeA": {
+            "start": {
+              "x": 108,
+              "y": 88
+            },
+            "end": {
+              "x": 25,
+              "y": 88
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 108,
+              "y": 88
+            },
+            "end": {
+              "x": 25,
+              "y": 88
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-box-lid-fold-left-connection",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-left",
+          "edgeA": {
+            "start": {
+              "x": 25,
+              "y": 88
+            },
+            "end": {
+              "x": 25,
+              "y": 25
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 25,
+              "y": 88
+            },
+            "end": {
+              "x": 25,
+              "y": 25
+            }
+          },
+          "disposition": "hinge",
+          "closure": "none",
+          "required": false,
+          "tabIds": []
+        },
+        {
+          "id": "fold-box-lid-tab-left-bottom-connection",
+          "panelAId": "fold-box-lid-wall-left",
+          "panelBId": "fold-box-lid-wall-bottom",
+          "edgeA": {
+            "start": {
+              "x": 10,
+              "y": 25
+            },
+            "end": {
+              "x": 25,
+              "y": 25
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 25,
+              "y": 10
+            },
+            "end": {
+              "x": 25,
+              "y": 25
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-box-lid-tab-left-bottom"]
+        },
+        {
+          "id": "fold-box-lid-tab-left-top-connection",
+          "panelAId": "fold-box-lid-wall-left",
+          "panelBId": "fold-box-lid-wall-top",
+          "edgeA": {
+            "start": {
+              "x": 25,
+              "y": 88
+            },
+            "end": {
+              "x": 10,
+              "y": 88
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 25,
+              "y": 88
+            },
+            "end": {
+              "x": 25,
+              "y": 103
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-box-lid-tab-left-top"]
+        },
+        {
+          "id": "fold-box-lid-tab-right-bottom-connection",
+          "panelAId": "fold-box-lid-wall-right",
+          "panelBId": "fold-box-lid-wall-bottom",
+          "edgeA": {
+            "start": {
+              "x": 108,
+              "y": 25
+            },
+            "end": {
+              "x": 123,
+              "y": 25
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 108,
+              "y": 25
+            },
+            "end": {
+              "x": 108,
+              "y": 10
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-box-lid-tab-right-bottom"]
+        },
+        {
+          "id": "fold-box-lid-tab-right-top-connection",
+          "panelAId": "fold-box-lid-wall-right",
+          "panelBId": "fold-box-lid-wall-top",
+          "edgeA": {
+            "start": {
+              "x": 123,
+              "y": 88
+            },
+            "end": {
+              "x": 108,
+              "y": 88
+            }
+          },
+          "edgeB": {
+            "start": {
+              "x": 108,
+              "y": 103
+            },
+            "end": {
+              "x": 108,
+              "y": 88
+            }
+          },
+          "disposition": "seam",
+          "closure": "glue-tab",
+          "required": true,
+          "tabIds": ["fold-box-lid-tab-right-top"]
+        }
+      ],
+      "tabs": [
+        {
+          "id": "fold-box-base-tab-left-bottom",
+          "partId": "fold-box-base",
+          "edgeId": "fold-box-base-tab-left-bottom-base",
+          "ownerPanelId": "fold-box-base-wall-left",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 10,
+            "y": 50
+          },
+          "baseEnd": {
+            "x": 50,
+            "y": 50
+          },
+          "outline": [
+            {
+              "x": 10,
+              "y": 50
+            },
+            {
+              "x": 12.8,
+              "y": 42
+            },
+            {
+              "x": 47.2,
+              "y": 42
+            },
+            {
+              "x": 50,
+              "y": 50
+            }
+          ],
+          "receiverPanelId": "fold-box-base-wall-bottom"
+        },
+        {
+          "id": "fold-box-base-tab-left-top",
+          "partId": "fold-box-base",
+          "edgeId": "fold-box-base-tab-left-top-base",
+          "ownerPanelId": "fold-box-base-wall-left",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 50,
+            "y": 110
+          },
+          "baseEnd": {
+            "x": 10,
+            "y": 110
+          },
+          "outline": [
+            {
+              "x": 50,
+              "y": 110
+            },
+            {
+              "x": 47.2,
+              "y": 118
+            },
+            {
+              "x": 12.8,
+              "y": 118
+            },
+            {
+              "x": 10,
+              "y": 110
+            }
+          ],
+          "receiverPanelId": "fold-box-base-wall-top"
+        },
+        {
+          "id": "fold-box-base-tab-right-bottom",
+          "partId": "fold-box-base",
+          "edgeId": "fold-box-base-tab-right-bottom-base",
+          "ownerPanelId": "fold-box-base-wall-right",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 130,
+            "y": 50
+          },
+          "baseEnd": {
+            "x": 170,
+            "y": 50
+          },
+          "outline": [
+            {
+              "x": 130,
+              "y": 50
+            },
+            {
+              "x": 132.8,
+              "y": 42
+            },
+            {
+              "x": 167.2,
+              "y": 42
+            },
+            {
+              "x": 170,
+              "y": 50
+            }
+          ],
+          "receiverPanelId": "fold-box-base-wall-bottom"
+        },
+        {
+          "id": "fold-box-base-tab-right-top",
+          "partId": "fold-box-base",
+          "edgeId": "fold-box-base-tab-right-top-base",
+          "ownerPanelId": "fold-box-base-wall-right",
+          "style": "glue",
+          "depthMm": 8,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 170,
+            "y": 110
+          },
+          "baseEnd": {
+            "x": 130,
+            "y": 110
+          },
+          "outline": [
+            {
+              "x": 170,
+              "y": 110
+            },
+            {
+              "x": 167.2,
+              "y": 118
+            },
+            {
+              "x": 132.8,
+              "y": 118
+            },
+            {
+              "x": 130,
+              "y": 110
+            }
+          ],
+          "receiverPanelId": "fold-box-base-wall-top"
+        },
+        {
+          "id": "fold-box-lid-tab-left-bottom",
+          "partId": "fold-box-lid",
+          "edgeId": "fold-box-lid-tab-left-bottom-base",
+          "ownerPanelId": "fold-box-lid-wall-left",
+          "style": "glue",
+          "depthMm": 5.25,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 10,
+            "y": 25
+          },
+          "baseEnd": {
+            "x": 25,
+            "y": 25
+          },
+          "outline": [
+            {
+              "x": 10,
+              "y": 25
+            },
+            {
+              "x": 11.8375,
+              "y": 19.75
+            },
+            {
+              "x": 23.1625,
+              "y": 19.75
+            },
+            {
+              "x": 25,
+              "y": 25
+            }
+          ],
+          "receiverPanelId": "fold-box-lid-wall-bottom"
+        },
+        {
+          "id": "fold-box-lid-tab-left-top",
+          "partId": "fold-box-lid",
+          "edgeId": "fold-box-lid-tab-left-top-base",
+          "ownerPanelId": "fold-box-lid-wall-left",
+          "style": "glue",
+          "depthMm": 5.25,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 25,
+            "y": 88
+          },
+          "baseEnd": {
+            "x": 10,
+            "y": 88
+          },
+          "outline": [
+            {
+              "x": 25,
+              "y": 88
+            },
+            {
+              "x": 23.1625,
+              "y": 93.25
+            },
+            {
+              "x": 11.8375,
+              "y": 93.25
+            },
+            {
+              "x": 10,
+              "y": 88
+            }
+          ],
+          "receiverPanelId": "fold-box-lid-wall-top"
+        },
+        {
+          "id": "fold-box-lid-tab-right-bottom",
+          "partId": "fold-box-lid",
+          "edgeId": "fold-box-lid-tab-right-bottom-base",
+          "ownerPanelId": "fold-box-lid-wall-right",
+          "style": "glue",
+          "depthMm": 5.25,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 108,
+            "y": 25
+          },
+          "baseEnd": {
+            "x": 123,
+            "y": 25
+          },
+          "outline": [
+            {
+              "x": 108,
+              "y": 25
+            },
+            {
+              "x": 109.8375,
+              "y": 19.75
+            },
+            {
+              "x": 121.1625,
+              "y": 19.75
+            },
+            {
+              "x": 123,
+              "y": 25
+            }
+          ],
+          "receiverPanelId": "fold-box-lid-wall-bottom"
+        },
+        {
+          "id": "fold-box-lid-tab-right-top",
+          "partId": "fold-box-lid",
+          "edgeId": "fold-box-lid-tab-right-top-base",
+          "ownerPanelId": "fold-box-lid-wall-right",
+          "style": "glue",
+          "depthMm": 5.25,
+          "shoulderAngleDeg": 20,
+          "enabled": true,
+          "baseStart": {
+            "x": 123,
+            "y": 88
+          },
+          "baseEnd": {
+            "x": 108,
+            "y": 88
+          },
+          "outline": [
+            {
+              "x": 123,
+              "y": 88
+            },
+            {
+              "x": 121.1625,
+              "y": 93.25
+            },
+            {
+              "x": 109.8375,
+              "y": 93.25
+            },
+            {
+              "x": 108,
+              "y": 88
+            }
+          ],
+          "receiverPanelId": "fold-box-lid-wall-top"
+        }
+      ],
+      "parts": [
+        {
+          "id": "fold-box-base",
+          "name": "Box base net",
+          "label": "Box base net",
+          "paths": [
+            {
+              "id": "fold-box-base-wall-bottom-boundary-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 50,
+                  "y": 10
+                },
+                {
+                  "x": 130,
+                  "y": 10
+                }
+              ],
+              "panelId": "fold-box-base-wall-bottom",
+              "edgeId": "fold-box-base-wall-bottom-boundary-1"
+            },
+            {
+              "id": "fold-box-base-wall-bottom-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 130,
+                  "y": 10
+                },
+                {
+                  "x": 130,
+                  "y": 50
+                }
+              ],
+              "panelId": "fold-box-base-wall-bottom",
+              "edgeId": "fold-box-base-wall-bottom-boundary-2"
+            },
+            {
+              "id": "fold-box-base-wall-bottom-boundary-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 50,
+                  "y": 50
+                },
+                {
+                  "x": 50,
+                  "y": 10
+                }
+              ],
+              "panelId": "fold-box-base-wall-bottom",
+              "edgeId": "fold-box-base-wall-bottom-boundary-4"
+            },
+            {
+              "id": "fold-box-base-wall-right-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 170,
+                  "y": 50
+                },
+                {
+                  "x": 170,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-box-base-wall-right",
+              "edgeId": "fold-box-base-wall-right-boundary-2"
+            },
+            {
+              "id": "fold-box-base-wall-top-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 130,
+                  "y": 110
+                },
+                {
+                  "x": 130,
+                  "y": 150
+                }
+              ],
+              "panelId": "fold-box-base-wall-top",
+              "edgeId": "fold-box-base-wall-top-boundary-2"
+            },
+            {
+              "id": "fold-box-base-wall-top-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 130,
+                  "y": 150
+                },
+                {
+                  "x": 50,
+                  "y": 150
+                }
+              ],
+              "panelId": "fold-box-base-wall-top",
+              "edgeId": "fold-box-base-wall-top-boundary-3"
+            },
+            {
+              "id": "fold-box-base-wall-top-boundary-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 50,
+                  "y": 150
+                },
+                {
+                  "x": 50,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-box-base-wall-top",
+              "edgeId": "fold-box-base-wall-top-boundary-4"
+            },
+            {
+              "id": "fold-box-base-wall-left-boundary-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 10,
+                  "y": 110
+                },
+                {
+                  "x": 10,
+                  "y": 50
+                }
+              ],
+              "panelId": "fold-box-base-wall-left",
+              "edgeId": "fold-box-base-wall-left-boundary-4"
+            },
+            {
+              "id": "fold-box-base-fold-bottom-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 50,
+                  "y": 50
+                },
+                {
+                  "x": 130,
+                  "y": 50
+                }
+              ],
+              "panelId": "fold-box-base-base",
+              "edgeId": "fold-box-base-fold-bottom"
+            },
+            {
+              "id": "fold-box-base-fold-right-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 130,
+                  "y": 50
+                },
+                {
+                  "x": 130,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-box-base-base",
+              "edgeId": "fold-box-base-fold-right"
+            },
+            {
+              "id": "fold-box-base-fold-top-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 130,
+                  "y": 110
+                },
+                {
+                  "x": 50,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-box-base-base",
+              "edgeId": "fold-box-base-fold-top"
+            },
+            {
+              "id": "fold-box-base-fold-left-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 50,
+                  "y": 110
+                },
+                {
+                  "x": 50,
+                  "y": 50
+                }
+              ],
+              "panelId": "fold-box-base-base",
+              "edgeId": "fold-box-base-fold-left"
+            },
+            {
+              "id": "fold-box-base-tab-left-bottom-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 10,
+                  "y": 50
+                },
+                {
+                  "x": 12.8,
+                  "y": 42
+                },
+                {
+                  "x": 47.2,
+                  "y": 42
+                },
+                {
+                  "x": 50,
+                  "y": 50
+                }
+              ],
+              "panelId": "fold-box-base-wall-left",
+              "tabId": "fold-box-base-tab-left-bottom"
+            },
+            {
+              "id": "fold-box-base-tab-left-bottom-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 10,
+                  "y": 50
+                },
+                {
+                  "x": 50,
+                  "y": 50
+                }
+              ],
+              "panelId": "fold-box-base-wall-left",
+              "tabId": "fold-box-base-tab-left-bottom",
+              "edgeId": "fold-box-base-tab-left-bottom-base"
+            },
+            {
+              "id": "fold-box-base-tab-left-top-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 50,
+                  "y": 110
+                },
+                {
+                  "x": 47.2,
+                  "y": 118
+                },
+                {
+                  "x": 12.8,
+                  "y": 118
+                },
+                {
+                  "x": 10,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-box-base-wall-left",
+              "tabId": "fold-box-base-tab-left-top"
+            },
+            {
+              "id": "fold-box-base-tab-left-top-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 50,
+                  "y": 110
+                },
+                {
+                  "x": 10,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-box-base-wall-left",
+              "tabId": "fold-box-base-tab-left-top",
+              "edgeId": "fold-box-base-tab-left-top-base"
+            },
+            {
+              "id": "fold-box-base-tab-right-bottom-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 130,
+                  "y": 50
+                },
+                {
+                  "x": 132.8,
+                  "y": 42
+                },
+                {
+                  "x": 167.2,
+                  "y": 42
+                },
+                {
+                  "x": 170,
+                  "y": 50
+                }
+              ],
+              "panelId": "fold-box-base-wall-right",
+              "tabId": "fold-box-base-tab-right-bottom"
+            },
+            {
+              "id": "fold-box-base-tab-right-bottom-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 130,
+                  "y": 50
+                },
+                {
+                  "x": 170,
+                  "y": 50
+                }
+              ],
+              "panelId": "fold-box-base-wall-right",
+              "tabId": "fold-box-base-tab-right-bottom",
+              "edgeId": "fold-box-base-tab-right-bottom-base"
+            },
+            {
+              "id": "fold-box-base-tab-right-top-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 170,
+                  "y": 110
+                },
+                {
+                  "x": 167.2,
+                  "y": 118
+                },
+                {
+                  "x": 132.8,
+                  "y": 118
+                },
+                {
+                  "x": 130,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-box-base-wall-right",
+              "tabId": "fold-box-base-tab-right-top"
+            },
+            {
+              "id": "fold-box-base-tab-right-top-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 170,
+                  "y": 110
+                },
+                {
+                  "x": 130,
+                  "y": 110
+                }
+              ],
+              "panelId": "fold-box-base-wall-right",
+              "tabId": "fold-box-base-tab-right-top",
+              "edgeId": "fold-box-base-tab-right-top-base"
+            }
+          ],
+          "labels": [
+            {
+              "id": "fold-box-base-base-label",
+              "text": "Base",
+              "position": {
+                "x": 90,
+                "y": 80
+              },
+              "operation": "engrave",
+              "entityId": "fold-box-base-base"
+            },
+            {
+              "id": "fold-box-base-wall-bottom-label",
+              "text": "Bottom wall",
+              "position": {
+                "x": 90,
+                "y": 30
+              },
+              "operation": "engrave",
+              "entityId": "fold-box-base-wall-bottom"
+            },
+            {
+              "id": "fold-box-base-wall-right-label",
+              "text": "Right wall",
+              "position": {
+                "x": 150,
+                "y": 80
+              },
+              "operation": "engrave",
+              "entityId": "fold-box-base-wall-right"
+            },
+            {
+              "id": "fold-box-base-wall-top-label",
+              "text": "Top wall",
+              "position": {
+                "x": 90,
+                "y": 130
+              },
+              "operation": "engrave",
+              "entityId": "fold-box-base-wall-top"
+            },
+            {
+              "id": "fold-box-base-wall-left-label",
+              "text": "Left wall",
+              "position": {
+                "x": 30,
+                "y": 80
+              },
+              "operation": "engrave",
+              "entityId": "fold-box-base-wall-left"
+            }
+          ],
+          "thicknessMm": 1,
+          "folding": {
+            "templateKind": "box-with-lid",
+            "panelIds": [
+              "fold-box-base-base",
+              "fold-box-base-wall-bottom",
+              "fold-box-base-wall-right",
+              "fold-box-base-wall-top",
+              "fold-box-base-wall-left"
+            ]
+          }
+        },
+        {
+          "id": "fold-box-lid",
+          "name": "Box lid net",
+          "label": "Box lid net",
+          "paths": [
+            {
+              "id": "fold-box-lid-wall-bottom-boundary-1-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 25,
+                  "y": 10
+                },
+                {
+                  "x": 108,
+                  "y": 10
+                }
+              ],
+              "panelId": "fold-box-lid-wall-bottom",
+              "edgeId": "fold-box-lid-wall-bottom-boundary-1"
+            },
+            {
+              "id": "fold-box-lid-wall-bottom-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 108,
+                  "y": 10
+                },
+                {
+                  "x": 108,
+                  "y": 25
+                }
+              ],
+              "panelId": "fold-box-lid-wall-bottom",
+              "edgeId": "fold-box-lid-wall-bottom-boundary-2"
+            },
+            {
+              "id": "fold-box-lid-wall-bottom-boundary-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 25,
+                  "y": 25
+                },
+                {
+                  "x": 25,
+                  "y": 10
+                }
+              ],
+              "panelId": "fold-box-lid-wall-bottom",
+              "edgeId": "fold-box-lid-wall-bottom-boundary-4"
+            },
+            {
+              "id": "fold-box-lid-wall-right-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 123,
+                  "y": 25
+                },
+                {
+                  "x": 123,
+                  "y": 88
+                }
+              ],
+              "panelId": "fold-box-lid-wall-right",
+              "edgeId": "fold-box-lid-wall-right-boundary-2"
+            },
+            {
+              "id": "fold-box-lid-wall-top-boundary-2-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 108,
+                  "y": 88
+                },
+                {
+                  "x": 108,
+                  "y": 103
+                }
+              ],
+              "panelId": "fold-box-lid-wall-top",
+              "edgeId": "fold-box-lid-wall-top-boundary-2"
+            },
+            {
+              "id": "fold-box-lid-wall-top-boundary-3-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 108,
+                  "y": 103
+                },
+                {
+                  "x": 25,
+                  "y": 103
+                }
+              ],
+              "panelId": "fold-box-lid-wall-top",
+              "edgeId": "fold-box-lid-wall-top-boundary-3"
+            },
+            {
+              "id": "fold-box-lid-wall-top-boundary-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 25,
+                  "y": 103
+                },
+                {
+                  "x": 25,
+                  "y": 88
+                }
+              ],
+              "panelId": "fold-box-lid-wall-top",
+              "edgeId": "fold-box-lid-wall-top-boundary-4"
+            },
+            {
+              "id": "fold-box-lid-wall-left-boundary-4-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 10,
+                  "y": 88
+                },
+                {
+                  "x": 10,
+                  "y": 25
+                }
+              ],
+              "panelId": "fold-box-lid-wall-left",
+              "edgeId": "fold-box-lid-wall-left-boundary-4"
+            },
+            {
+              "id": "fold-box-lid-fold-bottom-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 25,
+                  "y": 25
+                },
+                {
+                  "x": 108,
+                  "y": 25
+                }
+              ],
+              "panelId": "fold-box-lid-lid",
+              "edgeId": "fold-box-lid-fold-bottom"
+            },
+            {
+              "id": "fold-box-lid-fold-right-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 108,
+                  "y": 25
+                },
+                {
+                  "x": 108,
+                  "y": 88
+                }
+              ],
+              "panelId": "fold-box-lid-lid",
+              "edgeId": "fold-box-lid-fold-right"
+            },
+            {
+              "id": "fold-box-lid-fold-top-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 108,
+                  "y": 88
+                },
+                {
+                  "x": 25,
+                  "y": 88
+                }
+              ],
+              "panelId": "fold-box-lid-lid",
+              "edgeId": "fold-box-lid-fold-top"
+            },
+            {
+              "id": "fold-box-lid-fold-left-fold",
+              "operation": "valley-fold",
+              "closed": false,
+              "points": [
+                {
+                  "x": 25,
+                  "y": 88
+                },
+                {
+                  "x": 25,
+                  "y": 25
+                }
+              ],
+              "panelId": "fold-box-lid-lid",
+              "edgeId": "fold-box-lid-fold-left"
+            },
+            {
+              "id": "fold-box-lid-tab-left-bottom-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 10,
+                  "y": 25
+                },
+                {
+                  "x": 11.8375,
+                  "y": 19.75
+                },
+                {
+                  "x": 23.1625,
+                  "y": 19.75
+                },
+                {
+                  "x": 25,
+                  "y": 25
+                }
+              ],
+              "panelId": "fold-box-lid-wall-left",
+              "tabId": "fold-box-lid-tab-left-bottom"
+            },
+            {
+              "id": "fold-box-lid-tab-left-bottom-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 10,
+                  "y": 25
+                },
+                {
+                  "x": 25,
+                  "y": 25
+                }
+              ],
+              "panelId": "fold-box-lid-wall-left",
+              "tabId": "fold-box-lid-tab-left-bottom",
+              "edgeId": "fold-box-lid-tab-left-bottom-base"
+            },
+            {
+              "id": "fold-box-lid-tab-left-top-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 25,
+                  "y": 88
+                },
+                {
+                  "x": 23.1625,
+                  "y": 93.25
+                },
+                {
+                  "x": 11.8375,
+                  "y": 93.25
+                },
+                {
+                  "x": 10,
+                  "y": 88
+                }
+              ],
+              "panelId": "fold-box-lid-wall-left",
+              "tabId": "fold-box-lid-tab-left-top"
+            },
+            {
+              "id": "fold-box-lid-tab-left-top-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 25,
+                  "y": 88
+                },
+                {
+                  "x": 10,
+                  "y": 88
+                }
+              ],
+              "panelId": "fold-box-lid-wall-left",
+              "tabId": "fold-box-lid-tab-left-top",
+              "edgeId": "fold-box-lid-tab-left-top-base"
+            },
+            {
+              "id": "fold-box-lid-tab-right-bottom-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 108,
+                  "y": 25
+                },
+                {
+                  "x": 109.8375,
+                  "y": 19.75
+                },
+                {
+                  "x": 121.1625,
+                  "y": 19.75
+                },
+                {
+                  "x": 123,
+                  "y": 25
+                }
+              ],
+              "panelId": "fold-box-lid-wall-right",
+              "tabId": "fold-box-lid-tab-right-bottom"
+            },
+            {
+              "id": "fold-box-lid-tab-right-bottom-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 108,
+                  "y": 25
+                },
+                {
+                  "x": 123,
+                  "y": 25
+                }
+              ],
+              "panelId": "fold-box-lid-wall-right",
+              "tabId": "fold-box-lid-tab-right-bottom",
+              "edgeId": "fold-box-lid-tab-right-bottom-base"
+            },
+            {
+              "id": "fold-box-lid-tab-right-top-cut",
+              "operation": "cut",
+              "closed": false,
+              "points": [
+                {
+                  "x": 123,
+                  "y": 88
+                },
+                {
+                  "x": 121.1625,
+                  "y": 93.25
+                },
+                {
+                  "x": 109.8375,
+                  "y": 93.25
+                },
+                {
+                  "x": 108,
+                  "y": 88
+                }
+              ],
+              "panelId": "fold-box-lid-wall-right",
+              "tabId": "fold-box-lid-tab-right-top"
+            },
+            {
+              "id": "fold-box-lid-tab-right-top-fold",
+              "operation": "score",
+              "closed": false,
+              "points": [
+                {
+                  "x": 123,
+                  "y": 88
+                },
+                {
+                  "x": 108,
+                  "y": 88
+                }
+              ],
+              "panelId": "fold-box-lid-wall-right",
+              "tabId": "fold-box-lid-tab-right-top",
+              "edgeId": "fold-box-lid-tab-right-top-base"
+            }
+          ],
+          "labels": [
+            {
+              "id": "fold-box-lid-lid-label",
+              "text": "Lid face",
+              "position": {
+                "x": 66.5,
+                "y": 56.5
+              },
+              "operation": "engrave",
+              "entityId": "fold-box-lid-lid"
+            },
+            {
+              "id": "fold-box-lid-wall-bottom-label",
+              "text": "Bottom wall",
+              "position": {
+                "x": 66.5,
+                "y": 17.5
+              },
+              "operation": "engrave",
+              "entityId": "fold-box-lid-wall-bottom"
+            },
+            {
+              "id": "fold-box-lid-wall-right-label",
+              "text": "Right wall",
+              "position": {
+                "x": 115.5,
+                "y": 56.5
+              },
+              "operation": "engrave",
+              "entityId": "fold-box-lid-wall-right"
+            },
+            {
+              "id": "fold-box-lid-wall-top-label",
+              "text": "Top wall",
+              "position": {
+                "x": 66.5,
+                "y": 95.5
+              },
+              "operation": "engrave",
+              "entityId": "fold-box-lid-wall-top"
+            },
+            {
+              "id": "fold-box-lid-wall-left-label",
+              "text": "Left wall",
+              "position": {
+                "x": 17.5,
+                "y": 56.5
+              },
+              "operation": "engrave",
+              "entityId": "fold-box-lid-wall-left"
+            }
+          ],
+          "thicknessMm": 1,
+          "folding": {
+            "templateKind": "box-with-lid",
+            "panelIds": [
+              "fold-box-lid-lid",
+              "fold-box-lid-wall-bottom",
+              "fold-box-lid-wall-right",
+              "fold-box-lid-wall-top",
+              "fold-box-lid-wall-left"
+            ]
+          }
+        }
+      ],
+      "issues": [
+        {
+          "id": "tab-depth-clamped-fold-box-lid-tab-left-bottom",
+          "severity": "warning",
+          "code": "TAB_DEPTH_CLAMPED",
+          "message": "Tab fold-box-lid-tab-left-bottom was reduced from 8 mm to 5.25 mm to fit its edge.",
+          "affectedEntityIds": [
+            "fold-box-lid",
+            "fold-box-lid-tab-left-bottom",
+            "fold-box-lid-wall-left"
+          ],
+          "suggestedAction": "Review the adjusted tab before fabrication."
+        },
+        {
+          "id": "tab-depth-clamped-fold-box-lid-tab-left-top",
+          "severity": "warning",
+          "code": "TAB_DEPTH_CLAMPED",
+          "message": "Tab fold-box-lid-tab-left-top was reduced from 8 mm to 5.25 mm to fit its edge.",
+          "affectedEntityIds": [
+            "fold-box-lid",
+            "fold-box-lid-tab-left-top",
+            "fold-box-lid-wall-left"
+          ],
+          "suggestedAction": "Review the adjusted tab before fabrication."
+        },
+        {
+          "id": "tab-depth-clamped-fold-box-lid-tab-right-bottom",
+          "severity": "warning",
+          "code": "TAB_DEPTH_CLAMPED",
+          "message": "Tab fold-box-lid-tab-right-bottom was reduced from 8 mm to 5.25 mm to fit its edge.",
+          "affectedEntityIds": [
+            "fold-box-lid",
+            "fold-box-lid-tab-right-bottom",
+            "fold-box-lid-wall-right"
+          ],
+          "suggestedAction": "Review the adjusted tab before fabrication."
+        },
+        {
+          "id": "tab-depth-clamped-fold-box-lid-tab-right-top",
+          "severity": "warning",
+          "code": "TAB_DEPTH_CLAMPED",
+          "message": "Tab fold-box-lid-tab-right-top was reduced from 8 mm to 5.25 mm to fit its edge.",
+          "affectedEntityIds": [
+            "fold-box-lid",
+            "fold-box-lid-tab-right-top",
+            "fold-box-lid-wall-right"
+          ],
+          "suggestedAction": "Review the adjusted tab before fabrication."
+        }
+      ],
+      "assembledPreview": {
+        "panels": [
+          {
+            "id": "fold-box-base-base",
+            "partId": "fold-box-base",
+            "name": "Base",
+            "verticesMm": [
+              [-40, -20, -30],
+              [40, -20, -30],
+              [40, -20, 30],
+              [-40, -20, 30]
+            ]
+          },
+          {
+            "id": "fold-box-base-wall-bottom",
+            "partId": "fold-box-base",
+            "name": "Bottom wall",
+            "verticesMm": [
+              [-40, -20, -30],
+              [40, -20, -30],
+              [40, 20, -30],
+              [-40, 20, -30]
+            ]
+          },
+          {
+            "id": "fold-box-base-wall-right",
+            "partId": "fold-box-base",
+            "name": "Right wall",
+            "verticesMm": [
+              [40, -20, -30],
+              [40, -20, 30],
+              [40, 20, 30],
+              [40, 20, -30]
+            ]
+          },
+          {
+            "id": "fold-box-base-wall-top",
+            "partId": "fold-box-base",
+            "name": "Top wall",
+            "verticesMm": [
+              [40, -20, 30],
+              [-40, -20, 30],
+              [-40, 20, 30],
+              [40, 20, 30]
+            ]
+          },
+          {
+            "id": "fold-box-base-wall-left",
+            "partId": "fold-box-base",
+            "name": "Left wall",
+            "verticesMm": [
+              [-40, -20, 30],
+              [-40, -20, -30],
+              [-40, 20, -30],
+              [-40, 20, 30]
+            ]
+          },
+          {
+            "id": "fold-box-lid-lid",
+            "partId": "fold-box-lid",
+            "name": "Lid face",
+            "verticesMm": [
+              [-41.5, 21, -31.5],
+              [41.5, 21, -31.5],
+              [41.5, 21, 31.5],
+              [-41.5, 21, 31.5]
+            ]
+          },
+          {
+            "id": "fold-box-lid-wall-bottom",
+            "partId": "fold-box-lid",
+            "name": "Bottom wall",
+            "verticesMm": [
+              [-41.5, 21, -31.5],
+              [41.5, 21, -31.5],
+              [41.5, 6, -31.5],
+              [-41.5, 6, -31.5]
+            ]
+          },
+          {
+            "id": "fold-box-lid-wall-right",
+            "partId": "fold-box-lid",
+            "name": "Right wall",
+            "verticesMm": [
+              [41.5, 21, -31.5],
+              [41.5, 21, 31.5],
+              [41.5, 6, 31.5],
+              [41.5, 6, -31.5]
+            ]
+          },
+          {
+            "id": "fold-box-lid-wall-top",
+            "partId": "fold-box-lid",
+            "name": "Top wall",
+            "verticesMm": [
+              [41.5, 21, 31.5],
+              [-41.5, 21, 31.5],
+              [-41.5, 6, 31.5],
+              [41.5, 6, 31.5]
+            ]
+          },
+          {
+            "id": "fold-box-lid-wall-left",
+            "partId": "fold-box-lid",
+            "name": "Left wall",
+            "verticesMm": [
+              [-41.5, 21, 31.5],
+              [-41.5, 21, -31.5],
+              [-41.5, 6, -31.5],
+              [-41.5, 6, 31.5]
+            ]
+          }
+        ]
+      },
+      "editableEdges": [
+        {
+          "id": "fold-box-base-fold-bottom-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-bottom",
+          "startMm": [-40, -20, -30],
+          "endMm": [40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-fold-left-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-left",
+          "startMm": [-40, -20, 30],
+          "endMm": [-40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-fold-right-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-right",
+          "startMm": [40, -20, -30],
+          "endMm": [40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-fold-top-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-base-base",
+          "panelBId": "fold-box-base-wall-top",
+          "startMm": [40, -20, 30],
+          "endMm": [-40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-tab-left-bottom-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-base-wall-left",
+          "panelBId": "fold-box-base-wall-bottom",
+          "startMm": [-40, -20, 30],
+          "endMm": [-40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-tab-left-top-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-base-wall-left",
+          "panelBId": "fold-box-base-wall-top",
+          "startMm": [-40, 20, -30],
+          "endMm": [-40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-tab-right-bottom-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-base-wall-right",
+          "panelBId": "fold-box-base-wall-bottom",
+          "startMm": [40, -20, -30],
+          "endMm": [40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-tab-right-top-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-base-wall-right",
+          "panelBId": "fold-box-base-wall-top",
+          "startMm": [40, 20, 30],
+          "endMm": [40, 20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-wall-bottom-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-box-base-wall-bottom",
+          "startMm": [-40, -20, -30],
+          "endMm": [40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-wall-bottom-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-box-base-wall-bottom",
+          "startMm": [40, -20, -30],
+          "endMm": [40, 20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-wall-bottom-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-box-base-wall-bottom",
+          "startMm": [-40, 20, -30],
+          "endMm": [-40, -20, -30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-wall-left-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-box-base-wall-left",
+          "startMm": [-40, 20, 30],
+          "endMm": [-40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-wall-right-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-box-base-wall-right",
+          "startMm": [40, -20, 30],
+          "endMm": [40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-wall-top-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-box-base-wall-top",
+          "startMm": [-40, -20, 30],
+          "endMm": [-40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-wall-top-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-box-base-wall-top",
+          "startMm": [-40, 20, 30],
+          "endMm": [40, 20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-base-wall-top-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-box-base-wall-top",
+          "startMm": [40, 20, 30],
+          "endMm": [40, -20, 30],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-fold-bottom-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-bottom",
+          "startMm": [-41.5, 21, -31.5],
+          "endMm": [41.5, 21, -31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-fold-left-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-left",
+          "startMm": [-41.5, 21, 31.5],
+          "endMm": [-41.5, 21, -31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-fold-right-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-right",
+          "startMm": [41.5, 21, -31.5],
+          "endMm": [41.5, 21, 31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-fold-top-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-lid-lid",
+          "panelBId": "fold-box-lid-wall-top",
+          "startMm": [41.5, 21, 31.5],
+          "endMm": [-41.5, 21, 31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-tab-left-bottom-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-lid-wall-left",
+          "panelBId": "fold-box-lid-wall-bottom",
+          "startMm": [-41.5, 21, 31.5],
+          "endMm": [-41.5, 21, -31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-tab-left-top-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-lid-wall-left",
+          "panelBId": "fold-box-lid-wall-top",
+          "startMm": [-41.5, 6, -31.5],
+          "endMm": [-41.5, 6, 31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-tab-right-bottom-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-lid-wall-right",
+          "panelBId": "fold-box-lid-wall-bottom",
+          "startMm": [41.5, 21, -31.5],
+          "endMm": [41.5, 21, 31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-tab-right-top-connection",
+          "kind": "connection",
+          "panelAId": "fold-box-lid-wall-right",
+          "panelBId": "fold-box-lid-wall-top",
+          "startMm": [41.5, 6, 31.5],
+          "endMm": [41.5, 6, -31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-wall-bottom-boundary-1",
+          "kind": "boundary",
+          "panelAId": "fold-box-lid-wall-bottom",
+          "startMm": [-41.5, 21, -31.5],
+          "endMm": [41.5, 21, -31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-wall-bottom-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-box-lid-wall-bottom",
+          "startMm": [41.5, 21, -31.5],
+          "endMm": [41.5, 6, -31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-wall-bottom-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-box-lid-wall-bottom",
+          "startMm": [-41.5, 6, -31.5],
+          "endMm": [-41.5, 21, -31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-wall-left-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-box-lid-wall-left",
+          "startMm": [-41.5, 6, 31.5],
+          "endMm": [-41.5, 21, 31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-wall-right-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-box-lid-wall-right",
+          "startMm": [41.5, 21, 31.5],
+          "endMm": [41.5, 6, 31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-wall-top-boundary-2",
+          "kind": "boundary",
+          "panelAId": "fold-box-lid-wall-top",
+          "startMm": [-41.5, 21, 31.5],
+          "endMm": [-41.5, 6, 31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-wall-top-boundary-3",
+          "kind": "boundary",
+          "panelAId": "fold-box-lid-wall-top",
+          "startMm": [-41.5, 6, 31.5],
+          "endMm": [41.5, 6, 31.5],
+          "editable": true
+        },
+        {
+          "id": "fold-box-lid-wall-top-boundary-4",
+          "kind": "boundary",
+          "panelAId": "fold-box-lid-wall-top",
+          "startMm": [41.5, 6, 31.5],
+          "endMm": [41.5, 21, 31.5],
+          "editable": true
+        }
+      ],
+      "resolvedDimensions": {
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40
+      },
+      "algorithmVersion": "interactive-connections-v8",
+      "inputHash": "sf6-110afec8"
+    },
+    "generationRecord": {
+      "signatureVersion": 2,
+      "mode": "fold-template",
+      "inputHash": "sf9-fed9881b",
+      "resultHash": "sf9-1c9699cf",
+      "algorithmVersion": "interactive-connections-v8",
+      "generatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

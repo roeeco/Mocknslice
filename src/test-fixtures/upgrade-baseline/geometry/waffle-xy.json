@@ -1,0 +1,1231 @@
+{
+  "input": {
+    "mode": "waffle-slices",
+    "payload": {
+      "mesh": {
+        "positionsMm": [
+          -20, -20, -20, 20, -20, -20, 20, 20, -20, -20, 20, -20, -20, -20, 20, 20, -20, 20, 20, 20,
+          20, -20, 20, 20
+        ],
+        "indices": [
+          0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 3, 7, 6, 3, 6, 2, 0, 4, 7, 0, 7, 3,
+          1, 2, 6, 1, 6, 5
+        ]
+      },
+      "bounds": {
+        "minMm": [-20, -20, -20],
+        "maxMm": [20, 20, 20]
+      },
+      "modelId": "model-legacy-fixture",
+      "settings": {
+        "primaryAxis": "x",
+        "secondaryAxis": "y",
+        "primarySpacingMm": 20,
+        "secondarySpacingMm": 20,
+        "thicknessMm": 3,
+        "clearanceMm": 0.15,
+        "contourEpsilonMm": 0.001,
+        "slotPattern": "alternating",
+        "reverseSlots": false
+      }
+    }
+  },
+  "result": {
+    "parts": [
+      {
+        "id": "waffle-a-x-1-1",
+        "name": "Family A · Slice X1",
+        "label": "X1",
+        "thicknessMm": 3,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "x",
+          "positionMm": -10,
+          "planeIndex": 0
+        },
+        "paths": [
+          {
+            "id": "waffle-a-x-1-1-outer-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -20,
+                "y": -10
+              },
+              {
+                "x": -20,
+                "y": -20
+              },
+              {
+                "x": -10,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -10
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": -10,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              }
+            ]
+          },
+          {
+            "id": "waffle-a-x-1-1-slot-waffle-b-y-1-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -20,
+                "y": -11.575
+              },
+              {
+                "x": 0,
+                "y": -11.575
+              },
+              {
+                "x": 0,
+                "y": -8.425
+              },
+              {
+                "x": -20,
+                "y": -8.425
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-b-y-1-1",
+              "intersectionAxis": "z",
+              "centreMm": -10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "start"
+            }
+          },
+          {
+            "id": "waffle-a-x-1-1-slot-waffle-b-y-2-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 20,
+                "y": 8.425
+              },
+              {
+                "x": 0,
+                "y": 8.425
+              },
+              {
+                "x": 0,
+                "y": 11.575
+              },
+              {
+                "x": 20,
+                "y": 11.575
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-b-y-2-1",
+              "intersectionAxis": "z",
+              "centreMm": 10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "end"
+            }
+          }
+        ],
+        "waffle": {
+          "family": "a",
+          "slotCount": 2
+        }
+      },
+      {
+        "id": "waffle-a-x-2-1",
+        "name": "Family A · Slice X2",
+        "label": "X2",
+        "thicknessMm": 3,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "x",
+          "positionMm": 10,
+          "planeIndex": 1
+        },
+        "paths": [
+          {
+            "id": "waffle-a-x-2-1-outer-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -20,
+                "y": 10
+              },
+              {
+                "x": -20,
+                "y": -20
+              },
+              {
+                "x": 10,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": 10
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": 10,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              }
+            ]
+          },
+          {
+            "id": "waffle-a-x-2-1-slot-waffle-b-y-1-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 20,
+                "y": -11.575
+              },
+              {
+                "x": 0,
+                "y": -11.575
+              },
+              {
+                "x": 0,
+                "y": -8.425
+              },
+              {
+                "x": 20,
+                "y": -8.425
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-b-y-1-1",
+              "intersectionAxis": "z",
+              "centreMm": -10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "end"
+            }
+          },
+          {
+            "id": "waffle-a-x-2-1-slot-waffle-b-y-2-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -20,
+                "y": 8.425
+              },
+              {
+                "x": 0,
+                "y": 8.425
+              },
+              {
+                "x": 0,
+                "y": 11.575
+              },
+              {
+                "x": -20,
+                "y": 11.575
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-b-y-2-1",
+              "intersectionAxis": "z",
+              "centreMm": 10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "start"
+            }
+          }
+        ],
+        "waffle": {
+          "family": "a",
+          "slotCount": 2
+        }
+      },
+      {
+        "id": "waffle-b-y-1-1",
+        "name": "Family B · Slice Y1",
+        "label": "Y1",
+        "thicknessMm": 3,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "y",
+          "positionMm": -10,
+          "planeIndex": 0
+        },
+        "paths": [
+          {
+            "id": "waffle-b-y-1-1-outer-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -10,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -10
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": -10,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": -10
+              },
+              {
+                "x": -20,
+                "y": -20
+              }
+            ]
+          },
+          {
+            "id": "waffle-b-y-1-1-slot-waffle-a-x-1-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -11.575,
+                "y": 20
+              },
+              {
+                "x": -11.575,
+                "y": 0
+              },
+              {
+                "x": -8.425,
+                "y": 0
+              },
+              {
+                "x": -8.425,
+                "y": 20
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-a-x-1-1",
+              "intersectionAxis": "z",
+              "centreMm": -10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "end"
+            }
+          },
+          {
+            "id": "waffle-b-y-1-1-slot-waffle-a-x-2-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 8.425,
+                "y": -20
+              },
+              {
+                "x": 8.425,
+                "y": 0
+              },
+              {
+                "x": 11.575,
+                "y": 0
+              },
+              {
+                "x": 11.575,
+                "y": -20
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-a-x-2-1",
+              "intersectionAxis": "z",
+              "centreMm": 10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "start"
+            }
+          }
+        ],
+        "waffle": {
+          "family": "b",
+          "slotCount": 2
+        }
+      },
+      {
+        "id": "waffle-b-y-2-1",
+        "name": "Family B · Slice Y2",
+        "label": "Y2",
+        "thicknessMm": 3,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "y",
+          "positionMm": 10,
+          "planeIndex": 1
+        },
+        "paths": [
+          {
+            "id": "waffle-b-y-2-1-outer-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": 10,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": 10
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": 10,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 10
+              },
+              {
+                "x": -20,
+                "y": -20
+              }
+            ]
+          },
+          {
+            "id": "waffle-b-y-2-1-slot-waffle-a-x-1-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -11.575,
+                "y": -20
+              },
+              {
+                "x": -11.575,
+                "y": 0
+              },
+              {
+                "x": -8.425,
+                "y": 0
+              },
+              {
+                "x": -8.425,
+                "y": -20
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-a-x-1-1",
+              "intersectionAxis": "z",
+              "centreMm": -10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "start"
+            }
+          },
+          {
+            "id": "waffle-b-y-2-1-slot-waffle-a-x-2-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 8.425,
+                "y": 20
+              },
+              {
+                "x": 8.425,
+                "y": 0
+              },
+              {
+                "x": 11.575,
+                "y": 0
+              },
+              {
+                "x": 11.575,
+                "y": 20
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-a-x-2-1",
+              "intersectionAxis": "z",
+              "centreMm": 10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "end"
+            }
+          }
+        ],
+        "waffle": {
+          "family": "b",
+          "slotCount": 2
+        }
+      }
+    ],
+    "issues": [],
+    "primaryPlanePositionsMm": [-10, 10],
+    "secondaryPlanePositionsMm": [-10, 10],
+    "slotCount": 4
+  },
+  "project": {
+    "metadata": {
+      "id": "project-upgrade-baseline",
+      "name": "Upgrade baseline: waffle-xy",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    "model": {
+      "id": "model-legacy-fixture",
+      "name": "40 mm cube",
+      "source": {
+        "kind": "built-in",
+        "primitive": "cube"
+      },
+      "dimensions": {
+        "widthMm": 40,
+        "heightMm": 40,
+        "depthMm": 40
+      },
+      "transform": {
+        "positionMm": [0, 0, 0],
+        "rotationDeg": [0, 0, 0],
+        "scale": [1, 1, 1]
+      },
+      "mesh": {
+        "positionsMm": [
+          -20, -20, -20, 20, -20, -20, 20, 20, -20, -20, 20, -20, -20, -20, 20, 20, -20, 20, 20, 20,
+          20, -20, 20, 20
+        ],
+        "indices": [
+          0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 3, 7, 6, 3, 6, 2, 0, 4, 7, 0, 7, 3,
+          1, 2, 6, 1, 6, 5
+        ]
+      },
+      "bounds": {
+        "minMm": [-20, -20, -20],
+        "maxMm": [20, 20, 20]
+      },
+      "healthReport": {
+        "triangleCount": 12,
+        "openEdgeCount": 0,
+        "nonManifoldEdgeCount": 0,
+        "disconnectedShellCount": 1,
+        "orientationIssueCount": 0,
+        "weldedVertexCount": 8,
+        "signedVolumeMm3": 64000.00000000001,
+        "likelyInverted": false,
+        "inspected": true
+      }
+    },
+    "fabricationMode": "waffle-slices",
+    "materialProfileSnapshot": {
+      "id": "card-300gsm",
+      "name": "300 gsm card",
+      "category": "card",
+      "thicknessMm": 1,
+      "kerfMm": 0.1,
+      "clearanceMm": 0.1,
+      "grainDirection": "none",
+      "scoreAllowanceMm": 0.2,
+      "defaultSheetWidthMm": 210,
+      "defaultSheetHeightMm": 297
+    },
+    "generatedParts": [
+      {
+        "id": "waffle-a-x-1-1",
+        "name": "Family A · Slice X1",
+        "label": "X1",
+        "thicknessMm": 3,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "x",
+          "positionMm": -10,
+          "planeIndex": 0
+        },
+        "paths": [
+          {
+            "id": "waffle-a-x-1-1-outer-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -20,
+                "y": -10
+              },
+              {
+                "x": -20,
+                "y": -20
+              },
+              {
+                "x": -10,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -10
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": -10,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              }
+            ]
+          },
+          {
+            "id": "waffle-a-x-1-1-slot-waffle-b-y-1-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -20,
+                "y": -11.575
+              },
+              {
+                "x": 0,
+                "y": -11.575
+              },
+              {
+                "x": 0,
+                "y": -8.425
+              },
+              {
+                "x": -20,
+                "y": -8.425
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-b-y-1-1",
+              "intersectionAxis": "z",
+              "centreMm": -10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "start"
+            }
+          },
+          {
+            "id": "waffle-a-x-1-1-slot-waffle-b-y-2-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 20,
+                "y": 8.425
+              },
+              {
+                "x": 0,
+                "y": 8.425
+              },
+              {
+                "x": 0,
+                "y": 11.575
+              },
+              {
+                "x": 20,
+                "y": 11.575
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-b-y-2-1",
+              "intersectionAxis": "z",
+              "centreMm": 10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "end"
+            }
+          }
+        ],
+        "waffle": {
+          "family": "a",
+          "slotCount": 2
+        }
+      },
+      {
+        "id": "waffle-a-x-2-1",
+        "name": "Family A · Slice X2",
+        "label": "X2",
+        "thicknessMm": 3,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "x",
+          "positionMm": 10,
+          "planeIndex": 1
+        },
+        "paths": [
+          {
+            "id": "waffle-a-x-2-1-outer-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -20,
+                "y": 10
+              },
+              {
+                "x": -20,
+                "y": -20
+              },
+              {
+                "x": 10,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": 10
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": 10,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              }
+            ]
+          },
+          {
+            "id": "waffle-a-x-2-1-slot-waffle-b-y-1-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 20,
+                "y": -11.575
+              },
+              {
+                "x": 0,
+                "y": -11.575
+              },
+              {
+                "x": 0,
+                "y": -8.425
+              },
+              {
+                "x": 20,
+                "y": -8.425
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-b-y-1-1",
+              "intersectionAxis": "z",
+              "centreMm": -10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "end"
+            }
+          },
+          {
+            "id": "waffle-a-x-2-1-slot-waffle-b-y-2-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -20,
+                "y": 8.425
+              },
+              {
+                "x": 0,
+                "y": 8.425
+              },
+              {
+                "x": 0,
+                "y": 11.575
+              },
+              {
+                "x": -20,
+                "y": 11.575
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-b-y-2-1",
+              "intersectionAxis": "z",
+              "centreMm": 10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "start"
+            }
+          }
+        ],
+        "waffle": {
+          "family": "a",
+          "slotCount": 2
+        }
+      },
+      {
+        "id": "waffle-b-y-1-1",
+        "name": "Family B · Slice Y1",
+        "label": "Y1",
+        "thicknessMm": 3,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "y",
+          "positionMm": -10,
+          "planeIndex": 0
+        },
+        "paths": [
+          {
+            "id": "waffle-b-y-1-1-outer-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": -10,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -10
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": -10,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": -10
+              },
+              {
+                "x": -20,
+                "y": -20
+              }
+            ]
+          },
+          {
+            "id": "waffle-b-y-1-1-slot-waffle-a-x-1-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -11.575,
+                "y": 20
+              },
+              {
+                "x": -11.575,
+                "y": 0
+              },
+              {
+                "x": -8.425,
+                "y": 0
+              },
+              {
+                "x": -8.425,
+                "y": 20
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-a-x-1-1",
+              "intersectionAxis": "z",
+              "centreMm": -10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "end"
+            }
+          },
+          {
+            "id": "waffle-b-y-1-1-slot-waffle-a-x-2-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 8.425,
+                "y": -20
+              },
+              {
+                "x": 8.425,
+                "y": 0
+              },
+              {
+                "x": 11.575,
+                "y": 0
+              },
+              {
+                "x": 11.575,
+                "y": -20
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-a-x-2-1",
+              "intersectionAxis": "z",
+              "centreMm": 10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "start"
+            }
+          }
+        ],
+        "waffle": {
+          "family": "b",
+          "slotCount": 2
+        }
+      },
+      {
+        "id": "waffle-b-y-2-1",
+        "name": "Family B · Slice Y2",
+        "label": "Y2",
+        "thicknessMm": 3,
+        "sourceReference": "model-legacy-fixture",
+        "slice": {
+          "axis": "y",
+          "positionMm": 10,
+          "planeIndex": 1
+        },
+        "paths": [
+          {
+            "id": "waffle-b-y-2-1-outer-1",
+            "operation": "cut",
+            "closed": true,
+            "contourRole": "outer",
+            "points": [
+              {
+                "x": 10,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": -20
+              },
+              {
+                "x": 20,
+                "y": 10
+              },
+              {
+                "x": 20,
+                "y": 20
+              },
+              {
+                "x": 10,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 20
+              },
+              {
+                "x": -20,
+                "y": 10
+              },
+              {
+                "x": -20,
+                "y": -20
+              }
+            ]
+          },
+          {
+            "id": "waffle-b-y-2-1-slot-waffle-a-x-1-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": -11.575,
+                "y": -20
+              },
+              {
+                "x": -11.575,
+                "y": 0
+              },
+              {
+                "x": -8.425,
+                "y": 0
+              },
+              {
+                "x": -8.425,
+                "y": -20
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-a-x-1-1",
+              "intersectionAxis": "z",
+              "centreMm": -10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "start"
+            }
+          },
+          {
+            "id": "waffle-b-y-2-1-slot-waffle-a-x-2-1-1",
+            "operation": "cut",
+            "closed": false,
+            "points": [
+              {
+                "x": 8.425,
+                "y": 20
+              },
+              {
+                "x": 8.425,
+                "y": 0
+              },
+              {
+                "x": 11.575,
+                "y": 0
+              },
+              {
+                "x": 11.575,
+                "y": 20
+              }
+            ],
+            "slot": {
+              "pairedPartId": "waffle-a-x-2-1",
+              "intersectionAxis": "z",
+              "centreMm": 10,
+              "widthMm": 3.15,
+              "depthMm": 20,
+              "direction": "end"
+            }
+          }
+        ],
+        "waffle": {
+          "family": "b",
+          "slotCount": 2
+        }
+      }
+    ],
+    "generationIssues": [],
+    "sheetLayouts": [
+      {
+        "id": "sheet-upgrade-baseline",
+        "widthMm": 600,
+        "heightMm": 400,
+        "marginMm": 5,
+        "spacingMm": 3,
+        "placements": [
+          {
+            "partId": "waffle-a-x-1-1",
+            "x": 25,
+            "y": 25,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "waffle-a-x-2-1",
+            "x": 68,
+            "y": 25,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "waffle-b-y-1-1",
+            "x": 111,
+            "y": 25,
+            "rotationDeg": 0
+          },
+          {
+            "partId": "waffle-b-y-2-1",
+            "x": 154,
+            "y": 25,
+            "rotationDeg": 0
+          }
+        ]
+      }
+    ],
+    "exportSettings": {
+      "includeLabels": true,
+      "includeRegistrationMarks": false,
+      "includeSheetBoundary": true,
+      "operationStyles": [
+        {
+          "operation": "cut",
+          "stroke": "#ff0000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "score",
+          "stroke": "#0000ff",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "mountain-fold",
+          "stroke": "#8b5cf6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "valley-fold",
+          "stroke": "#14b8a6",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "perforate",
+          "stroke": "#f59e0b",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "engrave",
+          "stroke": "#000000",
+          "strokeWidthMm": 0.1
+        },
+        {
+          "operation": "guide",
+          "stroke": "#6b7280",
+          "strokeWidthMm": 0.1
+        }
+      ],
+      "kerfCompensation": "none",
+      "customKerfMm": 0.1,
+      "foldLineOutput": "preserve",
+      "perforationDashMm": 2,
+      "perforationGapMm": 1,
+      "labelFontSizeMm": 3
+    },
+    "acknowledgedWarningIds": [],
+    "modeSettings": {
+      "stackedSlices": {
+        "axis": "z",
+        "spacingMm": 10,
+        "thicknessMm": 1,
+        "contourEpsilonMm": 0.001
+      },
+      "waffleSlices": {
+        "primaryAxis": "x",
+        "secondaryAxis": "y",
+        "primarySpacingMm": 20,
+        "secondarySpacingMm": 20,
+        "thicknessMm": 3,
+        "clearanceMm": 0.15,
+        "contourEpsilonMm": 0.001,
+        "slotPattern": "alternating",
+        "reverseSlots": false
+      },
+      "foldTemplate": {
+        "templateKind": "open-box",
+        "widthMm": 80,
+        "lengthMm": 60,
+        "heightMm": 40,
+        "profileToleranceMm": 1,
+        "wallHeightMm": 40,
+        "tabDepthMm": 8,
+        "lidDepthMm": 15,
+        "lidClearanceMm": 0.5,
+        "gussetDepthMm": 40,
+        "closureFlapMm": 12,
+        "prismSides": 6,
+        "prismRotationDeg": 0,
+        "topScale": 0.5,
+        "seamTabMm": 8,
+        "closureMethod": "glue",
+        "slotClearanceMm": 0.1,
+        "connectionOverrides": [],
+        "boundaryGlueTabs": [],
+        "glueTabDepthMm": 8
+      },
+      "meshUnfold": {
+        "strategy": "automatic",
+        "rootFaceIndex": 0,
+        "manualSeamKeys": [],
+        "tabDepthMm": 6,
+        "maximumFaceCount": 200,
+        "searchAttempts": 18
+      },
+      "panelConstruction": {
+        "innerWidthMm": 80,
+        "innerDepthMm": 60,
+        "innerHeightMm": 50,
+        "jointKind": "finger",
+        "fingerWidthMm": 10,
+        "clearanceMm": 0.15,
+        "includeLid": false,
+        "panelThicknessMm": 1,
+        "dividerThicknessMm": 1,
+        "lidThicknessMm": 1,
+        "widthDividerCount": 0,
+        "depthDividerCount": 0,
+        "connectionOverrides": {},
+        "panelProfiles": {
+          "front": "flat",
+          "back": "flat"
+        },
+        "glueTabDepthMm": 8,
+        "boundaryGlueTabs": [],
+        "features": []
+      }
+    },
+    "generationRecord": {
+      "signatureVersion": 2,
+      "mode": "waffle-slices",
+      "inputHash": "sf9-762edad7",
+      "resultHash": "sf9-e34cf507",
+      "algorithmVersion": "slicing-baseline",
+      "generatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  }
+}

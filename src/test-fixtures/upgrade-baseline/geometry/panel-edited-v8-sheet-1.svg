@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600mm" height="400mm" viewBox="0 0 600 400">
+  <metadata>{&quot;application&quot;:&quot;MocknSlice&quot;,&quot;projectFormatVersion&quot;:8,&quot;projectId&quot;:&quot;project-upgrade-baseline&quot;,&quot;mode&quot;:&quot;panel-construction&quot;,&quot;units&quot;:&quot;mm&quot;,&quot;sheetId&quot;:&quot;sheet-upgrade-baseline&quot;,&quot;sheetNumber&quot;:1,&quot;kerfMm&quot;:0,&quot;foldLineOutput&quot;:&quot;preserve&quot;}</metadata>
+  <rect id="sheet-boundary" x="0.05" y="0.05" width="599.9" height="399.9" fill="none" stroke="#777777" stroke-width="0.1"/>
+  <g id="operation-cut" data-operation="cut" fill="none" stroke="#ff0000" stroke-width="0.1">
+    <path id="construction-part-back-outline-1" data-part-id="construction-part-back" data-contour-role="outer" d="M 5 5 L 6 5 L 86 5 L 87 5 L 87 55 L 5 55 Z"/>
+    <path id="baseline-opening-cutout" data-part-id="construction-part-back" data-contour-role="hole" data-panel-id="construction-panel-back" data-feature-id="baseline-opening" d="M 40 26 L 52 26 L 52 34 L 40 34 Z"/>
+    <path id="construction-net-base-front-outline-1" data-part-id="construction-net-base-front" data-contour-role="outer" d="M 171 55 L 171 115 L 91 115 L 91 55 L 91 55 L 90 55 L 90 5 L 172 5 L 180 7.8 L 180 52.2 L 172 55 Z"/>
+    <path id="construction-part-left-outline-1" data-part-id="construction-part-left" data-contour-role="outer" d="M 183 5 L 243 5 L 243 55 L 183 55 Z"/>
+    <path id="construction-part-right-outline-1" data-part-id="construction-part-right" data-contour-role="outer" d="M 246 5 L 306 5 L 306 55 L 246 55 Z"/>
+  </g>
+  <g id="operation-score" data-operation="score" fill="none" stroke="#0000ff" stroke-width="0.1">
+    <path id="construction-joint-1-score" data-part-id="construction-net-base-front" data-contour-role="path" data-panel-id="construction-panel-base" data-edge-id="construction-joint-1" d="M 91 55 L 171 55"/>
+    <path id="construction-joint-5-glue-tab-score" data-part-id="construction-net-base-front" data-contour-role="path" data-panel-id="construction-panel-front" data-edge-id="construction-joint-5-glue-tab-base" data-tab-id="construction-joint-5-glue-tab" d="M 172 5 L 172 55"/>
+  </g>
+  <g id="operation-mountain-fold" data-operation="mountain-fold" fill="none" stroke="#8b5cf6" stroke-width="0.1">
+  </g>
+  <g id="operation-valley-fold" data-operation="valley-fold" fill="none" stroke="#14b8a6" stroke-width="0.1">
+  </g>
+  <g id="operation-perforate" data-operation="perforate" fill="none" stroke="#f59e0b" stroke-width="0.1">
+  </g>
+  <g id="operation-engrave" data-operation="engrave" fill="none" stroke="#000000" stroke-width="0.1">
+    <text id="construction-panel-back-label" data-part-id="construction-part-back" data-entity-id="construction-panel-back" x="46" y="30" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">BACK</text>
+    <text id="construction-joint-2-back-label" data-part-id="construction-part-back" data-entity-id="construction-joint-2" x="46" y="7.5" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J2</text>
+    <text id="construction-joint-7-back-label" data-part-id="construction-part-back" data-entity-id="construction-joint-7" x="7.5" y="30" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J7</text>
+    <text id="construction-joint-8-back-label" data-part-id="construction-part-back" data-entity-id="construction-joint-8" x="84.5" y="30" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J8</text>
+    <text id="construction-panel-base-label" data-part-id="construction-net-base-front" data-entity-id="construction-panel-base" x="131" y="85" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">BASE</text>
+    <text id="construction-joint-1-base-label" data-part-id="construction-net-base-front" data-entity-id="construction-joint-1" x="131" y="57.5" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J1</text>
+    <text id="construction-joint-2-base-label" data-part-id="construction-net-base-front" data-entity-id="construction-joint-2" x="131" y="112.5" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J2</text>
+    <text id="construction-joint-3-base-label" data-part-id="construction-net-base-front" data-entity-id="construction-joint-3" x="93.5" y="85" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J3</text>
+    <text id="construction-joint-4-base-label" data-part-id="construction-net-base-front" data-entity-id="construction-joint-4" x="168.5" y="85" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J4</text>
+    <text id="construction-panel-front-label" data-part-id="construction-net-base-front" data-entity-id="construction-panel-front" x="131" y="30" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">FRONT</text>
+    <text id="construction-joint-1-front-label" data-part-id="construction-net-base-front" data-entity-id="construction-joint-1" x="131" y="62.5" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J1</text>
+    <text id="construction-joint-5-front-label" data-part-id="construction-net-base-front" data-entity-id="construction-joint-5" x="92.5" y="85" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J5</text>
+    <text id="construction-joint-6-front-label" data-part-id="construction-net-base-front" data-entity-id="construction-joint-6" x="169.5" y="85" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J6</text>
+    <text id="construction-panel-left-label" data-part-id="construction-part-left" data-entity-id="construction-panel-left" x="213" y="30" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">LEFT</text>
+    <text id="construction-joint-3-left-label" data-part-id="construction-part-left" data-entity-id="construction-joint-3" x="213" y="7.5" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J3</text>
+    <text id="construction-joint-5-left-label" data-part-id="construction-part-left" data-entity-id="construction-joint-5" x="185.5" y="30" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J5</text>
+    <text id="construction-joint-7-left-label" data-part-id="construction-part-left" data-entity-id="construction-joint-7" x="240.5" y="30" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J7</text>
+    <text id="construction-panel-right-label" data-part-id="construction-part-right" data-entity-id="construction-panel-right" x="276" y="30" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">RIGHT</text>
+    <text id="construction-joint-4-right-label" data-part-id="construction-part-right" data-entity-id="construction-joint-4" x="276" y="7.5" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J4</text>
+    <text id="construction-joint-6-right-label" data-part-id="construction-part-right" data-entity-id="construction-joint-6" x="248.5" y="30" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J6</text>
+    <text id="construction-joint-8-right-label" data-part-id="construction-part-right" data-entity-id="construction-joint-8" x="303.5" y="30" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">J8</text>
+    <text id="baseline-label-label" data-part-id="construction-part-right" data-entity-id="baseline-label" data-feature-id="baseline-label" x="276" y="30" fill="#000000" stroke="none" font-family="sans-serif" font-size="3" text-anchor="middle">Baseline</text>
+  </g>
+  <g id="operation-guide" data-operation="guide" fill="none" stroke="#6b7280" stroke-width="0.1">
+  </g>
+  <g id="part-labels" data-operation="engrave" fill="#000000" stroke="none" font-family="sans-serif" font-size="3">
+    <text id="label-construction-part-back" x="7" y="9">BACK</text>
+    <text id="label-construction-net-base-front" x="92" y="9">BASE + FRONT</text>
+    <text id="label-construction-part-left" x="185" y="9">LEFT</text>
+    <text id="label-construction-part-right" x="248" y="9">RIGHT</text>
+  </g>
+</svg>
