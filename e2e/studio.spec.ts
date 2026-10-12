@@ -25,7 +25,7 @@ test('creates and resizes a template with synchronized previews, undo and SVG ex
   await expect(width).toHaveValue('105');
   await page.getByRole('button', { name: 'Manufacture', exact: true }).click();
   const downloaded = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Download active sheet SVG', exact: true }).click();
+  await page.getByRole('button', { name: 'Export draft SVG', exact: true }).click();
   const stream = await (await downloaded).createReadStream();
   const chunks: Uint8Array[] = [];
   for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
@@ -58,7 +58,7 @@ test('provides Hebrew RTL dimensions with LTR numeric axes and no unsupported FE
   await page.getByRole('button', { name: 'חלקים דו־ממדיים', exact: true }).click();
   await expect(page.locator('.sheet-part').first()).toBeVisible();
   await page.getByRole('button', { name: 'הכנה לחיתוך', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'הורדת SVG לגיליון הפעיל' })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'ייצוא SVG ראשוני' })).toBeEnabled();
 });
 
 test('retains valid geometry through invalid drafts and restores named projects', async ({

@@ -81,6 +81,19 @@ describe('v9 papercraft persistence', () => {
     oversized.papercraft!.settings.maxCandidates = 33;
     expect(() => parseProjectFile(serializeProject(oversized))).toThrow('malformed');
   });
+  it('rejects finite contour displacement and missing physical creases', () => {
+    const shifted = projectWithNet(),
+      contour = shifted.papercraft!.result!.graph.features.find((f) => f.kind === 'contour')!;
+    contour.geometry2D = contour.geometry2D.map((p) => ({ ...p, x: p.x + 10 }));
+    expect(() => parseProjectFile(serializeProject(shifted))).toThrow('geometry validation');
+    const missing = projectWithNet(),
+      graph = missing.papercraft!.result!.graph,
+      crease = graph.features.find((f) => f.operation === 'mountain-fold')!;
+    graph.features = graph.features.filter((f) => f.id !== crease.id);
+    for (const piece of graph.pieces)
+      piece.pathIds = piece.pathIds.filter((id) => id !== crease.id);
+    expect(() => parseProjectFile(serializeProject(missing))).toThrow('geometry validation');
+  });
   it('keeps the native result when another fabrication mode is active', () => {
     const project = projectWithNet();
     project.fabricationMode = 'fold-template';

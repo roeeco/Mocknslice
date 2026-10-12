@@ -1,3 +1,4 @@
+import type { FabricationProfile } from '../geometry/output/fabricationProfiles';
 import type {
   PapercraftEdgeEdit,
   PapercraftIslandEdit,
@@ -160,6 +161,9 @@ export interface HistorySlice {
 }
 
 export interface ExportSlice {
+  fabricationProfile: FabricationProfile;
+  setFabricationProfile: (profile: FabricationProfile) => void;
+  acknowledgeFabricationWarnings: (ids: string[], accepted: boolean) => void;
   updateExportSettings: (settings: Partial<ExportSettings>) => void;
 }
 

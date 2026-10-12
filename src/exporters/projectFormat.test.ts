@@ -70,9 +70,9 @@ describe('MocknSlice project format', () => {
     expect(restored.generatedParts[0]?.paths[1]?.slot?.widthMm).toBe(2);
   });
 
-  it('emits only version 8 with typed mode settings', () => {
+  it('emits only version 9 with typed mode settings', () => {
     const file = JSON.parse(serializeProject(createProject())) as Record<string, unknown>;
-    expect(file).toMatchObject({ format: 'mocknslice-project', version: 8 });
+    expect(file).toMatchObject({ format: 'mocknslice-project', version: 9 });
     const project = file.project as Record<string, unknown>;
     expect(project.modeSettings).toBeDefined();
     expect(project.modeParameters).toBeUndefined();
@@ -195,7 +195,7 @@ describe('MocknSlice project format', () => {
     expect(restored.modeSettings.panelConstruction.features).toEqual([]);
     expect(JSON.parse(serializeProject(restored))).toMatchObject({
       format: 'mocknslice-project',
-      version: 8,
+      version: 9,
     });
   });
 

@@ -1,3 +1,4 @@
+import { usePreparedOutput } from '../../geometry/output/PreparedOutputContext';
 import { useDisplayedProjectField } from '../PreviewProject';
 import { useEffect, useMemo } from 'react';
 import { ExtrudeGeometry, Path, Shape } from 'three';
@@ -59,7 +60,8 @@ function PartMesh({ part }: { part: FabricationPart }) {
 }
 
 export function FabricationParts() {
-  const parts = useDisplayedProjectField((project) => project.generatedParts);
+  const project = useDisplayedProjectField((project) => project);
+  const parts = usePreparedOutput(project).preparedParts;
   return (
     <>
       {parts.map((part) => (

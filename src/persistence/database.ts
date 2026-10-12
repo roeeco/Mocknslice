@@ -24,14 +24,14 @@ export type StoredProjectRecord = ProjectData & { storageVersion: 8 | 9 };
 export function createStoredProjectRecord(project: ProjectData): StoredProjectRecord {
   return structuredClone({
     ...project,
-    storageVersion: project.papercraft ? (9 as const) : (8 as const),
+    storageVersion: 9 as const,
   });
 }
 
 function isStoredProjectRecord(
   value: StoredProjectRecord | LegacyProjectData,
 ): value is StoredProjectRecord {
-  return 'storageVersion' in value && (value.storageVersion === 8 || value.storageVersion === 9);
+  return 'storageVersion' in value && value.storageVersion === 9;
 }
 
 export function migrateStoredProjectRecord(value: unknown): ProjectData {

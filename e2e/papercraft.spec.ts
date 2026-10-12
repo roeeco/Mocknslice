@@ -58,6 +58,10 @@ test('imports STL and edits native edges directly with undo, locks, folding, v9 
   await page.getByRole('button', { name: 'Join edge', exact: true }).click();
   await expect(page.locator('.studio-bottom-bar')).toContainText('Current geometry');
   await expect(page.locator('.papercraft-toolbar')).toContainText('must-join');
+  await page.getByRole('spinbutton', { name: 'Rotation', exact: true }).fill('90');
+  await page.getByRole('spinbutton', { name: 'Rotation', exact: true }).press('Enter');
+  await page.getByRole('spinbutton', { name: 'Sheet X', exact: true }).fill('100');
+  await page.getByRole('spinbutton', { name: 'Sheet X', exact: true }).press('Enter');
   await page.getByRole('button', { name: 'Lock placement', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Unlock placement', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Together', exact: true }).click();
@@ -98,4 +102,20 @@ test('imports STL and edits native edges directly with undo, locks, folding, v9 
   await page.locator(`[data-papercraft-edge="${key}"]`).first().locator('circle').click();
   await expect(page.locator('.papercraft-toolbar')).toContainText('must-join');
   await expect(page.getByRole('button', { name: 'Unlock placement', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Manufacture', exact: true }).click();
+  await page.getByLabel('Output profile', { exact: true }).selectOption('laser-svg');
+  await page.getByLabel('I reviewed the fabrication warnings', { exact: true }).check();
+  await expect(page.locator('[data-export-readiness]')).toHaveAttribute(
+    'data-export-readiness',
+    'ready',
+  );
+  const cuttingDownload = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export cutting SVG', exact: true }).click();
+  const cuttingStream = await (await cuttingDownload).createReadStream(),
+    cuttingChunks: Uint8Array[] = [];
+  for await (const chunk of cuttingStream as AsyncIterable<Uint8Array>) cuttingChunks.push(chunk);
+  const cuttingSvg = Buffer.concat(cuttingChunks).toString('utf8');
+  expect(cuttingSvg).toContain('&quot;draft&quot;:false');
+  expect(cuttingSvg).toContain('&quot;algorithmVersion&quot;:&quot;papercraft-v2&quot;');
+  expect(cuttingSvg).toMatch(/data-contour-role="outer"[^>]+Z"/);
 });

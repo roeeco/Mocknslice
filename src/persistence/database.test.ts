@@ -31,7 +31,7 @@ describe('IndexedDbProjectRepository', () => {
     expect(restored.modeSettings.panelConstruction.features).toEqual([]);
   });
 
-  it('rewrites an existing raw IndexedDB v6 record as storage version 8 on restore', async () => {
+  it('rewrites an existing raw IndexedDB v6 record as storage version 9 on restore', async () => {
     const repository = new IndexedDbProjectRepository();
     await repository.save(createProject('Database bootstrap'));
     const envelope = JSON.parse(legacyProjectFixtures[5].source) as {
@@ -43,16 +43,16 @@ describe('IndexedDbProjectRepository', () => {
     const restored = await repository.get(envelope.project.metadata.id);
     expect(restored?.modeSettings.panelConstruction.features).toEqual([]);
     await expect(database.get('projects', envelope.project.metadata.id)).resolves.toMatchObject({
-      storageVersion: 8,
+      storageVersion: 9,
       metadata: { id: envelope.project.metadata.id },
     });
     database.close();
   });
 
-  it('writes local records with storage version 8 while retaining the metadata key path', () => {
+  it('writes local records with storage version 9 while retaining the metadata key path', () => {
     const project = createProject('Stored v7');
     const record = createStoredProjectRecord(project);
-    expect(record.storageVersion).toBe(8);
+    expect(record.storageVersion).toBe(9);
     expect(record.metadata.id).toBe(project.metadata.id);
     expect(record.modeSettings).toEqual(project.modeSettings);
   });

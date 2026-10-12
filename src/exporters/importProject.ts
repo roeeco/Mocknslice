@@ -984,6 +984,7 @@ function markMigratedTopologyStale(project: ProjectData): ProjectData {
 export function migrateProjectFile(
   value: unknown,
 ): MocknSliceProjectFileV8 | MocknSliceProjectFileV9 {
+  validateProjectLimits(value);
   const originalVersion = isRecord(value) ? value.version : undefined;
   value = originalVersion === 7 ? upgradeV7ConnectionContracts(value) : value;
   if (
@@ -993,6 +994,8 @@ export function migrateProjectFile(
     throw new ProjectImportError('This file is not a MocknSlice project.');
   }
 
+  if (value.version !== 9 && isRecord(value.project) && value.project.papercraft !== undefined)
+    throw new ProjectImportError('Papercraft data requires project schema v9.');
   const legacy = value.format === 'slicefold-project';
   if (
     (legacy &&
@@ -1017,7 +1020,7 @@ export function migrateProjectFile(
       !isCurrentProjectData(value.project) ||
       !isCurrentExportSettings(value.project.exportSettings)
     )
-      throw new ProjectImportError('The v9 project file is incomplete or damaged.');
+      throw new ProjectImportError('The project file is incomplete or damaged.');
     const project = withCurrentPanelSettings(withCurrentExportSettings(value.project));
     try {
       if (project.papercraft)
@@ -1038,7 +1041,7 @@ export function migrateProjectFile(
     }
     return {
       format: 'mocknslice-project',
-      version: 8,
+      version: 9,
       project:
         value.version === 7
           ? markMigratedTopologyStale(
@@ -1110,14 +1113,60 @@ export function migrateProjectFile(
 
   return {
     format: 'mocknslice-project',
-    version: 8,
+    version: 9,
     project: markMigratedTopologyStale(
       upgradeLegacyGenerationRecord(legacyProject, runtimeProject),
     ),
   };
 }
 
+export function validateProjectLimits(value: unknown): void {
+  const stack: { value: unknown; depth: number }[] = [{ value, depth: 0 }];
+  let count = 0;
+  while (stack.length) {
+    const next = stack.pop()!;
+    if (++count > 2000000 || next.depth > 64)
+      throw new ProjectImportError('Project exceeds supported structural complexity.');
+    if (next.value && typeof next.value === 'object')
+      for (const [key, child] of Object.entries(next.value)) {
+        if (['__proto__', 'prototype', 'constructor'].includes(key))
+          throw new ProjectImportError('Unsafe project property.');
+        stack.push({ value: child, depth: next.depth + 1 });
+      }
+  }
+  if (!isRecord(value) || !isRecord(value.project)) return;
+  const project = value.project;
+  if (isRecord(project.model) && isRecord(project.model.mesh)) {
+    const mesh = project.model.mesh;
+    const positions = mesh.positionsMm;
+    const indices = mesh.indices;
+    if (
+      !Array.isArray(indices) ||
+      !Array.isArray(positions) ||
+      indices.length > 300000 ||
+      indices.length % 3 ||
+      positions.length % 3 ||
+      indices.some(
+        (i: unknown) =>
+          typeof i !== 'number' || !Number.isInteger(i) || i < 0 || i * 3 + 2 >= positions.length,
+      )
+    )
+      throw new ProjectImportError('Mesh exceeds 100,000 triangles or contains invalid indices.');
+  }
+  if (
+    Array.isArray(project.generatedParts) &&
+    project.generatedParts.reduce(
+      (sum: number, part: unknown) =>
+        sum + (isRecord(part) && Array.isArray(part.paths) ? part.paths.length : 0),
+      0,
+    ) > 10000
+  )
+    throw new ProjectImportError('Project exceeds 10,000 fabrication paths.');
+}
+
 export function parseProjectFile(source: string): ProjectData {
+  if (new TextEncoder().encode(source).byteLength > 20 * 1024 * 1024)
+    throw new ProjectImportError('Project exceeds the 20 MiB import limit.');
   let parsed: unknown;
 
   try {

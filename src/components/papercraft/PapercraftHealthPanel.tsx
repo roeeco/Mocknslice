@@ -1,3 +1,4 @@
+import { outputIssueMessage } from '../../locales/outputCopy';
 import { useProjectStore } from '../../state/useProjectStore';
 import { papercraftCopy } from '../../locales/papercraftCopy';
 export function PapercraftHealthPanel() {
@@ -27,7 +28,7 @@ export function PapercraftHealthPanel() {
         .filter((i) => i.severity !== 'info')
         .map((issue) => (
           <p role={issue.severity === 'error' ? 'alert' : 'status'} key={issue.id}>
-            {issue.message}
+            {outputIssueMessage(issue, locale)}
             <br />
             <span dir="ltr">{issue.affectedEntityIds.join(', ')}</span>
           </p>

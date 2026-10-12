@@ -6,6 +6,7 @@ import { transformPoint, transformedBoundsForPart } from '../geometry/layout/par
 import {
   createRegistrationMarkPaths,
   prepareFabricationOutput,
+  type PreparedFabricationOutput,
 } from '../geometry/output/prepareFabricationOutput';
 import { BRAND } from '../config/brand';
 
@@ -182,10 +183,11 @@ function pageContent(
 export function createAssemblyPdf(
   project: ProjectData,
   layouts: readonly SheetLayout[] = project.sheetLayouts,
+  preparedInput?: PreparedFabricationOutput,
 ): Uint8Array {
   const sheets = layouts.filter((sheet) => sheet.placements.length > 0);
   if (sheets.length === 0) throw new Error('Place at least one part before exporting a PDF.');
-  const prepared = prepareFabricationOutput(project);
+  const prepared = preparedInput ?? prepareFabricationOutput(project);
   const blockingIssue = prepared.issues.find((issue) => issue.severity === 'error');
   if (blockingIssue) throw new Error(blockingIssue.message);
   const partsById = new Map(prepared.parts.map((part) => [part.id, part]));

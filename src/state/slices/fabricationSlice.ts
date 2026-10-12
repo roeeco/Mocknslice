@@ -59,6 +59,7 @@ function updatedPanelSettings(
 function generationRecordFor(project: ProjectData, result: unknown, algorithmVersion: string) {
   return {
     ...expectedGenerationSignature(project),
+    signatureVersion: 3 as const,
     resultHash: hashSerializable(result),
     algorithmVersion,
     generatedAt: new Date().toISOString(),

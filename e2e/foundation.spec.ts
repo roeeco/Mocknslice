@@ -400,7 +400,7 @@ test('Simple panel construction skips source, Inspect, and Arrange and generates
   await expect(page.getByRole('heading', { name: 'Fabrication output' })).toBeVisible();
 });
 
-test('edits a survey kit, exports feature geometry, and re-imports the v8 project', async ({
+test('edits a survey kit, exports feature geometry, and re-imports the v9 project', async ({
   page,
 }) => {
   await page.goto('/');
@@ -427,7 +427,7 @@ test('edits a survey kit, exports feature geometry, and re-imports the v8 projec
   await page.getByRole('button', { name: 'Next' }).click();
   await expect(page.getByRole('heading', { name: 'Fabrication output' })).toBeVisible();
 
-  const svg = await downloadedText(page, 'Download active sheet SVG');
+  const svg = await downloadedText(page, 'Export draft SVG');
   expect(svg).toContain('data-feature-id="survey-response-slot"');
   expect(svg).toContain('data-feature-id="panel-feature-');
   expect(svg).toContain('Class 5 Vote');
@@ -439,7 +439,7 @@ test('edits a survey kit, exports feature geometry, and re-imports the v8 projec
     project: { modeSettings: { panelConstruction: { features: Array<{ id: string }> } } };
   };
   expect(serialized.format).toBe('mocknslice-project');
-  expect(serialized.version).toBe(8);
+  expect(serialized.version).toBe(9);
   expect(serialized.project.modeSettings.panelConstruction.features).toHaveLength(2);
 
   await page.locator('.workflow-nav').getByRole('button', { name: /Start/ }).click();
@@ -591,9 +591,9 @@ test('generates, arranges, rotates, and exports a selected fabrication sheet', a
   await page.getByRole('button', { name: 'Next' }).click();
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Download active sheet SVG' }).click();
+  await page.getByRole('button', { name: 'Export draft SVG' }).click();
   const download = await downloadPromise;
-  expect(download.suggestedFilename()).toMatch(/sheet-2\.svg$/);
+  expect(download.suggestedFilename()).toMatch(/draft-sheet-02\.svg$/);
   const stream = await download.createReadStream();
   const chunks: Uint8Array[] = [];
   for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
@@ -635,7 +635,7 @@ test('generates complementary waffle slots and exports them on the active sheet'
   await page.getByRole('button', { name: 'Next' }).click();
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Download active sheet SVG' }).click();
+  await page.getByRole('button', { name: 'Export draft SVG' }).click();
   const download = await downloadPromise;
   const stream = await download.createReadStream();
   const chunks: Uint8Array[] = [];
@@ -677,7 +677,7 @@ test('creates a standalone folding template, previews its net, and exports opera
   await page.getByRole('button', { name: 'Next' }).click();
 
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Download active sheet SVG' }).click();
+  await page.getByRole('button', { name: 'Export draft SVG' }).click();
   const download = await downloadPromise;
   const stream = await download.createReadStream();
   const chunks: Uint8Array[] = [];
@@ -717,14 +717,14 @@ test('imports a low-poly STL, unfolds it, edits seams, previews folding, and exp
 
   await page.getByRole('button', { name: 'Next' }).click();
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Download active sheet SVG' }).click();
+  await page.getByRole('button', { name: 'Export draft SVG' }).click();
   const download = await downloadPromise;
   const stream = await download.createReadStream();
   const chunks: Uint8Array[] = [];
   for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
   const svg = Buffer.concat(chunks).toString('utf8');
   expect(svg).toContain('&quot;mode&quot;:&quot;mesh-unfold&quot;');
-  expect(svg).toContain('&quot;projectFormatVersion&quot;:8');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:9');
   expect(svg).toContain('data-panel-id="unfold-face-');
   expect(svg).toContain('data-edge-id="unfold-edge-');
   expect(svg).toContain('data-tab-id="unfold-tab-');
@@ -766,14 +766,14 @@ test('builds a mixed-thickness divided panel enclosure and exports labelled join
 
   await page.getByRole('button', { name: 'Next' }).click();
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Download active sheet SVG' }).click();
+  await page.getByRole('button', { name: 'Export draft SVG' }).click();
   const download = await downloadPromise;
   const stream = await download.createReadStream();
   const chunks: Uint8Array[] = [];
   for await (const chunk of stream as AsyncIterable<Uint8Array>) chunks.push(chunk);
   const svg = Buffer.concat(chunks).toString('utf8');
   expect(svg).toContain('&quot;mode&quot;:&quot;panel-construction&quot;');
-  expect(svg).toContain('&quot;projectFormatVersion&quot;:8');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:9');
   expect(svg).toContain('data-panel-id="construction-panel-');
   expect(svg).toContain('data-edge-id="construction-joint-');
   expect(svg).toContain('divider-1-base-slot');
@@ -812,7 +812,7 @@ test('builds paired connection overrides with bounded open-top panel profiles', 
   await expect(page.getByText('The 3D preview stopped rendering.')).toHaveCount(0);
 });
 
-test('edits cardboard panel creases and glue seams, then exports v8 score metadata', async ({
+test('edits cardboard panel creases and glue seams, then exports v9 score metadata', async ({
   page,
 }) => {
   await page.goto('/');
@@ -853,7 +853,7 @@ test('edits cardboard panel creases and glue seams, then exports v8 score metada
   await selectSheetContaining(page, 'path[data-operation="score"][data-tab-id]');
   await page.getByRole('button', { name: 'Next' }).click();
 
-  const svg = await downloadedText(page, 'Download active sheet SVG');
+  const svg = await downloadedText(page, 'Export draft SVG');
   expect(svg).toContain('id="operation-score"');
   expect(svg).toContain('data-tab-id=');
   expect(svg).toContain('data-edge-id="construction-joint-1"');
@@ -865,7 +865,7 @@ test('edits cardboard panel creases and glue seams, then exports v8 score metada
       };
     };
   };
-  expect(projectFile.version).toBe(8);
+  expect(projectFile.version).toBe(9);
   expect(
     projectFile.project.modeSettings.panelConstruction.connectionOverrides['base-front'],
   ).toMatchObject({ treatment: 'crease' });
@@ -900,7 +900,7 @@ test('splits a folding crease, adds a free glue tab, and exports cut and score l
   await selectSheetContaining(page, 'path[data-operation="score"][data-tab-id]');
   await page.getByRole('button', { name: 'Next' }).click();
 
-  const svg = await downloadedText(page, 'Download active sheet SVG');
+  const svg = await downloadedText(page, 'Export draft SVG');
   expect(svg).toContain('id="operation-cut"');
   expect(svg).toContain('id="operation-score"');
   expect(svg).toContain('data-tab-id=');
@@ -935,13 +935,13 @@ test('prepares kerf, perforations, labels, registration marks, styles, and PDF o
   );
 
   const svgDownloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Download active sheet SVG' }).click();
+  await page.getByRole('button', { name: 'Export draft SVG' }).click();
   const svgDownload = await svgDownloadPromise;
   const svgStream = await svgDownload.createReadStream();
   const svgChunks: Uint8Array[] = [];
   for await (const chunk of svgStream as AsyncIterable<Uint8Array>) svgChunks.push(chunk);
   const svg = Buffer.concat(svgChunks).toString('utf8');
-  expect(svg).toContain('&quot;projectFormatVersion&quot;:8');
+  expect(svg).toContain('&quot;projectFormatVersion&quot;:9');
   expect(svg).toContain('&quot;kerfMm&quot;:0.1');
   expect(svg).toContain('id="operation-perforate"');
   expect(svg).toContain('data-registration-mark="true"');
@@ -949,7 +949,8 @@ test('prepares kerf, perforations, labels, registration marks, styles, and PDF o
   expect(svg).toContain('font-size="4"');
 
   const pdfDownloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Export assembly PDF' }).click();
+  await page.getByLabel('Output profile', { exact: true }).selectOption('assembly-pdf');
+  await page.getByRole('button', { name: 'Export draft PDF' }).click();
   const pdfDownload = await pdfDownloadPromise;
   expect(pdfDownload.suggestedFilename()).toMatch(/assembly\.pdf$/);
   const pdfStream = await pdfDownload.createReadStream();

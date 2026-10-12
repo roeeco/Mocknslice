@@ -1,3 +1,5 @@
+import { flatEdge } from './edgeGeometry';
+import { uniqueSourceEdges } from './unfoldForest';
 import type { PapercraftKernelResult, PapercraftTab } from '../../domain/papercraft';
 import type { FabricationDesignGraph } from '../../domain/designGraph';
 import { validateGraph } from '../designGraph/validateGraph';
@@ -92,6 +94,26 @@ export function validatePapercraftNet(
           'Every physical island needs exactly one closed exterior cut contour.',
         ),
       );
+    const near = (a: { x: number; y: number }, b: { x: number; y: number }) =>
+      Math.hypot(a.x - b.x, a.y - b.y) <= EPS_LENGTH_MM;
+    const sameLoop = (expected: (typeof loops)[number], actual: (typeof loops)[number]) =>
+      expected.length === actual.length &&
+      actual.some(
+        (point, offset) =>
+          near(point, expected[0]!) &&
+          expected.every((p, i) => near(p, actual[(offset + i) % actual.length]!)),
+      );
+    if (
+      paths.length !== loops.length ||
+      loops.some((loop) => !paths.some((path) => sameLoop(loop, path.geometry2D)))
+    )
+      issues.push(
+        papercraftIssue(
+          'PAPERCRAFT_PERIMETER_MISMATCH',
+          [island.id],
+          'Compiled contour differs from the physical face and tab perimeter.',
+        ),
+      );
     const expectedLength = loops.reduce(
       (sum, loop) =>
         sum +
@@ -118,6 +140,61 @@ export function validatePapercraftNet(
           'Physical cut boundary length differs from compiled geometry.',
         ),
       );
+  }
+  for (const edge of uniqueSourceEdges(result.source)) {
+    const connection = graph.connections.find((c) => c.id === `connection-${edge.edgeKey}`),
+      joined = result.hingeKeys.includes(edge.edgeKey),
+      tab = tabs.find((t) => t.edgeKey === edge.edgeKey);
+    if (!connection || connection.flatJoined !== joined || connection.panelAId !== edge.faceId)
+      issues.push(
+        papercraftIssue(
+          'PAPERCRAFT_CONNECTION_MISMATCH',
+          [edge.edgeKey],
+          'Connection disagrees with the generated seam forest.',
+        ),
+      );
+    if (
+      !joined &&
+      connection?.required &&
+      (!tab ||
+        tab.status !== 'enabled' ||
+        connection.tabOwnerPanelId !== tab.ownerFaceId ||
+        !graph.features.some((f) => f.id === tab.id && f.kind === 'tab'))
+    )
+      issues.push(
+        papercraftIssue(
+          'PAPERCRAFT_TAB_UNRESOLVED',
+          [edge.edgeKey],
+          'Required closure has no enabled owned tab.',
+        ),
+      );
+    if (joined && Math.abs(edge.signedDihedralDeg ?? 0) > 1e-6) {
+      const face = result.faces.find((f) => f.id === edge.faceId)!,
+        [a, b] = flatEdge(face, edge);
+      const score = graph.features.filter(
+        (f) =>
+          f.path?.edgeId === `edge-${edge.edgeKey}` &&
+          ['score', 'mountain-fold', 'valley-fold'].includes(f.operation),
+      );
+      if (
+        score.length !== 1 ||
+        score[0]!.geometry2D.length !== 2 ||
+        Math.min(
+          Math.hypot(a.x - score[0]!.geometry2D[0]!.x, a.y - score[0]!.geometry2D[0]!.y) +
+            Math.hypot(b.x - score[0]!.geometry2D[1]!.x, b.y - score[0]!.geometry2D[1]!.y),
+          Math.hypot(a.x - score[0]!.geometry2D[1]!.x, a.y - score[0]!.geometry2D[1]!.y) +
+            Math.hypot(b.x - score[0]!.geometry2D[0]!.x, b.y - score[0]!.geometry2D[0]!.y),
+        ) >
+          EPS_LENGTH_MM * 2
+      )
+        issues.push(
+          papercraftIssue(
+            'PAPERCRAFT_CREASE_MISSING',
+            [edge.edgeKey],
+            'A physical hinge crease is missing or disagrees with its source edge.',
+          ),
+        );
+    }
   }
   return [...new Map(issues.map((i) => [i.id, i])).values()];
 }

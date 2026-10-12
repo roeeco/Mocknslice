@@ -1,3 +1,4 @@
+import { PreparedOutputProvider } from '../components/studio/PreparedOutputProvider';
 import { useEffect, useState } from 'react';
 import { useProjectAutosave } from '../persistence/useProjectAutosave';
 import { useProjectStore } from '../state/useProjectStore';
@@ -159,9 +160,13 @@ export function App() {
       /* Preference remains runtime-only when storage is unavailable. */
     }
   };
-  return legacy ? (
-    <AppShell onStudio={() => toggleWorkflow(false)}>{workspace}</AppShell>
-  ) : (
-    <StudioShell onLegacy={() => toggleWorkflow(true)}>{workspace}</StudioShell>
+  return (
+    <PreparedOutputProvider>
+      {legacy ? (
+        <AppShell onStudio={() => toggleWorkflow(false)}>{workspace}</AppShell>
+      ) : (
+        <StudioShell onLegacy={() => toggleWorkflow(true)}>{workspace}</StudioShell>
+      )}
+    </PreparedOutputProvider>
   );
 }

@@ -1,3 +1,9 @@
+import { compileToParts } from '../geometry/designGraph/compileToParts';
+import { papercraftHalfEdges } from '../geometry/papercraft/halfEdge';
+import { preflightPapercraftSource } from '../geometry/papercraft/prepareSource';
+import { applyPose } from '../geometry/designGraph/poses';
+import { meshVertex } from '../geometry/unfolding/meshAdjacency';
+import { EPS_LENGTH_MM } from '../geometry/designGraph/tolerances';
 import * as v from 'valibot';
 import type { ProjectData } from './project';
 import { validateGraph } from '../geometry/designGraph/validateGraph';
@@ -281,12 +287,67 @@ export function parsePapercraftRecord(
       saved.source.halfEdges.some((e) => !saved.faces.some((f) => f.id === e.faceId))
     )
       throw new Error('Papercraft result references invalid source entities.');
+    const topology = papercraftHalfEdges(saved.source.mesh);
+    if (
+      preflightPapercraftSource(saved.source.mesh).length ||
+      saved.faces.length !== topology.faces.length ||
+      saved.source.faces.length !== topology.faces.length ||
+      saved.source.halfEdges.length !== topology.halfEdges.length ||
+      new Set(saved.hingeKeys).size !== saved.hingeKeys.length
+    )
+      throw new Error('Papercraft source topology is invalid.');
+    const expectedEdges = new Map(topology.halfEdges.map((e) => [e.id, e]));
+    for (const edge of saved.source.halfEdges) {
+      const expected = expectedEdges.get(edge.id);
+      if (
+        !expected ||
+        expected.faceId !== edge.faceId ||
+        expected.startVertex !== edge.startVertex ||
+        expected.endVertex !== edge.endVertex ||
+        expected.oppositeId !== edge.oppositeId ||
+        expected.nextId !== edge.nextId ||
+        Math.abs(expected.lengthMm - edge.lengthMm) > EPS_LENGTH_MM ||
+        Math.abs((expected.signedDihedralDeg ?? 0) - (edge.signedDihedralDeg ?? 0)) > 1e-6
+      )
+        throw new Error('Papercraft half-edge differs from source geometry.');
+    }
+    for (const face of saved.faces) {
+      const sourceFace = topology.faces[face.sourceFaceIndex],
+        panel = saved.graph.panels.find((p) => p.id === face.id);
+      if (
+        !sourceFace ||
+        sourceFace.id !== face.id ||
+        sourceFace.vertexIds.some((id, i) => id !== face.vertexIds[i]) ||
+        !panel?.assembledPose
+      )
+        throw new Error('Papercraft face identity differs from source geometry.');
+      for (let i = 0; i < 3; i++) {
+        const point = face.points[i]!,
+          next = face.points[(i + 1) % 3]!,
+          world = meshVertex(saved.source.mesh, face.vertexIds[i]!),
+          worldNext = meshVertex(saved.source.mesh, face.vertexIds[(i + 1) % 3]!),
+          posed = applyPose(point, panel.assembledPose),
+          vertex = panel.vertices.find((v) => v.id === `${face.id}:vertex-${face.vertexIds[i]}`);
+        if (
+          !vertex ||
+          Math.hypot(vertex.x - point.x, vertex.y - point.y) > EPS_LENGTH_MM ||
+          Math.abs(
+            Math.hypot(next.x - point.x, next.y - point.y) -
+              Math.hypot(...world.map((v, k) => v - worldNext[k]!)),
+          ) > EPS_LENGTH_MM ||
+          Math.hypot(...world.map((v, k) => v - posed[k]!)) > EPS_LENGTH_MM
+        )
+          throw new Error('Papercraft flat and assembled geometry disagree with the source.');
+      }
+    }
     const issues = [
       ...validateGraph(saved.graph),
       ...validatePapercraftNet(saved, saved.tabs, saved.graph),
     ];
     if (issues.some((i) => i.severity === 'error'))
       throw new Error('Saved papercraft result fails geometry validation.');
+    if (hashSerializable(compileToParts(saved.graph).parts) !== hashSerializable(saved.parts))
+      throw new Error('Papercraft compiled parts disagree with graph authority.');
     if (
       project.fabricationMode === 'mesh-unfold' &&
       (hashSerializable(saved.parts) !== hashSerializable(project.generatedParts) ||

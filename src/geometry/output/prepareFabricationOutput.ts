@@ -9,6 +9,14 @@ export interface PreparedFabricationOutput {
   parts: FabricationPart[];
   issues: ValidationIssue[];
   appliedKerfMm: number;
+  provenance?: {
+    schemaVersion: 9;
+    algorithmVersion: string;
+    inputHash: string;
+    snapshotHash: string;
+    profile: string;
+    draft: boolean;
+  };
 }
 
 export interface MaterialUsageEstimate {

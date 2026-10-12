@@ -1,16 +1,12 @@
 import { BRAND } from '../config/brand';
-import type {
-  MocknSliceProjectFileV8,
-  MocknSliceProjectFileV9,
-  ProjectData,
-} from '../domain/project';
+import type { MocknSliceProjectFileV9, ProjectData } from '../domain/project';
 
-export const CURRENT_PROJECT_FILE_VERSION = 8 as const;
+export const CURRENT_PROJECT_FILE_VERSION = 9 as const;
 
 export function serializeProject(project: ProjectData): string {
-  const file: MocknSliceProjectFileV8 | MocknSliceProjectFileV9 = {
+  const file: MocknSliceProjectFileV9 = {
     format: 'mocknslice-project',
-    version: project.papercraft ? 9 : CURRENT_PROJECT_FILE_VERSION,
+    version: CURRENT_PROJECT_FILE_VERSION,
     project,
   };
 

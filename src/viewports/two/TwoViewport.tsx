@@ -1,23 +1,13 @@
+import { usePreparedOutput } from '../../geometry/output/PreparedOutputContext';
 import { PapercraftNetCanvas } from '../../components/papercraft/PapercraftNetCanvas';
 import { useDisplayedProjectField } from '../PreviewProject';
-import {
-  useMemo,
-  useRef,
-  useState,
-  type KeyboardEvent,
-  type PointerEvent,
-  type WheelEvent,
-} from 'react';
+import { useRef, useState, type KeyboardEvent, type PointerEvent, type WheelEvent } from 'react';
 import type { FabricationPart, SheetPlacement } from '../../domain/fabrication';
 import type { Point2D } from '../../domain/geometry';
 import type { OperationStyle } from '../../domain/operations';
 import { assemblySelectionPanelIds } from '../../domain/assembly';
 import { transformPoint, transformedBoundsForPart } from '../../geometry/layout/partPlacement';
-import { deriveTightOutputLayout } from '../../geometry/layout/deriveTightOutputLayout';
-import {
-  createRegistrationMarkPaths,
-  prepareFabricationOutput,
-} from '../../geometry/output/prepareFabricationOutput';
+import { createRegistrationMarkPaths } from '../../geometry/output/prepareFabricationOutput';
 import { copy, t } from '../../locales';
 import { useProjectStore } from '../../state/useProjectStore';
 
@@ -228,21 +218,9 @@ export function TwoViewport() {
   const selectedPartId = useProjectStore((state) => state.selectedPartId);
   const setActiveSheet = useProjectStore((state) => state.setActiveSheet);
   const updatePartPlacement = useProjectStore((state) => state.updatePartPlacement);
-  const preparedParts = useMemo(() => prepareFabricationOutput(project).parts, [project]);
-  const layouts = useMemo(
-    () =>
-      experienceMode === 'standard' &&
-      !(project.fabricationMode === 'mesh-unfold' && project.papercraft)
-        ? [deriveTightOutputLayout(preparedParts)]
-        : project.sheetLayouts,
-    [
-      experienceMode,
-      preparedParts,
-      project.sheetLayouts,
-      project.fabricationMode,
-      project.papercraft,
-    ],
-  );
+  const readiness = usePreparedOutput(project),
+    preparedParts = readiness.preparedParts,
+    layouts = readiness.effectiveLayouts;
   const interactiveLayout =
     experienceMode === 'advanced' ||
     (project.fabricationMode === 'mesh-unfold' && !!project.papercraft);
