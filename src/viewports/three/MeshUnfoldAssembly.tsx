@@ -1,6 +1,6 @@
+import { PapercraftEdgeTargets } from './PapercraftEdgeTargets';
 import { useDisplayedProjectField } from '../PreviewProject';
-import { Edges } from '@react-three/drei';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useLayoutEffect, useMemo } from 'react';
 import { BufferGeometry, Float32BufferAttribute } from 'three';
 import type { MeshUnfoldFace } from '../../domain/unfolding';
 import type { Vector3Mm } from '../../domain/geometry';
@@ -27,19 +27,39 @@ function UnfoldFaceMesh({
   const relatedPanelIds = assemblySelectionPanelIds(project, selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
   const geometry = useMemo(() => {
-    const geometry = new BufferGeometry();
-    geometry.setAttribute(
-      'position',
-      new Float32BufferAttribute(
-        positions.flatMap((point) => [point[0] - centre[0], point[1] - centre[1], point[2]]),
-        3,
-      ),
-    );
-    geometry.setIndex([0, 1, 2]);
+    const mesh = new BufferGeometry();
+    mesh.name = face.id;
+    mesh.setAttribute('position', new Float32BufferAttribute(new Float32Array(9), 3));
+    mesh.setIndex([0, 1, 2]);
+    return mesh;
+  }, [face.id]);
+  const wire = useMemo(() => {
+    const lines = new BufferGeometry();
+    lines.name = face.id;
+    lines.setAttribute('position', new Float32BufferAttribute(new Float32Array(18), 3));
+    return lines;
+  }, [face.id]);
+  useLayoutEffect(() => {
+    const buffer = geometry.getAttribute('position'),
+      edgeBuffer = wire.getAttribute('position');
+    positions.forEach((p, i) => buffer.setXYZ(i, p[0] - centre[0], p[1] - centre[1], p[2]));
+    [0, 1, 1, 2, 2, 0].forEach((index, i) => {
+      const p = positions[index]!;
+      edgeBuffer.setXYZ(i, p[0] - centre[0], p[1] - centre[1], p[2]);
+    });
+    buffer.needsUpdate = true;
+    edgeBuffer.needsUpdate = true;
     geometry.computeVertexNormals();
-    return geometry;
-  }, [centre, positions]);
-  useEffect(() => () => geometry?.dispose(), [geometry]);
+    geometry.computeBoundingSphere();
+    wire.computeBoundingSphere();
+  }, [positions, centre, geometry, wire]);
+  useEffect(
+    () => () => {
+      geometry.dispose();
+      wire.dispose();
+    },
+    [geometry, wire],
+  );
   if (!geometry) return null;
   const selected = selectedEntityId === face.id || relatedPanelIds.has(face.id);
   return (
@@ -62,7 +82,9 @@ function UnfoldFaceMesh({
         transparent
         opacity={0.86}
       />
-      <Edges color={selected ? '#7c2d12' : '#243b35'} threshold={8} />
+      <lineSegments geometry={wire}>
+        <lineBasicMaterial color={selected ? '#7c2d12' : '#243b35'} />
+      </lineSegments>
     </mesh>
   );
 }
@@ -89,6 +111,7 @@ export function MeshUnfoldAssembly() {
   if (!result?.faces.length) return null;
   return (
     <group rotation={[-Math.PI / 2, 0, 0]} data-testid="mesh-unfold-assembly">
+      <PapercraftEdgeTargets result={result} positions={positions} centre={centre} />
       {result.faces.map((face) => {
         const facePositions = positions.get(face.id);
         return facePositions ? (

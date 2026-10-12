@@ -16,7 +16,7 @@ export interface LegacyGenerationRecord {
 }
 
 export interface CanonicalGenerationRecord {
-  signatureVersion: 2;
+  signatureVersion: 2 | 3;
   mode: FabricationMode;
   inputHash: string;
   resultHash: string;

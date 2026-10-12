@@ -1,3 +1,4 @@
+import { papercraftInputHash } from '../geometry/papercraft/inputHash';
 import { hashSerializable } from './canonicalHash';
 import type { FabricationMode, SliceAxis } from './fabrication';
 import type { TemplateFitSettings } from './folding';
@@ -471,10 +472,23 @@ export function canonicalGenerationInputHash(input: CanonicalGenerationInput): s
 }
 
 export function canonicalGenerationSignature(project: ProjectData): {
-  signatureVersion: 2;
+  signatureVersion: 2 | 3;
   mode: FabricationMode;
   inputHash: string;
 } {
+  if (project.fabricationMode === 'mesh-unfold' && project.papercraft) {
+    if (!project.model.mesh) throw new GenerationInputError('Papercraft requires a source mesh.');
+    return {
+      signatureVersion: 3,
+      mode: 'mesh-unfold',
+      inputHash: papercraftInputHash({
+        mesh: project.model.mesh,
+        settings: project.papercraft.settings,
+        materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
+        acceptSimplification: project.papercraft.acceptSimplification,
+      }),
+    };
+  }
   const input = buildCanonicalGenerationInput(project);
   return { signatureVersion: 2, mode: input.mode, inputHash: canonicalGenerationInputHash(input) };
 }

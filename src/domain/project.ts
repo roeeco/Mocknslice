@@ -1,3 +1,4 @@
+import type { PapercraftResult, PapercraftSettingsV2 } from './papercraft';
 import type { ExportSettings } from './exports';
 import type { FabricationMode, FabricationPart, SheetLayout } from './fabrication';
 import type { MaterialProfile } from './material';
@@ -17,6 +18,9 @@ export interface ProjectMetadata {
 }
 
 export interface ProjectData {
+  papercraft?:
+    | { settings: PapercraftSettingsV2; acceptSimplification: boolean; result?: PapercraftResult }
+    | undefined;
   metadata: ProjectMetadata;
   model: ModelData;
   fabricationMode: FabricationMode;
@@ -85,6 +89,12 @@ export interface MocknSliceProjectFileV8 {
   project: ProjectData;
 }
 
+export interface MocknSliceProjectFileV9 {
+  format: 'mocknslice-project';
+  version: 9;
+  project: ProjectData;
+}
+
 export type SliceFoldProjectFile =
   | SliceFoldProjectFileV1
   | SliceFoldProjectFileV2
@@ -93,4 +103,5 @@ export type SliceFoldProjectFile =
   | SliceFoldProjectFileV5
   | MocknSliceProjectFileV6
   | MocknSliceProjectFileV7
-  | MocknSliceProjectFileV8;
+  | MocknSliceProjectFileV8
+  | MocknSliceProjectFileV9;

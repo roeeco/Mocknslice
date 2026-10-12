@@ -1,3 +1,4 @@
+import { cancelPapercraftTask } from './papercraftSlice';
 import type { AppSliceCreator, AppState, FabricationSlice } from '../types';
 import { recordProjectChange, touchProject } from '../projectChange';
 import { validationIssuesForProject } from '../../validation/projectValidation';
@@ -308,6 +309,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       return;
     }
     activeTask?.cancel();
+    cancelPapercraftTask();
     const task = generateStackedSlicesInWorker(input.payload);
     activeTask = task;
     set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
@@ -395,6 +397,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       return;
     }
     activeTask?.cancel();
+    cancelPapercraftTask();
     const task = generateWaffleSlicesInWorker(input.payload);
     activeTask = task;
     set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
@@ -468,6 +471,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       return;
     }
     activeTask?.cancel();
+    cancelPapercraftTask();
     const task = generateFoldTemplateInWorker(input.payload);
     activeTask = task;
     set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
@@ -560,6 +564,10 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       });
   },
   generateMeshUnfold: () => {
+    if (get().project.papercraft) {
+      get().generatePapercraft();
+      return;
+    }
     const { project } = get();
     let input: GenerationInputForMode<'mesh-unfold'>;
     try {
@@ -575,6 +583,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       return;
     }
     activeTask?.cancel();
+    cancelPapercraftTask();
     const task = generateMeshUnfoldInWorker(input.payload);
     activeTask = task;
     set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
@@ -658,6 +667,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       return;
     }
     activeTask?.cancel();
+    cancelPapercraftTask();
     const task = generatePanelConstructionInWorker(input.payload);
     activeTask = task;
     set({ sliceGenerationStatus: 'processing', sliceGenerationError: undefined });
@@ -744,6 +754,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
   },
   cancelSliceGeneration: () => {
     activeTask?.cancel();
+    cancelPapercraftTask();
     activeTask = undefined;
     set({
       sliceGenerationStatus: 'cancelled',

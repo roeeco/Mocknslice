@@ -1,5 +1,11 @@
+import { parsePapercraftRecord } from '../domain/papercraftSchema';
 import { safeParse } from 'valibot';
-import type { LegacyProjectData, MocknSliceProjectFileV8, ProjectData } from '../domain/project';
+import type {
+  LegacyProjectData,
+  MocknSliceProjectFileV8,
+  MocknSliceProjectFileV9,
+  ProjectData,
+} from '../domain/project';
 import { createCubeMesh } from '../geometry/mesh/createPrimitiveMesh';
 import { modeSettingsSchema } from '../domain/modeSettingsSchema';
 import {
@@ -759,7 +765,7 @@ function isCurrentExportSettings(value: unknown): boolean {
 function isCanonicalGenerationRecord(value: unknown): boolean {
   return (
     isRecord(value) &&
-    value.signatureVersion === 2 &&
+    (value.signatureVersion === 2 || value.signatureVersion === 3) &&
     isString(value.mode) &&
     fabricationModes.has(value.mode) &&
     isString(value.inputHash) &&
@@ -975,7 +981,9 @@ function markMigratedTopologyStale(project: ProjectData): ProjectData {
   };
 }
 
-export function migrateProjectFile(value: unknown): MocknSliceProjectFileV8 {
+export function migrateProjectFile(
+  value: unknown,
+): MocknSliceProjectFileV8 | MocknSliceProjectFileV9 {
   const originalVersion = isRecord(value) ? value.version : undefined;
   value = originalVersion === 7 ? upgradeV7ConnectionContracts(value) : value;
   if (
@@ -993,13 +1001,34 @@ export function migrateProjectFile(value: unknown): MocknSliceProjectFileV8 {
       value.version !== 3 &&
       value.version !== 4 &&
       value.version !== 5) ||
-    (!legacy && value.version !== 6 && value.version !== 7 && value.version !== 8)
+    (!legacy &&
+      value.version !== 6 &&
+      value.version !== 7 &&
+      value.version !== 8 &&
+      value.version !== 9)
   ) {
     throw new ProjectImportError(
       `Project version ${String(value.version)} is not supported by this build.`,
     );
   }
 
+  if (value.version === 9) {
+    if (
+      !isCurrentProjectData(value.project) ||
+      !isCurrentExportSettings(value.project.exportSettings)
+    )
+      throw new ProjectImportError('The v9 project file is incomplete or damaged.');
+    const project = withCurrentPanelSettings(withCurrentExportSettings(value.project));
+    try {
+      if (project.papercraft)
+        project.papercraft = parsePapercraftRecord(project.papercraft, project, isMeshUnfoldResult);
+    } catch (error) {
+      throw new ProjectImportError(
+        error instanceof Error ? error.message : 'Invalid papercraft project.',
+      );
+    }
+    return { format: 'mocknslice-project', version: 9, project };
+  }
   if (value.version === 7 || value.version === 8) {
     if (
       !isCurrentProjectData(value.project) ||

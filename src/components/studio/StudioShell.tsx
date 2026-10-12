@@ -9,7 +9,7 @@ import { ModelInspectionPanel } from '../panels/ModelInspectionPanel';
 import { PanelConstructionPanel } from '../panels/PanelConstructionPanel';
 import { StackedSlicePanel } from '../panels/StackedSlicePanel';
 import { WaffleSlicePanel } from '../panels/WaffleSlicePanel';
-import { MeshUnfoldPanel } from '../panels/MeshUnfoldPanel';
+import { PapercraftToolbar } from '../papercraft/PapercraftToolbar';
 import { FabricationOutputPanel } from '../panels/FabricationOutputPanel';
 import { LayoutPanel } from '../panels/LayoutPanel';
 import { ProjectDrawer } from './ProjectDrawer';
@@ -238,7 +238,7 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
                     ) : project.fabricationMode === 'waffle-slices' ? (
                       <WaffleSlicePanel hideGenerationAction />
                     ) : (
-                      <MeshUnfoldPanel hideGenerationAction />
+                      <PapercraftToolbar />
                     )}
                     <details>
                       <summary>{c.source}</summary>

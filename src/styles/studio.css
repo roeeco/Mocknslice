@@ -304,3 +304,16 @@
 .studio-inspector .measurement-list dd {
   direction: ltr;
 }
+
+.papercraft-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.papercraft-toolbar section {
+  margin-block: 24px;
+}
+.papercraft-net-targets [role='button']:hover path,
+.papercraft-net-targets [role='button']:focus-visible path {
+  stroke: #95c5a1;
+}

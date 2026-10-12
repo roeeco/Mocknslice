@@ -1,3 +1,4 @@
+import { createProjectDownload } from '../../exporters/exportProject';
 import { useEffect, useState } from 'react';
 import { projectRepository } from '../../persistence/database';
 import { useProjectStore } from '../../state/useProjectStore';
@@ -121,6 +122,9 @@ export function ProjectDrawer({ onClose, onOpen }: { onClose: () => void; onOpen
           }}
         />
       </label>
+      <button type="button" onClick={() => createProjectDownload(project)}>
+        {c.exportProject}
+      </button>
       {failed ? <p role="alert">{c.projectFailure}</p> : null}
       {records.length ? (
         records.map((record) => (

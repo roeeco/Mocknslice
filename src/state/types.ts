@@ -1,3 +1,9 @@
+import type {
+  PapercraftEdgeEdit,
+  PapercraftIslandEdit,
+  PapercraftProgress,
+  PapercraftSettingsV2,
+} from '../domain/papercraft';
 import type { StateCreator } from 'zustand';
 import type { ExportSettings } from '../domain/exports';
 import type { FabricationMode, SheetLayout } from '../domain/fabrication';
@@ -75,6 +81,25 @@ export interface FabricationSlice {
   cancelSliceGeneration: () => void;
 }
 
+export interface PapercraftSlice {
+  papercraftProgress: PapercraftProgress | undefined;
+  papercraftIssues: ValidationIssue[];
+  enablePapercraft: () => void;
+  useLegacyUnfolding: () => void;
+  updatePapercraftSettings: (
+    patch: Partial<
+      Omit<
+        PapercraftSettingsV2,
+        'algorithmVersion' | 'sourceMeshHash' | 'edgeEdits' | 'islandEdits'
+      >
+    >,
+    acceptSimplification?: boolean,
+  ) => void;
+  editPapercraftEdge: (edit: PapercraftEdgeEdit) => void;
+  editPapercraftIsland: (edit: PapercraftIslandEdit) => void;
+  generatePapercraft: (options?: { mergeWithInputEdit?: boolean }) => void;
+}
+
 export interface LayoutSlice {
   activeSheetId: string | undefined;
   setActiveSheet: (sheetId: string) => void;
@@ -143,7 +168,8 @@ export interface ValidationSlice {
   setValidationIssues: (issues: ValidationIssue[]) => void;
 }
 
-export type AppState = ProjectSlice &
+export type AppState = PapercraftSlice &
+  ProjectSlice &
   ModelSlice &
   FabricationSlice &
   LayoutSlice &

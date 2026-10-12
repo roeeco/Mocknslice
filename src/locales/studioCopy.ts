@@ -1,4 +1,5 @@
 const en = {
+  exportProject: 'Download project JSON',
   importProject: 'Import project',
   projectFailure: 'Could not open or save the project. The current project is retained.',
   destinations: 'Workspace destinations',
@@ -89,6 +90,7 @@ const en = {
   sourceUpdated: 'Source update needs review',
 };
 const he: typeof en = {
+  exportProject: 'הורדת JSON לפרויקט',
   importProject: 'ייבוא פרויקט',
   projectFailure: 'לא ניתן לפתוח או לשמור את הפרויקט. הפרויקט הנוכחי נשמר ללא שינוי.',
   destinations: 'יעדי עבודה',

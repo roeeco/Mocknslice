@@ -9,7 +9,8 @@ export function papercraftInputHash(input: PapercraftKernelInput): string {
     settings: {
       ...input.settings,
       edgeEdits: [...input.settings.edgeEdits].sort((a, b) => a.id.localeCompare(b.id)),
-      islandEdits: [...input.settings.islandEdits].sort((a, b) => a.id.localeCompare(b.id)),
+      // Placement and locks are durable layout intent, not geometry inputs.
+      islandEdits: [],
     },
   });
 }

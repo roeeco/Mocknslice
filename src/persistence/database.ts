@@ -19,16 +19,19 @@ interface SliceFoldDatabase extends DBSchema {
   };
 }
 
-export type StoredProjectRecord = ProjectData & { storageVersion: 8 };
+export type StoredProjectRecord = ProjectData & { storageVersion: 8 | 9 };
 
 export function createStoredProjectRecord(project: ProjectData): StoredProjectRecord {
-  return structuredClone({ ...project, storageVersion: 8 as const });
+  return structuredClone({
+    ...project,
+    storageVersion: project.papercraft ? (9 as const) : (8 as const),
+  });
 }
 
 function isStoredProjectRecord(
   value: StoredProjectRecord | LegacyProjectData,
 ): value is StoredProjectRecord {
-  return 'storageVersion' in value && value.storageVersion === 8;
+  return 'storageVersion' in value && (value.storageVersion === 8 || value.storageVersion === 9);
 }
 
 export function migrateStoredProjectRecord(value: unknown): ProjectData {
@@ -36,7 +39,7 @@ export function migrateStoredProjectRecord(value: unknown): ProjectData {
     throw new Error('The saved project record is damaged.');
   }
   const record = value as Record<string, unknown>;
-  if (record.storageVersion === 8 || record.storageVersion === 7) {
+  if (record.storageVersion === 9 || record.storageVersion === 8 || record.storageVersion === 7) {
     const project = { ...record };
     delete project.storageVersion;
     return migrateProjectFile({

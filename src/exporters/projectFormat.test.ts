@@ -388,9 +388,9 @@ describe('MocknSlice project format', () => {
 
   it('rejects future mocknslice versions and malformed typed settings', () => {
     const file = JSON.parse(serializeProject(createProject())) as Record<string, unknown>;
-    file.version = 9;
+    file.version = 10;
     expect(() => parseProjectFile(JSON.stringify(file))).toThrow(
-      'Project version 9 is not supported by this build.',
+      'Project version 10 is not supported by this build.',
     );
 
     file.version = 7;
