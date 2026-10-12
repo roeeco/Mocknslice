@@ -1,5 +1,7 @@
 /// <reference lib="webworker" />
 
+import { optimizePapercraft } from '../geometry/papercraft/optimizeSeams';
+import type { PapercraftWorkerProgress } from './protocol';
 import { normalizeMesh } from '../geometry/mesh/normalizeMesh';
 import { parseStl } from '../importers/importSTL';
 import { generateStackedSlices } from '../geometry/slicing/generateStackedSlices';
@@ -15,7 +17,27 @@ const context: DedicatedWorkerGlobalScope = self as DedicatedWorkerGlobalScope;
 context.onmessage = (event: MessageEvent<GeometryWorkerRequest>) => {
   const request = event.data;
   try {
-    if (request.type === 'normalize-stl') {
+    if (request.type === 'generate-papercraft') {
+      const deadline = performance.now() + 6000;
+      const result = optimizePapercraft(request.payload, {
+        budgetExpired: () => performance.now() >= deadline,
+        progress: (progress) => {
+          const message: PapercraftWorkerProgress = {
+            id: request.id,
+            type: 'papercraft-progress',
+            progress,
+          };
+          context.postMessage(message);
+        },
+      });
+      const response: GeometryWorkerResponse = {
+        id: request.id,
+        type: request.type,
+        ok: true,
+        result,
+      };
+      context.postMessage(response);
+    } else if (request.type === 'normalize-stl') {
       const soup = parseStl(request.payload.arrayBuffer);
       const result = normalizeMesh(soup, { assumedUnit: request.payload.assumedUnit });
       const response: GeometryWorkerResponse = {

@@ -1,3 +1,10 @@
+import type {
+  PapercraftKernelInput,
+  PapercraftKernelResult,
+  PapercraftProgress,
+} from '../domain/papercraft';
+import type { PapercraftWorkerProgress } from './protocol';
+import { papercraftInputHash } from '../geometry/papercraft/inputHash';
 import type { StlUnit } from '../domain/model';
 import type { NormalizedMeshResult } from '../geometry/mesh/normalizeMesh';
 import type {
@@ -321,6 +328,58 @@ export function generatePanelConstructionInWorker(
       settled = true;
       worker.terminate();
       rejectTask?.(new DOMException('Panel generation was cancelled.', 'AbortError'));
+    },
+  };
+}
+
+/** Dedicated worker termination is cancellation even while an expensive join is running. */
+export function generatePapercraftInWorker(
+  input: PapercraftKernelInput,
+  onProgress?: (progress: PapercraftProgress) => void,
+): GeometryTask<PapercraftKernelResult> {
+  const worker = new Worker(new URL('./geometry.worker.ts', import.meta.url), { type: 'module' }),
+    id = crypto.randomUUID(),
+    expectedHash = papercraftInputHash(input);
+  let settled = false,
+    rejectTask: ((reason?: unknown) => void) | undefined;
+  const promise = new Promise<PapercraftKernelResult>((resolve, reject) => {
+    rejectTask = reject;
+    worker.onmessage = (event: MessageEvent<GeometryWorkerResponse | PapercraftWorkerProgress>) => {
+      const message = event.data;
+      if (message.id !== id || settled) return;
+      if (message.type === 'papercraft-progress') {
+        onProgress?.(message.progress);
+        return;
+      }
+      settled = true;
+      worker.terminate();
+      if (
+        message.ok &&
+        message.type === 'generate-papercraft' &&
+        message.result.inputHash === expectedHash
+      )
+        resolve(message.result);
+      else
+        reject(
+          new Error(message.ok ? 'Papercraft worker returned a mismatched result.' : message.error),
+        );
+    };
+    worker.onerror = () => {
+      if (settled) return;
+      settled = true;
+      worker.terminate();
+      reject(new Error('Papercraft worker stopped unexpectedly.'));
+    };
+  });
+  const request: GeometryWorkerRequest = { id, type: 'generate-papercraft', payload: input };
+  worker.postMessage(request);
+  return {
+    promise,
+    cancel: () => {
+      if (settled) return;
+      settled = true;
+      worker.terminate();
+      rejectTask?.(new DOMException('Papercraft calculation cancelled.', 'AbortError'));
     },
   };
 }
