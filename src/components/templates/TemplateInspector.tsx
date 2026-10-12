@@ -1,3 +1,4 @@
+import { TemplateAuthoring } from './TemplateAuthoring';
 import { useState } from 'react';
 import type { FoldTemplateSettings } from '../../domain/modeSettings';
 import { useProjectStore } from '../../state/useProjectStore';
@@ -163,6 +164,7 @@ export function TemplateInspector({
         {field('lidClearanceMm')}
         <ConnectionInspector mode="fold-template" />
       </details>
+      <TemplateAuthoring />
       <p className="field-help">{c.nominal}</p>
     </section>
   );

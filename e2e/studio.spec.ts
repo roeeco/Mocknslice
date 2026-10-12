@@ -5,7 +5,7 @@ test('creates and resizes a template with synchronized previews, undo and SVG ex
 }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Create', exact: true })).toBeVisible();
-  await expect(page.locator('.template-card')).toHaveCount(7);
+  await expect(page.locator('.template-card')).toHaveCount(12);
   await page.getByRole('button', { name: 'Create by dimensions', exact: true }).click();
   await expect(page.locator('.studio-bottom-bar')).toContainText('Current geometry');
   await page.getByRole('button', { name: 'Together', exact: true }).click();

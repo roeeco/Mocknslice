@@ -2,7 +2,7 @@ import type { FoldTemplateSettings } from '../domain/modeSettings';
 import type { ProjectData } from '../domain/project';
 import { buildCanonicalGenerationInput } from '../domain/generationInputs';
 import { arrangePartsInRows } from '../geometry/layout/arrangeParts';
-import { generateRegisteredTemplate } from './registry';
+import { generateNativeTemplate } from './generateNativeTemplate';
 
 /** Runtime-only projection. Never commit this object to state, history or autosave. */
 export function templateDraftPreview(project: ProjectData, patch: Partial<FoldTemplateSettings>) {
@@ -17,12 +17,13 @@ export function templateDraftPreview(project: ProjectData, patch: Partial<FoldTe
     const input = buildCanonicalGenerationInput(draft);
     if (input.mode !== 'fold-template')
       throw new Error('Template preview requires a template source.');
-    const result = generateRegisteredTemplate(input.payload);
+    const result = generateNativeTemplate(input.payload);
     if (result.issues.some((issue) => issue.severity === 'error')) return { issues: result.issues };
     return {
       project: {
         ...draft,
         foldingResult: result,
+        designGraph: result.graph,
         generatedParts: result.parts,
         generationIssues: result.issues,
         sheetLayouts: draft.sheetLayouts[0]

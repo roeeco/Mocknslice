@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
 
+import { generateNativeTemplate } from '../templates/generateNativeTemplate';
 import { generatePapercraft } from '../geometry/papercraft/buildFabrication';
 import type { PapercraftWorkerProgress } from './protocol';
 import { normalizeMesh } from '../geometry/mesh/normalizeMesh';
@@ -17,7 +18,15 @@ const context: DedicatedWorkerGlobalScope = self as DedicatedWorkerGlobalScope;
 context.onmessage = (event: MessageEvent<GeometryWorkerRequest>) => {
   const request = event.data;
   try {
-    if (request.type === 'generate-papercraft') {
+    if (request.type === 'generate-template-graph') {
+      const response: GeometryWorkerResponse = {
+        id: request.id,
+        type: request.type,
+        ok: true,
+        result: generateNativeTemplate(request.payload),
+      };
+      context.postMessage(response);
+    } else if (request.type === 'generate-papercraft') {
       const deadline = performance.now() + 6000;
       const result = generatePapercraft(request.payload, {
         budgetExpired: () => performance.now() >= deadline,

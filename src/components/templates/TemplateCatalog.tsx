@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { legacyTemplateDefinitions } from '../../templates/definitions';
+import { templateRegistry } from '../../templates/registry';
 import type { TemplateDefinition } from '../../templates/types';
 import { studioCopy } from '../../locales/studioCopy';
 import { useProjectStore } from '../../state/useProjectStore';
@@ -11,6 +11,11 @@ import envelope from '../../assets/template-previews/envelope.svg';
 import prism from '../../assets/template-previews/regular-prism.svg';
 import pyramid from '../../assets/template-previews/pyramid-frustum.svg';
 
+const recipeThumbnails = import.meta.glob<string>('../../assets/template-previews/recipe-*.svg', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
 const thumbnails: Record<string, string> = {
   'open-box': openBox,
   'box-with-lid': lid,
@@ -19,6 +24,12 @@ const thumbnails: Record<string, string> = {
   envelope,
   'regular-prism': prism,
   'pyramid-frustum': pyramid,
+  ...Object.fromEntries(
+    Object.entries(recipeThumbnails).map(([path, url]) => [
+      path.split('recipe-')[1]!.replace('.svg', ''),
+      url,
+    ]),
+  ),
 };
 export function TemplateCatalog({
   onChoose,
@@ -30,7 +41,7 @@ export function TemplateCatalog({
   const [search, setSearch] = useState(''),
     [family, setFamily] = useState('all'),
     [reference, setReference] = useState<TemplateDefinition>();
-  const definitions = [...legacyTemplateDefinitions];
+  const definitions = [...templateRegistry];
   const matches = definitions.filter(
     (def) =>
       (family === 'all' || def.family === family) &&
@@ -70,8 +81,8 @@ export function TemplateCatalog({
       <div className="catalog-grid">
         {matches.map((def) => (
           <article className="template-card" key={def.id}>
-            {def.legacyKind ? (
-              <img src={thumbnails[def.legacyKind]} alt="" loading="lazy" />
+            {def.legacyKind || def.recipeId ? (
+              <img src={thumbnails[def.legacyKind ?? def.recipeId!]} alt="" loading="lazy" />
             ) : (
               <div className="reference-thumbnail" aria-hidden="true">
                 {def.fefcoCode}

@@ -12,6 +12,13 @@ export interface PreparedFabricationOutput {
   appliedKerfByPart?: Record<string, number>;
   provenance?: {
     schemaVersion: 9;
+    template?: {
+      templateId: string;
+      templateVersion: number;
+      definitionHash: string;
+      values: Record<string, number>;
+    };
+    kerfByPartMm?: Record<string, number>;
     algorithmVersion: string;
     inputHash: string;
     snapshotHash: string;

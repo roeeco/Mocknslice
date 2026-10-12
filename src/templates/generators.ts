@@ -1,3 +1,4 @@
+import { constructionRecipeDefinitions, generateConstructionRecipe } from './constructionRecipes';
 import { legacyFamilies } from './families/legacyFamilies';
 import type { LegacyTemplateGenerator } from './types';
 import type { TemplateGraphGenerator } from './types';
@@ -9,8 +10,16 @@ export const legacyTemplateGenerators: Readonly<Record<string, LegacyTemplateGen
   );
 
 export const templateGraphGenerators: Readonly<Record<string, TemplateGraphGenerator>> =
-  Object.fromEntries(
-    Object.entries(legacyTemplateGenerators).map(
+  Object.fromEntries([
+    ...constructionRecipeDefinitions.map(
+      (d) =>
+        [
+          d.generatorId!,
+          (values: Record<string, number | string | boolean>, material: { thicknessMm: number }) =>
+            generateConstructionRecipe(d.recipeId!, values, material),
+        ] as [string, TemplateGraphGenerator],
+    ),
+    ...Object.entries(legacyTemplateGenerators).map(
       ([id, generate]) =>
         [
           id,
@@ -35,4 +44,4 @@ export const templateGraphGenerators: Readonly<Record<string, TemplateGraphGener
             ),
         ] as [string, TemplateGraphGenerator],
     ),
-  );
+  ]);

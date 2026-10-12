@@ -1,9 +1,9 @@
+import { generateTemplateGraphInWorker } from '../../workers/geometryWorkerClient';
 import { cancelPapercraftTask } from './papercraftSlice';
 import type { AppSliceCreator, AppState, FabricationSlice } from '../types';
 import { recordProjectChange, touchProject } from '../projectChange';
 import { validationIssuesForProject } from '../../validation/projectValidation';
 import {
-  generateFoldTemplateInWorker,
   generateMeshUnfoldInWorker,
   generatePanelConstructionInWorker,
   generateStackedSlicesInWorker,
@@ -103,6 +103,8 @@ function withTemplateSource(project: ProjectData, templateKind: TemplateKind): P
   return touchProject({
     ...project,
     fabricationMode: 'fold-template',
+    templateInstance: undefined,
+    designGraph: undefined,
     modeSettings: {
       ...project.modeSettings,
       foldTemplate: {
@@ -534,7 +536,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     }
     activeTask?.cancel();
     cancelPapercraftTask();
-    const task = generateFoldTemplateInWorker(input.payload);
+    const task = generateTemplateGraphInWorker(input.payload);
     activeTask = task;
     set({
       sliceGenerationStatus: 'processing',
@@ -569,6 +571,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
                 result.algorithmVersion,
               ),
               foldingResult: result,
+              designGraph: result.graph,
               unfoldingResult: undefined,
               panelConstructionResult: undefined,
               sheetLayouts: template

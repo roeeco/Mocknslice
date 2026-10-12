@@ -167,13 +167,13 @@ const tab = v.object({
 const edgeRef = v.object({ a: id, b: id });
 const pathMetadata = v.omit(path, ['points']);
 const labelMetadata = v.omit(label, ['position']);
-const graph = v.object({
+export const designGraphSchema = v.object({
   schemaVersion: v.literal(1),
   units: v.literal('mm'),
   source: v.object({
-    kind: v.literal('mesh'),
+    kind: v.picklist(['mesh', 'template', 'panel-construction', 'slicing']),
     sourceId: id,
-    algorithmVersion: v.literal('papercraft-v2'),
+    algorithmVersion: id,
     inputHash: id,
   }),
   panels: bounded(
@@ -252,7 +252,10 @@ const result = v.object({
   score: v.pipe(v.array(finite), v.length(6)),
   searchExhausted: v.boolean(),
   tabs: bounded(tab, 300),
-  graph,
+  graph: v.pipe(
+    designGraphSchema,
+    v.check((g) => g.source.kind === 'mesh' && g.source.algorithmVersion === 'papercraft-v2'),
+  ),
   parts: bounded(part, 200),
   unfolding: v.unknown(),
 });

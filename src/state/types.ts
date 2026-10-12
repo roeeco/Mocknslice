@@ -1,3 +1,4 @@
+import type { UserTemplateDefinition } from '../templates/authoring/types';
 import type { FabricationProfile } from '../geometry/output/fabricationProfiles';
 import type {
   PapercraftEdgeEdit,
@@ -176,7 +177,8 @@ export interface ValidationSlice {
   setValidationIssues: (issues: ValidationIssue[]) => void;
 }
 
-export type AppState = PapercraftSlice &
+export type AppState = TemplateAuthoringSlice &
+  PapercraftSlice &
   ProjectSlice &
   ModelSlice &
   FabricationSlice &
@@ -189,3 +191,12 @@ export type AppState = PapercraftSlice &
   ValidationSlice;
 
 export type AppSliceCreator<T> = StateCreator<AppState, [], [], T>;
+
+export interface TemplateAuthoringSlice {
+  applyTemplateDefinition: (
+    definition: UserTemplateDefinition,
+    values?: Record<string, number>,
+  ) => void;
+  updateTemplateValues: (values: Record<string, number>) => void;
+  resetTemplateValues: () => void;
+}

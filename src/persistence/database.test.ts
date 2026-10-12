@@ -37,7 +37,7 @@ describe('IndexedDbProjectRepository', () => {
     const envelope = JSON.parse(legacyProjectFixtures[5].source) as {
       project: { metadata: { id: string } };
     };
-    const database = await openDB('slicefold', 1);
+    const database = await openDB('slicefold', 2);
     await database.put('projects', envelope.project);
 
     const restored = await repository.get(envelope.project.metadata.id);

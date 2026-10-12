@@ -27,6 +27,12 @@ function preparedFor(readiness: ExportReadiness, draft: boolean): PreparedFabric
     issues: draft ? [] : readiness.prepared.issues,
     provenance: {
       schemaVersion: 9,
+      ...(readiness.projectSnapshot.templateInstance
+        ? { template: readiness.projectSnapshot.templateInstance }
+        : {}),
+      ...(readiness.prepared.appliedKerfByPart
+        ? { kerfByPartMm: readiness.prepared.appliedKerfByPart }
+        : {}),
       algorithmVersion:
         readiness.projectSnapshot.generationRecord?.algorithmVersion ?? 'legacy-unverified',
       inputHash: readiness.sourceInputHash,

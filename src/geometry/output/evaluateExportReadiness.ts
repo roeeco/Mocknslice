@@ -82,6 +82,13 @@ export function evaluateExportReadiness(
     );
   blocking.push(...(project.generationIssues ?? []).filter((i) => i.severity === 'error'));
   warnings.push(...(project.generationIssues ?? []).filter((i) => i.severity === 'warning'));
+  if (project.fabricationMode === 'fold-template' && project.designGraph) {
+    if (project.designGraph.source.inputHash !== sourceInputHash)
+      blocking.push(
+        outputIssue('OUTPUT_GRAPH_MISMATCH', [], 'Template graph belongs to different inputs.'),
+      );
+    blocking.push(...validateGraph(project.designGraph).filter((i) => i.severity === 'error'));
+  }
   const native = project.fabricationMode === 'mesh-unfold' ? project.papercraft?.result : undefined;
   if (native) {
     try {
@@ -148,6 +155,9 @@ export function evaluateExportReadiness(
   const edgeIds = new Set(
     [
       ...(project.foldingResult?.edges ?? []),
+      ...(project.fabricationMode === 'fold-template'
+        ? (project.designGraph?.connections ?? [])
+        : []),
       ...(project.unfoldingResult?.edges ?? []),
       ...(project.panelConstructionResult?.editableEdges ?? []),
     ].map((e) => e.id),

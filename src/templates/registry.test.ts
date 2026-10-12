@@ -18,7 +18,8 @@ import { compileToParts } from '../geometry/designGraph/compileToParts';
 describe('versioned local template registry', () => {
   it('registers all seven existing families with unique IDs and local generators', () => {
     expect(registeredLegacyKinds).toEqual(TEMPLATE_KINDS);
-    expect(templateRegistry).toHaveLength(7);
+    expect(templateRegistry.filter((def) => def.legacyKind)).toHaveLength(7);
+    expect(templateRegistry.filter((def) => def.recipeId)).toHaveLength(5);
     expect(validateRegistry()).toEqual([]);
     expect(templateRegistry.every((def) => def.thumbnail.startsWith('generated:'))).toBe(true);
     expect(templateRegistry.every((def) => def.status === 'experimental')).toBe(true);

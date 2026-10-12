@@ -1,13 +1,16 @@
+import { parseTemplateDefinition } from '../templates/authoring/validate';
+import type { UserTemplateDefinition } from '../templates/authoring/types';
 import { type DBSchema, type IDBPDatabase, openDB } from 'idb';
 import type { LegacyProjectData, ProjectData, ProjectMetadata } from '../domain/project';
 import type { ProjectRepository } from './projectRepository';
 import { migrateProjectFile } from '../exporters/importProject';
 
 const DATABASE_NAME = 'slicefold';
-const DATABASE_VERSION = 1;
+const DATABASE_VERSION = 2;
 const LAST_AUTOSAVE_KEY = 'last-autosave-project-id';
 
 interface SliceFoldDatabase extends DBSchema {
+  templates: { key: string; value: UserTemplateDefinition };
   projects: {
     key: string;
     value: StoredProjectRecord | LegacyProjectData;
@@ -60,11 +63,14 @@ let databasePromise: Promise<IDBPDatabase<SliceFoldDatabase>> | undefined;
 function getDatabase(): Promise<IDBPDatabase<SliceFoldDatabase>> {
   databasePromise ??= openDB<SliceFoldDatabase>(DATABASE_NAME, DATABASE_VERSION, {
     upgrade(database) {
-      const projects = database.createObjectStore('projects', {
-        keyPath: 'metadata.id',
-      });
-      projects.createIndex('by-updated-at', 'metadata.updatedAt');
-      database.createObjectStore('settings');
+      if (!database.objectStoreNames.contains('templates')) database.createObjectStore('templates');
+      if (!database.objectStoreNames.contains('projects')) {
+        const projects = database.createObjectStore('projects', {
+          keyPath: 'metadata.id',
+        });
+        projects.createIndex('by-updated-at', 'metadata.updatedAt');
+        database.createObjectStore('settings');
+      }
     },
   });
 
@@ -128,3 +134,19 @@ export class IndexedDbProjectRepository implements ProjectRepository {
 }
 
 export const projectRepository: ProjectRepository = new IndexedDbProjectRepository();
+
+export const templateRepository = {
+  async list() {
+    const db = await getDatabase();
+    return (await db.getAll('templates')).map(parseTemplateDefinition);
+  },
+  async save(value: UserTemplateDefinition) {
+    const definition = parseTemplateDefinition(value);
+    const db = await getDatabase();
+    const key = `${definition.id}:${definition.version}`;
+    const existing = await db.get('templates', key);
+    if (existing && JSON.stringify(existing) !== JSON.stringify(definition))
+      throw new Error('Saved versions are immutable. Clone or increment the version.');
+    await db.put('templates', definition, key);
+  },
+};

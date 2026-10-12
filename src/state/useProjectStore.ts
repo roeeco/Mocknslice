@@ -1,3 +1,4 @@
+import { createTemplateAuthoringSlice } from './slices/templateAuthoringSlice';
 import { createPapercraftSlice } from './slices/papercraftSlice';
 import { create } from 'zustand';
 import { createExportSlice } from './slices/exportSlice';
@@ -14,6 +15,7 @@ import type { AppState } from './types';
 
 export const useProjectStore = create<AppState>()((...args) => ({
   ...createProjectSlice(...args),
+  ...createTemplateAuthoringSlice(...args),
   ...createPapercraftSlice(...args),
   ...createModelSlice(...args),
   ...createFabricationSlice(...args),

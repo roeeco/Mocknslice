@@ -1,3 +1,7 @@
+import type {
+  SavedTemplateInstance,
+  UserTemplateDefinition,
+} from '../../templates/authoring/types';
 import type { SliceAxis } from '../../domain/fabrication';
 import type {
   AssembledFoldPanel,
@@ -25,6 +29,8 @@ import type { BuiltTemplate } from './templateTypes';
 import { openBoxNet } from '../../templates/families/openBoxNet';
 
 export interface FoldTemplateInput {
+  definition?: UserTemplateDefinition | undefined;
+  instance?: SavedTemplateInstance;
   mesh?: SerializableTriangleMesh;
   bounds?: Bounds3D;
   modelId?: string;

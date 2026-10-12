@@ -1,3 +1,4 @@
+import { constructionRecipeDefinitions } from './constructionRecipes';
 import type { FoldTemplateInput } from '../geometry/folding/generateFoldTemplate';
 import { legacyTemplateDefinitions } from './definitions';
 import { legacyTemplateGenerators, templateGraphGenerators } from './generators';
@@ -8,7 +9,10 @@ import {
   validateTemplateDefinition,
 } from './validateTemplateDefinition';
 
-export const templateRegistry: readonly TemplateDefinition[] = legacyTemplateDefinitions;
+export const templateRegistry: readonly TemplateDefinition[] = [
+  ...legacyTemplateDefinitions,
+  ...constructionRecipeDefinitions,
+];
 export { registeredLegacyKinds } from './definitions';
 
 export function getTemplate(id: string, version?: number): TemplateDefinition {
@@ -23,7 +27,10 @@ export function validateRegistry(
   definitions: readonly TemplateDefinition[] = templateRegistry,
 ): string[] {
   const errors = definitions.flatMap((def) =>
-    validateTemplateDefinition(def, new Set(Object.keys(legacyTemplateGenerators))),
+    validateTemplateDefinition(
+      def,
+      new Set([...Object.keys(legacyTemplateGenerators), ...Object.keys(templateGraphGenerators)]),
+    ),
   );
   const ids = new Set<string>();
   for (const definition of definitions) {

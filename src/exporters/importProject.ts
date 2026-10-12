@@ -1,3 +1,4 @@
+import { validateEmbeddedTemplates } from '../templates/authoring/projectValidation';
 import { parsePapercraftRecord } from '../domain/papercraftSchema';
 import { safeParse } from 'valibot';
 import type {
@@ -1064,6 +1065,7 @@ export function migrateProjectFile(
       throw new ProjectImportError('The project file is incomplete or damaged.');
     const project = withCurrentPanelSettings(withCurrentExportSettings(value.project));
     try {
+      validateEmbeddedTemplates(project);
       if (project.papercraft)
         project.papercraft = parsePapercraftRecord(project.papercraft, project, isMeshUnfoldResult);
     } catch (error) {

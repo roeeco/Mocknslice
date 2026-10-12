@@ -78,7 +78,13 @@ export interface PapercraftWorkerProgress {
   progress: PapercraftProgress;
 }
 
+export interface GenerateTemplateGraphRequest {
+  id: string;
+  type: 'generate-template-graph';
+  payload: FoldTemplateInput;
+}
 export type GeometryWorkerRequest =
+  | GenerateTemplateGraphRequest
   | GeneratePapercraftRequest
   | NormalizeStlRequest
   | GenerateStackedSlicesRequest
@@ -89,6 +95,7 @@ export type GeometryWorkerRequest =
   | GeneratePanelConstructionRequest;
 
 export type GeometryWorkerResponse =
+  | { id: string; type: 'generate-template-graph'; ok: true; result: TemplateGenerationResult }
   | { id: string; type: 'generate-papercraft'; ok: true; result: PapercraftResult }
   | { id: string; type: 'normalize-stl'; ok: true; result: NormalizedMeshResult }
   | { id: string; type: 'generate-stacked-slices'; ok: true; result: StackedSliceResult }

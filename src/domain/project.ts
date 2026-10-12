@@ -1,3 +1,5 @@
+import type { SavedTemplateInstance, UserTemplateDefinition } from '../templates/authoring/types';
+import type { FabricationDesignGraph } from './designGraph';
 import type { PapercraftResult, PapercraftSettingsV2 } from './papercraft';
 import type { ExportSettings } from './exports';
 import type { FabricationMode, FabricationPart, SheetLayout } from './fabrication';
@@ -18,6 +20,9 @@ export interface ProjectMetadata {
 }
 
 export interface ProjectData {
+  templateInstance?: SavedTemplateInstance | undefined;
+  templateDefinitions?: UserTemplateDefinition[] | undefined;
+  designGraph?: FabricationDesignGraph | undefined;
   papercraft?:
     | { settings: PapercraftSettingsV2; acceptSimplification: boolean; result?: PapercraftResult }
     | undefined;

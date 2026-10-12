@@ -1,3 +1,4 @@
+import type { ClassroomRecipeId } from '../domain/classroomRecipes';
 import type { FabricationDesignGraph } from '../domain/designGraph';
 import type { TemplateKind, TemplateGenerationResult } from '../domain/folding';
 import type { FoldTemplateInput } from '../geometry/folding/generateFoldTemplate';
@@ -15,6 +16,7 @@ export interface TemplateParameter {
   displayGroup: 'size' | 'material' | 'closure' | 'advanced';
 }
 export interface TemplateDefinition {
+  recipeId?: ClassroomRecipeId;
   id: string;
   version: number;
   family: 'carton' | 'tray' | 'sleeve' | 'lid-base' | 'polyhedron' | 'organizer' | 'custom';

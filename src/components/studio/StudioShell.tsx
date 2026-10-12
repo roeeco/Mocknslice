@@ -1,3 +1,4 @@
+import { TemplateAuthoring } from '../templates/TemplateAuthoring';
 import { reliabilityCopy } from '../../locales/reliabilityCopy';
 import { useEffect, useState, type PropsWithChildren } from 'react';
 import { AppHeader } from '../../app/layout/AppHeader';
@@ -30,6 +31,7 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
     materialLibrary = useProjectStore((state) => state.materials);
   const generationDraft = useProjectStore((s) => s.generationDraft);
   const [inspectPartial, setInspectPartial] = useState(false);
+  const [authorDraft, setAuthorDraft] = useState<Record<string, number> | null>();
   const experience = useProjectStore((state) => state.experienceMode);
   const setExperience = useProjectStore((state) => state.setExperienceMode);
   const c = studioCopy(locale),
@@ -48,17 +50,27 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
     fit = useProjectStore((state) => state.fitCamera),
     cancel = useProjectStore((state) => state.cancelSliceGeneration);
   useEffect(() => {
-    if (!draft || project.fabricationMode !== 'fold-template') return;
+    if ((!draft && !authorDraft) || project.fabricationMode !== 'fold-template') return;
     const timer = window.setTimeout(() => {
       try {
-        const value = templateDraftPreview(project, draft);
+        const source =
+          authorDraft && project.templateInstance
+            ? {
+                ...project,
+                templateInstance: {
+                  ...project.templateInstance,
+                  values: { ...project.templateInstance.values, ...authorDraft },
+                },
+              }
+            : project;
+        const value = templateDraftPreview(source, draft ?? {});
         if (value.project) setPreview({ project: value.project, source: project });
       } catch {
         /* Invalid draft stays local and retains the prior valid preview. */
       }
     }, 150);
     return () => window.clearTimeout(timer);
-  }, [draft, project]);
+  }, [draft, authorDraft, project]);
   const partial =
     inspectPartial && generationDraft?.source === project
       ? {
@@ -71,7 +83,8 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
         }
       : undefined;
   const shownPreview =
-    partial ?? (draft && preview?.source === project ? preview.project : undefined);
+    partial ??
+    ((draft || authorDraft) && preview?.source === project ? preview.project : undefined);
   const canGenerate =
     project.fabricationMode === 'fold-template' ||
     project.fabricationMode === 'panel-construction' ||
@@ -86,6 +99,7 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
   };
   const design = () => {
     setDraft(undefined);
+    setAuthorDraft(undefined);
     setPreview(undefined);
     setDestination('design');
     setArrange(false);
@@ -119,6 +133,7 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
               value === 'manufacture' &&
               (partial !== undefined ||
                 draft !== undefined ||
+                authorDraft !== undefined ||
                 status === 'processing' ||
                 generation === 'absent')
             }
@@ -172,8 +187,16 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
               {c.panels}
             </button>
           </div>
+          <TemplateAuthoring onApplied={design} />
           <TemplateCatalog
             onChoose={(definition) => {
+              if (definition.recipeId) {
+                mode('panel-construction');
+                useProjectStore.getState().applyPanelRecipe(definition.recipeId);
+                useProjectStore.getState().generatePanelConstruction();
+                fit();
+                return;
+              }
               if (!definition.legacyKind) return;
               cancel();
               choose(definition.legacyKind);
@@ -228,7 +251,9 @@ export function StudioShell({ children, onLegacy }: PropsWithChildren<{ onLegacy
                     </select>
                   </label>
                 ) : null}
-                {project.fabricationMode === 'fold-template' ? (
+                {project.fabricationMode === 'fold-template' && project.templateInstance ? (
+                  <TemplateAuthoring onValuesDraft={setAuthorDraft} />
+                ) : project.fabricationMode === 'fold-template' ? (
                   <TemplateInspector
                     key={`${project.metadata.id}:${project.modeSettings.foldTemplate.templateKind}`}
                     onDraft={setDraft}

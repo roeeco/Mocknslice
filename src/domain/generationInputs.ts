@@ -1,3 +1,4 @@
+import type { FoldTemplateInput } from '../geometry/folding/generateFoldTemplate';
 import { papercraftInputHash } from '../geometry/papercraft/inputHash';
 import { hashSerializable } from './canonicalHash';
 import type { FabricationMode, SliceAxis } from './fabrication';
@@ -58,7 +59,7 @@ export interface WaffleGenerationInput {
 
 export interface FoldingGenerationInput {
   mode: 'fold-template';
-  payload: { materialThicknessMm: number; settings: TemplateFitSettings };
+  payload: FoldTemplateInput;
 }
 
 export interface MeshUnfoldGenerationInput {
@@ -482,6 +483,16 @@ export function buildCanonicalGenerationInput(project: ProjectData): CanonicalGe
             'Material thickness',
           ),
           settings: foldSettings(project),
+          ...(project.templateInstance
+            ? {
+                instance: project.templateInstance,
+                definition: project.templateDefinitions?.find(
+                  (d) =>
+                    d.id === project.templateInstance!.templateId &&
+                    d.version === project.templateInstance!.templateVersion,
+                ),
+              }
+            : {}),
         },
       };
     case 'mesh-unfold': {
