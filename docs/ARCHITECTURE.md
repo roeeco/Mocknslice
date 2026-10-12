@@ -46,6 +46,10 @@ User input updates a focused Zustand action. Meaningful project actions record a
 
 ## Dependency rules
 
+The MocknSlice 2.0 design graph is introduced alongside existing result types (ADR 0026). `src/domain/designGraph.ts` defines named panel vertices, physical connections, manufacturing features and pieces. `src/geometry/designGraph/` validates identity, finite geometry, contour topology, stock, connection lengths, hinge forests, ownership and duplicate cuts. The two covered folding adapters and butt-enclosure adapter project unchanged parts and rigid assembled poses; they remain disabled in public dispatch. Slicing and legacy unfolding retain their existing contracts.
+
+Manufacturing features hold one authoritative point array plus original path/label metadata. Piece feature ordering retains exact legacy SVG/PDF bytes. Assembled panels derive from that panel's flat boundary and a serializable rigid pose; an explicit vertex-reference ordering preserves legacy assembled inventory without storing another shape. The adapter recovers correspondence using physical hinge targets because legacy 2D and 3D vertex orders differ. Explicit closing vertices in old panel paths are retained in exports and normalized only for topology predicates. Legacy graph manufacturing remains unverified; this phase does not grant production readiness or migrate persistence.
+
 - Domain code may not import React, browser APIs, Zustand, or Three.js.
 - Geometry may import domain types but not state or presentation code.
 - Persistence works through `ProjectRepository` so a future storage adapter does not affect UI code.
