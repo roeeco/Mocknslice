@@ -1,3 +1,5 @@
+import { verifySurfaceDeviation } from '../geometry/papercraft/measureSurfaceDeviation';
+import { papercraftPreparationHash } from '../geometry/papercraft/workingSource';
 import { compileToParts } from '../geometry/designGraph/compileToParts';
 import { papercraftHalfEdges } from '../geometry/papercraft/halfEdge';
 import { preflightPapercraftSource } from '../geometry/papercraft/prepareSource';
@@ -53,6 +55,7 @@ const settings = v.object({
     v.object({
       id,
       rootFaceId: id,
+      sourceFaceIds: v.optional(bounded(id, 200)),
       translationMm: v.tuple([finite, finite]),
       rotationDeg: finite,
       layoutLocked: v.boolean(),
@@ -259,9 +262,16 @@ const result = v.object({
   parts: bounded(part, 200),
   unfolding: v.unknown(),
 });
+export const papercraftWorkingSourceSchema = v.object({
+  mesh: source.entries.mesh,
+  meshHash: id,
+  preparationHash: id,
+  maximumDeviationMm: v.pipe(finite, v.minValue(0)),
+});
 const schema = v.object({
   settings,
   acceptSimplification: v.boolean(),
+  workingSource: v.optional(papercraftWorkingSourceSchema),
   result: v.optional(result),
 });
 export function parsePapercraftRecord(
@@ -278,6 +288,27 @@ export function parsePapercraftRecord(
       record.settings.islandEdits.length
   )
     throw new Error('Duplicate papercraft edits.');
+  if (record.workingSource) {
+    const working = record.workingSource;
+    if (
+      hashSerializable(working.mesh) !== working.meshHash ||
+      preflightPapercraftSource(working.mesh).length
+    )
+      throw new Error('Accepted mesh cache is invalid.');
+    if (
+      project.model.mesh &&
+      working.preparationHash ===
+        papercraftPreparationHash({ mesh: project.model.mesh, settings: record.settings })
+    ) {
+      const bound = verifySurfaceDeviation(
+        project.model.mesh,
+        working.mesh,
+        record.settings.maximumDeviationMm,
+      );
+      if (!bound.verified || bound.maximumDeviationMm > working.maximumDeviationMm + EPS_LENGTH_MM)
+        throw new Error('Accepted mesh exceeds its source deviation bound.');
+    }
+  }
   const saved = record.result;
   if (saved) {
     if (
@@ -369,6 +400,7 @@ export function parsePapercraftRecord(
         settings: record.settings,
         materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
         acceptSimplification: record.acceptSimplification,
+        workingSource: record.workingSource,
       });
   }
   return record;

@@ -1,6 +1,6 @@
 import type { SavedTemplateInstance, UserTemplateDefinition } from '../templates/authoring/types';
 import type { FabricationDesignGraph } from './designGraph';
-import type { PapercraftResult, PapercraftSettingsV2 } from './papercraft';
+import type { PapercraftWorkingSource, PapercraftResult, PapercraftSettingsV2 } from './papercraft';
 import type { ExportSettings } from './exports';
 import type { FabricationMode, FabricationPart, SheetLayout } from './fabrication';
 import type { MaterialProfile } from './material';
@@ -20,11 +20,18 @@ export interface ProjectMetadata {
 }
 
 export interface ProjectData {
+  unresolvedEdits?:
+    import('../geometry/papercraft/relinkOnModelUpdate').UnresolvedPapercraftEdit[] | undefined;
   templateInstance?: SavedTemplateInstance | undefined;
   templateDefinitions?: UserTemplateDefinition[] | undefined;
   designGraph?: FabricationDesignGraph | undefined;
   papercraft?:
-    | { settings: PapercraftSettingsV2; acceptSimplification: boolean; result?: PapercraftResult }
+    | {
+        settings: PapercraftSettingsV2;
+        acceptSimplification: boolean;
+        workingSource?: PapercraftWorkingSource | undefined;
+        result?: PapercraftResult;
+      }
     | undefined;
   metadata: ProjectMetadata;
   model: ModelData;

@@ -89,6 +89,7 @@ export function unfoldForest(
   order: readonly PapercraftHalfEdge[],
   forcedOrder?: readonly string[],
   excluded: readonly string[] = [],
+  shouldStop?: () => boolean,
 ): PapercraftForest {
   let faces = flattenFaces(source),
     hinges: string[] = [];
@@ -163,6 +164,7 @@ export function unfoldForest(
   ]);
   if (!issues.length)
     for (const edge of order) {
+      if (shouldStop?.()) break;
       if (cuts.has(edge.edgeKey) || hinges.includes(edge.edgeKey) || !edge.joinable) continue;
       const joined = tryForestJoin(source, faces, hinges, edge);
       if (typeof joined === 'string') continue;

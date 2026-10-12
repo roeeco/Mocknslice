@@ -543,6 +543,7 @@ export function canonicalGenerationSignature(project: ProjectData): {
         settings: project.papercraft.settings,
         materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
         acceptSimplification: project.papercraft.acceptSimplification,
+        workingSource: project.papercraft.workingSource,
       }),
     };
   }

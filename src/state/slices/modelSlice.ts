@@ -9,13 +9,28 @@ function modelName(fileName: string): string {
   return fileName.replace(/\.stl$/i, '') || 'Imported STL';
 }
 
-export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
+export const createModelSlice: AppSliceCreator<ModelSlice> = (set, get) => ({
   assumedStlUnit: 'millimetres',
   modelImportStatus: 'idle',
   modelImportError: undefined,
   setAssumedStlUnit: (assumedStlUnit) => set({ assumedStlUnit }),
   startModelImport: () => set({ modelImportStatus: 'processing', modelImportError: undefined }),
-  completeModelImport: (fileName, result) =>
+  completeModelImport: (fileName, result) => {
+    get().cancelSliceGeneration();
+    if (get().project.papercraft) {
+      get().proposePapercraftModelUpdate({
+        id: `model-${crypto.randomUUID()}`,
+        name: modelName(fileName),
+        source: { kind: 'imported', fileName, format: 'stl' },
+        transform: { positionMm: [0, 0, 0], rotationDeg: [0, 0, 0], scale: [1, 1, 1] },
+        mesh: result.mesh,
+        bounds: result.bounds,
+        dimensions: result.dimensions,
+        healthReport: result.healthReport,
+        importSettings: result.importSettings,
+      });
+      return;
+    }
     set((state) => {
       const id = `model-${crypto.randomUUID()}`;
       return {
@@ -62,11 +77,17 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
         ),
         sliceGenerationStatus: 'idle',
       };
-    }),
+    });
+  },
   failModelImport: (modelImportError) => set({ modelImportStatus: 'error', modelImportError }),
   cancelModelImport: () =>
     set({ modelImportStatus: 'cancelled', modelImportError: runtimeFailure('IMPORT_CANCELLED') }),
-  rotateModel90: (axis) =>
+  rotateModel90: (axis) => {
+    get().cancelSliceGeneration();
+    if (get().project.papercraft) {
+      get().proposePapercraftModelUpdate(rotateModelMesh90(get().project.model, axis));
+      return;
+    }
     set((state) => {
       const changed = recordProjectChange(state, (project) =>
         touchProject({ ...project, model: rotateModelMesh90(project.model, axis) }),
@@ -85,8 +106,16 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
             )
           : state.completedWorkflowSteps,
       };
-    }),
-  scaleModelToDimension: (axis, targetMm) =>
+    });
+  },
+  scaleModelToDimension: (axis, targetMm) => {
+    get().cancelSliceGeneration();
+    if (get().project.papercraft) {
+      get().proposePapercraftModelUpdate(
+        scaleModelMeshToDimension(get().project.model, axis, targetMm),
+      );
+      return;
+    }
     set((state) => {
       const changed = recordProjectChange(state, (project) =>
         touchProject({
@@ -108,8 +137,21 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
             )
           : state.completedWorkflowSteps,
       };
-    }),
-  scaleModelToLongestDimension: (targetMm) =>
+    });
+  },
+  scaleModelToLongestDimension: (targetMm) => {
+    if (get().project.papercraft) {
+      const dimensions = get().project.model.dimensions;
+      const axis =
+        dimensions.widthMm >= dimensions.heightMm && dimensions.widthMm >= dimensions.depthMm
+          ? 'x'
+          : dimensions.heightMm >= dimensions.depthMm
+            ? 'y'
+            : 'z';
+      get().scaleModelToDimension(axis, targetMm);
+      return;
+    }
+    get().cancelSliceGeneration();
     set((state) => {
       const dimensions = state.project.model.dimensions;
       const entries = [
@@ -138,5 +180,6 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set) => ({
             )
           : state.completedWorkflowSteps,
       };
-    }),
+    });
+  },
 });

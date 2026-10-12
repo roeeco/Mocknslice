@@ -1,3 +1,5 @@
+import { papercraftPreparationHash } from './workingSource';
+import { verifySurfaceDeviation } from './measureSurfaceDeviation';
 import type { PapercraftKernelInput, PreparedPapercraftSource } from '../../domain/papercraft';
 import type { SerializableTriangleMesh } from '../../domain/geometry';
 import type { ValidationIssue } from '../../domain/validation';
@@ -195,13 +197,57 @@ export function preparePapercraftSource(input: PapercraftKernelInput): PreparedP
         'Face target, candidate budget, deviation and stock thickness are outside supported bounds.',
       ),
     );
-  if (!issues.length && beforeFaceCount > settings.faceTarget && input.acceptSimplification) {
+  if (input.workingSource) {
+    const working = input.workingSource;
+    if (
+      !input.acceptSimplification ||
+      working.preparationHash !== papercraftPreparationHash(input) ||
+      working.meshHash !== hashSerializable(working.mesh) ||
+      !Number.isFinite(working.maximumDeviationMm) ||
+      working.maximumDeviationMm < 0 ||
+      working.maximumDeviationMm > settings.maximumDeviationMm ||
+      working.mesh.indices.length / 3 > settings.faceTarget ||
+      preflightPapercraftSource(working.mesh).length
+    )
+      issues.push(
+        papercraftIssue(
+          'PAPERCRAFT_WORKING_SOURCE_INVALID',
+          [],
+          'Accepted working mesh no longer matches source preparation. Reset preparation and review edits.',
+        ),
+      );
+    else {
+      mesh = structuredClone(working.mesh);
+      maximumDeviationMm = working.maximumDeviationMm;
+      simplified = true;
+    }
+  }
+  if (
+    !input.workingSource &&
+    beforeFaceCount > 5000 &&
+    beforeFaceCount > settings.faceTarget &&
+    input.acceptSimplification
+  )
+    issues.push(
+      papercraftIssue(
+        'PAPERCRAFT_PREPARATION_BUDGET',
+        [],
+        'Automatic conservative preparation supports at most 5,000 source triangles. Import a lower-poly source for unfolding.',
+      ),
+    );
+  if (
+    !input.workingSource &&
+    !issues.length &&
+    beforeFaceCount > settings.faceTarget &&
+    input.acceptSimplification
+  ) {
     const result = simplifyMeshQem(mesh, {
       targetFaceCount: settings.faceTarget,
       maximumDeviationMm: settings.maximumDeviationMm,
       sharpEdgeAngleDeg: 30,
     });
     const nextIssues = preflightPapercraftSource(result.mesh);
+    const surface = verifySurfaceDeviation(input.mesh, result.mesh, settings.maximumDeviationMm);
     const sharpEdges = buildMeshTopology(mesh).edges.filter((e) => (e.dihedralDeg ?? 0) >= 30);
     const nextEdges = buildMeshTopology(result.mesh).edges;
     const near = (a: number[], b: number[]) => Math.hypot(...a.map((v, i) => v - b[i]!)) <= 1e-6;
@@ -216,6 +262,7 @@ export function preparePapercraftSource(input: PapercraftKernelInput): PreparedP
     });
     if (
       nextIssues.length ||
+      !surface.verified ||
       !sharpPreserved ||
       JSON.stringify(bodyTopology(mesh)) !== JSON.stringify(bodyTopology(result.mesh)) ||
       result.maximumDeviationMm > settings.maximumDeviationMm
@@ -229,7 +276,7 @@ export function preparePapercraftSource(input: PapercraftKernelInput): PreparedP
       );
     else {
       mesh = result.mesh;
-      maximumDeviationMm = result.maximumDeviationMm;
+      maximumDeviationMm = surface.maximumDeviationMm;
       simplified = true;
     }
   }
@@ -251,7 +298,7 @@ export function preparePapercraftSource(input: PapercraftKernelInput): PreparedP
         ),
       );
   }
-  if (simplified && settings.edgeEdits.length)
+  if (simplified && !input.workingSource && settings.edgeEdits.length)
     issues.push(
       papercraftIssue(
         'PAPERCRAFT_SIMPLIFIED_EDITS_UNRESOLVED',

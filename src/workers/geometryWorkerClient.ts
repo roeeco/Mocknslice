@@ -1,3 +1,4 @@
+import type { PreparedPapercraftSource } from '../domain/papercraft';
 import type {
   PapercraftKernelInput,
   PapercraftResult,
@@ -414,6 +415,51 @@ export function generateTemplateGraphInWorker(
   const request: GeometryWorkerRequest = {
     id,
     type: 'generate-template-graph',
+    payload: input,
+  };
+  worker.postMessage(request);
+
+  return {
+    promise,
+    cancel: () => {
+      if (settled) return;
+      settled = true;
+      worker.terminate();
+      rejectTask?.(new DOMException('Template generation was cancelled.', 'AbortError'));
+    },
+  };
+}
+
+export function preparePapercraftSourceInWorker(
+  input: PapercraftKernelInput,
+): GeometryTask<PreparedPapercraftSource> {
+  const worker = new Worker(new URL('./geometry.worker.ts', import.meta.url), { type: 'module' });
+  const id = crypto.randomUUID();
+  let settled = false;
+  let rejectTask: ((reason?: unknown) => void) | undefined;
+
+  const promise = new Promise<PreparedPapercraftSource>((resolve, reject) => {
+    rejectTask = reject;
+    worker.onmessage = (event: MessageEvent<GeometryWorkerResponse>) => {
+      if (event.data.id !== id || settled) return;
+      settled = true;
+      worker.terminate();
+      if (event.data.ok && event.data.type === 'prepare-papercraft-source')
+        resolve(event.data.result);
+      else if (event.data.ok) reject(new Error('The geometry worker returned the wrong result.'));
+      else reject(new Error(event.data.error));
+    };
+    worker.onerror = () => {
+      if (settled) return;
+      settled = true;
+      worker.terminate();
+      reject(new Error('The geometry worker stopped unexpectedly.'));
+    };
+  });
+
+  const request: GeometryWorkerRequest = {
+    id,
+    type: 'prepare-papercraft-source',
     payload: input,
   };
   worker.postMessage(request);

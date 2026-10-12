@@ -109,6 +109,12 @@ export function optimizePapercraft(
       source,
       input.settings,
       candidateOrder(edges, candidate, inputHash, preset),
+      undefined,
+      [],
+      () => {
+        checkCancelled();
+        return hooks.budgetExpired?.() ?? false;
+      },
     );
     if (forest.issues.some((i) => i.severity === 'error'))
       return {

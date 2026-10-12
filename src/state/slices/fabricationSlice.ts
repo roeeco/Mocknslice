@@ -1,3 +1,4 @@
+import { cancelSourcePreparationTask } from './sourceUpdateSlice';
 import { generateTemplateGraphInWorker } from '../../workers/geometryWorkerClient';
 import { cancelPapercraftTask } from './papercraftSlice';
 import type { AppSliceCreator, AppState, FabricationSlice } from '../types';
@@ -849,10 +850,12 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
       });
   },
   cancelSliceGeneration: () => {
+    cancelSourcePreparationTask();
     activeTask?.cancel();
     cancelPapercraftTask();
     activeTask = undefined;
     set({
+      papercraftProgress: undefined,
       sliceGenerationStatus: 'cancelled',
       sliceGenerationError: runtimeFailure('GENERATION_CANCELLED'),
     });

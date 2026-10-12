@@ -1,3 +1,4 @@
+import { preparePapercraftSource } from '../geometry/papercraft/prepareSource';
 /// <reference lib="webworker" />
 
 import { generateNativeTemplate } from '../templates/generateNativeTemplate';
@@ -18,7 +19,15 @@ const context: DedicatedWorkerGlobalScope = self as DedicatedWorkerGlobalScope;
 context.onmessage = (event: MessageEvent<GeometryWorkerRequest>) => {
   const request = event.data;
   try {
-    if (request.type === 'generate-template-graph') {
+    if (request.type === 'prepare-papercraft-source') {
+      const response: GeometryWorkerResponse = {
+        id: request.id,
+        type: request.type,
+        ok: true,
+        result: preparePapercraftSource(request.payload),
+      };
+      context.postMessage(response);
+    } else if (request.type === 'generate-template-graph') {
       const response: GeometryWorkerResponse = {
         id: request.id,
         type: request.type,

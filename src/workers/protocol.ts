@@ -1,5 +1,6 @@
 import type {
   PapercraftKernelInput,
+  PreparedPapercraftSource,
   PapercraftResult,
   PapercraftProgress,
 } from '../domain/papercraft';
@@ -83,7 +84,13 @@ export interface GenerateTemplateGraphRequest {
   type: 'generate-template-graph';
   payload: FoldTemplateInput;
 }
+export interface PreparePapercraftSourceRequest {
+  id: string;
+  type: 'prepare-papercraft-source';
+  payload: PapercraftKernelInput;
+}
 export type GeometryWorkerRequest =
+  | PreparePapercraftSourceRequest
   | GenerateTemplateGraphRequest
   | GeneratePapercraftRequest
   | NormalizeStlRequest
@@ -95,6 +102,7 @@ export type GeometryWorkerRequest =
   | GeneratePanelConstructionRequest;
 
 export type GeometryWorkerResponse =
+  | { id: string; type: 'prepare-papercraft-source'; ok: true; result: PreparedPapercraftSource }
   | { id: string; type: 'generate-template-graph'; ok: true; result: TemplateGenerationResult }
   | { id: string; type: 'generate-papercraft'; ok: true; result: PapercraftResult }
   | { id: string; type: 'normalize-stl'; ok: true; result: NormalizedMeshResult }

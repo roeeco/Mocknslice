@@ -1,3 +1,4 @@
+import { papercraftFaceVerticesAtProgress } from '../../geometry/papercraft/foldPreview';
 import { PapercraftEdgeTargets } from './PapercraftEdgeTargets';
 import { useDisplayedProjectField } from '../PreviewProject';
 import { useEffect, useLayoutEffect, useMemo } from 'react';
@@ -91,26 +92,31 @@ function UnfoldFaceMesh({
 
 export function MeshUnfoldAssembly() {
   const result = useDisplayedProjectField((project) => project.unfoldingResult);
+  const native = useDisplayedProjectField((project) =>
+    project.fabricationMode === 'mesh-unfold' ? project.papercraft?.result : undefined,
+  );
   const progress = useProjectStore((state) => state.foldPreviewProgress);
   const positions = useMemo<UnfoldedFaceVertices>(
     () =>
       result
-        ? unfoldedFaceVerticesAtProgress(result, progress)
+        ? native
+          ? papercraftFaceVerticesAtProgress(native, progress)
+          : unfoldedFaceVerticesAtProgress(result, progress)
         : new Map<string, [Vector3Mm, Vector3Mm, Vector3Mm]>(),
-    [progress, result],
+    [progress, result, native],
   );
   const centre = useMemo<[number, number]>(() => {
-    if (!result?.faces.length) return [0, 0];
+    if (native || !result?.faces.length) return [0, 0];
     const points = result.faces.flatMap((face) => face.points2D);
     const minX = Math.min(...points.map((point) => point.x));
     const maxX = Math.max(...points.map((point) => point.x));
     const minY = Math.min(...points.map((point) => point.y));
     const maxY = Math.max(...points.map((point) => point.y));
     return [(minX + maxX) / 2, (minY + maxY) / 2];
-  }, [result]);
+  }, [result, native]);
   if (!result?.faces.length) return null;
   return (
-    <group rotation={[-Math.PI / 2, 0, 0]} data-testid="mesh-unfold-assembly">
+    <group rotation={native ? [0, 0, 0] : [-Math.PI / 2, 0, 0]} data-testid="mesh-unfold-assembly">
       <PapercraftEdgeTargets result={result} positions={positions} centre={centre} />
       {result.faces.map((face) => {
         const facePositions = positions.get(face.id);

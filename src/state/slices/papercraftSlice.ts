@@ -1,3 +1,4 @@
+import { acceptedWorkingSource } from '../../geometry/papercraft/workingSource';
 import type { AppSliceCreator, PapercraftSlice } from '../types';
 import { recordProjectChange, touchProject } from '../projectChange';
 import { papercraftDefaults, type PapercraftResult } from '../../domain/papercraft';
@@ -111,7 +112,10 @@ export const createPapercraftSlice: AppSliceCreator<PapercraftSlice> = (set, get
               ...native.settings,
               islandEdits: [
                 ...native.settings.islandEdits.filter((i) => i.id !== edit.id),
-                edit,
+                {
+                  ...edit,
+                  sourceFaceIds: native.result!.islands.find((i) => i.id === edit.id)!.faceIds,
+                },
               ].sort((a, b) => a.id.localeCompare(b.id)),
             },
           },
@@ -142,6 +146,7 @@ export const createPapercraftSlice: AppSliceCreator<PapercraftSlice> = (set, get
       settings: native.settings,
       materialThicknessMm: project.materialProfileSnapshot.thicknessMm,
       acceptSimplification: native.acceptSimplification,
+      workingSource: native.workingSource,
     };
     let expectedHash: string;
     try {
@@ -163,6 +168,7 @@ export const createPapercraftSlice: AppSliceCreator<PapercraftSlice> = (set, get
       });
     active = task;
     set({
+      generationDraft: undefined,
       sliceGenerationStatus: 'processing',
       sliceGenerationError: undefined,
       papercraftIssues: [],
@@ -183,6 +189,7 @@ export const createPapercraftSlice: AppSliceCreator<PapercraftSlice> = (set, get
               settings: current.papercraft.settings,
               materialThicknessMm: current.materialProfileSnapshot.thicknessMm,
               acceptSimplification: current.papercraft.acceptSimplification,
+              workingSource: current.papercraft.workingSource,
             }) !== expectedHash
           )
             return { sliceGenerationStatus: 'stale', papercraftProgress: undefined };
@@ -194,27 +201,69 @@ export const createPapercraftSlice: AppSliceCreator<PapercraftSlice> = (set, get
               papercraftProgress: undefined,
               sliceGenerationError: runtimeFailure('UNFOLD_GENERATION_FAILED', blocking.message),
             };
-          const apply = (value: typeof current) =>
-            touchProject({
-              ...value,
-              papercraft: { ...value.papercraft!, result },
-              generatedParts: result.parts,
-              unfoldingResult: result.unfolding,
+          const apply = (value: typeof current) => {
+            const workingSource =
+              value.papercraft!.workingSource ?? acceptedWorkingSource(input, result);
+            const next = { ...value, papercraft: { ...value.papercraft!, workingSource } };
+            const committed = structuredClone(result),
+              signature = expectedGenerationSignature(next);
+            committed.inputHash = signature.inputHash;
+            committed.graph.source.inputHash = signature.inputHash;
+            committed.unfolding.inputHash = signature.inputHash;
+            let layouts = preservePlacements(
+              value.sheetLayouts,
+              value.generatedParts,
+              committed.parts,
+            );
+            const islandEdits = value.papercraft!.settings.islandEdits.map((edit) => {
+              const island =
+                committed.islands.find((i) => i.id === edit.id) ??
+                committed.islands.find(
+                  (i) =>
+                    !!edit.sourceFaceIds?.length &&
+                    i.faceIds.includes(edit.rootFaceId) &&
+                    i.faceIds.filter((id) => edit.sourceFaceIds!.includes(id)).length /
+                      Math.max(i.faceIds.length, edit.sourceFaceIds.length) >=
+                      0.7,
+                );
+              return island ? { ...edit, id: island.id, sourceFaceIds: island.faceIds } : edit;
+            });
+            for (const edit of islandEdits)
+              layouts = layouts.map((sheet) => ({
+                ...sheet,
+                placements: sheet.placements.map((placement) =>
+                  placement.partId === edit.id
+                    ? {
+                        ...placement,
+                        x: edit.translationMm[0],
+                        y: edit.translationMm[1],
+                        rotationDeg: edit.rotationDeg,
+                        layoutLocked: edit.layoutLocked,
+                      }
+                    : placement,
+                ),
+              }));
+            return touchProject({
+              ...next,
+              papercraft: {
+                ...next.papercraft,
+                settings: { ...next.papercraft.settings, islandEdits },
+                result: committed,
+              },
+              generatedParts: committed.parts,
+              unfoldingResult: committed.unfolding,
               foldingResult: undefined,
               panelConstructionResult: undefined,
-              generationIssues: result.issues,
+              generationIssues: committed.issues,
               generationRecord: {
-                ...expectedGenerationSignature(value),
-                resultHash: hashSerializable(result),
+                ...signature,
+                resultHash: hashSerializable(committed),
                 algorithmVersion: 'papercraft-v2',
                 generatedAt: new Date().toISOString(),
               },
-              sheetLayouts: preservePlacements(
-                value.sheetLayouts,
-                value.generatedParts,
-                result.parts,
-              ),
+              sheetLayouts: layouts,
             });
+          };
           const changed =
               options?.mergeWithInputEdit && inputHistory && state.past.at(-1) === inputHistory
                 ? { project: apply(current), future: [], autosaveStatus: 'pending' as const }

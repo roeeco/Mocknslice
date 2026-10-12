@@ -89,6 +89,14 @@ export function evaluateExportReadiness(
       );
     blocking.push(...validateGraph(project.designGraph).filter((i) => i.severity === 'error'));
   }
+  if (project.fabricationMode === 'mesh-unfold' && project.unresolvedEdits?.length)
+    blocking.push(
+      outputIssue(
+        'SOURCE_EDITS_UNRESOLVED',
+        project.unresolvedEdits.map((e) => e.id),
+        'Resolve or explicitly discard unmatched source edits before cutting.',
+      ),
+    );
   const native = project.fabricationMode === 'mesh-unfold' ? project.papercraft?.result : undefined;
   if (native) {
     try {

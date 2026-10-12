@@ -11,6 +11,7 @@ export interface PapercraftEdgeEdit {
   tab: { owner: 'face-a' | 'face-b' | 'none'; targetDepthMm: number; shoulderAngleDeg: number };
 }
 export interface PapercraftIslandEdit {
+  sourceFaceIds?: string[];
   id: string;
   rootFaceId: string;
   translationMm: [number, number];
@@ -102,7 +103,14 @@ export interface PapercraftForest {
   issues: ValidationIssue[];
   score: number[];
 }
+export interface PapercraftWorkingSource {
+  mesh: SerializableTriangleMesh;
+  meshHash: string;
+  preparationHash: string;
+  maximumDeviationMm: number;
+}
 export interface PapercraftKernelInput {
+  workingSource?: PapercraftWorkingSource | undefined;
   mesh: SerializableTriangleMesh;
   settings: PapercraftSettingsV2;
   materialThicknessMm: number;

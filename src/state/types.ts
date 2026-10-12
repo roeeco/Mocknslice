@@ -1,3 +1,6 @@
+import type { PapercraftWorkingSource } from '../domain/papercraft';
+import type { PapercraftRelinkProposal } from '../geometry/papercraft/relinkOnModelUpdate';
+import type { ModelData } from '../domain/model';
 import type { UserTemplateDefinition } from '../templates/authoring/types';
 import type { FabricationProfile } from '../geometry/output/fabricationProfiles';
 import type {
@@ -177,7 +180,8 @@ export interface ValidationSlice {
   setValidationIssues: (issues: ValidationIssue[]) => void;
 }
 
-export type AppState = TemplateAuthoringSlice &
+export type AppState = SourceUpdateSlice &
+  TemplateAuthoringSlice &
   PapercraftSlice &
   ProjectSlice &
   ModelSlice &
@@ -199,4 +203,20 @@ export interface TemplateAuthoringSlice {
   ) => void;
   updateTemplateValues: (values: Record<string, number>) => void;
   resetTemplateValues: () => void;
+}
+
+export interface SourceUpdateSlice {
+  pendingModelUpdate:
+    | {
+        originalProject: ProjectData;
+        model: ModelData;
+        settings: PapercraftSettingsV2;
+        workingSource: PapercraftWorkingSource | undefined;
+        proposal: PapercraftRelinkProposal;
+      }
+    | undefined;
+  proposePapercraftModelUpdate: (model: ModelData) => void;
+  acceptPapercraftModelUpdate: () => void;
+  cancelPapercraftModelUpdate: () => void;
+  resolvePapercraftEdit: (id: string, targetId?: string) => void;
 }
