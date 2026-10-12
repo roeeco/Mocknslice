@@ -6,11 +6,21 @@ import {
 import * as v from 'valibot';
 import type { ProjectData } from '../../domain/project';
 import { parseTemplateDefinition, authorInstance } from './validate';
-import { designGraphSchema } from '../../domain/papercraftSchema';
+import { unresolvedPapercraftEditsSchema, designGraphSchema } from '../../domain/papercraftSchema';
 import { validateGraph } from '../../geometry/designGraph/validateGraph';
 import { compileToParts } from '../../geometry/designGraph/compileToParts';
 import { hashSerializable } from '../../domain/canonicalHash';
 export function validateEmbeddedTemplates(project: ProjectData) {
+  if (project.unresolvedEdits) {
+    const parsed = v.safeParse(unresolvedPapercraftEditsSchema, project.unresolvedEdits);
+    if (
+      !parsed.success ||
+      new Set(project.unresolvedEdits.map((e) => e.id)).size !== project.unresolvedEdits.length
+    )
+      throw new Error('Unresolved source edits are malformed.');
+    project.unresolvedEdits = parsed.output;
+  }
+
   if (project.templateDefinitions) {
     if (!Array.isArray(project.templateDefinitions) || project.templateDefinitions.length > 50)
       throw new Error('Too many embedded template definitions.');

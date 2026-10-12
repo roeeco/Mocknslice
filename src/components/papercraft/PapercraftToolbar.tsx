@@ -1,3 +1,4 @@
+import { PapercraftUnresolvedEdits } from './PapercraftSourceReview';
 import { useProjectStore } from '../../state/useProjectStore';
 import { papercraftCopy } from '../../locales/papercraftCopy';
 import { PapercraftEdgeInspector } from './PapercraftEdgeInspector';
@@ -51,6 +52,7 @@ export function PapercraftToolbar() {
         </p>
       ) : null}
       <PapercraftHealthPanel />
+      <PapercraftUnresolvedEdits />
       <PapercraftOptimizationPanel />
       <label className="field-stack">
         <span>{c.fold}</span>

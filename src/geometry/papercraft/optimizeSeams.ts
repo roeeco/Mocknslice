@@ -68,7 +68,7 @@ export function optimizePapercraft(
       throw new DOMException('Papercraft calculation cancelled.', 'AbortError');
   };
   checkCancelled();
-  const source = preparePapercraftSource(input);
+  const source = preparePapercraftSource(input, hooks);
   let inputHash: string;
   try {
     inputHash = papercraftInputHash(input);
@@ -95,6 +95,23 @@ export function optimizePapercraft(
       score: [0, 0, 0, 0, 0, 0],
       searchExhausted: false,
     };
+  const orderingHash = papercraftInputHash({
+    ...input,
+    workingSource: undefined,
+    settings: {
+      ...input.settings,
+      edgeEdits: input.settings.edgeEdits
+        .filter((e) => e.intent !== 'auto')
+        .map((e) => ({
+          ...e,
+          tab: {
+            owner: 'none',
+            targetDepthMm: input.settings.tabDefaultDepthMm,
+            shoulderAngleDeg: input.settings.tabShoulderAngleDeg,
+          },
+        })),
+    },
+  });
   const edges = uniqueSourceEdges(source),
     preset = input.settings.optimizer;
   let best: PapercraftForest | undefined,
@@ -108,7 +125,7 @@ export function optimizePapercraft(
     const forest = unfoldForest(
       source,
       input.settings,
-      candidateOrder(edges, candidate, inputHash, preset),
+      candidateOrder(edges, candidate, orderingHash, preset),
       undefined,
       [],
       () => {

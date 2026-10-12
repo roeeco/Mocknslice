@@ -1,5 +1,45 @@
+import { useState } from 'react';
 import { useProjectStore } from '../../state/useProjectStore';
 import { papercraftCopy } from '../../locales/papercraftCopy';
+function FaceTargetControl({
+  value,
+  processing,
+  label,
+  commit,
+}: {
+  value: number;
+  processing: boolean;
+  label: string;
+  commit: (value: number) => void;
+}) {
+  const [draft, setDraft] = useState(value);
+  return (
+    <label className="field-stack">
+      <span>
+        {label}: <span dir="ltr">{draft}</span>
+      </span>
+      <input
+        aria-label={label}
+        type="range"
+        min="4"
+        max="200"
+        step="1"
+        value={draft}
+        disabled={processing}
+        data-runtime-draft={draft !== value || undefined}
+        onChange={(event) => setDraft(Number(event.target.value))}
+        onBlur={() => {
+          if (draft !== value) commit(draft);
+        }}
+        onPointerUp={(event) => event.currentTarget.blur()}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') event.currentTarget.blur();
+          if (event.key === 'Escape') setDraft(value);
+        }}
+      />
+    </label>
+  );
+}
 export function PapercraftOptimizationPanel() {
   const native = useProjectStore((s) => s.project.papercraft),
     locale = useProjectStore((s) => s.locale),
@@ -25,23 +65,16 @@ export function PapercraftOptimizationPanel() {
           <option value="preserve-sharp-edges">{c.sharp}</option>
         </select>
       </label>
-      <label className="field-stack">
-        <span>
-          {c.target}: <output dir="ltr">{settings.faceTarget}</output>
-        </span>
-        <input
-          type="range"
-          min="4"
-          max="200"
-          step="1"
-          value={settings.faceTarget}
-          disabled={processing}
-          onChange={(event) => update({ faceTarget: Number(event.target.value) })}
-        />
-        <span className="range-labels">
-          {c.fewer} · {c.details}
-        </span>
-      </label>
+      <FaceTargetControl
+        key={`${settings.sourceMeshHash}:${settings.faceTarget}`}
+        value={settings.faceTarget}
+        processing={processing}
+        label={c.target}
+        commit={(faceTarget) => update({ faceTarget })}
+      />
+      <span className="range-labels">
+        {c.fewer} · {c.details}
+      </span>
       <label className="checkbox-field">
         <input
           type="checkbox"
@@ -74,8 +107,9 @@ export function PapercraftOptimizationPanel() {
                 Number.isFinite(n) &&
                 n >= (key === 'maximumDeviationMm' ? 0 : 1) &&
                 (key !== 'maxCandidates' || (Number.isInteger(n) && n <= 32))
-              )
-                update({ [key]: n });
+              ) {
+                if (n !== settings[key]) update({ [key]: n });
+              } else event.currentTarget.value = String(settings[key]);
             }}
             onKeyDown={(event) => {
               if (event.key === 'Enter') event.currentTarget.blur();

@@ -1,3 +1,4 @@
+import type { PapercraftKernelInput, PapercraftResult } from '../domain/papercraft';
 import type { PapercraftWorkingSource } from '../domain/papercraft';
 import type { PapercraftRelinkProposal } from '../geometry/papercraft/relinkOnModelUpdate';
 import type { ModelData } from '../domain/model';
@@ -89,6 +90,9 @@ export interface FabricationSlice {
 }
 
 export interface PapercraftSlice {
+  papercraftCandidate:
+    | { sourceProject: ProjectData; result: PapercraftResult; input: PapercraftKernelInput }
+    | undefined;
   papercraftProgress: PapercraftProgress | undefined;
   papercraftIssues: ValidationIssue[];
   enablePapercraft: () => void;

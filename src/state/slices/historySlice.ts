@@ -1,15 +1,20 @@
 import type { AppSliceCreator, HistorySlice } from '../types';
 import { validationIssuesForProject } from '../../validation/projectValidation';
 
-export const createHistorySlice: AppSliceCreator<HistorySlice> = (set) => ({
+export const createHistorySlice: AppSliceCreator<HistorySlice> = (set, get) => ({
   past: [],
   future: [],
-  undo: () =>
+  undo: () => {
+    if (!get().past.length) return;
+    get().cancelSliceGeneration();
     set((state) => {
       const previous = state.past.at(-1);
       if (!previous) return state;
 
       return {
+        pendingModelUpdate: undefined,
+        papercraftProgress: undefined,
+        generationDraft: undefined,
         project: previous,
         past: state.past.slice(0, -1),
         future: [state.project, ...state.future],
@@ -20,13 +25,19 @@ export const createHistorySlice: AppSliceCreator<HistorySlice> = (set) => ({
           ? state.activeSheetId
           : previous.sheetLayouts[0]?.id,
       };
-    }),
-  redo: () =>
+    });
+  },
+  redo: () => {
+    if (!get().future.length) return;
+    get().cancelSliceGeneration();
     set((state) => {
       const [next, ...remaining] = state.future;
       if (!next) return state;
 
       return {
+        pendingModelUpdate: undefined,
+        papercraftProgress: undefined,
+        generationDraft: undefined,
         project: next,
         past: [...state.past, state.project],
         future: remaining,
@@ -37,5 +48,6 @@ export const createHistorySlice: AppSliceCreator<HistorySlice> = (set) => ({
           ? state.activeSheetId
           : next.sheetLayouts[0]?.id,
       };
-    }),
+    });
+  },
 });

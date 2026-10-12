@@ -9,6 +9,11 @@ export interface SimplifyMeshQemSettings {
   sharpEdgeAngleDeg: number;
 }
 
+export interface SimplifyMeshQemHooks {
+  acceptTrial?: (trial: SerializableTriangleMesh) => boolean;
+  retainLockedCoordinates?: boolean;
+  shouldStop?: () => boolean;
+}
 export interface SimplifyMeshQemResult extends MeshDeviationMetrics {
   mesh: SerializableTriangleMesh;
   beforeFaceCount: number;
@@ -66,6 +71,7 @@ function quadricCost(quadric: Quadric, point: readonly number[]): number {
 export function simplifyMeshQem(
   source: SerializableTriangleMesh,
   settings: SimplifyMeshQemSettings,
+  hooks: SimplifyMeshQemHooks = {},
 ): SimplifyMeshQemResult {
   let mesh = structuredClone(source);
   let rejectedCollapseCount = 0;
@@ -78,7 +84,15 @@ export function simplifyMeshQem(
       )
       .flatMap((edge) => [edge.vertexA, edge.vertexB]),
   );
+  const lockedCoordinates = new Set(
+    [...locked].map((index) => meshVertex(source, index).join(':')),
+  );
+  const isLocked = (index: number) =>
+    hooks.retainLockedCoordinates
+      ? lockedCoordinates.has(meshVertex(mesh, index).join(':'))
+      : locked.has(index);
   while (mesh.indices.length / 3 > settings.targetFaceCount) {
+    if (hooks.shouldStop?.()) break;
     const topology = buildMeshTopology(mesh);
     const vertexQuadrics = quadrics(mesh);
     const cost = (first: number, second: number): number => {
@@ -92,8 +106,8 @@ export function simplifyMeshQem(
       .filter(
         (edge) =>
           edge.uses.length === 2 &&
-          !locked.has(edge.vertexA) &&
-          !locked.has(edge.vertexB) &&
+          !isLocked(edge.vertexA) &&
+          !isLocked(edge.vertexB) &&
           !rejectedEdges.has(edge.key),
       )
       .sort(
@@ -122,7 +136,8 @@ export function simplifyMeshQem(
     if (
       topologyAfter.nonManifoldEdgeCount > topology.nonManifoldEdgeCount ||
       topologyAfter.orientationIssueCount > topology.orientationIssueCount ||
-      deviation.maximumDeviationMm > settings.maximumDeviationMm
+      deviation.maximumDeviationMm > settings.maximumDeviationMm ||
+      (hooks.acceptTrial && !hooks.acceptTrial(trial))
     ) {
       rejectedEdges.add(candidate.key);
       rejectedCollapseCount += 1;

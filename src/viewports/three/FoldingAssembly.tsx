@@ -1,6 +1,7 @@
 import { useDisplayedProjectField } from '../PreviewProject';
 import { useEffect, useMemo } from 'react';
-import { BufferGeometry, DoubleSide, Float32BufferAttribute } from 'three';
+import { DoubleSide } from 'three';
+import { assembledPanelGeometry } from './assembledPanelGeometry';
 import type { AssembledFoldPanel } from '../../domain/folding';
 import { assemblySelectionPanelIds } from '../../domain/assembly';
 import { useProjectStore } from '../../state/useProjectStore';
@@ -20,23 +21,7 @@ function PanelMesh({
 }) {
   const selectedEntityId = useProjectStore((state) => state.selectedEntityId);
   const selectEntity = useProjectStore((state) => state.selectEntity);
-  const geometry = useMemo(() => {
-    const result = new BufferGeometry();
-    result.setAttribute(
-      'position',
-      new Float32BufferAttribute(
-        panel.verticesMm.flatMap((point) => point),
-        3,
-      ),
-    );
-    const indices: number[] = [];
-    for (let vertex = 1; vertex < panel.verticesMm.length - 1; vertex += 1) {
-      indices.push(0, vertex, vertex + 1);
-    }
-    result.setIndex(indices);
-    result.computeVertexNormals();
-    return result;
-  }, [panel]);
+  const geometry = useMemo(() => assembledPanelGeometry(panel), [panel]);
   useEffect(() => () => geometry.dispose(), [geometry]);
   return (
     <mesh

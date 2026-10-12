@@ -324,8 +324,12 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     });
     void task.promise
       .then((result) => {
+        if (activeTask !== task) return;
         set((state) => {
-          if (!generationInputStillMatches(state.project, input)) {
+          if (
+            state.project.metadata.id !== project.metadata.id ||
+            !generationInputStillMatches(state.project, input)
+          ) {
             return {
               sliceGenerationStatus: 'stale',
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
@@ -443,7 +447,10 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     void task.promise
       .then((result: WaffleSliceResult) => {
         set((state) => {
-          if (!generationInputStillMatches(state.project, input)) {
+          if (
+            state.project.metadata.id !== project.metadata.id ||
+            !generationInputStillMatches(state.project, input)
+          ) {
             return {
               sliceGenerationStatus: 'stale',
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
@@ -546,8 +553,12 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     });
     void task.promise
       .then((result) => {
+        if (activeTask !== task) return;
         set((state) => {
-          if (!generationInputStillMatches(state.project, input)) {
+          if (
+            state.project.metadata.id !== project.metadata.id ||
+            !generationInputStillMatches(state.project, input)
+          ) {
             return {
               sliceGenerationStatus: 'stale',
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
@@ -669,8 +680,12 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     });
     void task.promise
       .then((result) => {
+        if (activeTask !== task) return;
         set((state) => {
-          if (!generationInputStillMatches(state.project, input)) {
+          if (
+            state.project.metadata.id !== project.metadata.id ||
+            !generationInputStillMatches(state.project, input)
+          ) {
             return {
               sliceGenerationStatus: 'stale',
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
@@ -764,8 +779,12 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     });
     void task.promise
       .then((result) => {
+        if (activeTask !== task) return;
         set((state) => {
-          if (!generationInputStillMatches(state.project, input)) {
+          if (
+            state.project.metadata.id !== project.metadata.id ||
+            !generationInputStillMatches(state.project, input)
+          ) {
             return {
               sliceGenerationStatus: 'stale',
               sliceGenerationError: runtimeFailure('GENERATION_INPUT_CHANGED'),
@@ -855,6 +874,7 @@ export const createFabricationSlice: AppSliceCreator<FabricationSlice> = (set, g
     cancelPapercraftTask();
     activeTask = undefined;
     set({
+      papercraftCandidate: undefined,
       papercraftProgress: undefined,
       sliceGenerationStatus: 'cancelled',
       sliceGenerationError: runtimeFailure('GENERATION_CANCELLED'),

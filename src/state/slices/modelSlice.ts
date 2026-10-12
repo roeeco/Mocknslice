@@ -80,8 +80,10 @@ export const createModelSlice: AppSliceCreator<ModelSlice> = (set, get) => ({
     });
   },
   failModelImport: (modelImportError) => set({ modelImportStatus: 'error', modelImportError }),
-  cancelModelImport: () =>
-    set({ modelImportStatus: 'cancelled', modelImportError: runtimeFailure('IMPORT_CANCELLED') }),
+  cancelModelImport: () => {
+    get().cancelSliceGeneration();
+    set({ modelImportStatus: 'cancelled', modelImportError: runtimeFailure('IMPORT_CANCELLED') });
+  },
   rotateModel90: (axis) => {
     get().cancelSliceGeneration();
     if (get().project.papercraft) {

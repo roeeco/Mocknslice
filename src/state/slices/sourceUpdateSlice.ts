@@ -42,7 +42,14 @@ export const createSourceUpdateSlice: AppSliceCreator<SourceUpdateSlice> = (set,
     });
     void task.promise
       .then((source) => {
-        if (preparation !== task || get().project !== project) return;
+        if (preparation !== task) return;
+        if (get().project !== project) {
+          set({
+            sliceGenerationStatus:
+              deriveGenerationState(get().project) === 'ready' ? 'ready' : 'stale',
+          });
+          return;
+        }
         if (source.sourceMeshHash !== settings.sourceMeshHash)
           throw new Error('Source preparation returned a mismatched mesh.');
         const oldMesh =
@@ -115,6 +122,15 @@ export const createSourceUpdateSlice: AppSliceCreator<SourceUpdateSlice> = (set,
             ...pending.proposal.unresolvedEdits,
           ],
           acknowledgedWarningIds: [],
+          sheetLayouts: project.sheetLayouts.map((sheet) => ({
+            ...sheet,
+            placements: sheet.placements.filter(
+              (placement) =>
+                !pending.proposal.unresolvedEdits.some(
+                  (edit) => edit.kind === 'island' && edit.edit.id === placement.partId,
+                ),
+            ),
+          })),
         }),
       );
       return {

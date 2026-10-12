@@ -1,7 +1,7 @@
 import type { SerializableTriangleMesh, Vector3Mm } from '../../domain/geometry';
 import { meshVertex } from '../unfolding/meshAdjacency';
-import { convexIntersectionArea } from '../designGraph/polygons';
-import { EPS_AREA_MM2, EPS_LENGTH_MM } from '../designGraph/tolerances';
+import { booleanPerimeter } from '../designGraph/booleanPerimeter';
+import { EPS_LENGTH_MM } from '../designGraph/tolerances';
 type Triangle = [Vector3Mm, Vector3Mm, Vector3Mm];
 const sub = (a: Vector3Mm, b: Vector3Mm): Vector3Mm => a.map((v, i) => v - b[i]!) as Vector3Mm;
 const dot = (a: Vector3Mm, b: Vector3Mm) => a.reduce((s, v, i) => s + v * b[i]!, 0);
@@ -104,12 +104,14 @@ function coveredCoplanar(triangle: Triangle, target: Node) {
     min: [0, 1, 2].map((i) => Math.min(...triangle.map((p) => p[i]!))) as Vector3Mm,
     max: [0, 1, 2].map((i) => Math.max(...triangle.map((p) => p[i]!))) as Vector3Mm,
   };
-  let covered = 0;
+  const removals: { x: number; y: number }[][] = [];
   for (const other of candidates(box, target)) {
     if (other.some((p) => Math.abs(dot(sub(p, a), normal)) / length > 1e-9)) continue;
-    covered += convexIntersectionArea(points, other.map(project));
+    removals.push(other.map(project));
   }
-  return covered >= area - EPS_AREA_MM2;
+  if (!area) return false;
+  const remaining = booleanPerimeter([points], removals);
+  return remaining !== undefined && remaining.length === 0;
 }
 /** Bidirectional continuous surface bound, using the 1-Lipschitz distance to a triangle union. */
 export function verifySurfaceDeviation(

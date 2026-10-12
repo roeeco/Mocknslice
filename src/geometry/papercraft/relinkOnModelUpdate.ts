@@ -1,5 +1,6 @@
 import type { SerializableTriangleMesh, Vector3Mm } from '../../domain/geometry';
 import type {
+  UnresolvedPapercraftEdit,
   PapercraftEdgeEdit,
   PapercraftIslandEdit,
   PapercraftResult,
@@ -9,12 +10,6 @@ import { hashSerializable } from '../../domain/canonicalHash';
 import { papercraftHalfEdges } from './halfEdge';
 import { preflightPapercraftSource } from './prepareSource';
 import { meshVertex } from '../unfolding/meshAdjacency';
-export interface UnresolvedPapercraftEdit {
-  id: string;
-  kind: 'edge' | 'island';
-  reason: string;
-  edit: PapercraftEdgeEdit | PapercraftIslandEdit;
-}
 export interface PapercraftRelinkProposal {
   sourceMeshHash: string;
   edgeEdits: PapercraftEdgeEdit[];

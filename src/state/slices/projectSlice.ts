@@ -8,15 +8,20 @@ import {
 import { inferredWorkflowProgress } from '../workflow';
 import { deriveGenerationState } from '../../domain/generation';
 
-export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
+export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set, get) => ({
   project: createProject(),
   hasHydrated: false,
   autosaveStatus: 'idle',
-  createNewProject: (name) =>
+  createNewProject: (name) => {
+    get().cancelSliceGeneration();
     set(() => {
       const project = createProject(name);
       return {
         project,
+        pendingModelUpdate: undefined,
+        generationDraft: undefined,
+        papercraftProgress: undefined,
+        papercraftIssues: [],
         past: [],
         future: [],
         autosaveStatus: 'pending',
@@ -27,8 +32,10 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
         activeWorkflowStep: 'start',
         completedWorkflowSteps: [],
       };
-    }),
-  hydrateProject: (project) =>
+    });
+  },
+  hydrateProject: (project) => {
+    get().cancelSliceGeneration();
     set((state) => {
       const prepared = prepareProjectForUse(project ?? state.project);
       const progress = project
@@ -36,6 +43,10 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
         : { activeStep: state.activeWorkflowStep, completedSteps: state.completedWorkflowSteps };
       return {
         project: prepared,
+        pendingModelUpdate: undefined,
+        generationDraft: undefined,
+        papercraftProgress: undefined,
+        papercraftIssues: [],
         hasHydrated: true,
         past: [],
         future: [],
@@ -48,11 +59,14 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
               ? 'stale'
               : 'idle',
         sliceGenerationError: undefined,
-        activeSheetId: prepared.sheetLayouts[0]?.id,
+        activeSheetId:
+          prepared.sheetLayouts.find((sheet) => sheet.placements.length > 0)?.id ??
+          prepared.sheetLayouts[0]?.id,
         activeWorkflowStep: progress.activeStep,
         completedWorkflowSteps: progress.completedSteps,
       };
-    }),
+    });
+  },
   renameProject: (name) =>
     set((state) => ({
       ...recordProjectChange(state, (project) =>
@@ -63,12 +77,17 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
       ),
       completedWorkflowSteps: name.trim() ? state.completedWorkflowSteps : [],
     })),
-  replaceProject: (project) =>
+  replaceProject: (project) => {
+    get().cancelSliceGeneration();
     set((state) => {
       const prepared = prepareProjectForUse(project);
       const progress = inferredWorkflowProgress(prepared, state.experienceMode);
       return {
         ...recordProjectChange(state, () => touchProject(prepared)),
+        pendingModelUpdate: undefined,
+        generationDraft: undefined,
+        papercraftProgress: undefined,
+        papercraftIssues: [],
         hasHydrated: true,
         validationIssues: validationIssuesForProject(prepared),
         activeWorkflowStep: progress.activeStep,
@@ -80,8 +99,11 @@ export const createProjectSlice: AppSliceCreator<ProjectSlice> = (set) => ({
               ? 'stale'
               : 'idle',
         sliceGenerationError: undefined,
-        activeSheetId: prepared.sheetLayouts[0]?.id,
+        activeSheetId:
+          prepared.sheetLayouts.find((sheet) => sheet.placements.length > 0)?.id ??
+          prepared.sheetLayouts[0]?.id,
       };
-    }),
+    });
+  },
   setAutosaveStatus: (autosaveStatus) => set({ autosaveStatus }),
 });
