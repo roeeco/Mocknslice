@@ -4,7 +4,7 @@ import { normalizeMesh } from '../geometry/mesh/normalizeMesh';
 import { parseStl } from '../importers/importSTL';
 import { generateStackedSlices } from '../geometry/slicing/generateStackedSlices';
 import { generateWaffleSlices } from '../geometry/slicing/generateWaffleSlices';
-import { generateFoldTemplate } from '../geometry/folding/generateFoldTemplate';
+import { generateRegisteredTemplate } from '../templates/registry';
 import { generateMeshUnfold } from '../geometry/unfolding/generateMeshUnfold';
 import { generatePanelConstruction } from '../geometry/panelConstruction/generatePanelConstruction';
 import { prepareAndGeneratePanelUnfold } from '../geometry/unfolding/generatePanelUnfold';
@@ -44,7 +44,7 @@ context.onmessage = (event: MessageEvent<GeometryWorkerRequest>) => {
       };
       context.postMessage(response);
     } else if (request.type === 'generate-fold-template') {
-      const result = generateFoldTemplate(request.payload);
+      const result = generateRegisteredTemplate(request.payload);
       const response: GeometryWorkerResponse = {
         id: request.id,
         type: request.type,

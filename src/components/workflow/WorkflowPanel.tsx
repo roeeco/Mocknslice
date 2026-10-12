@@ -1,5 +1,5 @@
+import { registeredLegacyKinds } from '../../templates/definitions';
 import { useRef, useState, type ChangeEvent } from 'react';
-import { TEMPLATE_KINDS } from '../../domain/folding';
 import { deriveAssemblyInspection } from '../../domain/assembly';
 import { deriveGenerationState } from '../../domain/generation';
 import { measureConnectionAlignment } from '../../geometry/folding/measureConnectionAlignment';
@@ -186,7 +186,7 @@ function ImportOrCreateStep() {
           <div className="template-source-options">
             <h3>{copy.chooseTemplate}</h3>
             <div className="template-choice-grid" role="group" aria-label={copy.templateFamily}>
-              {TEMPLATE_KINDS.map((templateKind) => (
+              {registeredLegacyKinds.map((templateKind) => (
                 <button
                   type="button"
                   className={
