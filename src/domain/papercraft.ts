@@ -1,3 +1,6 @@
+import type { FabricationDesignGraph } from './designGraph';
+import type { FabricationPart } from './fabrication';
+import type { MeshUnfoldResult } from './unfolding';
 import type { Point2D, SerializableTriangleMesh, Vector3Mm } from './geometry';
 import type { ValidationIssue } from './validation';
 
@@ -122,4 +125,23 @@ export interface PapercraftRunHooks {
   cancelled?: () => boolean;
   /** Optional worker deadline. It can stop search, never relax geometry validity. */
   budgetExpired?: () => boolean;
+}
+
+export interface PapercraftTab {
+  id: string;
+  edgeKey: string;
+  ownerFaceId: string;
+  receiverFaceId: string;
+  islandId: string;
+  depthMm: number;
+  shoulderAngleDeg: number;
+  outline: [Point2D, Point2D, Point2D, Point2D];
+  status: 'enabled' | 'unresolved' | 'suppressed';
+}
+export interface PapercraftResult extends PapercraftKernelResult {
+  tabs: PapercraftTab[];
+  graph: FabricationDesignGraph;
+  parts: FabricationPart[];
+  /** Compatibility bridge for the existing renderer; geometry comes from the graph computation. */
+  unfolding: MeshUnfoldResult;
 }

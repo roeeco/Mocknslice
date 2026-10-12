@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import { optimizePapercraft } from '../geometry/papercraft/optimizeSeams';
+import { generatePapercraft } from '../geometry/papercraft/buildFabrication';
 import type { PapercraftWorkerProgress } from './protocol';
 import { normalizeMesh } from '../geometry/mesh/normalizeMesh';
 import { parseStl } from '../importers/importSTL';
@@ -19,7 +19,7 @@ context.onmessage = (event: MessageEvent<GeometryWorkerRequest>) => {
   try {
     if (request.type === 'generate-papercraft') {
       const deadline = performance.now() + 6000;
-      const result = optimizePapercraft(request.payload, {
+      const result = generatePapercraft(request.payload, {
         budgetExpired: () => performance.now() >= deadline,
         progress: (progress) => {
           const message: PapercraftWorkerProgress = {

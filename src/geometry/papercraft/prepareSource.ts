@@ -233,6 +233,24 @@ export function preparePapercraftSource(input: PapercraftKernelInput): PreparedP
       simplified = true;
     }
   }
+  for (const edit of settings.edgeEdits) {
+    if (
+      !['auto', 'must-cut', 'must-join'].includes(edit.intent) ||
+      !['face-a', 'face-b', 'none'].includes(edit.tab.owner) ||
+      !Number.isFinite(edit.tab.targetDepthMm) ||
+      edit.tab.targetDepthMm <= 0 ||
+      !Number.isFinite(edit.tab.shoulderAngleDeg) ||
+      edit.tab.shoulderAngleDeg <= 0 ||
+      edit.tab.shoulderAngleDeg >= 90
+    )
+      issues.push(
+        papercraftIssue(
+          'PAPERCRAFT_EDGE_EDIT_INVALID',
+          [edit.id],
+          'Edge intent or tab preference is outside supported bounds.',
+        ),
+      );
+  }
   if (simplified && settings.edgeEdits.length)
     issues.push(
       papercraftIssue(

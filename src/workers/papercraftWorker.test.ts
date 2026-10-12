@@ -3,7 +3,7 @@ import { generatePapercraftInWorker } from './geometryWorkerClient';
 import { createCubeMesh } from '../geometry/mesh/createPrimitiveMesh';
 import { hashSerializable } from '../domain/canonicalHash';
 import { papercraftDefaults } from '../domain/papercraft';
-import { optimizePapercraft } from '../geometry/papercraft/optimizeSeams';
+import { generatePapercraft } from '../geometry/papercraft/buildFabrication';
 
 class MockWorker {
   static instances: MockWorker[] = [];
@@ -41,7 +41,7 @@ describe('papercraft worker lifecycle', () => {
     });
     expect(progress).toHaveBeenCalledOnce();
     expect(worker.terminate).not.toHaveBeenCalled();
-    const result = optimizePapercraft(input);
+    const result = generatePapercraft(input);
     worker.onmessage?.({ data: { id, type: 'generate-papercraft', ok: true, result } });
     expect(await task.promise).toEqual(result);
     expect(worker.terminate).toHaveBeenCalledOnce();

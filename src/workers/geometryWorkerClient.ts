@@ -1,6 +1,6 @@
 import type {
   PapercraftKernelInput,
-  PapercraftKernelResult,
+  PapercraftResult,
   PapercraftProgress,
 } from '../domain/papercraft';
 import type { PapercraftWorkerProgress } from './protocol';
@@ -336,13 +336,13 @@ export function generatePanelConstructionInWorker(
 export function generatePapercraftInWorker(
   input: PapercraftKernelInput,
   onProgress?: (progress: PapercraftProgress) => void,
-): GeometryTask<PapercraftKernelResult> {
+): GeometryTask<PapercraftResult> {
   const worker = new Worker(new URL('./geometry.worker.ts', import.meta.url), { type: 'module' }),
     id = crypto.randomUUID(),
     expectedHash = papercraftInputHash(input);
   let settled = false,
     rejectTask: ((reason?: unknown) => void) | undefined;
-  const promise = new Promise<PapercraftKernelResult>((resolve, reject) => {
+  const promise = new Promise<PapercraftResult>((resolve, reject) => {
     rejectTask = reject;
     worker.onmessage = (event: MessageEvent<GeometryWorkerResponse | PapercraftWorkerProgress>) => {
       const message = event.data;

@@ -1,6 +1,6 @@
 import type {
   PapercraftKernelInput,
-  PapercraftKernelResult,
+  PapercraftResult,
   PapercraftProgress,
 } from '../domain/papercraft';
 import type { StlUnit } from '../domain/model';
@@ -89,7 +89,7 @@ export type GeometryWorkerRequest =
   | GeneratePanelConstructionRequest;
 
 export type GeometryWorkerResponse =
-  | { id: string; type: 'generate-papercraft'; ok: true; result: PapercraftKernelResult }
+  | { id: string; type: 'generate-papercraft'; ok: true; result: PapercraftResult }
   | { id: string; type: 'normalize-stl'; ok: true; result: NormalizedMeshResult }
   | { id: string; type: 'generate-stacked-slices'; ok: true; result: StackedSliceResult }
   | { id: string; type: 'generate-waffle-slices'; ok: true; result: WaffleSliceResult }
